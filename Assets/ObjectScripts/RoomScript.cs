@@ -64,8 +64,6 @@ public class RoomScript : MonoBehaviour
                     if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
                         continue;
 
-                    if(manManRef.GetManData(RoomData.ManSlotsAssignments[i]).ManScript.ManData.ManType
-                    == Enums.ManTypes.Guest)
                     ManRef occupant = manManRef.GetManData(RoomData.ManSlotsAssignments[i]);
                     if (occupant.ManScript.ManData.ManType
                     == Enums.ManTypes.Guest && occupant.ManScript.State == Enums.ManStates.None)
@@ -73,8 +71,6 @@ public class RoomScript : MonoBehaviour
                         bStank = true;
                         numGuests += 1.0f;
                     }
-                    else if(manManRef.GetManData(RoomData.ManSlotsAssignments[i]).ManScript.ManData.ManType
-                     == Enums.ManTypes.Cleaner)
                     else if(occupant.ManScript.ManData.ManType
                      == Enums.ManTypes.Cleaner && occupant.ManScript.State == Enums.ManStates.None)
                     {

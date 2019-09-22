@@ -21,7 +21,6 @@ public class BookGuestDlgScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetActive(false);
         //SetActive(false);
         b0.gameObject.SetActive(false);
         b1.gameObject.SetActive(false);

@@ -20,7 +20,6 @@ public class ManInfoWindowScript : MonoBehaviour
 
     public void Activate(Guid manId)
     {
-        ManNameText.text = ManManager.Ref.GetManData(manId).ManScript.ManData.GetManFullName();
         ManRef manRef = ManManager.Ref.GetManData(manId);
         ManNameText.text = manRef.ManScript.ManData.GetManFullName();
         ownedRoom = manRef.ManScript.ManData.OwnedRoomRef;

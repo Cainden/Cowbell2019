@@ -5205,7 +5205,6 @@ RectTransform:
   m_Children:
   - {fileID: 765438550}
   m_Father: {fileID: 2060419151}
-  m_RootOrder: 2
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
