@@ -263,6 +263,25 @@ public class ClickManager : MonoBehaviour
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
     }
 
+    public void ViewSelectedManOwnedRoom()
+    {
+        if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
+        Guid ManId = StateManager.Ref.GetSelectedMan();
+        //ManManager.Ref.MakeManLeave(ManId);
+        //ManManager.Ref.RemoveManFromRoom(ManId);
+       // ManManager.Ref.RemoveManFromList(ManId);
+        //StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    }
+    public void ChangeSelectedManOwnedRoom()
+    {
+        if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
+        Guid ManId = StateManager.Ref.GetSelectedMan();
+        //ManManager.Ref.MakeManLeave(ManId);
+        //ManManager.Ref.RemoveManFromRoom(ManId);
+        //ManManager.Ref.RemoveManFromList(ManId);
+        //StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    }
+
     public void AddNewMan()
     {
         //if (StateManager.Ref.IsManWaiting()) return;

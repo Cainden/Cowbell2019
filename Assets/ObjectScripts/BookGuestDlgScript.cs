@@ -22,6 +22,7 @@ public class BookGuestDlgScript : MonoBehaviour
     void Start()
     {
         SetActive(false);
+        //SetActive(false);
         b0.gameObject.SetActive(false);
         b1.gameObject.SetActive(false);
         b2.gameObject.SetActive(false);

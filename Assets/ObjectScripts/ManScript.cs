@@ -14,6 +14,7 @@ public class ManScript : MonoBehaviour
     // Avatar movement
     protected Queue<ActionData> _ActionList = new Queue<ActionData>();
     protected Enums.ManStates _State = Enums.ManStates.None;
+    private Enums.ManStates state = Enums.ManStates.None;
     protected Animator _Animator;
     protected Vector3 _TargetPos;
     protected Quaternion _TargetRot;
@@ -29,6 +30,8 @@ public class ManScript : MonoBehaviour
 
     //Script specific members
     private bool hasPaidRent = false;
+
+    public Enums.ManStates State { get => state; protected set => state = value; }
 
     private void Start()
     {
@@ -102,6 +105,7 @@ public class ManScript : MonoBehaviour
     protected void StateUpdate()
     {
         switch (_State)
+        switch (State)
         {
             case Enums.ManStates.Running: DoMovement(Constants.ManRunSpeed); break;
             case Enums.ManStates.RotatingToPlayer: FaceTowardsPlayer(); break;
@@ -138,6 +142,11 @@ public class ManScript : MonoBehaviour
                 ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
             }
         }
+    }
+
+    public void TransferOwnershipToNewRoom()
+    {
+
     }
 
     public bool IsAssignedToAnyRoom()
@@ -222,20 +231,25 @@ public class ManScript : MonoBehaviour
     {
         _State = Enums.ManStates.Waiting;
         SetAnimation(_State);
+        State = Enums.ManStates.Waiting;
+        SetAnimation(State);
         yield return new WaitForSeconds(seconds);
         _State = Enums.ManStates.None; // Will trigger next action
+        State = Enums.ManStates.None; // Will trigger next action
     }
 
     protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
     {
         _State = state;
+        State = state;
         _TargetPos = position;
-        SetAnimation(_State);
+        SetAnimation(State);
     }
 
     protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
     {
         _State = state;
+        State = state;
         _TargetRot = rotation;
         //SetAnimation(_State);
     }
@@ -249,6 +263,7 @@ public class ManScript : MonoBehaviour
         {
             transform.position = _TargetPos;
             _State = Enums.ManStates.None; // Will trigger next action
+            State = Enums.ManStates.None; // Will trigger next action
             return;
         }
         else // Regular movement
@@ -271,6 +286,8 @@ public class ManScript : MonoBehaviour
     {
         _State = Enums.ManStates.RotatingToPlayer;
         SetAnimation(_State);
+        State = Enums.ManStates.RotatingToPlayer;
+        SetAnimation(State);
     }
 
     private void FaceTowardsPlayer()
@@ -283,6 +300,7 @@ public class ManScript : MonoBehaviour
         {
             transform.rotation = TargetRotation;
             _State = Enums.ManStates.None; // Will trigger next action
+            State = Enums.ManStates.None; // Will trigger next action
         }
     }
 
@@ -294,6 +312,7 @@ public class ManScript : MonoBehaviour
         {
             transform.rotation = _TargetRot;
             _State = Enums.ManStates.None; // Will trigger next action
+            State = Enums.ManStates.None; // Will trigger next action
         }
     }
 
