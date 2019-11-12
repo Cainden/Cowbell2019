@@ -15,15 +15,17 @@ public class StateManager : MonoBehaviour
     private Guid _SelectedMan = Guid.Empty;
     private Guid _WaitingMan = Guid.Empty;
 
+
+
     void Awake()
     {
         if (Ref == null) Ref = GetComponent<StateManager>();
     }
 
-    void Start ()
+    void Start()
     {
         RoomManager.Ref.CreateRoom(Guid.NewGuid(),
-                                   Constants.EntranceRoomType, 
+                                   Constants.EntranceRoomType,
                                    Constants.EntranceRoomSize,
                                    Enums.RoomOverUnder.Over,
                                    Constants.EntranceRoomIndex);
@@ -34,8 +36,8 @@ public class StateManager : MonoBehaviour
                                   Constants.UWEntranceRoomIndex);
         SetGameState(Enums.GameStates.Normal);
     }
-	
-	public void ClearAll()
+
+    public void ClearAll()
     {
         ResetSelectedMan();
         ResetSelectedRoom();
@@ -58,7 +60,7 @@ public class StateManager : MonoBehaviour
     {
         _HighlightedRoom = roomId;
     }
-    
+
     public Guid GetHighlightedRoom()
     {
         return (_HighlightedRoom);
@@ -115,10 +117,10 @@ public class StateManager : MonoBehaviour
 
     public void SetGameState(Enums.GameStates newGameState, Guid selectedObjectId)
     {
-        switch(newGameState)
+        switch (newGameState)
         {
-            case Enums.GameStates.ManPressed:   SetSelectedMan(selectedObjectId); break;
-            case Enums.GameStates.ManSelected:  SetSelectedMan(selectedObjectId); break;
+            case Enums.GameStates.ManPressed: SetSelectedMan(selectedObjectId); break;
+            case Enums.GameStates.ManSelected: SetSelectedMan(selectedObjectId); break;
             case Enums.GameStates.RoomSelected: SetSelectedRoom(selectedObjectId); break;
         }
 
@@ -135,6 +137,20 @@ public class StateManager : MonoBehaviour
                 //Refund the room purchase by getting the room BuildPosition info. Is this the best way for this?
                 if (_GameState == Enums.GameStates.BuildRoom && ClickManager.Ref.buildCancelled == true)
                     WalletManager.Ref.Hoots += Constants.RoomCostDefinitions[GameObject.FindObjectOfType<BuildPositionScript>().RoomSize];
+
+                // If the player is chaning a guest's room and cancels (right clicks)
+                // return to the ManInfoWindow they were just on
+                // May be a better way to do this (Dupe code in ManSelected case)
+                // didn't want to use a GoTo/while loop
+                if (_GameState == Enums.GameStates.ChangeOwnedRoom)
+                {
+                    newGameState = Enums.GameStates.ManSelected;
+                    ResetSelectedRoom();
+                    GuiManager.Ref.Show_ManInfoWindow(_SelectedMan);
+                    break;
+                }
+
+
                 ResetSelectedRoom();
                 ResetSelectedMan();
                 GuiManager.Ref.SetNormalCursor();
@@ -169,6 +185,11 @@ public class StateManager : MonoBehaviour
             case Enums.GameStates.ManDragging:
                 ResetSelectedRoom();
                 GuiManager.Ref.SetManDragCursor();
+                break;
+            case Enums.GameStates.ChangeOwnedRoom:
+                GuiManager.Ref.Hide_ManInfoWindow();
+                //ManManager.Ref.RemoveManOwnershipFromRoom(GetSelectedMan());
+                ResetSelectedRoom();
                 break;
         }
 

@@ -247,6 +247,15 @@ public class RoomScript : MonoBehaviour
         //if (AllOwnerSlotsAreEmpty()) RoomIsActive = false;
     }
 
+    public void RemoveAllOwners()
+    {
+        for (int i = 0; i < RoomData.ManSlotCount; i++)
+        {
+            if(RoomData.OwnerSlotsAssignments[i] != Guid.Empty)
+                manManRef.GetManData( RoomData.OwnerSlotsAssignments[i] ).ManScript.RemoveRoomOwnership();
+        }
+    }
+
     private void SetRoomText()
     {
         Transform[] Children = GetComponentsInChildren<Transform>();

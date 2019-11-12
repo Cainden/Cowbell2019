@@ -89,6 +89,7 @@ public class RoomManager : MonoBehaviour
     {
         RoomScript RoomScript = _RoomList[roomId].RoomScript;
         GridManager.Ref.DeregisterFromGrid(RoomScript.RoomData.GetLeftMostIndex(), RoomScript.RoomData.RoomSize);
+        _RoomList[roomId].RoomScript.RemoveAllOwners();
         Destroy(_RoomList[roomId].RoomObject);
         _RoomList[roomId].RoomObject = null;
         _RoomList.Remove(roomId);
@@ -174,7 +175,7 @@ public class RoomManager : MonoBehaviour
         RoomScript RoomScript = _RoomList[roomId].RoomScript;
 
         if (IsEntranceRoom(roomId)) return (false);
-        if (RoomScript.AllOwnerSlotsAreEmpty() == false) return (false);
+        //if (RoomScript.AllOwnerSlotsAreEmpty() == false) return (false);
         if (RoomScript.AllManSlotsAreEmpty() == false) return (false);
 
         // Check if it is linked to only one other room. Then, we can always safely remove

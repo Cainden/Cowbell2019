@@ -5455,7 +5455,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1565618332}
-        m_MethodName: 
+        m_MethodName: ChangeSelectedManOwnedRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11919,7 +11919,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1565618332}
-        m_MethodName: 
+        m_MethodName: ViewSelectedManOwnedRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13504,6 +13504,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ManNameText: {fileID: 1299118821}
   OwnedRoomName: {fileID: 1975767815}
+  viewOwnedButton: {fileID: 1859792536}
+  changeOwnedButton: {fileID: 859505703}
 --- !u!4 &2062345398
 Transform:
   m_ObjectHideFlags: 0

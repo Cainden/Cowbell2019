@@ -122,6 +122,12 @@ public class ManScript : MonoBehaviour
 
     public void SetOwnerOfRoom(Guid assignedRoom)
     {
+
+        if (assignedRoom == Guid.Empty)
+        {
+            RemoveRoomOwnership();
+            return;
+        }
         //Temporary set up for setting room ownership
         //SET ownership of room only if
         //Man is of type Guest
@@ -133,7 +139,7 @@ public class ManScript : MonoBehaviour
             !IsOwnerOfRoom())
         {
             //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-            int freeSlot = -1; ;
+            int freeSlot = -1;
             if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
             {
                 roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
@@ -142,9 +148,46 @@ public class ManScript : MonoBehaviour
         }
     }
 
-    public void TransferOwnershipToNewRoom()
+    public void TransferOwnershipToNewRoom(Guid newRoom)
     {
 
+
+        if (newRoom == Guid.Empty)
+        {
+            RemoveRoomOwnership();
+            return;
+        }
+
+        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(newRoom);
+        if (ManData.ManType == Enums.ManTypes.Guest &&
+            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom )
+        {
+            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
+            int freeSlot = -1;
+            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
+            {
+                roomRefTemp.RoomScript.RemoveOwnerFromRoomSlot(ManData.ManId);
+                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
+                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
+            }
+        }
+    }
+
+    public void RemoveRoomOwnership()
+    {
+        if (ManData.OwnedRoomRef != null)
+        {
+            for (int i = 0; i < ManData.OwnedRoomRef.OwnerSlotsAssignments.Length; i++)
+            {
+                if (ManData.OwnedRoomRef.OwnerSlotsAssignments[i] == ManData.ManId)
+                {
+                    ManData.OwnedRoomRef.OwnerSlotsAssignments[i] = Guid.Empty;
+                    break;
+                }
+            }
+        }
+
+        ManData.OwnedRoomRef = null;
     }
 
     public bool IsAssignedToAnyRoom()
