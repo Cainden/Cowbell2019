@@ -154,7 +154,6 @@ public class TimeManager : MonoBehaviour
         // Update the current cycle time:  
         currentCycleTime += Time.deltaTime;
         currentCycleTime = currentCycleTime % dayCycleLength;
-
     }
 
     /// Sets the currentPhase to Dawn, turning on the directional light, if any.  
