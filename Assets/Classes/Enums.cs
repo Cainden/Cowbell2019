@@ -5,7 +5,7 @@ namespace MySpace
     public static class Enums
     {
         // Game states
-        public enum GameStates { None, Normal, GuiBlocking, BuildRoom, RoomSelected, ManPressed, ManSelected, ManDragging };
+        public enum GameStates { None, Normal, GuiBlocking, BuildRoom, RoomSelected, ManPressed, ManSelected, ManDragging, ChangeOwnedRoom };
 
         // Cursor states
         public enum CursorStates { None, Normal, CamDrag, ManDrag, GuiBlocking };

@@ -8,30 +8,42 @@ using UnityEngine;
 
 public class ManScript : MonoBehaviour
 {
-    // Instance specific data
-    public ManInstanceData ManData;
+    #region Variables
+    #region Inspector Variables
 
+    #endregion
+
+    #region Public Variables
+    // Instance specific data
+    [HideInInspector] public ManInstanceData ManData;
+
+    public Enums.ManStates State { get => state; protected set => state = value; }
+    private Enums.ManStates state = Enums.ManStates.None;
+    #endregion
+
+    #region Private Variables
     // Avatar movement
     protected Queue<ActionData> _ActionList = new Queue<ActionData>();
-    private Enums.ManStates state = Enums.ManStates.None;
-    protected Animator _Animator;
-    protected Vector3 _TargetPos;
-    protected Quaternion _TargetRot;
 
-    // Material handling
+    protected Animator _Animator;
+
+
+
+    #region Material Handling
     private Renderer[] _Renderers;
     private Material _MaterialNormal;
     private Material _MaterialHighlight; // Selected
     private Material _MaterialGhost;     // Leaving
+    #endregion
 
     // Couroutines
     private IEnumerator WaitCoroutine;
 
-    //Script specific members
-    private bool hasPaidRent = false;
 
-    public Enums.ManStates State { get => state; protected set => state = value; }
+    #endregion
+    #endregion
 
+    #region Mono Methods
     private void Start()
     {
         _Animator = GetComponentInChildren<Animator>();
@@ -45,7 +57,9 @@ public class ManScript : MonoBehaviour
         StateUpdate();
         CheckIfRentTime();
     }
+    #endregion
 
+    #region Helper Methods
     protected void CheckReferences()
     {
         Debug.Assert(ManData != null);
@@ -86,7 +100,9 @@ public class ManScript : MonoBehaviour
                 break;
         }
     }
+    #endregion
 
+    #region State Methods
     public void SetSelectedState(bool selected)
     {
         if (selected)
@@ -113,54 +129,10 @@ public class ManScript : MonoBehaviour
         }
     }
 
-    public void AssignToRoom(Guid assignedRoom, int assignedRoomSlot)
+    private void SetFaceTowardsPlayer()
     {
-        SetOwnerOfRoom(assignedRoom);
-        ManData.AssignedRoom = assignedRoom;
-        ManData.AssignedRoomSlot = assignedRoomSlot;
-    }
-
-    public void SetOwnerOfRoom(Guid assignedRoom)
-    {
-        //Temporary set up for setting room ownership
-        //SET ownership of room only if
-        //Man is of type Guest
-        //Room is of type Bedroom
-        //Owner does NOT own a room already
-        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(assignedRoom);
-        if (ManData.ManType == Enums.ManTypes.Guest &&
-            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom &&
-            !IsOwnerOfRoom())
-        {
-            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-            int freeSlot = -1; ;
-            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
-            {
-                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
-                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
-            }
-        }
-    }
-
-    public void TransferOwnershipToNewRoom()
-    {
-
-    }
-
-    public bool IsAssignedToAnyRoom()
-    {
-        return (ManData.AssignedRoom != Guid.Empty);
-    }
-
-    public bool IsOwnerOfRoom()
-    {
-        return (ManData.OwnedRoomRef != null);
-    }
-
-    protected void ProcessActions()
-    {
-        if (_ActionList.Count == 0) return;
-        _ActionList.Dequeue().ActionItem.Invoke();
+        State = Enums.ManStates.RotatingToPlayer;
+        SetAnimation(State);
     }
 
     protected void SetAnimation(Enums.ManStates state)
@@ -176,6 +148,175 @@ public class ManScript : MonoBehaviour
             case Enums.ManStates.Waiting:
                 if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle")) _Animator.SetTrigger("IdleTrigger"); break;
         }
+    }
+
+    protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
+    {
+        State = state;
+        _TargetPos = position;
+        SetAnimation(State);
+    }
+
+    protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
+    {
+        State = state;
+        _TargetRot = rotation;
+        //SetAnimation(_State);
+    }
+
+    #region State Functionality Methods
+
+    protected Vector3 _TargetPos;
+    private void DoMovement(float movementSpeed)
+    {
+        float Distance = Vector3.Distance(transform.position, _TargetPos);
+        float Travel = movementSpeed * Time.deltaTime;
+
+        if (Travel > Distance) // Target reached
+        {
+            transform.position = _TargetPos;
+            State = Enums.ManStates.None; // Will trigger next action
+            return;
+        }
+        else // Regular movement
+        {
+            Vector3 DeltaPos = (_TargetPos - transform.position);
+            DeltaPos.Normalize();
+            transform.position += (DeltaPos * Travel);
+            FaceTowardsWaypoint(DeltaPos);
+        }
+    }
+
+    private void FaceTowardsWaypoint(Vector3 deltaPos)
+    {
+        deltaPos.y = 0.0f;
+        if (deltaPos.magnitude == 0) return;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
+    }
+
+    private void FaceTowardsPlayer()
+    {
+        Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
+
+        if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
+        {
+            transform.rotation = TargetRotation;
+            State = Enums.ManStates.None; // Will trigger next action
+        }
+    }
+
+    protected Quaternion _TargetRot;
+    private void RotateToOrientation()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
+
+        if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
+        {
+            transform.rotation = _TargetRot;
+            State = Enums.ManStates.None; // Will trigger next action
+        }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Room Helper Functions
+    public void AssignToRoom(Guid assignedRoom, int assignedRoomSlot)
+    {
+        SetOwnerOfRoom(assignedRoom);
+        ManData.AssignedRoom = assignedRoom;
+        ManData.AssignedRoomSlot = assignedRoomSlot;
+    }
+
+    public void SetOwnerOfRoom(Guid assignedRoom)
+    {
+
+        if (assignedRoom == Guid.Empty)
+        {
+            RemoveRoomOwnership();
+            return;
+        }
+        //Temporary set up for setting room ownership
+        //SET ownership of room only if
+        //Man is of type Guest
+        //Room is of type Bedroom
+        //Owner does NOT own a room already
+        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(assignedRoom);
+        if (ManData.ManType == Enums.ManTypes.Guest &&
+            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom &&
+            !IsOwnerOfRoom())
+        {
+            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
+            int freeSlot = -1;
+            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
+            {
+                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
+                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
+            }
+        }
+    }
+
+    public void TransferOwnershipToNewRoom(Guid newRoom)
+    {
+
+
+        if (newRoom == Guid.Empty)
+        {
+            RemoveRoomOwnership();
+            return;
+        }
+
+        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(newRoom);
+        if (ManData.ManType == Enums.ManTypes.Guest &&
+            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom )
+        {
+            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
+            int freeSlot = -1;
+            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
+            {
+                roomRefTemp.RoomScript.RemoveOwnerFromRoomSlot(ManData.ManId);
+                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
+                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
+            }
+        }
+    }
+
+    public void RemoveRoomOwnership()
+    {
+        if (ManData.OwnedRoomRef != null)
+        {
+            for (int i = 0; i < ManData.OwnedRoomRef.OwnerSlotsAssignments.Length; i++)
+            {
+                if (ManData.OwnedRoomRef.OwnerSlotsAssignments[i] == ManData.ManId)
+                {
+                    ManData.OwnedRoomRef.OwnerSlotsAssignments[i] = Guid.Empty;
+                    break;
+                }
+            }
+        }
+
+        ManData.OwnedRoomRef = null;
+    }
+
+    public bool IsAssignedToAnyRoom()
+    {
+        return (ManData.AssignedRoom != Guid.Empty);
+    }
+
+    public bool IsOwnerOfRoom()
+    {
+        return (ManData.OwnedRoomRef != null);
+    }
+    #endregion
+
+    #region Queue Methods
+    protected void ProcessActions()
+    {
+        if (_ActionList.Count == 0) return;
+        _ActionList.Dequeue().ActionItem.Invoke();
     }
 
     public void Add_RunAction_ToList(Vector3 position)
@@ -232,77 +373,11 @@ public class ManScript : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         State = Enums.ManStates.None; // Will trigger next action
     }
+    #endregion
 
-    protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
-    {
-        State = state;
-        _TargetPos = position;
-        SetAnimation(State);
-    }
+    #region Rent Methods
 
-    protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
-    {
-        State = state;
-        _TargetRot = rotation;
-        //SetAnimation(_State);
-    }
-
-    private void DoMovement(float movementSpeed)
-    {
-        float Distance = Vector3.Distance(transform.position, _TargetPos);
-        float Travel = movementSpeed * Time.deltaTime;
-
-        if (Travel > Distance) // Target reached
-        {
-            transform.position = _TargetPos;
-            State = Enums.ManStates.None; // Will trigger next action
-            return;
-        }
-        else // Regular movement
-        {
-            Vector3 DeltaPos = (_TargetPos - transform.position);
-            DeltaPos.Normalize();
-            transform.position += (DeltaPos * Travel);
-            FaceTowardsWaypoint(DeltaPos);
-        }
-    }
-
-    private void FaceTowardsWaypoint(Vector3 deltaPos)
-    {
-        deltaPos.y = 0.0f;
-        if (deltaPos.magnitude == 0) return;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
-    }
-
-    private void SetFaceTowardsPlayer()
-    {
-        State = Enums.ManStates.RotatingToPlayer;
-        SetAnimation(State);
-    }
-
-    private void FaceTowardsPlayer()
-    {
-        Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
-
-        if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
-        {
-            transform.rotation = TargetRotation;
-            State = Enums.ManStates.None; // Will trigger next action
-        }
-    }
-
-    private void RotateToOrientation()
-    {
-        transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
-
-        if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
-        {
-            transform.rotation = _TargetRot;
-            State = Enums.ManStates.None; // Will trigger next action
-        }
-    }
+    private bool hasPaidRent = false;
 
     public void PayUserInHoots(string reason, int amount)
     {
@@ -322,4 +397,5 @@ public class ManScript : MonoBehaviour
             hasPaidRent = false;
         }
     }
+    #endregion
 }

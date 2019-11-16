@@ -90,7 +90,7 @@ public class ClickManager : MonoBehaviour
 
     bool RayCastCheckRoomClicked()
     {
-        if (StateManager.Ref.IsRoomSelectionAllowed())
+        if (StateManager.Ref.IsRoomSelectionAllowed() || StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
         {
             RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -134,9 +134,19 @@ public class ClickManager : MonoBehaviour
 
     void RightMouseButtonDown()
     {
-        buildCancelled = true;
-        StateManager.Ref.SetGameState(Enums.GameStates.Normal); // TODO: Probably need to refine this
-        buildCancelled = false;
+        //switch to handle similar state mechanics to ChangeOwnedRoom state
+        switch (StateManager.Ref.GetGameState())
+        {
+            case Enums.GameStates.ChangeOwnedRoom:
+                StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
+                break;
+            default:
+                buildCancelled = true;
+                StateManager.Ref.SetGameState(Enums.GameStates.Normal); // TODO: Probably need to refine this
+                buildCancelled = false;
+                break;
+        }
+
     }
 
     void LeftMouseButtonUp()
@@ -145,6 +155,23 @@ public class ClickManager : MonoBehaviour
         {
             _WasGuiClick = false;
             return;
+        }
+
+        if(_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
+        {
+            RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
+
+            if (roomToChangeTo.RoomScript.RoomHasFreeOwnerSlots())
+            {
+                ManManager.Ref.TransferOwnershipToRoom(StateManager.Ref.GetSelectedMan(), _MouseOnRoomGuid);
+                StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
+                return;
+            }
+            else
+            {
+                GuiManager.Ref.Initiate_UserInfoSmall("Sorry, that room is completely booked! Select another or Right Click to exit!");
+                return;
+            }
         }
 
         if (_MouseOnRoom && (StateManager.Ref.IsRoomSelectionAllowed()))
@@ -267,19 +294,25 @@ public class ClickManager : MonoBehaviour
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
         Guid ManId = StateManager.Ref.GetSelectedMan();
-        //ManManager.Ref.MakeManLeave(ManId);
-        //ManManager.Ref.RemoveManFromRoom(ManId);
-       // ManManager.Ref.RemoveManFromList(ManId);
-        //StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+
+        if (ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef != null)
+        {
+            Guid RoomId = ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef.RoomId;
+            RoomManager.Ref.SelectRoom(RoomId);
+        }
+
+        //For moving the camera's position. May implement later.
+        //GameObject ownedRoomObject = RoomManager.Ref.GetRoomData(RoomId).RoomObject;
+
     }
     public void ChangeSelectedManOwnedRoom()
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
-        Guid ManId = StateManager.Ref.GetSelectedMan();
+        //Guid ManId = StateManager.Ref.GetSelectedMan();
         //ManManager.Ref.MakeManLeave(ManId);
-        //ManManager.Ref.RemoveManFromRoom(ManId);
+        //ManManager.Ref.RemoveManOwnershipFromRoom(ManId);
         //ManManager.Ref.RemoveManFromList(ManId);
-        //StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+        StateManager.Ref.SetGameState(Enums.GameStates.ChangeOwnedRoom);
     }
 
     public void AddNewMan()

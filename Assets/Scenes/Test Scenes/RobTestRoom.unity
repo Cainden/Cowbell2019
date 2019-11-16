@@ -38,13 +38,14 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.004080244, g: 0.00022318629, b: 0.000000056975885,
+    a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -5455,7 +5456,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1565618332}
-        m_MethodName: ChangeSelectedManOwnedRoom
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7860,7 +7861,7 @@ GameObject:
   m_Layer: 2
   m_Name: TimeManager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
@@ -7871,8 +7872,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184589034}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.00000029616058, y: 0.00000086426735, z: -0.8336435, w: 0.55230296}
+  m_LocalPosition: {x: -103.99834, y: -61.608498, z: -0.000015258789}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1735916740}
@@ -10742,7 +10743,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 5.298e-42, y: 1.02e-43, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -10753,13 +10754,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1735916738}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: -72.407555, y: 3.6462479, z: -171.02681}
+  m_LocalRotation: {x: 0.40821788, y: -0.23456973, z: 0.109381594, w: 0.8754261}
+  m_LocalPosition: {x: -72.40756, y: 3.6462708, z: -171.02682}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184589035}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -36.488003, y: -46.18, z: -82.707}
 --- !u!1 &1771935683
 GameObject:
   m_ObjectHideFlags: 0
@@ -11919,7 +11920,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1565618332}
-        m_MethodName: ViewSelectedManOwnedRoom
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13504,8 +13505,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ManNameText: {fileID: 1299118821}
   OwnedRoomName: {fileID: 1975767815}
-  viewOwnedButton: {fileID: 1859792536}
-  changeOwnedButton: {fileID: 859505703}
 --- !u!4 &2062345398
 Transform:
   m_ObjectHideFlags: 0
