@@ -245,9 +245,7 @@ public class ManScript : MonoBehaviour
         //Room is of type Bedroom
         //Owner does NOT own a room already
         RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(assignedRoom);
-        if (ManData.ManType == Enums.ManTypes.Guest &&
-            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom &&
-            !IsOwnerOfRoom())
+        if (ManData.ManType == Enums.ManTypes.Guest && (roomRefTemp.RoomScript is Room_Bedroom) && !IsOwnerOfRoom())
         {
             //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
             int freeSlot = -1;
@@ -270,8 +268,7 @@ public class ManScript : MonoBehaviour
         }
 
         RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(newRoom);
-        if (ManData.ManType == Enums.ManTypes.Guest &&
-            roomRefTemp.RoomScript.RoomData.RoomType == Enums.RoomTypes.Bedroom )
+        if (ManData.ManType == Enums.ManTypes.Guest && (roomRefTemp.RoomScript is Room_Bedroom))
         {
             //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
             int freeSlot = -1;
