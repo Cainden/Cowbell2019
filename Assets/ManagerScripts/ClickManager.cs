@@ -24,7 +24,7 @@ public class ClickManager : MonoBehaviour
 
     //for refunding rooms if right click occurs during build
     // Used in right click function
-    public bool buildCancelled = false;
+    //public bool buildCancelled = false;
 
     void Awake()
     {
@@ -124,6 +124,10 @@ public class ClickManager : MonoBehaviour
                                                 BuildPosScript.RoomType,
                                                 BuildPosScript.RoomOverUnder,
                                                 BuildPosScript.LeftmostIndex);
+
+                //For buying rooms
+                WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[BuildPosScript.RoomSize];
+
                 StateManager.Ref.SetGameState(Enums.GameStates.Normal);
                 return (true);
             }
@@ -141,9 +145,9 @@ public class ClickManager : MonoBehaviour
                 StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
                 break;
             default:
-                buildCancelled = true;
+                //buildCancelled = true;
                 StateManager.Ref.SetGameState(Enums.GameStates.Normal); // TODO: Probably need to refine this
-                buildCancelled = false;
+                //buildCancelled = false;
                 break;
         }
 
@@ -441,11 +445,19 @@ public class ClickManager : MonoBehaviour
 
     private void InitiateBuilding(Enums.RoomSizes RoomSize, Enums.RoomTypes RoomType, Enums.RoomOverUnder RoomOverUnder = Enums.RoomOverUnder.Neutral)
     {
+        // if there is no available build position, let the user know and don't try to build.
+        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomSize);
+        if (BuildingIndexArray.Length == 0)
+        {
+            GuiManager.Ref.Initiate_UserInfoSmall("No Available Build Locations Available!");
+            return;
+        }
+
         if (WalletManager.Ref.Hoots - Constants.RoomCostDefinitions[RoomSize] >= 0)
         {
-            WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[RoomSize];
+            //Money deductions now made in RayCastCheckBuildPositionClicked()
+            //WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[RoomSize];
             StateManager.Ref.SetGameState(Enums.GameStates.BuildRoom);
-            GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomSize);
             BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomSize, RoomOverUnder);
         }
         else
