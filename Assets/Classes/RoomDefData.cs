@@ -78,11 +78,26 @@ namespace MySpace
             set { _RoomCost = value; }
         }
 
-        // NOTE: OverUnder is defaulted to NEUTRAL, meaning the room will be buildable above and below ground unless otherwise specified!!!
-        public RoomDefData(string roomName, string roomModelFile,
-                           Enums.RoomSizes roomSize, Enums.RoomTypes roomType, Enums.RoomCategories roomCategory,
-                           int manSlotCount, Enums.ManStates[] manWorkingStates,
-                           string roomDescription, Enums.RoomOverUnder overUnder = Enums.RoomOverUnder.Neutral)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roomCost">This defaults to 100</param>
+        /// <param name="overUnder">OverUnder is defaulted to NEUTRAL, meaning the room will be buildable above and below ground unless otherwise specified!!!</param>
+        public RoomDefData
+            (
+            string roomName, 
+            string roomModelFile,
+            Enums.RoomSizes roomSize, 
+            Enums.RoomTypes roomType, 
+            Enums.RoomCategories roomCategory,
+            int manSlotCount, 
+            Enums.ManStates[] manWorkingStates,
+            string roomDescription,
+            int roomCost = 100,
+            Enums.RoomOverUnder overUnder = Enums.RoomOverUnder.Neutral
+            )
+            //end parameters
         {
             _RoomName = roomName;
             _RoomModelFile = roomModelFile;

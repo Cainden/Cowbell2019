@@ -11,7 +11,7 @@ namespace MySpace
         public enum CursorStates { None, Normal, CamDrag, ManDrag, GuiBlocking };
 
         // Movement/Grid-Link directions, showing possible movement directions (bitfield). 
-        [Flags] public enum MoveDirections : Int32 { Left = 1, Right = 2, Top = 4, Bottom = 8, Front = 16, Back = 32 };
+        [Flags] public enum MoveDirections : int { Left = 1, Right = 2, Top = 4, Bottom = 8, Front = 16, Back = 32 };
 
         // Room related enums
         public enum RoomSizes
@@ -28,7 +28,25 @@ namespace MySpace
         { None, Standard, Other }
 
         public enum RoomTypes
-        { None, Common, Elevator, OverLobby, UnderLobby, Bedroom };
+        {
+            None,
+            Elevator,
+            UnderLobby,
+            Lobby,
+            Bedroom_Size2,
+            Bedroom_Size4,
+            Bedroom_Size6,
+            Hallway_Size2,
+            Hallway_Size4,
+            Hallway_Size6,
+            UnderHallway_Size2,
+            UnderHallway_Size4,
+            UnderHallway_Size6,
+            Common_Size2,
+            Common_Size4,
+            Common_Size6,
+
+        };
 
         // Avatar/man related enums
         // Negative values are allowed in the Underworld
