@@ -19,14 +19,14 @@ public class RoomFactory : MonoBehaviour
     public GameObject CreateRoom(Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder roomOverUnder)
     {
         RoomDefData DefData = GetRoomDefData(roomType, roomSize, roomOverUnder );
-        GameObject RoomObject = LoadRoom(DefData);
+        GameObject RoomObject = InstantiateRoom(DefData.RoomModelFile);
         RoomObject.SetActive(true);        
         return (RoomObject);
     }
 
-    private GameObject LoadRoom(RoomDefData defData)
+    private GameObject InstantiateRoom(string filePath)
     {
-        return (Instantiate(Resources.Load<GameObject>(defData.RoomModelFile)));        
+        return (Instantiate(Resources.Load<GameObject>(filePath)));
     }
 
     public RoomDefData GetRoomDefData(Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder roomOverUnder)

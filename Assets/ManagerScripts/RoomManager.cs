@@ -11,6 +11,17 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
+    #region Serialized Variables
+    [Tooltip("A ratio applied to all calculations related to cleaning speed")]
+    [Range(0.001f, 100)]
+    [SerializeField] float cleanSpeedRatio = 0.1f;
+    /// <summary>
+    /// A ratio applied to all calculations related to cleaning speed
+    /// </summary>
+    public float CleanSpeedRatio { get { return cleanSpeedRatio; } }
+
+    [Header("===============================================================================================================================================")]
+    [Header("Room Highlights & Selectors")]
     public GameObject RoomSelectorSz1; // To be set by editor
     public GameObject RoomSelectorSz2;
     public GameObject RoomSelectorSz4;
@@ -18,12 +29,20 @@ public class RoomManager : MonoBehaviour
     public GameObject RoomHighlighterSz2;
     public GameObject RoomHighlighterSz4;
     public GameObject RoomHighlighterSz6;
+    [Header("===============================================================================================================================================")]
+    [SerializeField] Room[] roomDefinitions;
+    #endregion
 
-    [HideInInspector]
+    #region Static Variables
+
     public static RoomManager Ref { get; private set; } // For external access of script
+
+    #endregion
 
     //private float elapsedTime = 0;
     private Dictionary<Guid, RoomRef> _RoomList = new Dictionary<Guid, RoomRef>();
+
+    #region Monobehavior Methods
 
     void Awake()
     {
@@ -41,14 +60,16 @@ public class RoomManager : MonoBehaviour
         Debug.Assert(RoomHighlighterSz6 != null);
     }
 
+    #endregion
+
     public bool IsRoomExisting(Guid roomId)
     {
         return (_RoomList.ContainsKey(roomId));
     }
 
-    public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder roomOverUnder, GridIndex leftMostIndex)
+    public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, GridIndex leftMostIndex)
     {
-        RoomDefData RoomDefData = RoomFactory.Ref.GetRoomDefData(roomType, roomSize, roomOverUnder);
+        RoomDefData RoomDefData = GetRoomDefData(roomType);
 
         RoomInstanceData RoomData = new RoomInstanceData();
         RoomData.RoomId = roomId;
@@ -76,7 +97,7 @@ public class RoomManager : MonoBehaviour
     {
         if (roomData == null) return;
 
-        GameObject RoomObject = RoomFactory.Ref.CreateRoom(roomData.RoomType, roomData.RoomSize, roomData.RoomOverUnder);
+        GameObject RoomObject = InstantiateRoom(roomData.RoomType);
         RoomScript RoomScript = RoomObject.GetComponent<RoomScript>();
         RoomScript.RoomData = roomData;
 
@@ -84,6 +105,47 @@ public class RoomManager : MonoBehaviour
         RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
         GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
     }
+
+    #region Old CreateRoom
+    //public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder roomOverUnder, GridIndex leftMostIndex)
+    //{
+    //    RoomDefData RoomDefData = GetRoomDefData(roomType, roomSize, roomOverUnder);
+
+    //    RoomInstanceData RoomData = new RoomInstanceData();
+    //    RoomData.RoomId = roomId;
+    //    RoomData.RoomName = RoomDefData.RoomName;
+    //    RoomData.RoomSize = RoomDefData.RoomSize;
+    //    RoomData.RoomCategory = RoomDefData.RoomCategory;
+    //    RoomData.RoomType = RoomDefData.RoomType;
+    //    RoomData.RoomOverUnder = RoomDefData.RoomOverUnder;
+    //    RoomData.ManSlotCount = RoomDefData.ManSlotCount;
+    //    RoomData.ManSlotsPositions = new Vector3[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
+    //    RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
+    //    RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+    //    RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+
+    //    for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
+    //    RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
+    //    RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(roomSize, leftMostIndex);
+
+    //    for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.OwnerSlotsAssignments[i] = Guid.Empty;
+
+    //    CreateRoom(RoomData);
+    //}
+
+    //public void CreateRoom(RoomInstanceData roomData)
+    //{
+    //    if (roomData == null) return;
+
+    //    GameObject RoomObject = InstantiateRoom(roomData.RoomType, roomData.RoomSize, roomData.RoomOverUnder);
+    //    RoomScript RoomScript = RoomObject.GetComponent<RoomScript>();
+    //    RoomScript.RoomData = roomData;
+
+    //    _RoomList[roomData.RoomId] = new RoomRef(RoomObject, RoomScript);
+    //    RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
+    //    GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
+    //}
+    #endregion
 
     public void RemoveRoom(Guid roomId)
     {
@@ -286,5 +348,90 @@ public class RoomManager : MonoBehaviour
                 CreateRoom(RoomData);
             }
         }
+    }
+
+    public GameObject InstantiateRoom(Enums.RoomTypes roomType)
+    {
+        RoomDefData DefData = GetRoomDefData(roomType);
+        GameObject RoomObject = Instantiate(Resources.Load<GameObject>(DefData.RoomModelFile));
+        RoomObject.SetActive(true);
+        return (RoomObject);
+    }
+
+    public static RoomDefData GetRoomDefData(Enums.RoomTypes roomType)
+    {
+        foreach (RoomDefData DefData in Constants.RoomDefinitions)
+        {
+            if ((DefData.RoomType == roomType))
+            {
+                return (DefData);
+            }
+        }
+
+        Debug.Assert(1 == 0);
+        return (Constants.RoomDefinitions[0]);
+    }
+
+    #region RoomInfo Helper Functions
+    public int GetCostByRoomType(Enums.RoomTypes roomType)
+    {
+        for (int i = 0; i < roomDefinitions.Length; i++)
+        {
+            if (roomDefinitions[i].RoomType == roomType)
+                return roomDefinitions[i].RoomCost;
+        }
+        Debug.LogWarning("RoomManager.cs 'GetCostByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        return 0;
+    }
+
+    public Enums.RoomSizes GetRoomSizeByRoomType(Enums.RoomTypes roomType)
+    {
+        for (int i = 0; i < roomDefinitions.Length; i++)
+        {
+            if (roomDefinitions[i].RoomType == roomType)
+                return roomDefinitions[i].RoomSize;
+        }
+        Debug.LogWarning("RoomManager.cs 'GetRoomSizeByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        return 0;
+    }
+
+    public Enums.RoomOverUnder GetOverUnderByRoomType(Enums.RoomTypes roomType)
+    {
+        for (int i = 0; i < roomDefinitions.Length; i++)
+        {
+            if (roomDefinitions[i].RoomType == roomType)
+                return roomDefinitions[i].RoomOverUnder;
+        }
+        Debug.LogWarning("RoomManager.cs 'GetOverUnderByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        return 0;
+    }
+    #endregion
+    public void CreateStartRooms()
+    {
+        //Lobby
+        CreateRoom(Guid.NewGuid(),
+                                   Enums.RoomTypes.Lobby,
+                                   Constants.EntranceRoomSize,
+                                   Constants.EntranceRoomIndex);
+
+        //Underworld Lobby
+        CreateRoom(Guid.NewGuid(),
+                                  Enums.RoomTypes.UnderLobby,
+                                  Constants.UWEntranceRoomSize,
+                                  Constants.UWEntranceRoomIndex);
+    }
+
+    [Serializable]
+    private struct Room
+    {
+        public string RoomName;
+        public GameObject RoomModelPrefab;
+        public Enums.RoomSizes RoomSize;
+        public Enums.RoomCategories RoomCategory;
+        public Enums.RoomTypes RoomType;
+        public int ManSlotCount;
+        public string RoomDescription;
+        public Enums.RoomOverUnder RoomOverUnder;
+        public int RoomCost;
     }
 }

@@ -24,16 +24,9 @@ public class StateManager : MonoBehaviour
 
     void Start()
     {
-        RoomManager.Ref.CreateRoom(Guid.NewGuid(),
-                                   Constants.EntranceRoomType,
-                                   Constants.EntranceRoomSize,
-                                   Enums.RoomOverUnder.Over,
-                                   Constants.EntranceRoomIndex);
-        RoomManager.Ref.CreateRoom(Guid.NewGuid(),
-                                  Constants.UWEntranceRoomType,
-                                  Constants.UWEntranceRoomSize,
-                                  Enums.RoomOverUnder.Under,
-                                  Constants.UWEntranceRoomIndex);
+        //Moved the code for actually creating rooms to the room manager so the information that creates the start rooms can be displayed in the inspector there.
+        RoomManager.Ref.CreateStartRooms();
+
         SetGameState(Enums.GameStates.Normal);
     }
 

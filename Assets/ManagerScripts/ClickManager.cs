@@ -439,22 +439,41 @@ public class ClickManager : MonoBehaviour
         StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
     }
 
-    private void InitiateBuilding(Enums.RoomSizes RoomSize, Enums.RoomTypes RoomType, Enums.RoomOverUnder RoomOverUnder = Enums.RoomOverUnder.Neutral)
+    private void InitiateBuilding(Enums.RoomTypes RoomType)
     {
-        if (WalletManager.Ref.Hoots - Constants.RoomCostDefinitions[RoomSize] >= 0)
+        if (WalletManager.Ref.Hoots - RoomManager.Ref.GetCostByRoomType(RoomType) >= 0)
         {
-            WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[RoomSize];
+            WalletManager.Ref.Hoots -= RoomManager.Ref.GetCostByRoomType(RoomType);
             StateManager.Ref.SetGameState(Enums.GameStates.BuildRoom);
-            GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomSize);
-            BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomSize, RoomOverUnder);
+            GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
+            BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomManager.Ref.GetRoomSizeByRoomType(RoomType), RoomManager.Ref.GetOverUnderByRoomType(RoomType));
         }
         else
             GuiManager.Ref.Initiate_UserInfoSmall("Not enough hoots!");
-    }    
+    }
+    //private void InitiateBuilding(Enums.RoomSizes RoomSize, Enums.RoomTypes RoomType, Enums.RoomOverUnder RoomOverUnder = Enums.RoomOverUnder.Neutral)
+    //{
+    //    if (WalletManager.Ref.Hoots - RoomManager.Ref.GetCostByRoomType(RoomType) >= 0)
+    //    {
+    //        WalletManager.Ref.Hoots -= RoomManager.Ref.GetCostByRoomType(RoomType);
+    //        StateManager.Ref.SetGameState(Enums.GameStates.BuildRoom);
+    //        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomSize);
+    //        BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomSize, RoomOverUnder);
+    //    }
+    //    else
+    //        GuiManager.Ref.Initiate_UserInfoSmall("Not enough hoots!");
+    //}
 
+    public void BuildClick(Enums.RoomTypes roomType)
+    {
+        InitiateBuilding(roomType);
+    }
+    
+    #region Preset Build Functions
+    /*
     public void BuildDlg_Click_Elevator()
     {    
-            InitiateBuilding(Enums.RoomSizes.Size1, Enums.RoomTypes.Elevator);
+        InitiateBuilding(Enums.RoomTypes.Elevator);
     }
 
     public void BuildDlg_Click_Sz2()
@@ -520,6 +539,8 @@ public class ClickManager : MonoBehaviour
     {
         InitiateBuilding(Enums.RoomSizes.Size6, Enums.RoomTypes.Common, Enums.RoomOverUnder.Under);
     }
+    */
+    #endregion
 
     /// <summary>
     //HIRE WINDOW BUTTONS
