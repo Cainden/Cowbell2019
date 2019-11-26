@@ -127,9 +127,11 @@ public class StateManager : MonoBehaviour
         switch (newGameState)
         {
             case Enums.GameStates.Normal:
+
+                //NOT USED ANYMORE. LEAVING FOR ARCHIVAL PURPOSES FOR NOW
                 //Refund the room purchase by getting the room BuildPosition info. Is this the best way for this?
-                if (_GameState == Enums.GameStates.BuildRoom && ClickManager.Ref.buildCancelled == true)
-                    WalletManager.Ref.Hoots += Constants.RoomCostDefinitions[GameObject.FindObjectOfType<BuildPositionScript>().RoomSize];
+                //if (_GameState == Enums.GameStates.BuildRoom && ClickManager.Ref.buildCancelled == true)
+                //    WalletManager.Ref.Hoots += Constants.RoomCostDefinitions[GameObject.FindObjectOfType<BuildPositionScript>().RoomSize];
 
                 // If the player is chaning a guest's room and cancels (right clicks)
                 // return to the ManInfoWindow they were just on
