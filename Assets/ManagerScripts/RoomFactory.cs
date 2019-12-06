@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class RoomFactory : MonoBehaviour
 {
+    #region  THIS CLASS IS DEPRECATED
+    /*
     [HideInInspector]
     public static RoomFactory Ref { get; private set; } // For external access of script
 
@@ -42,4 +44,6 @@ public class RoomFactory : MonoBehaviour
         Debug.Assert(1 == 0);
         return (Constants.RoomDefinitions[0]);
     }
+    */
+    #endregion
 }
