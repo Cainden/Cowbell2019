@@ -6,13 +6,15 @@ namespace MySpace
     {
         // Room definitions
         public static readonly GridIndex EntranceRoomIndex = new GridIndex(0, GridSurfaceY, 0);
-        public static readonly Enums.RoomSizes EntranceRoomSize = Enums.RoomSizes.Size4;
-       // public static readonly Enums.RoomOverUnder EntranceRoomOverUnder = Enums.RoomOverUnder.Over;
+        //public static readonly Enums.RoomSizes EntranceRoomSize = Enums.RoomSizes.Size4;
+        //public static readonly Enums.RoomOverUnder EntranceRoomOverUnder = Enums.RoomOverUnder.Over;
         public static readonly GridIndex UWEntranceRoomIndex = new GridIndex(0, GridSurfaceY - 1, 0);
-        public static readonly Enums.RoomSizes UWEntranceRoomSize = Enums.RoomSizes.Size4;
+        //public static readonly Enums.RoomSizes UWEntranceRoomSize = Enums.RoomSizes.Size4;
         //public static readonly Enums.RoomOverUnder UWEntranceRoomOverUnder = Enums.RoomOverUnder.Under;
 
+        #region Old Room Definitions
         // Room data - might be moved to a file or database or so later. Unique index is combo size+type
+        /*
         public static readonly RoomDefData[] RoomDefinitions = new RoomDefData[]
         {
             #region Neutral Rooms
@@ -94,7 +96,7 @@ namespace MySpace
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of small size. Can hold 2 men.",
+            "An Overworld room of small size. Can hold 2 men.",
             overUnder: Enums.RoomOverUnder.Over
             ),
 
@@ -107,7 +109,7 @@ namespace MySpace
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of medium size. Can hold 4 men.",
+            "An Overworld room of medium size. Can hold 4 men.",
             overUnder: Enums.RoomOverUnder.Over
             ),
 
@@ -121,7 +123,7 @@ namespace MySpace
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of large size. Can hold 6 men.",
+            "An Overworld room of large size. Can hold 6 men.",
             overUnder: Enums.RoomOverUnder.Over
             ),
                 new RoomDefData (
@@ -190,7 +192,7 @@ namespace MySpace
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of small size. Can hold 2 men.",
+            "An Underworld room of small size. Can hold 2 men.",
             overUnder: Enums.RoomOverUnder.Under
             ),
 
@@ -203,7 +205,7 @@ namespace MySpace
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of medium size. Can hold 4 men.",
+            "An Underworld room of medium size. Can hold 4 men.",
             overUnder: Enums.RoomOverUnder.Under
             ),
 
@@ -217,10 +219,12 @@ namespace MySpace
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of large size. Can hold 6 men.",
+            "An Underworld room of large size. Can hold 6 men.",
             overUnder: Enums.RoomOverUnder.Under
             ),
             #endregion
         };
+        */
+        #endregion
     }
 }
