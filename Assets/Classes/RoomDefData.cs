@@ -8,7 +8,7 @@ namespace MySpace
     public class RoomDefData
     {
         private string _RoomName;
-        private string _RoomModelFile;
+        private GameObject _RoomPrefab;
         private Enums.RoomSizes _RoomSize;
         private Enums.RoomCategories _RoomCategory;
         private Enums.RoomTypes _RoomType;
@@ -24,10 +24,10 @@ namespace MySpace
             set { _RoomName = value; }
         }
 
-        public string RoomModelFile
+        public GameObject RoomPrefab
         {
-            get { return _RoomModelFile; }
-            set { _RoomModelFile = value; }
+            get { return _RoomPrefab; }
+            set { _RoomPrefab = value; }
         }
 
         public Enums.RoomSizes RoomSize
@@ -87,7 +87,7 @@ namespace MySpace
         public RoomDefData
             (
             string roomName, 
-            string roomModelFile,
+            GameObject roomPrefab,
             Enums.RoomSizes roomSize, 
             Enums.RoomTypes roomType, 
             Enums.RoomCategories roomCategory,
@@ -100,7 +100,7 @@ namespace MySpace
             //end parameters
         {
             _RoomName = roomName;
-            _RoomModelFile = roomModelFile;
+            _RoomPrefab = roomPrefab;
             _RoomSize = roomSize;
             _RoomType = roomType;
             _RoomCategory = roomCategory;
@@ -109,7 +109,7 @@ namespace MySpace
             _RoomDescription = roomDescription;
             _RoomOverUnder = overUnder;
             //Based on room size for now
-            _RoomCost = Constants.RoomCostDefinitions[_RoomSize];
+            _RoomCost = roomCost;
         }
     }
 }
