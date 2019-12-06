@@ -14,7 +14,9 @@ public class ManManager : MonoBehaviour
 
     private Dictionary<Guid, ManRef> _ManList = new Dictionary<Guid, ManRef>();
 
+    [HideInInspector]
     public List<ManInstanceData> hireList = new List<ManInstanceData>();
+    [HideInInspector]
     public List<ManInstanceData> bookingList = new List<ManInstanceData>();
 
     void Awake()

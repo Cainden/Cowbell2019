@@ -120,13 +120,12 @@ public class ClickManager : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskBuildPos))
             {
                 BuildPositionScript BuildPosScript = hitInfo.transform.GetComponent<BuildPositionScript>();
-                BuildManager.Ref.Build_Finished(BuildPosScript.RoomSize,
-                                                BuildPosScript.RoomType,
+                BuildManager.Ref.Build_Finished(BuildPosScript.RoomType,
                                                 BuildPosScript.RoomOverUnder,
                                                 BuildPosScript.LeftmostIndex);
 
                 //For buying rooms
-                WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[BuildPosScript.RoomSize];
+                WalletManager.Ref.Hoots -= RoomManager.Ref.GetCostByRoomType(BuildPosScript.RoomType);
 
                 StateManager.Ref.SetGameState(Enums.GameStates.Normal);
                 return (true);
@@ -446,19 +445,19 @@ public class ClickManager : MonoBehaviour
     private void InitiateBuilding(Enums.RoomTypes RoomType)
     {
         // if there is no available build position, let the user know and don't try to build.
-        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomSize);
+        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
         if (BuildingIndexArray.Length == 0)
         {
             GuiManager.Ref.Initiate_UserInfoSmall("No Available Build Locations Available!");
             return;
         }
 
-        if (WalletManager.Ref.Hoots - Constants.RoomCostDefinitions[RoomSize] >= 0)
+        if (WalletManager.Ref.Hoots - RoomManager.Ref.GetCostByRoomType(RoomType) >= 0)
         {
             //Money deductions now made in RayCastCheckBuildPositionClicked()
             //WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[RoomSize];
             StateManager.Ref.SetGameState(Enums.GameStates.BuildRoom);
-            BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomSize, RoomOverUnder);
+            BuildManager.Ref.ShowRoomPositionSelectors(BuildingIndexArray, RoomType, RoomManager.Ref.GetRoomSizeByRoomType(RoomType), RoomManager.Ref.GetOverUnderByRoomType(RoomType));
         }
         else
             GuiManager.Ref.Initiate_UserInfoSmall("Not enough hoots!");
@@ -476,9 +475,17 @@ public class ClickManager : MonoBehaviour
     //        GuiManager.Ref.Initiate_UserInfoSmall("Not enough hoots!");
     //}
 
-    public void BuildClick(Enums.RoomTypes roomType)
+    public void BuildClick(string roomType)
     {
-        InitiateBuilding(roomType);
+        if (Enum.TryParse(roomType, out Enums.RoomTypes type))
+        {
+            InitiateBuilding(type);
+        }
+        else
+        {
+            Debug.LogWarning("ClickManager.cs 'BuildClick'/n Try Parse Failed. '" + roomType + "' string input was not able to be converted into Enums.RoomTypes enum.");
+        }
+        
     }
     
     #region Preset Build Functions
