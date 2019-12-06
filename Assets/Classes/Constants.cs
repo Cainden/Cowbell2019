@@ -62,6 +62,7 @@ namespace MySpace
         };
 
         // Room cost definitions based on size for now
+        /*
         public static readonly Dictionary<Enums.RoomSizes, int> RoomCostDefinitions = new Dictionary<Enums.RoomSizes, int>
         {
             { Enums.RoomSizes.None, 0 },
@@ -70,6 +71,7 @@ namespace MySpace
             { Enums.RoomSizes.Size4, 2000 },
             { Enums.RoomSizes.Size6, 4000 }
         };
+        */
 
         // Man avatar definitions
         public static readonly string ManSelectedMaterial = "Avatars/UnlitYellowMaterial";
