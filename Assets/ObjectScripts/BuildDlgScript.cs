@@ -84,25 +84,25 @@ public class BuildDlgScript : MonoBehaviour
                 if (costText.name == "Sz2Cost")
                 {
                     costText.text = "Cost:"
-                        + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size2]
+                        + RoomManager.Ref.GetCostByRoomType(MySpace.Enums.RoomTypes.Bedroom_Size2)
                         + " Hoots";
                 }
                 else if (costText.name == "Sz4Cost")
                 {
                     costText.text = "Cost:"
-                        + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size4]
+                        + RoomManager.Ref.GetCostByRoomType(MySpace.Enums.RoomTypes.Bedroom_Size4)
                         + " Hoots";
                 }
                 else if (costText.name == "Sz6Cost")
                 {
                     costText.text = "Cost:"
-                        + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size6]
+                        + RoomManager.Ref.GetCostByRoomType(MySpace.Enums.RoomTypes.Bedroom_Size6)
                         + " Hoots";
                 }
                 else if (costText.name == "UtilCost")
                 {
                     costText.text = "Cost:"
-                        + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size1]
+                        + RoomManager.Ref.GetCostByRoomType(MySpace.Enums.RoomTypes.Elevator)
                         + " Hoots";
                 }
 
