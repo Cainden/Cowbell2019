@@ -31,6 +31,8 @@ public class RoomManager : MonoBehaviour
     public GameObject RoomHighlighterSz6;
     [Header("===============================================================================================================================================")]
     [SerializeField] Room[] roomDefinitions;
+
+    public static RoomDefData[] RoomDefinitions { get; private set; }
     #endregion
 
     #region Static Variables
@@ -47,10 +49,42 @@ public class RoomManager : MonoBehaviour
     void Awake()
     {
         if (Ref == null) Ref = GetComponent<RoomManager>();
+
+        #region Defining RoomDefinitions Array
+        if (roomDefinitions.Length == 0)
+            Debug.LogError("No Rooms filled in inspector for RoomManager!");
+        RoomDefinitions = new RoomDefData[roomDefinitions.Length];
+        for (int i = 0; i < roomDefinitions.Length; i++)
+        {
+            RoomDefinitions[i] = new RoomDefData(
+                roomDefinitions[i].RoomName,
+                roomDefinitions[i].RoomModelPrefab,
+                roomDefinitions[i].RoomSize,
+                roomDefinitions[i].RoomType,
+                roomDefinitions[i].RoomCategory,
+                roomDefinitions[i].ManSlotCount,
+                CreateNewArray(roomDefinitions[i].ManSlotCount),
+                roomDefinitions[i].RoomDescription,
+                roomDefinitions[i].RoomCost,
+                roomDefinitions[i].RoomOverUnder
+                );
+        }
+
+        Enums.ManStates[] CreateNewArray(int length)
+        {
+            var ar = new Enums.ManStates[length];
+            for (int i = 0; i < length; i++)
+            {
+                ar[i] = Enums.ManStates.Idle;
+            }
+            return ar;
+        }
+        #endregion
     }
 
     void Start()
     {
+        #region Checking inspector object fields are properly filled
         Debug.Assert(RoomSelectorSz1 != null);
         Debug.Assert(RoomSelectorSz2 != null);
         Debug.Assert(RoomSelectorSz4 != null);
@@ -58,16 +92,14 @@ public class RoomManager : MonoBehaviour
         Debug.Assert(RoomHighlighterSz2 != null);
         Debug.Assert(RoomHighlighterSz4 != null);
         Debug.Assert(RoomHighlighterSz6 != null);
+        #endregion
     }
 
     #endregion
 
-    public bool IsRoomExisting(Guid roomId)
-    {
-        return (_RoomList.ContainsKey(roomId));
-    }
+    #region CreateRoom Methods
 
-    public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, GridIndex leftMostIndex)
+    public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, GridIndex leftMostIndex)
     {
         RoomDefData RoomDefData = GetRoomDefData(roomType);
 
@@ -86,7 +118,7 @@ public class RoomManager : MonoBehaviour
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
-        RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(roomSize, leftMostIndex);
+        RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(RoomDefData.RoomSize, leftMostIndex);
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.OwnerSlotsAssignments[i] = Guid.Empty;
 
@@ -146,6 +178,13 @@ public class RoomManager : MonoBehaviour
     //    GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
     //}
     #endregion
+
+    #endregion
+
+    public bool IsRoomExisting(Guid roomId)
+    {
+        return (_RoomList.ContainsKey(roomId));
+    }
 
     public void RemoveRoom(Guid roomId)
     {
@@ -353,14 +392,14 @@ public class RoomManager : MonoBehaviour
     public GameObject InstantiateRoom(Enums.RoomTypes roomType)
     {
         RoomDefData DefData = GetRoomDefData(roomType);
-        GameObject RoomObject = Instantiate(Resources.Load<GameObject>(DefData.RoomModelFile));
+        GameObject RoomObject = Instantiate(DefData.RoomPrefab);
         RoomObject.SetActive(true);
         return (RoomObject);
     }
 
     public static RoomDefData GetRoomDefData(Enums.RoomTypes roomType)
     {
-        foreach (RoomDefData DefData in Constants.RoomDefinitions)
+        foreach (RoomDefData DefData in RoomDefinitions)
         {
             if ((DefData.RoomType == roomType))
             {
@@ -369,7 +408,7 @@ public class RoomManager : MonoBehaviour
         }
 
         Debug.Assert(1 == 0);
-        return (Constants.RoomDefinitions[0]);
+        return (RoomDefinitions[0]);
     }
 
     #region RoomInfo Helper Functions
@@ -380,7 +419,7 @@ public class RoomManager : MonoBehaviour
             if (roomDefinitions[i].RoomType == roomType)
                 return roomDefinitions[i].RoomCost;
         }
-        Debug.LogWarning("RoomManager.cs 'GetCostByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        Debug.LogWarning("RoomManager.cs 'GetCostByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
     }
 
@@ -391,7 +430,7 @@ public class RoomManager : MonoBehaviour
             if (roomDefinitions[i].RoomType == roomType)
                 return roomDefinitions[i].RoomSize;
         }
-        Debug.LogWarning("RoomManager.cs 'GetRoomSizeByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        Debug.LogWarning("RoomManager.cs 'GetRoomSizeByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
     }
 
@@ -402,25 +441,21 @@ public class RoomManager : MonoBehaviour
             if (roomDefinitions[i].RoomType == roomType)
                 return roomDefinitions[i].RoomOverUnder;
         }
-        Debug.LogWarning("RoomManager.cs 'GetOverUnderByRoomType'; No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
+        Debug.LogWarning("RoomManager.cs 'GetOverUnderByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
     }
     #endregion
+
     public void CreateStartRooms()
     {
         //Lobby
-        CreateRoom(Guid.NewGuid(),
-                                   Enums.RoomTypes.Lobby,
-                                   Constants.EntranceRoomSize,
-                                   Constants.EntranceRoomIndex);
+        CreateRoom(Guid.NewGuid(), Enums.RoomTypes.Lobby, Constants.EntranceRoomIndex);
 
         //Underworld Lobby
-        CreateRoom(Guid.NewGuid(),
-                                  Enums.RoomTypes.UnderLobby,
-                                  Constants.UWEntranceRoomSize,
-                                  Constants.UWEntranceRoomIndex);
+        CreateRoom(Guid.NewGuid(), Enums.RoomTypes.UnderLobby, Constants.UWEntranceRoomIndex);
     }
 
+    #region Serializable Struct (for inspector readability/clarity)
     [Serializable]
     private struct Room
     {
@@ -434,4 +469,5 @@ public class RoomManager : MonoBehaviour
         public Enums.RoomOverUnder RoomOverUnder;
         public int RoomCost;
     }
+    #endregion
 }
