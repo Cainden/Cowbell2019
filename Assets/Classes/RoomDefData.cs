@@ -7,76 +7,28 @@ namespace MySpace
 {
     public class RoomDefData
     {
-        private string _RoomName;
-        private GameObject _RoomPrefab;
-        private Enums.RoomSizes _RoomSize;
-        private Enums.RoomCategories _RoomCategory;
-        private Enums.RoomTypes _RoomType;
-        private int _ManSlotCount;
-        private Enums.ManStates[] _ManWorkingStates;  // Per slot, we can assign different (animation) states
-        private string _RoomDescription;
-        private Enums.RoomOverUnder _RoomOverUnder;
-        private int _RoomCost;
 
-        public string RoomName
-        {
-            get { return _RoomName; }
-            set { _RoomName = value; }
-        }
+        public string RoomName { get; set; }
 
-        public GameObject RoomPrefab
-        {
-            get { return _RoomPrefab; }
-            set { _RoomPrefab = value; }
-        }
+        public GameObject RoomPrefab { get; set; }
 
-        public Enums.RoomSizes RoomSize
-        {
-            get { return _RoomSize; }
-            set { _RoomSize = value; }
-        }
+        public Enums.RoomSizes RoomSize { get; set; }
 
-        public Enums.RoomCategories RoomCategory
-        {
-            get { return _RoomCategory; }
-            set { _RoomCategory = value; }
-        }
+        public Enums.RoomCategories RoomCategory { get; set; }
 
-        public Enums.RoomTypes RoomType
-        {
-            get { return _RoomType; }
-            set { _RoomType = value; }
-        }
+        public Enums.RoomTypes RoomType { get; set; }
 
-        public int ManSlotCount
-        {
-            get { return _ManSlotCount; }
-            set { _ManSlotCount = value; }
-        }
+        public int ManSlotCount { get; set; }
 
-        public Enums.ManStates[] ManWorkingStates
-        {
-            get { return _ManWorkingStates; }
-            set { _ManWorkingStates = value; }
-        }
+        public Enums.ManStates[] ManWorkingStates { get; set; }
 
-        public string RoomDescription
-        {
-            get { return _RoomDescription; }
-            set { _RoomDescription = value; }
-        }
+        public string RoomDescription { get; set; }
 
-        public Enums.RoomOverUnder RoomOverUnder
-        {
-            get { return _RoomOverUnder; }
-            set { _RoomOverUnder = value; }
-        }
+        public Enums.RoomOverUnder RoomOverUnder { get; set; }
 
-        public int RoomCost
-        {
-            get { return _RoomCost; }
-            set { _RoomCost = value; }
-        }
+        public int RoomCost { get; set; }
+
+        public bool Locked { get; set; }
 
 
         /// <summary>
@@ -94,22 +46,23 @@ namespace MySpace
             int manSlotCount, 
             Enums.ManStates[] manWorkingStates,
             string roomDescription,
-            int roomCost = 100,
-            Enums.RoomOverUnder overUnder = Enums.RoomOverUnder.Neutral
+            int roomCost,
+            Enums.RoomOverUnder overUnder,
+            bool locked
             )
             //end parameters
         {
-            _RoomName = roomName;
-            _RoomPrefab = roomPrefab;
-            _RoomSize = roomSize;
-            _RoomType = roomType;
-            _RoomCategory = roomCategory;
-            _ManSlotCount = manSlotCount;
-            _ManWorkingStates = manWorkingStates;
-            _RoomDescription = roomDescription;
-            _RoomOverUnder = overUnder;
-            //Based on room size for now
-            _RoomCost = roomCost;
+            RoomName = roomName;
+            RoomPrefab = roomPrefab;
+            RoomSize = roomSize;
+            RoomType = roomType;
+            RoomCategory = roomCategory;
+            ManSlotCount = manSlotCount;
+            ManWorkingStates = manWorkingStates;
+            RoomDescription = roomDescription;
+            RoomOverUnder = overUnder;
+            RoomCost = roomCost;
+            Locked = locked;
         }
     }
 }

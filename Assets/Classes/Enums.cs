@@ -25,7 +25,12 @@ namespace MySpace
         { Under = -1, Neutral, Over}
 
         public enum RoomCategories
-        { None, Standard, Other }
+        {
+            Miscellaneous,
+            Utility,
+            Overworld,
+            Underworld
+        }
 
         public enum RoomTypes
         {
@@ -47,6 +52,41 @@ namespace MySpace
             Common_Size6,
 
         };
+
+        /// <summary>
+        /// Use if you want to have a specific display string return instead of just the RoomType enum converted directly into a string. 
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns>The overidden string name hard-coded, otherwise it will return the type converted into a string.</returns>
+        public static string RoomTypeToRoomDisplayName(this RoomTypes type)
+        {
+            switch (type)
+            {
+                case RoomTypes.UnderLobby:
+                    return "Under Lobby";
+                case RoomTypes.Bedroom_Size2:
+                    return "Small Bedroom";
+                case RoomTypes.Bedroom_Size4:
+                    return "Bedroom";
+                case RoomTypes.Bedroom_Size6:
+                    return "Large Bedroom";
+                case RoomTypes.Hallway_Size2:
+                    return "Small Hallway";
+                case RoomTypes.Hallway_Size4:
+                    return "Hallway";
+                case RoomTypes.Hallway_Size6:
+                    return "Large Hallway";
+                case RoomTypes.UnderHallway_Size2:
+                    return "Small Under Hallway";
+                case RoomTypes.UnderHallway_Size4:
+                    return "Under Hallway";
+                case RoomTypes.UnderHallway_Size6:
+                    return "Large Under Hallway";
+                default:
+                    return type.ToString();
+            }
+
+        }
 
         // Avatar/man related enums
         // Negative values are allowed in the Underworld
