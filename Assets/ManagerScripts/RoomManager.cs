@@ -33,6 +33,8 @@ public class RoomManager : MonoBehaviour
     [SerializeField] Room[] roomDefinitions;
 
     public static RoomDefData[] RoomDefinitions { get; private set; }
+
+    public static Dictionary<Enums.RoomTypes, Action> UnlockEvents = new Dictionary<Enums.RoomTypes, Action>();
     #endregion
 
     #region Static Variables
@@ -66,7 +68,8 @@ public class RoomManager : MonoBehaviour
                 CreateNewArray(roomDefinitions[i].ManSlotCount),
                 roomDefinitions[i].RoomDescription,
                 roomDefinitions[i].RoomCost,
-                roomDefinitions[i].RoomOverUnder
+                roomDefinitions[i].RoomOverUnder,
+                roomDefinitions[i].locked
                 );
         }
 
@@ -181,6 +184,7 @@ public class RoomManager : MonoBehaviour
 
     #endregion
 
+    #region HelperFunction Library
     public bool IsRoomExisting(Guid roomId)
     {
         return (_RoomList.ContainsKey(roomId));
@@ -411,6 +415,50 @@ public class RoomManager : MonoBehaviour
         return (RoomDefinitions[0]);
     }
 
+    public static RoomDefData[] GetAllRoomsofCategory(Enums.RoomCategories category, bool excludeUnbuildables = false)
+    {
+        List<RoomDefData> rooms = new List<RoomDefData>();
+
+        for (int i = 0; i < RoomDefinitions.Length; i++)
+        {
+            if (excludeUnbuildables && RoomDefinitions[i].RoomCost == 0)
+                continue;
+            if (RoomDefinitions[i].RoomCategory == category)
+                rooms.Add(RoomDefinitions[i]);
+        }
+
+        return rooms.ToArray();
+
+        #region Fun Test
+        /*
+        RoomDefData[] ar;
+        Recursive(0, 0);
+        return ar;
+
+        void Recursive(int c, int count)
+        {
+            if (c > RoomDefinitions.Length)
+            {
+                ar = new RoomDefData[count];
+            }
+            else
+            {
+                if (RoomDefinitions[c].RoomCategory == category)
+                {
+                    Recursive(c + 1, count + 1);
+                    ar[count] = RoomDefinitions[c];
+                }
+                else
+                {
+                    Recursive(c + 1, count);
+                }
+            }
+        }
+        */
+        #endregion
+    }
+    #endregion
+
     #region RoomInfo Helper Functions
     public int GetCostByRoomType(Enums.RoomTypes roomType)
     {
@@ -446,6 +494,13 @@ public class RoomManager : MonoBehaviour
     }
     #endregion
 
+    public static void UnlockRoomsByType(Enums.RoomTypes type)
+    {
+        if (!UnlockEvents.ContainsKey(type))
+            return;
+        UnlockEvents[type]?.Invoke();
+    }
+
     public void CreateStartRooms()
     {
         //Lobby
@@ -460,14 +515,22 @@ public class RoomManager : MonoBehaviour
     private struct Room
     {
         public string RoomName;
+        [Tooltip("The prefab object that will be instantiated when the room is created.")]
         public GameObject RoomModelPrefab;
         public Enums.RoomSizes RoomSize;
+        [Tooltip("What category the room falls under (What tab it will show up under the build options when selecting a room to build)")]
         public Enums.RoomCategories RoomCategory;
         public Enums.RoomTypes RoomType;
+        [Tooltip("The maximum amount of people that can be in this room at any given point")]
         public int ManSlotCount;
         public string RoomDescription;
+        [Tooltip("Whether or not the room can be built above or below ground, or both")]
         public Enums.RoomOverUnder RoomOverUnder;
+        [Tooltip("The cost of the room in Hoots")]
         public int RoomCost;
+        [Tooltip("If set to true, the room will not be purchaseable until the player has unlocked it.")]
+        public bool locked;
+
     }
     #endregion
 }
