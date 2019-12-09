@@ -8,26 +8,26 @@ public class BuildDlgScript : MonoBehaviour
 {
     public enum ShowState { Type1, Type2, Type3, Type4 }
 
-    private ShowState _CurrentShowState = ShowState.Type1;
+    public ButtonScrollManager BuildWindowSel1;
+    public ButtonScrollManager BuildWindowSel2;
+    public ButtonScrollManager BuildWindowSel3;
+    public ButtonScrollManager BuildWindowSel4;
 
-    public GameObject BuildWindowSel1;
-    public GameObject BuildWindowSel2;
-    public GameObject BuildWindowSel3;
-    public GameObject BuildWindowSel4;
+    /// <summary>
+    /// The offset of each new button in the Y position, from the previous button.
+    /// </summary>
+    public const float yOffset = -40;
 
-
-
-    Button[] neutralButtons;
-    Button[] utilButtons;
-    Button[] overButtons;
-    Button[] underButtons;
+    #region MonoMethods
 
     void Start()
     {
         CheckReferences();
-        SetBuildWindow(_CurrentShowState);
-        SetButtonText();
-
+        BuildWindowSel1.Init();
+        BuildWindowSel2.Init();
+        BuildWindowSel3.Init();
+        BuildWindowSel4.Init();
+        SetBuildWindow(ShowState.Type1);
     }
 
     private void CheckReferences()
@@ -37,31 +37,41 @@ public class BuildDlgScript : MonoBehaviour
         Debug.Assert(BuildWindowSel3 != null);
         Debug.Assert(BuildWindowSel4 != null);
     }
+    #endregion
 
+    #region Change Build Tab Button Functions
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
+        if (!active)
+        {
+            CameraScript.ZoomDisabled = false;
+        }
     }
 
-    public void SetWindowAdministration()
+    public void SetWindowMisc()
     {
         SetBuildWindow(ShowState.Type1);
     }
 
-    public void SetWindowProduction()
+    public void SetWindowUtility()
     {
         SetBuildWindow(ShowState.Type2);
     }
 
-    public void SetWindowSupport()
+    public void SetWindowOverworld()
     {
         SetBuildWindow(ShowState.Type3);
     }
 
-    public void SetWindowOther()
+    public void SetWindowUnderworld()
     {
         SetBuildWindow(ShowState.Type4);
     }
+    #endregion
+
+    #region Old Button Text Method
+    /*
     private void SetButtonText()
     {
 
@@ -131,36 +141,69 @@ public class BuildDlgScript : MonoBehaviour
         //underButtons[1].GetComponentInChildren<Text>(true).text += ": " + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size4] + " Hoots";
         //underButtons[2].GetComponentInChildren<Text>(true).text += ": " + MySpace.Constants.RoomCostDefinitions[MySpace.Enums.RoomSizes.Size6] + " Hoots";
     }
+    */
+    #endregion
+
     private void SetBuildWindow(ShowState NewShowState)
     {
         switch (NewShowState)
         {
             case ShowState.Type1:
-                BuildWindowSel1.SetActive(true);
-                BuildWindowSel2.SetActive(false);
-                BuildWindowSel3.SetActive(false);
-                BuildWindowSel4.SetActive(false);
-                break;
-            case ShowState.Type2:
-                BuildWindowSel1.SetActive(false);
-                BuildWindowSel2.SetActive(true);
-                BuildWindowSel3.SetActive(false);
-                BuildWindowSel4.SetActive(false);
-                break;
-            case ShowState.Type3:
-                BuildWindowSel1.SetActive(false);
-                BuildWindowSel2.SetActive(false);
-                BuildWindowSel3.SetActive(true);
-                BuildWindowSel4.SetActive(false);
-                break;
-            case ShowState.Type4:
-                BuildWindowSel1.SetActive(false);
-                BuildWindowSel2.SetActive(false);
-                BuildWindowSel3.SetActive(false);
-                BuildWindowSel4.SetActive(true);
+                BuildWindowSel1.gameObject.SetActive(true);
+                BuildWindowSel2.gameObject.SetActive(false);
+                BuildWindowSel3.gameObject.SetActive(false);
+                BuildWindowSel4.gameObject.SetActive(false);
+                if (BuildWindowSel1.Scrolling)
+                {
+                    CameraScript.ZoomDisabled = true;
+                }
+                else
+                {
+                    CameraScript.ZoomDisabled = false;
+                }
+                break;              
+            case ShowState.Type2:   
+                BuildWindowSel1.gameObject.SetActive(false);
+                BuildWindowSel2.gameObject.SetActive(true);
+                BuildWindowSel3.gameObject.SetActive(false);
+                BuildWindowSel4.gameObject.SetActive(false);
+                if (BuildWindowSel2.Scrolling)
+                {
+                    CameraScript.ZoomDisabled = true;
+                }
+                else
+                {
+                    CameraScript.ZoomDisabled = false;
+                }
+                break;              
+            case ShowState.Type3:   
+                BuildWindowSel1.gameObject.SetActive(false);
+                BuildWindowSel2.gameObject.SetActive(false);
+                BuildWindowSel3.gameObject.SetActive(true);
+                BuildWindowSel4.gameObject.SetActive(false);
+                if (BuildWindowSel3.Scrolling)
+                {
+                    CameraScript.ZoomDisabled = true;
+                }
+                else
+                {
+                    CameraScript.ZoomDisabled = false;
+                }
+                break;              
+            case ShowState.Type4:   
+                BuildWindowSel1.gameObject.SetActive(false);
+                BuildWindowSel2.gameObject.SetActive(false);
+                BuildWindowSel3.gameObject.SetActive(false);
+                BuildWindowSel4.gameObject.SetActive(true);
+                if (BuildWindowSel4.Scrolling)
+                {
+                    CameraScript.ZoomDisabled = true;
+                }
+                else
+                {
+                    CameraScript.ZoomDisabled = false;
+                }
                 break;
         }
-
-        _CurrentShowState = NewShowState;
     }
 }
