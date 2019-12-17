@@ -212,9 +212,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4466256128660434}
   - component: {fileID: 65441117400528500}
-  - component: {fileID: 3047898761515187528}
+  - component: {fileID: -4772129522217544358}
   m_Layer: 8
-  m_Name: Room_All_Standard_Sz2
+  m_Name: Room_Bedroom_Sz2
   m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -248,7 +248,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5, y: 4, z: 5}
   m_Center: {x: 1.25, y: 1.8, z: 2.5}
---- !u!114 &3047898761515187528
+--- !u!114 &-4772129522217544358
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,6 +257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1943732263410148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
+  m_Script: {fileID: 11500000, guid: 402c51b6c3d566e4ea258f6906579295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cleanTickTime: 1

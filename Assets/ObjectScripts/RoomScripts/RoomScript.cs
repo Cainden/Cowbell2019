@@ -8,104 +8,32 @@ using System.Collections.Generic;
 public class RoomScript : MonoBehaviour
 {
     // Instance specific data. Kept separate for easier serialization
-    public RoomInstanceData RoomData;
-    MeshRenderer thisRend;
+    [HideInInspector] public RoomInstanceData RoomData;
+    
    
 
     // Internals
     public bool RoomIsActive { get; private set; } // True if at least one man working here
-    private float fElapsedTime = 0;
-
-    // Room Attributes
-    public float cleanliness;
+    
 
 
-    ManManager manManRef;
+    protected ManManager manManRef;
 
 
-    public void IncreaseCleanliness(float num)
-    {
-        // may not be necessary
-    }
 
-    private void Start()
+    protected virtual void Start()
     {
         AssignManSlotPositions();
         CheckReferences();
         SetRoomText();
-        //thisRend = obj.GetComponent<Renderer>();
-        thisRend = GetComponentInChildren<MeshRenderer>();
-        thisRend.material.color = Color.white;
-        cleanliness = 1.0f;
+        
         manManRef = ManManager.Ref;
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
-        //May be better in a coroutine method, look into this later
-        if (RoomData.RoomType == Enums.RoomTypes.Bedroom)
-        {
-            fElapsedTime += Time.deltaTime;
-            if (RoomIsActive && fElapsedTime > 2.0f)
-            {
-                int numMen = CountMen();
-                fElapsedTime = 0.0f;
-                bool bStank = false; // If true deteriorates room
-                bool bClean = false; // If true cleans room. 
-                float numGuests = 0;
-                float numCleaners = 0;
-                //Check to see if Room is occupied by Guest and decrease cleanliness. 
-                //If room is occupied by Cleaners, increase cleanliness.
-                //Make it so Cleaners cannot occupy the rooms at the same time as guests?
-
-                for (int i = 0; i < numMen; i++)
-                {
-                    if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
-                        continue;
-
-                    ManRef occupant = manManRef.GetManData(RoomData.ManSlotsAssignments[i]);
-                    if (occupant.ManScript.ManData.ManType
-                    == Enums.ManTypes.Guest && occupant.ManScript.State == Enums.ManStates.None)
-                    {
-                        bStank = true;
-                        numGuests += 1.0f;
-                    }
-                    else if(occupant.ManScript.ManData.ManType
-                     == Enums.ManTypes.Cleaner && occupant.ManScript.State == Enums.ManStates.None)
-                    {
-                        bClean = true;
-                        numCleaners += 1.0f;
-                    }
-                }
-
-
-                if (bStank)
-                {
-
-                    if (cleanliness - 0.1f * numGuests < 0.0f)
-                        cleanliness = 0.0f;
-                    else
-                    {
-                        cleanliness -= 0.1f * numGuests;
-                    }
-                }
-                else if (bClean)
-                {
-
-                    if (cleanliness + 0.1f * numCleaners > 1.0f)
-                        cleanliness = 1.0f;
-                    else
-                    {
-                        cleanliness += 0.1f * numCleaners;
-                    }
-                }
-
-
-
-                thisRend.material.SetColor("_Color", Color.Lerp(Color.green, Color.white, cleanliness));
-            }
-        }
+        //Left this here for now, it may need to be used later
     }
 
     private void CheckReferences()
@@ -134,6 +62,7 @@ public class RoomScript : MonoBehaviour
         }
     }
 
+    #region Helper Functions
     public bool RoomHasFreeManSlots()
     {
         foreach (Guid g in RoomData.ManSlotsAssignments)
@@ -273,4 +202,45 @@ public class RoomScript : MonoBehaviour
             }
         }
     }
+
+    protected void ApplyWithAllMen(Action<ManRef> action)
+    {
+        int menFound = 0;
+        for (int i = 0; menFound < CountMen(); i++)
+        {
+            restart:
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            {
+                i++;
+                goto restart;
+            }
+            else
+            {
+                menFound++;
+                action(manManRef.GetManData(RoomData.ManSlotsAssignments[i]));
+            }
+        }
+    }
+
+    protected ManRef[] GetAllMen()
+    {
+        List<ManRef> men = new List<ManRef>();
+        int menFound = 0;
+        for (int i = 0; menFound < CountMen(); i++)
+        {
+            restart:
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            {
+                i++;
+                goto restart;
+            }
+            else
+            {
+                menFound++;
+                men.Add(manManRef.GetManData(RoomData.ManSlotsAssignments[i]));
+            }
+        }
+        return men.ToArray();
+    }
+    #endregion
 }

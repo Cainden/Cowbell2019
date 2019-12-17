@@ -30,7 +30,7 @@ public class RoomInfoWindowScript : MonoBehaviour
         Info += "Size: " + RoomScript.RoomData.RoomSize.ToString() + "\r\n";
         RoomInfoText1.text = Info;
 
-        RoomInfoText2.text = RoomFactory.Ref.GetRoomDefData(RoomScript.RoomData.RoomType, RoomScript.RoomData.RoomSize, RoomScript.RoomData.RoomOverUnder).RoomDescription;
+        RoomInfoText2.text = RoomManager.GetRoomDefData(RoomScript.RoomData.RoomType).RoomDescription;
         gameObject.SetActive(true);
     }
 

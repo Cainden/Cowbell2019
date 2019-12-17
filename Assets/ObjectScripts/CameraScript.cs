@@ -38,9 +38,11 @@ public class CameraScript : MonoBehaviour
         Limit_CameraPosition();
     }
 
+    public static bool ZoomDisabled = false;
     public void CheckMouseWheelZoom()
     {
         if (Input.mouseScrollDelta.y == 0.0f) return;
+        if (ZoomDisabled) return;
 
         transform.Translate(new Vector3(0, 0, Input.mouseScrollDelta.y * Constants.CameraZoomMovementSpeed));
         RecalculateLimits();        

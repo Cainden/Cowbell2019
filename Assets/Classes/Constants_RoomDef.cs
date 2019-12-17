@@ -6,25 +6,26 @@ namespace MySpace
     {
         // Room definitions
         public static readonly GridIndex EntranceRoomIndex = new GridIndex(0, GridSurfaceY, 0);
-        public static readonly Enums.RoomSizes EntranceRoomSize = Enums.RoomSizes.Size4;
-        public static readonly Enums.RoomTypes EntranceRoomType = Enums.RoomTypes.OverLobby;
-       // public static readonly Enums.RoomOverUnder EntranceRoomOverUnder = Enums.RoomOverUnder.Over;
+        //public static readonly Enums.RoomSizes EntranceRoomSize = Enums.RoomSizes.Size4;
+        //public static readonly Enums.RoomOverUnder EntranceRoomOverUnder = Enums.RoomOverUnder.Over;
         public static readonly GridIndex UWEntranceRoomIndex = new GridIndex(0, GridSurfaceY - 1, 0);
-        public static readonly Enums.RoomSizes UWEntranceRoomSize = Enums.RoomSizes.Size4;
-        public static readonly Enums.RoomTypes UWEntranceRoomType = Enums.RoomTypes.UnderLobby;
+        //public static readonly Enums.RoomSizes UWEntranceRoomSize = Enums.RoomSizes.Size4;
         //public static readonly Enums.RoomOverUnder UWEntranceRoomOverUnder = Enums.RoomOverUnder.Under;
 
+        #region Old Room Definitions
         // Room data - might be moved to a file or database or so later. Unique index is combo size+type
+        /*
         public static readonly RoomDefData[] RoomDefinitions = new RoomDefData[]
         {
-        //////////////////////////////////////////////////////////////
-        //NEUTRAL ROOMS
-        /////////////////////////////////////////////////////////////
-        new RoomDefData (
+            #region Neutral Rooms
+            //////////////////////////////////////////////////////////////
+            //NEUTRAL ROOMS
+            /////////////////////////////////////////////////////////////
+            new RoomDefData (
             "Common Room Size 2",
             "Room_Prefabs/Room_All_Standard_Sz2",
             Enums.RoomSizes.Size2,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Common_Size2,
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
@@ -35,7 +36,7 @@ namespace MySpace
             "Common Room Size 4",
             "Room_Prefabs/Room_All_Standard_Sz4",
             Enums.RoomSizes.Size4,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Common_Size4,
             Enums.RoomCategories.Standard,
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
@@ -47,7 +48,7 @@ namespace MySpace
             "Common Room Size 6",
             "Room_Prefabs/Room_All_Standard_Sz6",
             Enums.RoomSizes.Size6,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Common_Size6,
             Enums.RoomCategories.Standard,
             6,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
@@ -64,103 +65,114 @@ namespace MySpace
             Enums.RoomCategories.Other,
             0,
             new Enums.ManStates[] {  },
-            "The elevator room is of size 1. It can not hold any men."
+            "The elevator room is of size 1. It can not hold any men.",
+            175
             ),
-        //////////////////////////////////////////////////////////////
-        // OVERWORLD ROOMS
-        /////////////////////////////////////////////////////////////
+            #endregion
+
+            #region Overworld Rooms
+            //////////////////////////////////////////////////////////////
+            // OVERWORLD ROOMS
+            /////////////////////////////////////////////////////////////
         new RoomDefData (
             "Overworld Lobby",
             "Room_Prefabs/Room_All_Standard_Sz4",
             Enums.RoomSizes.Size4,
-            Enums.RoomTypes.OverLobby,
+            Enums.RoomTypes.Lobby,
             Enums.RoomCategories.Standard,
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
             "The Overworld Hootel's Lobby. Our main Owl can be found here.",
+            0,
             Enums.RoomOverUnder.Over
             ),
-         new RoomDefData (
+
+        new RoomDefData (
             "Overworld Room Size 2",
             "Room_Prefabs/Room_All_Standard_Sz2",
             Enums.RoomSizes.Size2,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Hallway_Size2,
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of small size. Can hold 2 men.",
-            Enums.RoomOverUnder.Over
+            "An Overworld room of small size. Can hold 2 men.",
+            overUnder: Enums.RoomOverUnder.Over
             ),
 
         new RoomDefData (
             "Overworld Room Size 4",
             "Room_Prefabs/Room_All_Standard_Sz4",
             Enums.RoomSizes.Size4,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Hallway_Size4,
             Enums.RoomCategories.Standard,
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of medium size. Can hold 4 men.",
-            Enums.RoomOverUnder.Over
+            "An Overworld room of medium size. Can hold 4 men.",
+            overUnder: Enums.RoomOverUnder.Over
             ),
 
         new RoomDefData (
             "Overworld Room Size 6",
             "Room_Prefabs/Room_All_Standard_Sz6",
             Enums.RoomSizes.Size6,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.Hallway_Size6,
             Enums.RoomCategories.Standard,
             6,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Overworld room of large size. Can hold 6 men.",
-            Enums.RoomOverUnder.Over
+            "An Overworld room of large size. Can hold 6 men.",
+            overUnder: Enums.RoomOverUnder.Over
             ),
                 new RoomDefData (
             "Bedroom Size 2",
-            "Room_Prefabs/Room_All_Standard_Sz2",
+            "Room_Prefabs/Room_Bedroom_Sz2",
             Enums.RoomSizes.Size2,
-            Enums.RoomTypes.Bedroom,
+            Enums.RoomTypes.Bedroom_Size2,
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
             "A Bedroom of small size. Can hold 2 men.",
-            Enums.RoomOverUnder.Over
+            overUnder: Enums.RoomOverUnder.Over
             ),
 
         new RoomDefData (
             "Bedroom Size 4",
-            "Room_Prefabs/Room_All_Standard_Sz4",
+            "Room_Prefabs/Room_Bedroom_Sz4",
             Enums.RoomSizes.Size4,
-            Enums.RoomTypes.Bedroom,
+            Enums.RoomTypes.Bedroom_Size4,
             Enums.RoomCategories.Standard,
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
             "A bedroom of medium size. Can hold 4 men.",
+            150,
             Enums.RoomOverUnder.Over
             ),
 
         new RoomDefData (
             "Bedroom Size 6",
-            "Room_Prefabs/Room_All_Standard_Sz6",
+            "Room_Prefabs/Room_Bedroom_Sz6",
             Enums.RoomSizes.Size6,
-            Enums.RoomTypes.Bedroom,
+            Enums.RoomTypes.Bedroom_Size6,
             Enums.RoomCategories.Standard,
             6,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
             "A Bedroom of large size. Can hold 6 men.",
+            200,
             Enums.RoomOverUnder.Over
             ),
-        //////////////////////////////////////////////////////////////
-        //UNDERWORLD ROOMS
-        /////////////////////////////////////////////////////////////
-        new RoomDefData (
+            #endregion
+
+            #region Underworld Rooms
+            //////////////////////////////////////////////////////////////
+            //UNDERWORLD ROOMS
+            /////////////////////////////////////////////////////////////
+            new RoomDefData (
             "Underworld Lobby",
             "Room_Prefabs/Room_All_Standard_Sz4",
             Enums.RoomSizes.Size4,
@@ -170,46 +182,49 @@ namespace MySpace
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
             "The Underworld Hootel's Lobby. Max can be found here.",
-            Enums.RoomOverUnder.Under
+            overUnder: Enums.RoomOverUnder.Under
             ),
         new RoomDefData (
             "Underworld Room Size 2",
             "Room_Prefabs/Room_All_Standard_Sz2",
             Enums.RoomSizes.Size2,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.UnderHallway_Size2,
             Enums.RoomCategories.Standard,
             2,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of small size. Can hold 2 men.",
-            Enums.RoomOverUnder.Under
+            "An Underworld room of small size. Can hold 2 men.",
+            overUnder: Enums.RoomOverUnder.Under
             ),
 
         new RoomDefData (
             "Underworld Room Size 4",
             "Room_Prefabs/Room_All_Standard_Sz4",
             Enums.RoomSizes.Size4,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.UnderHallway_Size4,
             Enums.RoomCategories.Standard,
             4,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of medium size. Can hold 4 men.",
-            Enums.RoomOverUnder.Under
+            "An Underworld room of medium size. Can hold 4 men.",
+            overUnder: Enums.RoomOverUnder.Under
             ),
 
         new RoomDefData (
             "Underworld Room Size 6",
             "Room_Prefabs/Room_All_Standard_Sz6",
             Enums.RoomSizes.Size6,
-            Enums.RoomTypes.Common,
+            Enums.RoomTypes.UnderHallway_Size6,
             Enums.RoomCategories.Standard,
             6,
             new Enums.ManStates[] { Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle,
                                     Enums.ManStates.Idle, Enums.ManStates.Idle },
-            "A Underworld room of large size. Can hold 6 men.",
-            Enums.RoomOverUnder.Under
+            "An Underworld room of large size. Can hold 6 men.",
+            overUnder: Enums.RoomOverUnder.Under
             ),
+            #endregion
         };
+        */
+        #endregion
     }
 }

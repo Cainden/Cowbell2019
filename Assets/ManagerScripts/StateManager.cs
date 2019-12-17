@@ -24,16 +24,9 @@ public class StateManager : MonoBehaviour
 
     void Start()
     {
-        RoomManager.Ref.CreateRoom(Guid.NewGuid(),
-                                   Constants.EntranceRoomType,
-                                   Constants.EntranceRoomSize,
-                                   Enums.RoomOverUnder.Over,
-                                   Constants.EntranceRoomIndex);
-        RoomManager.Ref.CreateRoom(Guid.NewGuid(),
-                                  Constants.UWEntranceRoomType,
-                                  Constants.UWEntranceRoomSize,
-                                  Enums.RoomOverUnder.Under,
-                                  Constants.UWEntranceRoomIndex);
+        //Moved the code for actually creating rooms to the room manager so the information that creates the start rooms can be displayed in the inspector there.
+        RoomManager.Ref.CreateStartRooms();
+
         SetGameState(Enums.GameStates.Normal);
     }
 
@@ -134,9 +127,11 @@ public class StateManager : MonoBehaviour
         switch (newGameState)
         {
             case Enums.GameStates.Normal:
+
+                //NOT USED ANYMORE. LEAVING FOR ARCHIVAL PURPOSES FOR NOW
                 //Refund the room purchase by getting the room BuildPosition info. Is this the best way for this?
-                if (_GameState == Enums.GameStates.BuildRoom && ClickManager.Ref.buildCancelled == true)
-                    WalletManager.Ref.Hoots += Constants.RoomCostDefinitions[GameObject.FindObjectOfType<BuildPositionScript>().RoomSize];
+                //if (_GameState == Enums.GameStates.BuildRoom && ClickManager.Ref.buildCancelled == true)
+                //    WalletManager.Ref.Hoots += Constants.RoomCostDefinitions[GameObject.FindObjectOfType<BuildPositionScript>().RoomSize];
 
                 // If the player is chaning a guest's room and cancels (right clicks)
                 // return to the ManInfoWindow they were just on

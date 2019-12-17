@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3238476742045633261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3238476742045633258}
+  - component: {fileID: 3238476742045633259}
+  m_Layer: 2
+  m_Name: GuiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &3238476742045633258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3238476742045633261}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3238476742045633259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3238476742045633261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 041a9e6748471d34ca397adf3fb4b166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TextObject_GameState: {fileID: 0}
+  TextObject_ManCount: {fileID: 0}
+  TextObject_HootCount: {fileID: 0}
+  TextObject_SoulCount: {fileID: 0}
+  TextObject_MonCoinCount: {fileID: 0}
+  CursorNormalTex: {fileID: 2800000, guid: 4d6854dc5ffb2ab4bafac11bf4de95f2, type: 3}
+  CursorDragCamTex: {fileID: 2800000, guid: 559f1f902cceefa45ad943f7e857ac53, type: 3}
+  CursorDragManTex: {fileID: 2800000, guid: fd625f4dfbf65cb49ae58f748031eeca, type: 3}
+  CursorGuiBlockingTex: {fileID: 2800000, guid: 0e86e4a11941044489cf249797d1e2b0,
+    type: 3}
+  GuiSmallUserInfoDlg: {fileID: 0}
+  RoomInfoWindow: {fileID: 0}
+  ManInfoWindow: {fileID: 0}
+  BuildRoomDlg: {fileID: 0}
+  MainMenuDlg: {fileID: 0}
+  HireDlg: {fileID: 0}
+  BookGuestDlg: {fileID: 0}

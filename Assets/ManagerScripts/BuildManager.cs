@@ -57,9 +57,9 @@ public class BuildManager : MonoBehaviour
         RoomPositionSelectors.Clear();
     }
 
-    public void Build_Finished(Enums.RoomSizes roomSize, Enums.RoomTypes roomType, Enums.RoomOverUnder roomOverUnder, GridIndex index)
+    public void Build_Finished(Enums.RoomTypes roomType, Enums.RoomOverUnder roomOverUnder, GridIndex index)
     {
         HideRoomPositionSelectors();
-        RoomManager.Ref.CreateRoom(Guid.NewGuid(), roomType, roomSize, roomOverUnder, index);        
+        RoomManager.Ref.CreateRoom(Guid.NewGuid(), roomType, index);
     }
 }
