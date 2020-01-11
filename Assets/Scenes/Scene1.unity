@@ -334,7 +334,7 @@ PrefabInstance:
     - target: {fileID: 4114197911355649081, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 79.720024
+      value: 79.72101
       objectReference: {fileID: 0}
     - target: {fileID: 4114197910211258223, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 4114197911462037256, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 79.720024
+      value: 79.72101
       objectReference: {fileID: 0}
     - target: {fileID: 4114197910034455015, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
@@ -394,7 +394,7 @@ PrefabInstance:
     - target: {fileID: 4114197911854627287, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 79.720024
+      value: 79.72101
       objectReference: {fileID: 0}
     - target: {fileID: 4114197910811733439, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
@@ -424,7 +424,7 @@ PrefabInstance:
     - target: {fileID: 4114197910848556991, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 79.720024
+      value: 79.72101
       objectReference: {fileID: 0}
     - target: {fileID: 4114197911833512031, guid: e862f3894a696b74790cfd1039550576,
         type: 3}
@@ -8679,6 +8679,11 @@ PrefabInstance:
       propertyPath: MyEventSystem
       value: 
       objectReference: {fileID: 845738878}
+    - target: {fileID: 3490245230968083566, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7256544257156570967, guid: a154356a569c99b4b886195bab7d15d7,
         type: 3}
       propertyPath: debugElementsUI
@@ -8756,6 +8761,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
         type: 3}
+      propertyPath: roomDefinitions.Array.size
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
       propertyPath: RoomSelectorSz1
       value: 
       objectReference: {fileID: 1889779700}
@@ -8789,6 +8799,47 @@ PrefabInstance:
       propertyPath: RoomHighlighterSz6
       value: 
       objectReference: {fileID: 1785923958}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomName
+      value: Hallway Test Room
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomModelPrefab
+      value: 
+      objectReference: {fileID: 1455615580497424, guid: c1a5c8154bbdcde4c9275aca2505534f,
+        type: 3}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomSize
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomCategory
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomType
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].ManSlotCount
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomDescription
+      value: An Underworld room of large size. Can hold 6 men.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544257493797690, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: roomDefinitions.Array.data[15].RoomCost
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 7256544256906272987, guid: a154356a569c99b4b886195bab7d15d7,
         type: 3}
       propertyPath: TextObject_GameState

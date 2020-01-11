@@ -103,4 +103,45 @@ public class Room_Bedroom : RoomScript
             thisRend.material.SetColor("_Color", Color.Lerp(Color.green, Color.white, cleanliness));
         }
     }
+
+    public void SelfInitialize(GridIndex leftMostIndex)
+    {
+        //HAD TO DO ALL OF THE CREATEROOM INITIALIZATION HERE BECAUSE IT CANNOT BE INSTANTIATED IN THE WRONG POSITION THROUGH CREATEROOM
+        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom_Size2, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false);
+
+        RoomData = new RoomInstanceData();
+        RoomData.RoomId = Guid.NewGuid();
+        RoomData.RoomName = RoomDefData.RoomName;
+        RoomData.RoomSize = RoomDefData.RoomSize;
+        RoomData.RoomCategory = RoomDefData.RoomCategory;
+        RoomData.RoomType = RoomDefData.RoomType;
+        RoomData.RoomOverUnder = RoomDefData.RoomOverUnder;
+        RoomData.ManSlotCount = RoomDefData.ManSlotCount;
+        RoomData.ManSlotsPositions = new Vector3[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
+        RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
+        RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+        RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+
+        for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
+        RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
+        RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(RoomDefData.RoomSize, leftMostIndex);
+
+        for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.OwnerSlotsAssignments[i] = Guid.Empty;
+
+        GridManager.Ref.RegisterAtGrid(RoomData.RoomSize, RoomData.RoomId, leftMostIndex);
+        RoomManager.Ref.AddRoom(RoomData.RoomId, new RoomRef(gameObject, this));
+
+        //enable the  way to leave the room through the door
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes.Length - 1], Enums.MoveDirections.Front);
+
+        Enums.ManStates[] CreateNewArray(int length)
+        {
+            var ar = new Enums.ManStates[length];
+            for (int i = 0; i < length; i++)
+            {
+                ar[i] = Enums.ManStates.Idle;
+            }
+            return ar;
+        }
+    }
 }
