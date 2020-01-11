@@ -62,12 +62,12 @@ namespace MySpace
             }
         }
 
-        void AddMovementDirection(GridIndex Index, Enums.MoveDirections dir)
+        public void AddMovementDirection(GridIndex Index, Enums.MoveDirections dir)
         {
             _GridMovements[Index.X, Index.Y, Index.Z] |= (byte)dir;
         }
 
-        void RemoveMovementDirection(GridIndex Index, Enums.MoveDirections dir)
+        public void RemoveMovementDirection(GridIndex Index, Enums.MoveDirections dir)
         {
             if (!Index.IsValid()) return;
             _GridMovements[Index.X, Index.Y, Index.Z] &= (byte)~dir;

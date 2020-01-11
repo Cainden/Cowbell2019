@@ -49,7 +49,7 @@ namespace MySpace
             UnderHallway_Size6,
             Common_Size2,
             Common_Size4,
-            Common_Size6,
+            Common_Size6
 
         };
 
