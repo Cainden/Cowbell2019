@@ -328,6 +328,21 @@ public class GridManager : MonoBehaviour
         return (true);
     }
 
+    public void AddMovementDirectionToGridIndex(GridIndex index, Enums.MoveDirections dir)
+    {
+        _GridMovements.AddMovementDirection(index, dir);
+    }
+
+    public void RemoveMovementDirectionFromGridIndex(GridIndex index, Enums.MoveDirections dir)
+    {
+        _GridMovements.RemoveMovementDirection(index, dir);
+    }
+
+    public bool GridIndexHasDirection(GridIndex index, Enums.MoveDirections dir)
+    {
+        return _GridMovements.GridTileHasDirection(index, dir);
+    }
+
     public void EmptyGrid()
     {
         InitGridData();

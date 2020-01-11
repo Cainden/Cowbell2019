@@ -163,6 +163,15 @@ public class ClickManager : MonoBehaviour
         if(_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
         {
             RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
+            //VERY temporary, needs to be changed to be less spaghetti once it is tested and works
+            if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
+            {
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskRoom))
+                {
+                    roomToChangeTo = RoomManager.Ref.GetRoomData((roomToChangeTo.RoomScript as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x).RoomData.RoomId);
+                    
+                }
+            }
 
             if (roomToChangeTo.RoomScript.RoomHasFreeOwnerSlots())
             {
@@ -245,6 +254,7 @@ public class ClickManager : MonoBehaviour
         return (false);
     }
 
+    //Need to change this to highlight doors of bedrooms in hallways if the player is currently dragging a tennant person, but highlight regularly if they are holding a worker.
     bool RayCastCheckRoomOverMouseIsDown()
     {
         // In ManDragging mode, we check for target room highlighting
@@ -255,8 +265,19 @@ public class ClickManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskRoom))
             {
-                // Highlight box
                 Guid RoomID = hitInfo.transform.GetComponent<RoomScript>().RoomData.RoomId;
+                if (ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
+                {
+                    if (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway != null)
+                    {
+                        Room_Bedroom bedroom = (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
+                        RoomManager.Ref.HighlightBedroom(bedroom.RoomData.RoomId, bedroom.transform.position);
+                        return false;
+                    }
+                }
+                
+                // Highlight box
+                
                 RoomManager.Ref.HighlightRoom(RoomID);
             }
             else

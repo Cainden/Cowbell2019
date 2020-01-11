@@ -262,10 +262,12 @@ public class ManManager : MonoBehaviour
             if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
             {
                 Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
-                manScript.Add_DoorOpenAction_ToList(RoomID);
+                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+                    manScript.Add_DoorOpenAction_ToList(RoomID);
                 WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);
                 manScript.Add_RunAction_ToList(WorldPos);
-                manScript.Add_DoorCloseAction_ToList(RoomID);
+                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+                    manScript.Add_DoorCloseAction_ToList(RoomID);
                 i++;
             }
         }

@@ -29,6 +29,7 @@ public class RoomManager : MonoBehaviour
     public GameObject RoomHighlighterSz2;
     public GameObject RoomHighlighterSz4;
     public GameObject RoomHighlighterSz6;
+    public GameObject RoomHighlighter_Bedroom;
     [Header("===============================================================================================================================================")]
     [SerializeField] Room[] roomDefinitions;
 
@@ -95,6 +96,7 @@ public class RoomManager : MonoBehaviour
         Debug.Assert(RoomHighlighterSz2 != null);
         Debug.Assert(RoomHighlighterSz4 != null);
         Debug.Assert(RoomHighlighterSz6 != null);
+        Debug.Assert(RoomHighlighter_Bedroom != null);
         #endregion
     }
 
@@ -185,6 +187,12 @@ public class RoomManager : MonoBehaviour
     #endregion
 
     #region HelperFunction Library
+    public void AddRoom(Guid roomId, RoomRef room)
+    {
+        if (!_RoomList.ContainsKey(roomId))
+            _RoomList.Add(roomId, room);
+    }
+
     public bool IsRoomExisting(Guid roomId)
     {
         return (_RoomList.ContainsKey(roomId));
@@ -251,6 +259,7 @@ public class RoomManager : MonoBehaviour
         RoomSelectorSz6.SetActive(false);
     }
 
+    //NEED TO ADD A CASE HERE TO ALLOW HALLWAY // BEDROOMS TO BE REMOVEABLE, WITH THIS CLAUSE HALLWAYS CANNOT EVER BE REMOVED
     private int CountExternalRoomLinks(Guid roomId)
     {
         RoomScript RoomScript = _RoomList[roomId].RoomScript;
@@ -299,34 +308,36 @@ public class RoomManager : MonoBehaviour
     {
         if (StateManager.Ref.GetHighlightedRoom() == roomId) return;
 
-        GameObject Selector = null;
-
+        //GameObject Selector = null;
+        RoomHighlighterSz2.SetActive(false);
+        RoomHighlighterSz4.SetActive(false);
+        RoomHighlighterSz6.SetActive(false);
+        RoomHighlighter_Bedroom.SetActive(false);
         switch (_RoomList[roomId].RoomScript.RoomData.RoomSize)
         {
             case Enums.RoomSizes.Size1:
                 HighlightNoRoom();
                 return;
             case Enums.RoomSizes.Size2:
-                Selector = RoomHighlighterSz2;
-                RoomHighlighterSz4.SetActive(false);
-                RoomHighlighterSz6.SetActive(false);
+                StateManager.Ref.SetHighlightedRoom(roomId);
+                RoomHighlighterSz2.transform.position = _RoomList[roomId].RoomObject.transform.position;
+                RoomHighlighterSz2.SetActive(true);
                 break;
             case Enums.RoomSizes.Size4:
-                Selector = RoomHighlighterSz4;
-                RoomHighlighterSz2.SetActive(false);
-                RoomHighlighterSz6.SetActive(false);
+                StateManager.Ref.SetHighlightedRoom(roomId);
+                RoomHighlighterSz4.transform.position = _RoomList[roomId].RoomObject.transform.position;
+                RoomHighlighterSz4.SetActive(true);
                 break;
             case Enums.RoomSizes.Size6:
-                Selector = RoomHighlighterSz6;
-                RoomHighlighterSz2.SetActive(false);
-                RoomHighlighterSz4.SetActive(false);
+                StateManager.Ref.SetHighlightedRoom(roomId);
+                RoomHighlighterSz6.transform.position = _RoomList[roomId].RoomObject.transform.position;
+                RoomHighlighterSz6.SetActive(true);
                 break;
         }
 
-        Debug.Assert(Selector != null);
-        StateManager.Ref.SetHighlightedRoom(roomId);
-        Selector.transform.position = _RoomList[roomId].RoomObject.transform.position;
-        Selector.SetActive(true);
+        //StateManager.Ref.SetHighlightedRoom(roomId);
+        //Selector.transform.position = _RoomList[roomId].RoomObject.transform.position;
+        //Selector.SetActive(true);
     }
 
     public void HighlightNoRoom()
@@ -334,7 +345,24 @@ public class RoomManager : MonoBehaviour
         RoomHighlighterSz2.SetActive(false);
         RoomHighlighterSz4.SetActive(false);
         RoomHighlighterSz6.SetActive(false);
+        RoomHighlighter_Bedroom.SetActive(false);
         StateManager.Ref.SetHighlightedRoom(Guid.Empty);
+    }
+
+    public void HighlightBedroom(Guid hallwayId, Vector3 highlightPosition)
+    {
+        Debug.Assert(RoomHighlighter_Bedroom != null);
+
+        if (RoomHighlighter_Bedroom.activeInHierarchy && RoomHighlighter_Bedroom.transform.position == highlightPosition)
+            return;
+
+        RoomHighlighterSz2.SetActive(false);
+        RoomHighlighterSz4.SetActive(false);
+        RoomHighlighterSz6.SetActive(false);
+
+        StateManager.Ref.SetHighlightedRoom(hallwayId);
+        RoomHighlighter_Bedroom.transform.position = highlightPosition;
+        RoomHighlighter_Bedroom.SetActive(true);
     }
 
     public bool IsEntranceRoom(Guid roomId)
