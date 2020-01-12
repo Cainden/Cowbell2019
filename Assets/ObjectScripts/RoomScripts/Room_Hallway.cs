@@ -26,6 +26,19 @@ public class Room_Hallway : RoomScript
         for (int i = 1; i < RoomData.CoveredIndizes.Length; i+= 2)
         {
             GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+            //if (i % 2 == 1)
+            //{
+            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back))
+            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left))
+            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
+            //}
+            //else if (GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back))
+            //{
+            //    GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right))
+            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
+            //}
         }
     }
 
