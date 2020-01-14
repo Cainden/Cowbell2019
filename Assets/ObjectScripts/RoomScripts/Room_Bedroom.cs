@@ -24,11 +24,6 @@ public class Room_Bedroom : RoomScript
     ManRef occupant;
     #endregion
 
-    public void IncreaseCleanliness(float num)
-    {
-        // may not be necessary
-    }
-
     protected override void Start()
     {
         base.Start();
@@ -80,11 +75,11 @@ public class Room_Bedroom : RoomScript
             if (bStank)
             {
 
-                if (cleanliness - RoomManager.Ref.CleanSpeedRatio * numGuests < 0.0f)
+                if (cleanliness - RoomManager.Ref.DirtinessSpeedRatio * numGuests < 0.0f)
                     cleanliness = 0.0f;
                 else
                 {
-                    cleanliness -= RoomManager.Ref.CleanSpeedRatio * numGuests;
+                    cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * numGuests;
                 }
             }
             else if (bClean)
