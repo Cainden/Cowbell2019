@@ -14,11 +14,19 @@ public class RoomManager : MonoBehaviour
     #region Serialized Variables
     [Tooltip("A ratio applied to all calculations related to cleaning speed")]
     [Range(0.001f, 100)]
-    [SerializeField] float cleanSpeedRatio = 0.1f;
+    [SerializeField] float cleanSpeedRatio = 0.2f;
+    [Tooltip("A ratio applied to all calculations related to room dirtiness speed")]
+    [Range(0.001f, 100)]
+    [SerializeField] float dirtinessSpeedRatio = 0.1f;
     /// <summary>
     /// A ratio applied to all calculations related to cleaning speed
     /// </summary>
     public float CleanSpeedRatio { get { return cleanSpeedRatio; } }
+
+    /// <summary>
+    /// A ratio applied to all calculations related to room dirtiness speed
+    /// </summary>
+    public float DirtinessSpeedRatio { get { return dirtinessSpeedRatio; } }
 
     [Header("===============================================================================================================================================")]
     [Header("Room Highlights & Selectors")]
