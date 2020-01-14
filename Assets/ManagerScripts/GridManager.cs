@@ -343,6 +343,11 @@ public class GridManager : MonoBehaviour
         return _GridMovements.GridTileHasDirection(index, dir);
     }
 
+    public void DebugIndexMovement(GridIndex index, string message)
+    {
+        _GridMovements.DebugGridIndexMovement(index, message);
+    }
+
     public void EmptyGrid()
     {
         InitGridData();
