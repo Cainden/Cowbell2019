@@ -90,6 +90,12 @@ namespace MySpace
             return (false);
         }
 
+        public void DebugGridIndexMovement(GridIndex index, string message)
+        {
+            if (index == null) return;
+            Debug.Log(_GridMovements[index.X, index.Y, index.Z] + message);
+        }
+
         public void DEBUG_DumpGrid()
         {
             string Line = "";
