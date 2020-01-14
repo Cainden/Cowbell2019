@@ -131,8 +131,14 @@ public class Room_Bedroom : RoomScript
         GridManager.Ref.RegisterAtGrid(RoomData.RoomSize, RoomData.RoomId, leftMostIndex);
         RoomManager.Ref.AddRoom(RoomData.RoomId, new RoomRef(gameObject, this));
 
+        #region Manual assignment of grid index movement directions
         //enable the  way to leave the room through the door
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes.Length - 1], Enums.MoveDirections.Front);
+        //enable left movement to the door index
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes.Length - 1], Enums.MoveDirections.Left);
+        //enable right movement to the index inside the room
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Right);
+        #endregion
 
         Enums.ManStates[] CreateNewArray(int length)
         {

@@ -23,23 +23,24 @@ public class Room_Hallway : RoomScript
             
         }
 
-        for (int i = 1; i < RoomData.CoveredIndizes.Length; i+= 2)
+        #region Manual assignment of grid index movement directions
+        for (int i = 0; i < RoomData.CoveredIndizes.Length; i++)
         {
-            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-            //if (i % 2 == 1)
-            //{
-            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back))
-            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left))
-            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
-            //}
-            //else if (GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back))
-            //{
-            //    GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-            //    if (!GridManager.Ref.GridIndexHasDirection(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right))
-            //        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
-            //}
+            if (i % 2 == 1)
+            {
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
+            }
+            else
+            {
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
+            }
+            //GridManager.Ref.DebugIndexMovement(RoomData.CoveredIndizes[i], " : index " + i);
         }
+        #endregion
     }
 
     public Room_Bedroom GetBedroomFromX(float x)
