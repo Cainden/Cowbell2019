@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class BuildDlgScript : MonoBehaviour
 {
     public enum ShowState { Type1, Type2, Type3, Type4 }
+    private ShowState curState;
 
     public ButtonScrollManager BuildWindowSel1;
     public ButtonScrollManager BuildWindowSel2;
@@ -16,7 +17,7 @@ public class BuildDlgScript : MonoBehaviour
     /// <summary>
     /// The offset of each new button in the Y position, from the previous button.
     /// </summary>
-    public const float yOffset = -40;
+    public const float yOffset = -24;
 
     #region MonoMethods
 
@@ -27,7 +28,8 @@ public class BuildDlgScript : MonoBehaviour
         BuildWindowSel2.Init();
         BuildWindowSel3.Init();
         BuildWindowSel4.Init();
-        SetBuildWindow(ShowState.Type1);
+        curState = ShowState.Type1;
+        SetBuildWindow(curState);
     }
 
     private void CheckReferences()
@@ -46,6 +48,10 @@ public class BuildDlgScript : MonoBehaviour
         if (!active)
         {
             CameraScript.ZoomDisabled = false;
+        }
+        else
+        {
+            SetBuildWindow(curState);
         }
     }
 
@@ -205,5 +211,6 @@ public class BuildDlgScript : MonoBehaviour
                 }
                 break;
         }
+        curState = NewShowState;
     }
 }
