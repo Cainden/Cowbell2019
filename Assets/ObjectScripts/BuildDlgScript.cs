@@ -159,58 +159,28 @@ public class BuildDlgScript : MonoBehaviour
                 BuildWindowSel2.gameObject.SetActive(false);
                 BuildWindowSel3.gameObject.SetActive(false);
                 BuildWindowSel4.gameObject.SetActive(false);
-                if (BuildWindowSel1.Scrolling)
-                {
-                    CameraScript.ZoomDisabled = true;
-                }
-                else
-                {
-                    CameraScript.ZoomDisabled = false;
-                }
                 break;              
             case ShowState.Type2:   
                 BuildWindowSel1.gameObject.SetActive(false);
                 BuildWindowSel2.gameObject.SetActive(true);
                 BuildWindowSel3.gameObject.SetActive(false);
                 BuildWindowSel4.gameObject.SetActive(false);
-                if (BuildWindowSel2.Scrolling)
-                {
-                    CameraScript.ZoomDisabled = true;
-                }
-                else
-                {
-                    CameraScript.ZoomDisabled = false;
-                }
                 break;              
             case ShowState.Type3:   
                 BuildWindowSel1.gameObject.SetActive(false);
                 BuildWindowSel2.gameObject.SetActive(false);
                 BuildWindowSel3.gameObject.SetActive(true);
                 BuildWindowSel4.gameObject.SetActive(false);
-                if (BuildWindowSel3.Scrolling)
-                {
-                    CameraScript.ZoomDisabled = true;
-                }
-                else
-                {
-                    CameraScript.ZoomDisabled = false;
-                }
                 break;              
             case ShowState.Type4:   
                 BuildWindowSel1.gameObject.SetActive(false);
                 BuildWindowSel2.gameObject.SetActive(false);
                 BuildWindowSel3.gameObject.SetActive(false);
                 BuildWindowSel4.gameObject.SetActive(true);
-                if (BuildWindowSel4.Scrolling)
-                {
-                    CameraScript.ZoomDisabled = true;
-                }
-                else
-                {
-                    CameraScript.ZoomDisabled = false;
-                }
                 break;
         }
+        //Disable camera zooming while in build menu so that the middle mouse button can be used for scrolling instead.
+        CameraScript.ZoomDisabled = true;
         curState = NewShowState;
     }
 }

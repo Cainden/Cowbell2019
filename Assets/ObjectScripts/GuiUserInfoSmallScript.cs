@@ -16,6 +16,11 @@ public class GuiUserInfoSmallScript : MonoBehaviour
     {
         gameObject.SetActive(false);
         Debug.Assert(InfoText != null);
+
+        //Start slightly above the screen
+        _PosY1 = Screen.height * 0.75f;
+        //Make sure no matter the screen dimensions that the text becomes visible
+        _PosY2 = _PosY1 * 0.7f;
     }
 
     void Update()
