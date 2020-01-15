@@ -9,26 +9,15 @@ public class ButtonScrollManager : MonoBehaviour
     [SerializeField] Enums.RoomCategories category;
     [SerializeField] GameObject button1, panel, scrollView;
     private ButtonScript[] buttons;
-    public bool Scrolling { get; set; }
+    //public bool Scrolling { get; set; }
 
     public void Init()
     {
         buttons = ButtonScript.CreateButtonArrayFromRoomData(RoomManager.GetAllRoomsofCategory(category, true), button1);
-        if (buttons.Length > 4)
+
+        for (int i = 0; i < buttons.Length; i++)
         {
-            //panel.GetComponent<RectTransform>().offsetMin = new Vector2(panel.GetComponent<RectTransform>().offsetMin.x, 135 - (36 * buttons.Length));
-            //scrollView.GetComponentInChildren<Scrollbar>().size = 4 / buttons.Length;
-            //scrollView.GetComponentInChildren<Scrollbar>().value = 1;
-            for (int i = 0; i < buttons.Length; i++)
-            {
-                buttons[i].transform.SetParent(panel.transform, false);
-            }
-            Scrolling = true;
-        }
-        else
-        {
-            scrollView.SetActive(false);
-            Scrolling = false;
+            buttons[i].transform.SetParent(panel.transform, false);
         }
     }
 
