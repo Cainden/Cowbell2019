@@ -4,6 +4,8 @@ namespace MySpace
 {
     public static class Enums
     {
+        public enum AppState { MainMenu, Game }
+
         // Game states
         public enum GameStates { None, Normal, GuiBlocking, BuildRoom, RoomSelected, ManPressed, ManSelected, ManDragging, ChangeOwnedRoom };
 
