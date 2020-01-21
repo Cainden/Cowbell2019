@@ -36,20 +36,27 @@ public class ButtonScript : MonoBehaviour
     public static ButtonScript[] CreateButtonArrayFromRoomData(RoomDefData[] data, GameObject prefab)
     {
         ButtonScript[] ar = new ButtonScript[data.Length];
+
+        if (data.Length == 0)
+        {
+            // This will happen if there are no rooms of the given category for this button. Shouldn't happen in the final game, but this is here to make prototyping look cleaner.
+            prefab.SetActive(false);
+        }
+
         for (int i = 0; i < data.Length; i++)
         {
             if (i == 0)
             {
-                ar[i] = prefab.GetComponent<ButtonScript>().Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost);
+                ar[i] = prefab.GetComponent<ButtonScript>().Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost, data[i].RoomName);
                 continue;
             }
             ar[i] = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, prefab.transform.parent).GetComponent<ButtonScript>().
-                Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost);
+                Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost, data[i].RoomName);
         }
         return ar;
     }
 
-    public ButtonScript Init(float yOffset, bool locked, Enums.RoomCategories category, Enums.RoomTypes type, int cost)
+    public ButtonScript Init(float yOffset, bool locked, Enums.RoomCategories category, Enums.RoomTypes type, int cost, string roomName)
     {
         this.type = type;
         this.category = category;
@@ -72,7 +79,7 @@ public class ButtonScript : MonoBehaviour
             button.colors = disabledColor;
         }
 
-        buttonText.text = "Build " + type.RoomTypeToRoomDisplayName();
+        buttonText.text = "Build " + roomName;
         costText.text = "Cost: " + cost + " Hoots";
 
         return this;
