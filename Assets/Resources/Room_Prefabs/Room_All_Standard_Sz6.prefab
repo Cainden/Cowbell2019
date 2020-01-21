@@ -353,3 +353,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Test Room Size 6
+    RoomSize: 6
+    RoomCategory: 0
+    RoomType: 15
+    ManSlotCount: 6
+    RoomDescription: A standard room of medium size. Can hold 6 men.
+    RoomOverUnder: 0
+    RoomCost: 3
+    locked: 0

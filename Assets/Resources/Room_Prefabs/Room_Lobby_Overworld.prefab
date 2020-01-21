@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 65888976018413752}
   - component: {fileID: -9019794058010210433}
   m_Layer: 8
-  m_Name: Room_All_Standard_Sz4
+  m_Name: Room_Lobby_Overworld
   m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,6 +261,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: OverWorld Lobby
+    RoomModelPrefab: {fileID: 0}
+    RoomSize: 4
+    RoomCategory: 2
+    RoomType: 3
+    ManSlotCount: 4
+    RoomDescription: The Overworld Hootel's Lobby. Our main Owl can be found here.
+    RoomOverUnder: 1
+    RoomCost: 0
+    locked: 0
 --- !u!1 &1517176333350546
 GameObject:
   m_ObjectHideFlags: 0

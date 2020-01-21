@@ -261,6 +261,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Test Room Size 4
+    RoomSize: 4
+    RoomCategory: 0
+    RoomType: 14
+    ManSlotCount: 4
+    RoomDescription: A standard room of medium size. Can hold 4 men.
+    RoomOverUnder: 0
+    RoomCost: 2
+    locked: 0
 --- !u!1 &1517176333350546
 GameObject:
   m_ObjectHideFlags: 0

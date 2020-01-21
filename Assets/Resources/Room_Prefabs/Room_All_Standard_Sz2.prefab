@@ -243,7 +243,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1943732263410148}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 5, y: 4, z: 5}
@@ -260,3 +260,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Test Room Size 2
+    RoomSize: 2
+    RoomCategory: 0
+    RoomType: 13
+    ManSlotCount: 2
+    RoomDescription: A standard room of small size. Can hold 2 men.
+    RoomOverUnder: 0
+    RoomCost: 1
+    locked: 0

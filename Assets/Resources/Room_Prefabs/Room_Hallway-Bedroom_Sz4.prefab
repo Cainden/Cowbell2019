@@ -184,6 +184,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597299ce084c6714c9527eb277cae1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Hallway
+    RoomModelPrefab: {fileID: 0}
+    RoomSize: 4
+    RoomCategory: 2
+    RoomType: 8
+    ManSlotCount: 4
+    RoomDescription: A medium sized hallway. Has two bedrooms attached to it.
+    RoomOverUnder: 1
+    RoomCost: 150
+    locked: 0
   BedroomPosition: {fileID: 2176080296290898712}
 --- !u!1 &1517176333350546
 GameObject:

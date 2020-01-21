@@ -315,6 +315,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Elevator
+    RoomModelPrefab: {fileID: 0}
+    RoomSize: 1
+    RoomCategory: 1
+    RoomType: 1
+    ManSlotCount: 0
+    RoomDescription: The elevator room is of size 1. It cannot hold any men.
+    RoomOverUnder: 0
+    RoomCost: 175
+    locked: 0
 --- !u!114 &114295345331750346
 MonoBehaviour:
   m_ObjectHideFlags: 0
