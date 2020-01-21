@@ -39,7 +39,7 @@ public class RoomManager : MonoBehaviour
     public GameObject RoomHighlighterSz6;
     public GameObject RoomHighlighter_Bedroom;
     [Header("===============================================================================================================================================")]
-    [SerializeField] Room[] roomDefinitions;
+    [SerializeField] GameObject[] roomDefinitions;
 
     public static RoomDefData[] RoomDefinitions { get; private set; }
 
@@ -67,18 +67,19 @@ public class RoomManager : MonoBehaviour
         RoomDefinitions = new RoomDefData[roomDefinitions.Length];
         for (int i = 0; i < roomDefinitions.Length; i++)
         {
+            RoomScript room = roomDefinitions[i].GetComponent<RoomScript>();
             RoomDefinitions[i] = new RoomDefData(
-                roomDefinitions[i].RoomName,
-                roomDefinitions[i].RoomModelPrefab,
-                roomDefinitions[i].RoomSize,
-                roomDefinitions[i].RoomType,
-                roomDefinitions[i].RoomCategory,
-                roomDefinitions[i].ManSlotCount,
-                CreateNewArray(roomDefinitions[i].ManSlotCount),
-                roomDefinitions[i].RoomDescription,
-                roomDefinitions[i].RoomCost,
-                roomDefinitions[i].RoomOverUnder,
-                roomDefinitions[i].locked
+                room.RoomStats.RoomName,
+                roomDefinitions[i],
+                room.RoomStats.RoomSize,
+                room.RoomStats.RoomType,
+                room.RoomStats.RoomCategory,
+                room.RoomStats.ManSlotCount,
+                CreateNewArray(room.RoomStats.ManSlotCount),
+                room.RoomStats.RoomDescription,
+                room.RoomStats.RoomCost,
+                room.RoomStats.RoomOverUnder,
+                room.RoomStats.locked
                 );
         }
 
@@ -500,8 +501,8 @@ public class RoomManager : MonoBehaviour
     {
         for (int i = 0; i < roomDefinitions.Length; i++)
         {
-            if (roomDefinitions[i].RoomType == roomType)
-                return roomDefinitions[i].RoomCost;
+            if (roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomType == roomType)
+                return roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomCost;
         }
         Debug.LogWarning("RoomManager.cs 'GetCostByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
@@ -511,8 +512,8 @@ public class RoomManager : MonoBehaviour
     {
         for (int i = 0; i < roomDefinitions.Length; i++)
         {
-            if (roomDefinitions[i].RoomType == roomType)
-                return roomDefinitions[i].RoomSize;
+            if (roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomType == roomType)
+                return roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomSize;
         }
         Debug.LogWarning("RoomManager.cs 'GetRoomSizeByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
@@ -522,8 +523,8 @@ public class RoomManager : MonoBehaviour
     {
         for (int i = 0; i < roomDefinitions.Length; i++)
         {
-            if (roomDefinitions[i].RoomType == roomType)
-                return roomDefinitions[i].RoomOverUnder;
+            if (roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomType == roomType)
+                return roomDefinitions[i].GetComponent<RoomScript>().RoomStats.RoomOverUnder;
         }
         Debug.LogWarning("RoomManager.cs 'GetOverUnderByRoomType'/n No Room of the given RoomType: " + roomType + " was found in the roomDefinitions.");
         return 0;
@@ -548,11 +549,9 @@ public class RoomManager : MonoBehaviour
 
     #region Serializable Struct (for inspector readability/clarity)
     [Serializable]
-    private struct Room
+    public struct Room
     {
         public string RoomName;
-        [Tooltip("The prefab object that will be instantiated when the room is created.")]
-        public GameObject RoomModelPrefab;
         public Enums.RoomSizes RoomSize;
         [Tooltip("What category the room falls under (What tab it will show up under the build options when selecting a room to build)")]
         public Enums.RoomCategories RoomCategory;
