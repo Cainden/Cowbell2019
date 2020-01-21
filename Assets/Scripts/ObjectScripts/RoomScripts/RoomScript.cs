@@ -9,8 +9,9 @@ public class RoomScript : MonoBehaviour
 {
     // Instance specific data. Kept separate for easier serialization
     [HideInInspector] public RoomInstanceData RoomData;
-    
-   
+
+    // Used by the room manager
+    public RoomManager.Room RoomStats;
 
     // Internals
     public bool RoomIsActive { get; private set; } // True if at least one man working here
