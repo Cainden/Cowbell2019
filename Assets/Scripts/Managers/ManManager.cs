@@ -9,6 +9,13 @@ using UnityEngine;
 
 public class ManManager : MonoBehaviour
 {
+    #region Inspector Variables
+
+    [SerializeField] GameObject[] ManPrefabs;
+
+    #endregion
+
+    #region Variables
     [HideInInspector]
     public static ManManager Ref { get; private set; } // For external access of script
 
@@ -18,6 +25,7 @@ public class ManManager : MonoBehaviour
     public List<ManInstanceData> hireList = new List<ManInstanceData>();
     [HideInInspector]
     public List<ManInstanceData> bookingList = new List<ManInstanceData>();
+    #endregion
 
     void Awake()
     {
@@ -44,9 +52,9 @@ public class ManManager : MonoBehaviour
     {
         if (manData == null) return;
 
-        GameObject ManObject = ManFactory.Ref.CreateMan(manData.ManType);
+        GameObject ManObject = InstantiateMan(manData.ManType);
         ManScript ManScript = ManObject.GetComponent<ManScript>();
-        ManScript.ManData = manData;        
+        ManScript.ManData = manData;
 
         _ManList[manData.ManId] = new ManRef(ManObject, ManScript);
         ManObject.transform.position = Constants.NewManIncomingPath[0];
@@ -349,5 +357,16 @@ public class ManManager : MonoBehaviour
                 }
             }
         }        
+    }
+
+    private GameObject InstantiateMan(Enums.ManTypes manType)
+    {
+        foreach (GameObject man in ManPrefabs)
+        {
+            if (man.GetComponent<ManScript>().ManType == manType)
+                return Instantiate(man);
+        }
+        Debug.LogError("Man type of " + manType + " was not found in the ManPrefabs list on the ManManager.");
+        return null;
     }
 }
