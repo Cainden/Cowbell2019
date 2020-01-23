@@ -77,11 +77,11 @@ namespace MySpace
         public static readonly string ManSelectedMaterial = "Avatars/UnlitYellowMaterial";
         public static readonly string ManGhostMaterial = "Avatars/UnlitGreyMaterial";
 
-        public static readonly ManDefData[] ManDefinitions = new ManDefData[]
-        {
-            new ManDefData ("StandardMan", "Avatars/Man_pref", Enums.ManTypes.StandardMan),
-            new ManDefData ("Cleaner", "Avatars/Man_pref", Enums.ManTypes.Cleaner),
-            new ManDefData ("Guest", "Avatars/Man_pref", Enums.ManTypes.Guest)
-        };
+        //public static readonly ManDefData[] ManDefinitions = new ManDefData[]
+        //{
+        //    new ManDefData ("StandardMan", "Avatars/Man_pref", Enums.ManTypes.StandardMan),
+        //    new ManDefData ("Cleaner", "Avatars/Man_pref", Enums.ManTypes.Cleaner),
+        //    new ManDefData ("Guest", "Avatars/Man_pref", Enums.ManTypes.Guest)
+        //};
     }
 }
