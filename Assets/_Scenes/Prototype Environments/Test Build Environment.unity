@@ -9073,5 +9073,22 @@ PrefabInstance:
       propertyPath: rotation
       value: 
       objectReference: {fileID: 411926382}
+    - target: {fileID: 7256544258854591260, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: ManPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7256544258854591260, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: ManPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 1391923580201952, guid: 4bbde8ac1360f634684129dd2a37f4a5,
+        type: 3}
+    - target: {fileID: 7256544258854591260, guid: a154356a569c99b4b886195bab7d15d7,
+        type: 3}
+      propertyPath: ManPrefabs.Array.data[1]
+      value: 
+      objectReference: {fileID: 1391923580201952, guid: 687b52e7b1caec545b4adb329674a419,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a154356a569c99b4b886195bab7d15d7, type: 3}
