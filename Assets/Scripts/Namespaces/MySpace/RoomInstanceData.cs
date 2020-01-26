@@ -15,6 +15,7 @@ namespace MySpace
         public Enums.RoomTypes RoomType { get; set; }
         public Enums.RoomOverUnder RoomOverUnder{ get; set; }
         public int RoomCost { get; set; }
+        public RoomScript RoomScript { get; set; }
 
        
 
