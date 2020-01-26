@@ -213,7 +213,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4290223459029248}
   - component: {fileID: 65888976018413752}
-  - component: {fileID: -9019794058010210433}
+  - component: {fileID: -5801404362813417843}
   m_Layer: 8
   m_Name: Room_Lobby_Overworld
   m_TagString: Room
@@ -249,7 +249,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 4, z: 5}
   m_Center: {x: 3.75, y: 1.8, z: 2.5}
---- !u!114 &-9019794058010210433
+--- !u!114 &-5801404362813417843
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,12 +258,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1455615580497424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c65262770d0c924ab61ab1b6aa5e5f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RoomStats:
     RoomName: OverWorld Lobby
-    RoomModelPrefab: {fileID: 0}
     RoomSize: 4
     RoomCategory: 2
     RoomType: 3
