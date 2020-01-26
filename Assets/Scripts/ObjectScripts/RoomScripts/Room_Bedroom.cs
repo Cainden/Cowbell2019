@@ -116,6 +116,7 @@ public class Room_Bedroom : RoomScript
         RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
         RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+        RoomData.RoomScript = this;
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
@@ -128,11 +129,13 @@ public class Room_Bedroom : RoomScript
 
         #region Manual assignment of grid index movement directions
         //enable the  way to leave the room through the door
-        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes.Length - 1], Enums.MoveDirections.Front);
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Front);
         //enable left movement to the door index
-        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes.Length - 1], Enums.MoveDirections.Left);
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Left);
         //enable right movement to the index inside the room
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Right);
+        //disable front movement from the other index
+        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
         #endregion
 
         Enums.ManStates[] CreateNewArray(int length)
