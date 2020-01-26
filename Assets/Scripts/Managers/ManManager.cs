@@ -227,6 +227,11 @@ public class ManManager : MonoBehaviour
         ManScript.TransferOwnershipToNewRoom(roomId);
     }
 
+    public void TransferOwnershipToRoom(ManScript ManScript, Guid roomId)
+    {
+        ManScript.TransferOwnershipToNewRoom(roomId);
+    }
+
     private void SetManPathFromEntrance(Guid manId, Guid newRoomGuid, int newSlotIndex)
     {
         ManScript ManScript = _ManList[manId].ManScript;

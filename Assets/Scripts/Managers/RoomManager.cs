@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using UnityEngine;
+using System.Linq;
 
 public class RoomManager : MonoBehaviour
 {
@@ -49,6 +50,8 @@ public class RoomManager : MonoBehaviour
     #region Static Variables
 
     public static RoomManager Ref { get; private set; } // For external access of script
+
+    public static Guid lobbyId, underLobbyId;
 
     #endregion
 
@@ -146,6 +149,7 @@ public class RoomManager : MonoBehaviour
         GameObject RoomObject = InstantiateRoom(roomData.RoomType);
         RoomScript RoomScript = RoomObject.GetComponent<RoomScript>();
         RoomScript.RoomData = roomData;
+        roomData.RoomScript = RoomScript;
 
         _RoomList[roomData.RoomId] = new RoomRef(RoomObject, RoomScript);
         RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
@@ -465,34 +469,11 @@ public class RoomManager : MonoBehaviour
         }
 
         return rooms.ToArray();
+    }
 
-        #region Fun Test
-        /*
-        RoomDefData[] ar;
-        Recursive(0, 0);
-        return ar;
-
-        void Recursive(int c, int count)
-        {
-            if (c > RoomDefinitions.Length)
-            {
-                ar = new RoomDefData[count];
-            }
-            else
-            {
-                if (RoomDefinitions[c].RoomCategory == category)
-                {
-                    Recursive(c + 1, count + 1);
-                    ar[count] = RoomDefinitions[c];
-                }
-                else
-                {
-                    Recursive(c + 1, count);
-                }
-            }
-        }
-        */
-        #endregion
+    public RoomRef[] GetAllActiveRoomsofType(params Enums.RoomTypes[] roomTypes)
+    {
+        return (from r in _RoomList where roomTypes.Contains(r.Value.RoomScript.RoomData.RoomType) select r.Value).ToArray();
     }
     #endregion
 
@@ -541,10 +522,12 @@ public class RoomManager : MonoBehaviour
     public void CreateStartRooms()
     {
         //Lobby
-        CreateRoom(Guid.NewGuid(), Enums.RoomTypes.Lobby, Constants.EntranceRoomIndex);
+        lobbyId = Guid.NewGuid();
+        CreateRoom(lobbyId, Enums.RoomTypes.Lobby, Constants.EntranceRoomIndex);
 
         //Underworld Lobby
-        CreateRoom(Guid.NewGuid(), Enums.RoomTypes.UnderLobby, Constants.UWEntranceRoomIndex);
+        underLobbyId = Guid.NewGuid();
+        CreateRoom(underLobbyId, Enums.RoomTypes.UnderLobby, Constants.UWEntranceRoomIndex);
     }
 
     #region Serializable Struct (for inspector readability/clarity)
