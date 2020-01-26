@@ -49,7 +49,10 @@ public class ManScript : MonoBehaviour
     #endregion
 
     #region Mono Methods
-    private void Start()
+    /// <summary>
+    /// Call Base Start!
+    /// </summary>
+    protected virtual void Start()
     {
         _Animator = GetComponentInChildren<Animator>();
         _Renderers = GetComponentsInChildren<Renderer>();
@@ -57,7 +60,10 @@ public class ManScript : MonoBehaviour
         CheckReferences();
     }
 
-    private void Update()
+    /// <summary>
+    /// Call Base Update!
+    /// </summary>
+    protected virtual void Update()
     {
         StateUpdate();
         CheckIfRentTime();
@@ -82,7 +88,7 @@ public class ManScript : MonoBehaviour
         _MaterialGhost = Resources.Load<Material>(Constants.ManGhostMaterial);
         switch (ManType)
         {
-            case Enums.ManTypes.Max: // Who the hell is Max?
+            case Enums.ManTypes.Max: // Who is Max? lol
                 break;
             case Enums.ManTypes.Monster:
                 _MaterialNormal.color = Color.red;
@@ -236,7 +242,7 @@ public class ManScript : MonoBehaviour
         ManData.AssignedRoomSlot = assignedRoomSlot;
     }
 
-    public void SetOwnerOfRoom(Guid assignedRoom)
+    public virtual void SetOwnerOfRoom(Guid assignedRoom)
     {
 
         if (assignedRoom == Guid.Empty)
@@ -249,20 +255,9 @@ public class ManScript : MonoBehaviour
         //Man is of type Guest
         //Room is of type Bedroom
         //Owner does NOT own a room already
-        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(assignedRoom);
-        if (ManData.ManType == Enums.ManTypes.Guest && (roomRefTemp.RoomScript is Room_Bedroom) && !IsOwnerOfRoom())
-        {
-            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-            int freeSlot = -1;
-            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
-            {
-                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
-                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
-            }
-        }
     }
 
-    public void TransferOwnershipToNewRoom(Guid newRoom)
+    public virtual void TransferOwnershipToNewRoom(Guid newRoom)
     {
 
 
@@ -270,19 +265,6 @@ public class ManScript : MonoBehaviour
         {
             RemoveRoomOwnership();
             return;
-        }
-
-        RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(newRoom);
-        if (ManData.ManType == Enums.ManTypes.Guest && (roomRefTemp.RoomScript is Room_Bedroom))
-        {
-            //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-            int freeSlot = -1;
-            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
-            {
-                roomRefTemp.RoomScript.RemoveOwnerFromRoomSlot(ManData.ManId);
-                roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
-                ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
-            }
         }
     }
 
@@ -374,6 +356,11 @@ public class ManScript : MonoBehaviour
         SetAnimation(State);
         yield return new WaitForSeconds(seconds);
         State = Enums.ManStates.None; // Will trigger next action
+    }
+
+    public void Add_Action_ToList(ActionData action)
+    {
+        _ActionList.Enqueue(action);
     }
     #endregion
 
