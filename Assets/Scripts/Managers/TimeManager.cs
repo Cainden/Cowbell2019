@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
+    #region Variables
+    [SerializeField] Light sun = null;
+
+    [SerializeField] bool showTimeUI = true;
     
     public static TimeManager Ref { get; private set; } // For external access of script
 
@@ -14,7 +18,7 @@ public class TimeManager : MonoBehaviour
     public float currentCycleTime = 0;
 
     /// number of hours per day.  
-    public float hoursPerDay;
+    private float hoursPerDay = 24;
 
     /// The rotation pivot of Sun  
     public Transform rotation;
@@ -31,7 +35,6 @@ public class TimeManager : MonoBehaviour
 
     /// calculated minutes of the day, based on the hoursPerDay setting.  
     public int minutes;
-    private float timePerHour;
 
     /// The scene ambient color used for full daylight.  
     public Color fullLight = new Color(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
@@ -64,12 +67,20 @@ public class TimeManager : MonoBehaviour
     private float quarterDay;
     private float halfquarterDay;
 
+    public static float HourTime { get; private set; }
+    public static float MinuteTime { get; private set; }
+    public static float SecondsTime { get; private set; }
+
     /// The specified intensity of the directional light, if one exists. This value will be  
     /// faded to 0 during dusk, and faded from 0 back to this value during dawn.  
     private float lightIntensity;
 
     // blend value of skybox using SkyBoxBlend Shader in render settings range 0-1  
     private float SkyboxBlendFactor = 0.0f;
+
+    #endregion
+
+    #region Initialization
 
     void Awake()
     {
@@ -81,13 +92,18 @@ public class TimeManager : MonoBehaviour
     {
         quarterDay = dayCycleLength * 0.25f;
         halfquarterDay = dayCycleLength * 0.125f;
+
         dawnTime = 0.0f;
-        dayTime = dawnTime + halfquarterDay;
-        duskTime = dayTime + quarterDay + halfquarterDay;
-        nightTime = duskTime + halfquarterDay;
-        timePerHour = dayCycleLength / hoursPerDay;
-        if (GetComponent<Light>() != null)
-        { lightIntensity = GetComponent<Light>().intensity; }
+        dayTime = dawnTime + halfquarterDay; //dayCycleLength * 0.125f
+        duskTime = dayTime + quarterDay + halfquarterDay; //dayCycleLength * 0.5f
+        nightTime = duskTime + halfquarterDay; //dayCycleLength * 0.75f
+
+        HourTime = dayCycleLength / hoursPerDay;
+        MinuteTime = HourTime / 60;
+        SecondsTime = MinuteTime / 60;
+
+        if (sun != null)
+        { lightIntensity = sun.intensity; }
     }
 
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
@@ -109,6 +125,9 @@ public class TimeManager : MonoBehaviour
         Initialize();
     }
 
+    #endregion
+
+    #region Updates
     void OnGUI()
     {
         string jam = worldTimeHour.ToString();
@@ -121,7 +140,9 @@ public class TimeManager : MonoBehaviour
         {
             menit = "0" + minutes;
         }
-        GUI.Button(new Rect(500, 20, 100, 26), currentPhase.ToString() + " : " + jam + ":" + menit);
+
+        if (showTimeUI)
+            GUI.Button(new Rect(500, 20, 100, 26), currentPhase.ToString() + " : " + jam + ":" + menit);
     }
 
     // Update is called once per frame  
@@ -152,15 +173,28 @@ public class TimeManager : MonoBehaviour
         UpdateSkyboxBlendFactor();
 
         // Update the current cycle time:  
+        if (currentCycleTime > dayCycleLength)
+            currentCycleTime = currentCycleTime % dayCycleLength;
+        else if (currentCycleTime == dayCycleLength)
+            currentCycleTime = 0;
         currentCycleTime += Time.deltaTime;
-        currentCycleTime = currentCycleTime % dayCycleLength;
+        if (currentCycleTime > dayCycleLength)
+            currentCycleTime = dayCycleLength;
+
+        //Using the above method instead of the below one for triggering events based on end of day. 
+        //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
+
+        //currentCycleTime = currentCycleTime % dayCycleLength;
     }
 
+    #endregion
+
+    #region Day State Change Functions
     /// Sets the currentPhase to Dawn, turning on the directional light, if any.  
     public void SetDawn()
     {
-        if (GetComponent<Light>() != null)
-        { GetComponent<Light>().enabled = true; }
+        if (sun != null)
+        { sun.enabled = true; }
         currentPhase = DayPhase.Dawn;
     }
 
@@ -169,8 +203,8 @@ public class TimeManager : MonoBehaviour
     public void SetDay()
     {
         RenderSettings.ambientLight = fullLight;
-        if (GetComponent<Light>() != null)
-        { GetComponent<Light>().intensity = lightIntensity; }
+        if (sun != null)
+        { sun.intensity = lightIntensity; }
         currentPhase = DayPhase.Day;
     }
 
@@ -185,11 +219,14 @@ public class TimeManager : MonoBehaviour
     public void SetNight()
     {
         RenderSettings.ambientLight = fullDark;
-        if (GetComponent<Light>() != null)
-        { GetComponent<Light>().enabled = false; }
+        if (sun != null)
+        { sun.enabled = false; }
         currentPhase = DayPhase.Night;
     }
 
+    #endregion
+
+    #region Update Helper Functions
     /// If the currentPhase is dawn or dusk, this method adjusts the ambient light color and direcitonal  
     /// light intensity (if any) to a percentage of full dark or full light as appropriate. Regardless  
     /// of currentPhase, the method also rotates the transform of this component, thereby rotating the  
@@ -200,19 +237,18 @@ public class TimeManager : MonoBehaviour
         {
             float relativeTime = currentCycleTime - dawnTime;
             RenderSettings.ambientLight = Color.Lerp(fullDark, fullLight, relativeTime / halfquarterDay);
-            if (GetComponent<Light>() != null)
-            { GetComponent<Light>().intensity = lightIntensity * (relativeTime / halfquarterDay); }
+            if (sun != null)
+            { sun.intensity = lightIntensity * (relativeTime / halfquarterDay); }
         }
         else if (currentPhase == DayPhase.Dusk)
         {
             float relativeTime = currentCycleTime - duskTime;
             RenderSettings.ambientLight = Color.Lerp(fullLight, fullDark, relativeTime / halfquarterDay);
-            if (GetComponent<Light>() != null)
-            { GetComponent<Light>().intensity = lightIntensity * ((halfquarterDay - relativeTime) / halfquarterDay); }
+            if (sun != null)
+            { sun.intensity = lightIntensity * ((halfquarterDay - relativeTime) / halfquarterDay); }
         }
-
-        //transform.Rotate(Vector3.up * ((Time.deltaTime / dayCycleLength) * 360.0f), Space.Self);  
-        transform.RotateAround(rotation.position, Vector3.forward, ((Time.deltaTime / dayCycleLength) * 360.0f));
+ 
+        //transform.RotateAround(rotation.position, Vector3.forward, ((Time.deltaTime / dayCycleLength) * 360.0f));
     }
 
     private void UpdateSkyboxBlendFactor()
@@ -269,8 +305,75 @@ public class TimeManager : MonoBehaviour
     private void UpdateWorldTime()
     {
         worldTimeHour = (int)((Mathf.Ceil((currentCycleTime / dayCycleLength) * hoursPerDay) + dawnTimeOffset) % hoursPerDay) + 1;
-        minutes = (int)(Mathf.Ceil((currentCycleTime * (60 / timePerHour)) % 60));
+        minutes = (int)(Mathf.Ceil((currentCycleTime * (60 / HourTime)) % 60));
     }
+    #endregion
+
+    #region Event Helper Functions
+    /// <summary>
+    /// Add an event to trigger during the day cycle at the inputted specific second during the day/night cycle.
+    /// </summary>
+    /// <param name="time">The second at which the event will occur.</param>
+    /// <param name="action">The event to be triggered at the specified time.</param>
+    public static void AddEventToClock(int time, System.Action action)
+    {
+        Ref.StartCoroutine(EventTrigger(time, action));
+    }
+
+    /// <summary>
+    /// Add an event to trigger during the day cycle at the inputted ratio'd time. (Ex: 0.5f will have the event trigger at second 60 during a 120 second dayCycleLength.)
+    /// </summary>
+    /// <param name="ratioTime">The time at which the event will occur.</param>
+    /// <param name="action">The event to be triggered at the specified time.</param>
+    public static void AddEventToClock(float ratioTime, System.Action action)
+    {
+        if (ratioTime > 1)
+            ratioTime = 1;
+        Ref.StartCoroutine(EventTrigger(Ref.dayCycleLength * ratioTime, action));
+    }
+
+    /// <summary>
+    /// Add an event to trigger in a given amount of seconds.
+    /// </summary>
+    /// <param name="seconds">Aount of seconds it will take for the event to occur.</param>
+    /// <param name="action">The event to be triggered at the specified time.</param>
+    public static void AddEventTriggerInSeconds(float seconds, System.Action action)
+    {
+        Ref.StartCoroutine(EventTrigger((Ref.currentCycleTime + seconds) % Ref.dayCycleLength, action));
+    }
+
+    public static void AddEventTriggerToGameTime(int hours, int minutes, int seconds, System.Action action)
+    {
+        float tt = Ref.dayCycleLength;
+        float h = (tt / 24) * hours;
+        float m = (h / 60) * minutes;
+        float s = (m / 60) * seconds;
+        Ref.StartCoroutine(EventTrigger(h + m + s, action));
+    }
+
+    public static void AddEventTriggerBasedOnGameTime(int hours, int minutes, int seconds, System.Action action)
+    {
+        float tt = Ref.dayCycleLength;
+        float h = (tt / 24) * hours;
+        float m = (h / 60) * minutes;
+        float s = (m / 60) * seconds;
+        Ref.StartCoroutine(EventTrigger((Ref.currentCycleTime + h + m + s) % tt, action));
+    }
+
+    private static IEnumerator EventTrigger(float triggerTime, System.Action action)
+    {
+        while (Ref.currentCycleTime > triggerTime)
+        {
+            yield return null;
+        }
+        while (Ref.currentCycleTime < triggerTime)
+        {
+            yield return null;
+        }
+        action();
+    }
+
+    #endregion
 
     public enum DayPhase
     {

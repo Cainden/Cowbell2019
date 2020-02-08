@@ -34,11 +34,22 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             AppManager.Ref.ChangeApplicationState(MySpace.Enums.AppState.MainMenu);
         }
+    }
+
+    private void GiveGuest()
+    {
+        ClickManager.Ref.AddNewGuest();
+        TimeManager.AddEventTriggerInSeconds(60, GiveGuest);
     }
 }
