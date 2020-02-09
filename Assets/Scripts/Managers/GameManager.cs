@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    [SerializeField] GameObject DebugMenu;
 
 
 
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
+        DebugMenu.SetActive(false);
     }
 
     private void Update()
@@ -44,6 +45,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             AppManager.Ref.ChangeApplicationState(MySpace.Enums.AppState.MainMenu);
+        }
+        if (Input.GetKeyDown(KeyCode.Tilde))
+        {
+            DebugMenu.SetActive(!DebugMenu.activeInHierarchy);
         }
     }
 
