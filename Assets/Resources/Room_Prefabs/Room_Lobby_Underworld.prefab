@@ -92,7 +92,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5d3d42c0f82a2644f93a53f2725a5866, type: 2}
+  - {fileID: 2100000, guid: 575b5f3fffa3d37428a44eea13eca83d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -263,7 +263,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RoomStats:
     RoomName: Underworld Lobby
-    RoomModelPrefab: {fileID: 0}
     RoomSize: 4
     RoomCategory: 3
     RoomType: 2
