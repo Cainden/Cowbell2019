@@ -124,10 +124,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RoomStats:
     RoomName: Short Hallway
-    RoomModelPrefab: {fileID: 0}
     RoomSize: 2
     RoomCategory: 2
-    RoomType: 7
+    RoomType: 5
     ManSlotCount: 2
     RoomDescription: A short Hallway. Has one bedroom attached to it.
     RoomOverUnder: 1
@@ -158,7 +157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1517176333350546}
   m_LocalRotation: {x: 6.123234e-17, y: 1, z: -6.123234e-17, w: 6.123234e-17}
-  m_LocalPosition: {x: 3.75, y: 2.3, z: 4.7}
+  m_LocalPosition: {x: 1.35, y: 2.9, z: 4.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4290223459029248}

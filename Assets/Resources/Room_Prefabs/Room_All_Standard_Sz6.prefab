@@ -357,7 +357,7 @@ MonoBehaviour:
     RoomName: Test Room Size 6
     RoomSize: 6
     RoomCategory: 0
-    RoomType: 15
+    RoomType: 13
     ManSlotCount: 6
     RoomDescription: A standard room of medium size. Can hold 6 men.
     RoomOverUnder: 0

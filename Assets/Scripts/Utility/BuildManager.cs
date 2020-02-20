@@ -12,6 +12,8 @@ public class BuildManager : MonoBehaviour
  
     private List<GameObject> RoomPositionSelectors = new List<GameObject>();
 
+    public static Action BuildFinishedEvent;
+
     void Awake()
     {
         if (Ref == null) Ref = GetComponent<BuildManager>();
@@ -61,5 +63,6 @@ public class BuildManager : MonoBehaviour
     {
         HideRoomPositionSelectors();
         RoomManager.Ref.CreateRoom(Guid.NewGuid(), roomType, index);
+        BuildFinishedEvent?.Invoke();
     }
 }

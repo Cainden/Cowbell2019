@@ -16,11 +16,11 @@ public class RoomScript : MonoBehaviour
     // Internals
     public bool RoomIsActive { get; private set; } // True if at least one man working here
     
-
+    public virtual Enums.ManRole RoomRole { get { return Enums.ManRole.None; } }
 
     protected ManManager manManRef;
 
-
+    public Guid adjacentRight, adjacentLeft;
 
     protected virtual void Start()
     {
@@ -64,6 +64,17 @@ public class RoomScript : MonoBehaviour
     }
 
     #region Helper Functions
+
+    public bool HasOwner()
+    {
+        for (int i = 0; i < RoomData.OwnerSlotsAssignments.Length; i++)
+        {
+            if (RoomData.OwnerSlotsAssignments[i] != Guid.Empty)
+                return true;
+        }
+        return false;
+    }
+
     public bool RoomHasFreeManSlots()
     {
         foreach (Guid g in RoomData.ManSlotsAssignments)
@@ -114,13 +125,13 @@ public class RoomScript : MonoBehaviour
         return (Count);
     }
 
-    public void AssignManToRoomSlot(Guid manId, int slotIndex)
+    public virtual void AssignManToRoomSlot(Guid manId, int slotIndex, bool assignedByPlayer)
     {
         RoomData.ManSlotsAssignments[slotIndex] = manId;
         RoomIsActive = true; // General sign that there is a worker
     }
 
-    public void RemoveManFromRoomSlot(Guid manId)
+    public virtual void RemoveManFromRoomSlot(Guid manId)
     {
         for (int i = 0; i < RoomData.ManSlotCount; i++)
         {

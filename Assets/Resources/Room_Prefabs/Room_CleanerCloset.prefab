@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 33158270338459298}
   - component: {fileID: 23354810501705962}
   m_Layer: 8
-  m_Name: Room_All_Standard_Sz4
+  m_Name: Room_CleanerCloset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,9 +213,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4290223459029248}
   - component: {fileID: 65888976018413752}
-  - component: {fileID: -9019794058010210433}
+  - component: {fileID: 3497283401734531592}
   m_Layer: 8
-  m_Name: Room_All_Standard_Sz4
+  m_Name: Room_CleanerCloset
   m_TagString: Room
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -249,7 +249,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 10, y: 4, z: 5}
   m_Center: {x: 3.75, y: 1.8, z: 2.5}
---- !u!114 &-9019794058010210433
+--- !u!114 &3497283401734531592
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -258,19 +258,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1455615580497424}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
+  m_Script: {fileID: 11500000, guid: 6408d4a42af51ad4e9795892d63f5824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RoomStats:
-    RoomName: Test Room Size 4
+    RoomName: Cleaner's Closet
     RoomSize: 4
-    RoomCategory: 0
-    RoomType: 12
+    RoomCategory: 1
+    RoomType: 14
     ManSlotCount: 4
-    RoomDescription: A standard room of medium size. Can hold 4 men.
-    RoomOverUnder: 0
-    RoomCost: 2
+    RoomDescription: Cleaners can come to this room to rest so that they can clean
+      more rooms.
+    RoomOverUnder: 1
+    RoomCost: 150
     locked: 0
+  restRatio: 2
 --- !u!1 &1517176333350546
 GameObject:
   m_ObjectHideFlags: 0

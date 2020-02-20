@@ -154,6 +154,8 @@ public class RoomManager : MonoBehaviour
         _RoomList[roomData.RoomId] = new RoomRef(RoomObject, RoomScript);
         RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
         GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
+
+
     }
 
     #region Old CreateRoom
@@ -535,17 +537,25 @@ public class RoomManager : MonoBehaviour
     public struct Room
     {
         public string RoomName;
+
         public Enums.RoomSizes RoomSize;
+
         [Tooltip("What category the room falls under (What tab it will show up under the build options when selecting a room to build)")]
         public Enums.RoomCategories RoomCategory;
+
         public Enums.RoomTypes RoomType;
+
         [Tooltip("The maximum amount of people that can be in this room at any given point")]
         public int ManSlotCount;
+
         public string RoomDescription;
+
         [Tooltip("Whether or not the room can be built above or below ground, or both")]
         public Enums.RoomOverUnder RoomOverUnder;
+
         [Tooltip("The cost of the room in Hoots")]
         public int RoomCost;
+
         [Tooltip("If set to true, the room will not be purchaseable until the player has unlocked it.")]
         public bool locked;
 

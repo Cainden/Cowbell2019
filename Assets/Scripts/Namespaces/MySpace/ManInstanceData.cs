@@ -16,7 +16,7 @@ namespace MySpace
         public RoomInstanceData OwnedRoomRef { get; set; } = null;
 
         // Location
-        public Guid AssignedRoom { get; set; }
+        public RoomScript AssignedRoom { get; set; }//Made this a reference variable since it will be being called much more often in order to have the men communicate with the rooms better
         public int AssignedRoomSlot { get; set; }
 
         public ManInstanceData()

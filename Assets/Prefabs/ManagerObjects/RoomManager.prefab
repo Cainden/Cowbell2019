@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 994c741925b095f4ba637aaf0e5e6698, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,7 +143,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0325f7b4ec779024db79e874c5d7c67b, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -265,7 +265,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0f42473cc06ff8d48a934801faa23623, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -347,7 +347,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 76f569a7d33d31a49a6cbd103d68d843, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -412,7 +412,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f135c0dbfc47f41950b947716b526f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cleanSpeedRatio: 0.1
+  cleanSpeedRatio: 0.2
+  dirtinessSpeedRatio: 0.1
   RoomSelectorSz1: {fileID: 952491310245199890}
   RoomSelectorSz2: {fileID: 4856855630911402627}
   RoomSelectorSz4: {fileID: 3908575185322003742}
@@ -422,171 +423,16 @@ MonoBehaviour:
   RoomHighlighterSz6: {fileID: 492443655974179512}
   RoomHighlighter_Bedroom: {fileID: 7550134310508891342}
   roomDefinitions:
-  - RoomName: Common Room Size 2
-    RoomModelPrefab: {fileID: 1943732263410148, guid: fceb97cea2553514da81299b44e47047,
-      type: 3}
-    RoomSize: 2
-    RoomCategory: 0
-    RoomType: 13
-    ManSlotCount: 2
-    RoomDescription: A standard room of small size. Can hold 2 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
-  - RoomName: Common Room Size 4
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 087741c3b9494dc4784c1316af115cbc,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 0
-    RoomType: 14
-    ManSlotCount: 4
-    RoomDescription: A standard room of medium size. Can hold 4 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
-  - RoomName: Common  Room Size 6
-    RoomModelPrefab: {fileID: 1970130174721652, guid: c2f459f6e1cae334eb7309c6cf4b0bf4,
-      type: 3}
-    RoomSize: 6
-    RoomCategory: 0
-    RoomType: 15
-    ManSlotCount: 6
-    RoomDescription: A standard room of medium size. Can hold 6 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
-  - RoomName: Elevator
-    RoomModelPrefab: {fileID: 1966165223985586, guid: a0d9dc34818acff4f9010031c83e8564,
-      type: 3}
-    RoomSize: 1
-    RoomCategory: 1
-    RoomType: 1
-    ManSlotCount: 0
-    RoomDescription: The elevator room is of size 1. It cannot hold any men.
-    RoomOverUnder: 0
-    RoomCost: 175
-    locked: 0
-  - RoomName: Overworld Lobby
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 5b3b4fc132b6abd46b02d85569e510a4,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 2
-    RoomType: 3
-    ManSlotCount: 4
-    RoomDescription: The Overworld Hootel's Lobby. Our main Owl can be found here.
-    RoomOverUnder: 1
-    RoomCost: 0
-    locked: 0
-  - RoomName: Overworld Room Size 2
-    RoomModelPrefab: {fileID: 1943732263410148, guid: fceb97cea2553514da81299b44e47047,
-      type: 3}
-    RoomSize: 2
-    RoomCategory: 2
-    RoomType: 7
-    ManSlotCount: 2
-    RoomDescription: An Overworld room of small size. Can hold 2 men.
-    RoomOverUnder: 1
-    RoomCost: 100
-    locked: 0
-  - RoomName: Overworld Room Size 4
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 087741c3b9494dc4784c1316af115cbc,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 2
-    RoomType: 8
-    ManSlotCount: 4
-    RoomDescription: An Overworld room of medium size. Can hold 4 men.
-    RoomOverUnder: 1
-    RoomCost: 100
-    locked: 0
-  - RoomName: Overworld Room Size 6
-    RoomModelPrefab: {fileID: 1970130174721652, guid: c2f459f6e1cae334eb7309c6cf4b0bf4,
-      type: 3}
-    RoomSize: 6
-    RoomCategory: 2
-    RoomType: 9
-    ManSlotCount: 6
-    RoomDescription: An Overworld room of large size. Can hold 6 men.
-    RoomOverUnder: 1
-    RoomCost: 100
-    locked: 0
-  - RoomName: Bedroom Size 2
-    RoomModelPrefab: {fileID: 1943732263410148, guid: c35b6f4b9fc8e064ba304b09cf35c2f1,
-      type: 3}
-    RoomSize: 2
-    RoomCategory: 2
-    RoomType: 4
-    ManSlotCount: 2
-    RoomDescription: A Bedroom of small size. Can hold 2 men.
-    RoomOverUnder: 1
-    RoomCost: 100
-    locked: 0
-  - RoomName: Bedroom Size 4
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 5b3b4fc132b6abd46b02d85569e510a4,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 2
-    RoomType: 5
-    ManSlotCount: 4
-    RoomDescription: A Bedroom of medium size. Can hold 4 men.
-    RoomOverUnder: 1
-    RoomCost: 150
-    locked: 0
-  - RoomName: Bedroom Size 6
-    RoomModelPrefab: {fileID: 1970130174721652, guid: f417c9492f6aec04f9a5f054af0d6923,
-      type: 3}
-    RoomSize: 6
-    RoomCategory: 2
-    RoomType: 6
-    ManSlotCount: 6
-    RoomDescription: A Bedroom of large size. Can hold 6 men.
-    RoomOverUnder: 1
-    RoomCost: 200
-    locked: 0
-  - RoomName: Underworld Lobby
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 087741c3b9494dc4784c1316af115cbc,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 3
-    RoomType: 2
-    ManSlotCount: 4
-    RoomDescription: The Underworld Hootel's Lobby. Max can be found here.
-    RoomOverUnder: -1
-    RoomCost: 0
-    locked: 0
-  - RoomName: Underworld Room Size 2
-    RoomModelPrefab: {fileID: 1943732263410148, guid: fceb97cea2553514da81299b44e47047,
-      type: 3}
-    RoomSize: 2
-    RoomCategory: 3
-    RoomType: 10
-    ManSlotCount: 2
-    RoomDescription: An Underworld room of small size. Can hold 2 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
-  - RoomName: Underworld Room Size 4
-    RoomModelPrefab: {fileID: 1455615580497424, guid: 087741c3b9494dc4784c1316af115cbc,
-      type: 3}
-    RoomSize: 4
-    RoomCategory: 3
-    RoomType: 11
-    ManSlotCount: 4
-    RoomDescription: An Underworld room of medium size. Can hold 4 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
-  - RoomName: Underworld Room Size 6
-    RoomModelPrefab: {fileID: 1970130174721652, guid: c2f459f6e1cae334eb7309c6cf4b0bf4,
-      type: 3}
-    RoomSize: 6
-    RoomCategory: 3
-    RoomType: 12
-    ManSlotCount: 6
-    RoomDescription: An Underworld room of large size. Can hold 6 men.
-    RoomOverUnder: 0
-    RoomCost: 100
-    locked: 0
+  - {fileID: 1455615580497424, guid: db84b4bb3d524ad44a0f4187dc3ae57d, type: 3}
+  - {fileID: 1455615580497424, guid: c1a5c8154bbdcde4c9275aca2505534f, type: 3}
+  - {fileID: 1455615580497424, guid: f912f7e7b97835743aec23982c3ecc5b, type: 3}
+  - {fileID: 1455615580497424, guid: 15f68849c9542eb43bae3184ef7ea4fc, type: 3}
+  - {fileID: 1455615580497424, guid: 7d4f1090a7246a849aa0d211a0dc61c0, type: 3}
+  - {fileID: 1966165223985586, guid: a0d9dc34818acff4f9010031c83e8564, type: 3}
+  - {fileID: 1943732263410148, guid: fceb97cea2553514da81299b44e47047, type: 3}
+  - {fileID: 1455615580497424, guid: 087741c3b9494dc4784c1316af115cbc, type: 3}
+  - {fileID: 1970130174721652, guid: c2f459f6e1cae334eb7309c6cf4b0bf4, type: 3}
+  - {fileID: 1455615580497424, guid: 5e0698dc3c6670340bd6c2c1d1479d37, type: 3}
 --- !u!1 &7032114861054032047
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,7 +494,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7bb8b99280aaa5e4081d724d284e39d5, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -730,7 +576,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1e910884c590e0944993f38d5a500e40, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
