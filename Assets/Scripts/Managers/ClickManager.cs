@@ -211,7 +211,7 @@ public class ClickManager : MonoBehaviour
 
         if (StateManager.Ref.GetGameState() == Enums.GameStates.ManDragging)
         {
-            ManManager.Ref.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom());
+            ManManager.Ref.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom(), true);
             StateManager.Ref.SetGameState(Enums.GameStates.Normal);
             return;
         }
@@ -351,7 +351,7 @@ public class ClickManager : MonoBehaviour
         Guid ManId = Guid.NewGuid();
         ManInstanceData ManData = new ManInstanceData();
         ManData.ManId = ManId;
-        ManData.ManType = Enums.ManTypes.Cleaner;
+        ManData.ManType = Enums.ManTypes.Worker;
         ManData.ManFirstName = NameFactory.GetNewFirstName();
         ManData.ManLastName = NameFactory.GetNewLastName();
 

@@ -24,6 +24,8 @@ public class ManScript : MonoBehaviour
 
     //Used by the manager to know what type of man it is before the man is instantiated.
     public virtual Enums.ManTypes ManType { get { return Enums.ManTypes.StandardMan; } }
+
+    public Enums.ManRole role = Enums.ManRole.None;
     #endregion
 
     #region Private Variables
@@ -66,7 +68,6 @@ public class ManScript : MonoBehaviour
     protected virtual void Update()
     {
         StateUpdate();
-        CheckIfRentTime();
     }
     #endregion
 
@@ -97,7 +98,7 @@ public class ManScript : MonoBehaviour
             case Enums.ManTypes.None:
             case Enums.ManTypes.StandardMan:
                 break;
-            case Enums.ManTypes.Cleaner:
+            case Enums.ManTypes.Worker:
                 _MaterialNormal.color = Color.blue;
                 _MaterialGhost.color = Color.blue;
                 break;
@@ -238,7 +239,8 @@ public class ManScript : MonoBehaviour
     public void AssignToRoom(Guid assignedRoom, int assignedRoomSlot)
     {
         SetOwnerOfRoom(assignedRoom);
-        ManData.AssignedRoom = assignedRoom;
+        //ManData.AssignedRoom = assignedRoom;
+        ManData.AssignedRoom = RoomManager.Ref.GetRoomData(assignedRoom).RoomScript;
         ManData.AssignedRoomSlot = assignedRoomSlot;
     }
 
@@ -266,6 +268,10 @@ public class ManScript : MonoBehaviour
             RemoveRoomOwnership();
             return;
         }
+        //else
+        //{
+        //    RoomManager.Ref.GetRoomData(newRoom).RoomScript.AssignOwnerToRoomSlot(ManData.ManId, RoomManager.Ref.GetRoomData(newRoom).RoomScript.GetFreeOwnerSlotIndex());
+        //}
     }
 
     public void RemoveRoomOwnership()
@@ -287,7 +293,8 @@ public class ManScript : MonoBehaviour
 
     public bool IsAssignedToAnyRoom()
     {
-        return (ManData.AssignedRoom != Guid.Empty);
+        //return (ManData.AssignedRoom != Guid.Empty);
+        return ManData.AssignedRoom != null;
     }
 
     public bool IsOwnerOfRoom()
@@ -364,27 +371,5 @@ public class ManScript : MonoBehaviour
     }
     #endregion
 
-    #region Rent Methods
-
-    private bool hasPaidRent = false;
-
-    public void PayUserInHoots(string reason, int amount)
-    {
-        OverheadTextManager.Ref.OverheadHoots(amount.ToString(), transform.position);
-        WalletManager.Ref.Hoots += amount;
-    }
-
-    private void CheckIfRentTime()
-    {
-        if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8)
-        {
-            PayUserInHoots("Rent", (int)ManData.OwnedRoomRef.RoomSize * 50 );
-            hasPaidRent = true;
-        }
-        else if(TimeManager.Ref.worldTimeHour != 8)
-        {
-            hasPaidRent = false;
-        }
-    }
-    #endregion
+    
 }

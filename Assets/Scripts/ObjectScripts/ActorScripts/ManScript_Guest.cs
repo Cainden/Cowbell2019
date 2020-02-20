@@ -6,6 +6,8 @@ using System;
 
 public class ManScript_Guest : ManScript
 {
+    public float dirtyFactor = 1;
+
     public override Enums.ManTypes ManType { get { return Enums.ManTypes.Guest; } }
 
     public override void SetOwnerOfRoom(Guid assignedRoom)
@@ -15,8 +17,8 @@ public class ManScript_Guest : ManScript
         if (!IsOwnerOfRoom())
         {
             //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-            int freeSlot = -1;
-            if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
+            int freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex();
+            if (freeSlot > -1)
             {
                 roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
                 ManData.OwnedRoomRef = roomRefTemp.RoomScript.RoomData;
@@ -36,8 +38,8 @@ public class ManScript_Guest : ManScript
         //}
 
         //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
-        int freeSlot = -1;
-        if ((freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex()) > -1)
+        int freeSlot = roomRefTemp.RoomScript.GetFreeOwnerSlotIndex();
+        if (freeSlot > -1)
         {
             roomRefTemp.RoomScript.RemoveOwnerFromRoomSlot(ManData.ManId);
             roomRefTemp.RoomScript.RoomData.OwnerSlotsAssignments[freeSlot] = ManData.ManId;
@@ -53,10 +55,46 @@ public class ManScript_Guest : ManScript
         Add_Action_ToList(new ActionData(SendSignalToLobby));
     }
 
+    protected override void Update()
+    {
+        base.Update();
+        CheckIfRentTime();
+    }
+
     private void SendSignalToLobby()
     {
         Room_Lobby r = ManData.OwnedRoomRef.RoomScript as Room_Lobby;
         if (r != null)
-            r.FindOpenBedroom(this);
+            if (!r.FindOpenBedroom(this))
+            {
+                BuildManager.BuildFinishedEvent -= SendSignalToLobby;
+                BuildManager.BuildFinishedEvent += SendSignalToLobby;
+            }
+            else
+                BuildManager.BuildFinishedEvent -= SendSignalToLobby;
     }
+
+    #region Rent Methods
+
+    private bool hasPaidRent = false;
+
+    public void PayUserInHoots(string reason, int amount)
+    {
+        OverheadTextManager.Ref.OverheadHoots(amount.ToString(), transform.position);
+        WalletManager.Ref.Hoots += amount;
+    }
+
+    private void CheckIfRentTime()
+    {
+        if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8)
+        {
+            PayUserInHoots("Rent", (int)ManData.OwnedRoomRef.RoomSize * 50);
+            hasPaidRent = true;
+        }
+        else if (TimeManager.Ref.worldTimeHour != 8)
+        {
+            hasPaidRent = false;
+        }
+    }
+    #endregion
 }

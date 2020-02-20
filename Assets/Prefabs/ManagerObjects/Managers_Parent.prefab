@@ -297,7 +297,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e290a2b27cc430459e359e0d615d512, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ManPrefabs: []
+  ManPrefabs:
+  - {fileID: 1391923580201952, guid: 687b52e7b1caec545b4adb329674a419, type: 3}
+  - {fileID: 1391923580201952, guid: 4bbde8ac1360f634684129dd2a37f4a5, type: 3}
   hireList: []
   bookingList: []
 --- !u!1001 &1811732082269359670
@@ -446,71 +448,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomSelectorSz1
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomSelectorSz2
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomSelectorSz4
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomSelectorSz6
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomHighlighterSz2
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomHighlighterSz4
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: RoomHighlighterSz6
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3626952234795645649, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2624106195833480203, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3400540980344817293, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 2033918602205625498, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9085863766894661908, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 6707965572824556982, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4335b96a0b3f88044bbfe9bc5a531dd1, type: 3}

@@ -264,7 +264,7 @@ MonoBehaviour:
     RoomName: Test Room Size 2
     RoomSize: 2
     RoomCategory: 0
-    RoomType: 13
+    RoomType: 11
     ManSlotCount: 2
     RoomDescription: A standard room of small size. Can hold 2 men.
     RoomOverUnder: 0

@@ -40,9 +40,7 @@ namespace MySpace
             Elevator,
             UnderLobby,
             Lobby,
-            Bedroom_Size2,
-            Bedroom_Size4,
-            Bedroom_Size6,
+            Bedroom,
             Hallway_Size2,
             Hallway_Size4,
             Hallway_Size6,
@@ -51,7 +49,8 @@ namespace MySpace
             UnderHallway_Size6,
             Common_Size2,
             Common_Size4,
-            Common_Size6
+            Common_Size6,
+            CleanerCloset,
 
         };
 
@@ -66,12 +65,8 @@ namespace MySpace
             {
                 case RoomTypes.UnderLobby:
                     return "Under Lobby";
-                case RoomTypes.Bedroom_Size2:
-                    return "Small Bedroom";
-                case RoomTypes.Bedroom_Size4:
+                case RoomTypes.Bedroom:
                     return "Bedroom";
-                case RoomTypes.Bedroom_Size6:
-                    return "Large Bedroom";
                 case RoomTypes.Hallway_Size2:
                     return "Small Hallway";
                 case RoomTypes.Hallway_Size4:
@@ -95,9 +90,16 @@ namespace MySpace
         // Positive values are allowed in the Overworld
         // 0 is allowed in both.
         public enum ManTypes
-        { Max=-2, Monster, None, StandardMan, Cleaner, Guest, MC, }
+        { Max=-2, Monster, None, StandardMan, Worker, Guest, MC, }
 
         public enum ManStates
         { None, Idle, Running, RotatingToPlayer, Rotating, Waiting };
+
+        public enum ManRole
+        {
+            None,
+            Guest,
+            Cleaner,
+        }
     }
 }

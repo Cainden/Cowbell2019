@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
+using System.Linq;
 
 public class ManManager : MonoBehaviour
 {
@@ -99,7 +100,8 @@ public class ManManager : MonoBehaviour
         // Give path to entrance (if assigned to any room. Otherwise, it is the one waiting at the entrance)
         if (ManScript.IsAssignedToAnyRoom())
         {
-            RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
+            //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
+            RoomScript RoomScript = ManScript.ManData.AssignedRoom;
             GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(RoomScript.RoomData.CoveredIndizes[ManScript.ManData.AssignedRoomSlot],
                                                                    Constants.EntranceRoomIndex);
 
@@ -123,7 +125,43 @@ public class ManManager : MonoBehaviour
         return (_ManList[manId]);
     }
 
-    public void MoveManToNewRoom(Guid manId, Guid newRoomId)
+    public void MoveManToClosestRoomOfType(ManScript man, params Enums.RoomTypes[] types)
+    {
+        Guid chosen = Guid.Empty;
+        int shortest = int.MaxValue;
+        var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
+        foreach (Room_CleanerCloset room in ar)
+        {
+            var path = GridManager.Ref.GetIndexPath(man.ManData.AssignedRoom.RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
+            if (path.Length < shortest)
+            {
+                chosen = room.RoomData.RoomId;
+                shortest = path.Length;
+            }
+        }
+        if (chosen != Guid.Empty)
+            MoveManToNewRoom(man.ManData.ManId, chosen);
+    }
+
+    public void MoveManToClosestRoomOfType(Guid manId, params Enums.RoomTypes[] types)
+    {
+        Guid chosen = Guid.Empty;
+        int shortest = int.MaxValue;
+        var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
+        foreach (Room_CleanerCloset room in ar)
+        {
+            var path = GridManager.Ref.GetIndexPath(GetManData(manId).ManScript.ManData.AssignedRoom.RoomData.CoveredIndizes[GetManData(manId).ManScript.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
+            if (path.Length < shortest)
+            {
+                chosen = room.RoomData.RoomId;
+                shortest = path.Length;
+            }
+        }
+        if (chosen != Guid.Empty)
+            MoveManToNewRoom(manId, chosen);
+    }
+
+    public void MoveManToNewRoom(Guid manId, Guid newRoomId, bool fromPlayer = false)
     {
         if (RoomManager.Ref.IsRoomExisting(newRoomId) == false) return;
         if (IsManExisting(manId) == false) return;
@@ -161,24 +199,27 @@ public class ManManager : MonoBehaviour
         if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots() == true))
         {
             int ManSlotIndex = NewRoomScript.GetFreeManSlotIndex();
-            ManScript.AssignToRoom(newRoomId, ManSlotIndex);
-            NewRoomScript.AssignManToRoomSlot(manId, ManSlotIndex);
             SetManPathFromEntrance(manId, newRoomId, ManSlotIndex);
+            ManScript.AssignToRoom(newRoomId, ManSlotIndex);
+            NewRoomScript.AssignManToRoomSlot(manId, ManSlotIndex, fromPlayer);
+            
             StateManager.Ref.SetWaitingMan(Guid.Empty);
             return;
         }
 
-        Guid OldRoomGuid = ManScript.ManData.AssignedRoom;
+        //Guid OldRoomGuid = ManScript.ManData.AssignedRoom;
+        Guid OldRoomGuid = ManScript.ManData.AssignedRoom.RoomData.RoomId;
         RoomScript OldRoomScript = RoomManager.Ref.GetRoomData(OldRoomGuid).RoomScript;
 
         if (NewRoomScript.RoomHasFreeManSlots() == true)
         {            
             int NewManSlotIndex = NewRoomScript.GetFreeManSlotIndex();
             int OldManSlotIndex = ManScript.ManData.AssignedRoomSlot;
+            SetManPath(manId, OldRoomGuid, OldManSlotIndex, newRoomId, NewManSlotIndex);
             ManScript.AssignToRoom(newRoomId, NewManSlotIndex);
             OldRoomScript.RemoveManFromRoomSlot(manId);
-            NewRoomScript.AssignManToRoomSlot(manId, NewManSlotIndex);
-            SetManPath(manId, OldRoomGuid, OldManSlotIndex, newRoomId, NewManSlotIndex);
+            NewRoomScript.AssignManToRoomSlot(manId, NewManSlotIndex, fromPlayer);
+            
         }
         else
         {
@@ -189,24 +230,30 @@ public class ManManager : MonoBehaviour
 
             int NewManSlotIndex1 = NewRoomScript.GetFreeManSlotIndex();
             int OldManSlotIndex1 = ManScript.ManData.AssignedRoomSlot;
-            ManScript.AssignToRoom(newRoomId, NewManSlotIndex1);
-            NewRoomScript.AssignManToRoomSlot(manId, NewManSlotIndex1);
             SetManPath(manId, OldRoomGuid, OldManSlotIndex1, newRoomId, NewManSlotIndex1);
+            ManScript.AssignToRoom(newRoomId, NewManSlotIndex1);
+            NewRoomScript.AssignManToRoomSlot(manId, NewManSlotIndex1, fromPlayer);
+            
 
             int NewManSlotIndex2 = OldRoomScript.GetFreeManSlotIndex();
             int OldManSlotIndex2 = OtherManScript.ManData.AssignedRoomSlot;
-            OtherManScript.AssignToRoom(OldRoomGuid, NewManSlotIndex2);
-            OldRoomScript.AssignManToRoomSlot(OtherManGuid, NewManSlotIndex2);
             SetManPath(OtherManGuid, newRoomId, OldManSlotIndex2, OldRoomGuid, NewManSlotIndex2);
+            OtherManScript.AssignToRoom(OldRoomGuid, NewManSlotIndex2);
+            OldRoomScript.AssignManToRoomSlot(OtherManGuid, NewManSlotIndex2, fromPlayer);
+            
         }
     }
 
     public void RemoveManFromRoom(Guid manId)
     {
         ManScript ManScript = _ManList[manId].ManScript;
-        if (RoomManager.Ref.IsRoomExisting(ManScript.ManData.AssignedRoom) == false) return;
+        //if (RoomManager.Ref.IsRoomExisting(ManScript.ManData.AssignedRoom) == false) return;
 
-        RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
+        if (ManScript.ManData.AssignedRoom == null) return;
+        if (RoomManager.Ref.IsRoomExisting(ManScript.ManData.AssignedRoom.RoomData.RoomId) == false) return;
+
+        //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
+        RoomScript RoomScript = ManScript.ManData.AssignedRoom;
         RoomScript.RemoveManFromRoomSlot(manId);        
         ManScript.AssignToRoom(Guid.Empty, 0);
     }
@@ -350,15 +397,20 @@ public class ManManager : MonoBehaviour
             {
                 CreateMan(ManData); // Gets walking path to entrance automatically
 
-                if (ManData.AssignedRoom == Guid.Empty)
+                //if (ManData.AssignedRoom == Guid.Empty)
+                if (ManData.AssignedRoom == null)
                 {
                     StateManager.Ref.SetWaitingMan(ManData.ManId);
                 }
                 else
                 {
-                    RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManData.AssignedRoom).RoomScript;
-                    RoomScript.AssignManToRoomSlot(ManData.ManId, ManData.AssignedRoomSlot);
-                    SetManPathFromEntrance(ManData.ManId, ManData.AssignedRoom, ManData.AssignedRoomSlot);
+                    //This local reference wasn't necessary
+                    //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManData.AssignedRoom).RoomScript;
+                    //SetManPathFromEntrance(ManData.ManId, ManData.AssignedRoom, ManData.AssignedRoomSlot);
+                    SetManPathFromEntrance(ManData.ManId, ManData.AssignedRoom.RoomData.RoomId, ManData.AssignedRoomSlot);
+                    //RoomManager.Ref.GetRoomData(ManData.AssignedRoom).RoomScript.AssignManToRoomSlot(ManData.ManId, ManData.AssignedRoomSlot);
+                    ManData.AssignedRoom.AssignManToRoomSlot(ManData.ManId, ManData.AssignedRoomSlot, true);
+                    
                 }
             }
         }        

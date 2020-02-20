@@ -46,7 +46,7 @@ public class GridManager : MonoBehaviour
     }
 
     // When a new room is created, set grid indizes and internal links accordingly
-    public void RegisterAtGrid(Enums.RoomSizes roomSize, Guid roomId, GridIndex leftMostIndex)
+    public void RegisterAtGrid(Enums.RoomSizes roomSize, Guid roomId, GridIndex leftMostIndex, bool linkRoom = true)
     {
         GridIndex[] Occupiedindizes = GetOccupiedindizes(roomSize, leftMostIndex);
 
@@ -55,7 +55,8 @@ public class GridManager : MonoBehaviour
             _GridData[Occupiedindizes[i].X, Occupiedindizes[i].Y, Occupiedindizes[i].Z] = new TileData(true, roomId, roomSize);
         }
 
-        LinkRoom(Occupiedindizes); // Calculate and store movements to other grid elements
+        if (linkRoom)
+            LinkRoom(Occupiedindizes); // Calculate and store movements to other grid elements
     }    
     
     public bool IsGridAreaFree(GridIndex leftMostIndex, Enums.RoomSizes roomSize)

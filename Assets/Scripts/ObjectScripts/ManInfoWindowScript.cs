@@ -39,7 +39,7 @@ public class ManInfoWindowScript : MonoBehaviour
                 break;
             case Enums.ManTypes.StandardMan:
                 break;
-            case Enums.ManTypes.Cleaner:
+            case Enums.ManTypes.Worker:
                 break;
             case Enums.ManTypes.Guest:
                 ownedRoom = manRef.ManScript.ManData.OwnedRoomRef;

@@ -12,13 +12,18 @@ public class Room_Bedroom : RoomScript
 
     #endregion
 
+    public override Enums.ManRole RoomRole => Enums.ManRole.Guest;
+
     #region Private Variables
     MeshRenderer thisRend;
 
     private float fElapsedTime = 0;
 
     // Room Attributes
-    private float cleanliness;
+    private float cleanliness; //For debugging to the inspector
+    public float Cleanliness { get { return cleanliness; } set { cleanliness = value; } }
+
+    public const float cleanlinessThreshhold = 0.4f;
 
     //Here as a fillable reference instead of creating a local reference-type variable each frame of update
     ManRef occupant;
@@ -30,7 +35,7 @@ public class Room_Bedroom : RoomScript
         //thisRend = obj.GetComponent<Renderer>();
         thisRend = GetComponentInChildren<MeshRenderer>();
         thisRend.material.color = Color.white;
-        cleanliness = 1.0f;
+        Cleanliness = 1.0f;
     }
 
     
@@ -45,7 +50,7 @@ public class Room_Bedroom : RoomScript
             fElapsedTime = 0.0f;
             bool bStank = false; // If true deteriorates room
             bool bClean = false; // If true cleans room. 
-            int numGuests = 0, numCleaners = 0;
+            float cleanFactor = 0, dirtyFactor = 0;
             //Check to see if Room is occupied by Guest and decrease cleanliness. 
             //If room is occupied by Cleaners, increase cleanliness.
             //Make it so Cleaners cannot occupy the rooms at the same time as guests?
@@ -61,12 +66,12 @@ public class Room_Bedroom : RoomScript
                 if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Guest && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bStank = true;
-                    numGuests += 1;
+                    dirtyFactor += (occupant.ManScript as ManScript_Guest).dirtyFactor;
                 }
-                else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Cleaner && occupant.ManScript.State == Enums.ManStates.None)
+                else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Worker && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bClean = true;
-                    numCleaners += 1;
+                    cleanFactor += (occupant.ManScript as ManScript_Worker).cleaningEfficieny;
                 }
                 occupant = null;
             }
@@ -74,35 +79,28 @@ public class Room_Bedroom : RoomScript
 
             if (bStank)
             {
+                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor;
 
-                if (cleanliness - RoomManager.Ref.DirtinessSpeedRatio * numGuests < 0.0f)
-                    cleanliness = 0.0f;
-                else
-                {
-                    cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * numGuests;
-                }
+                if (Cleanliness < 0)
+                    Cleanliness = 0;
             }
-            else if (bClean)
+            if (bClean)
             {
-
-                if (cleanliness + RoomManager.Ref.CleanSpeedRatio * numCleaners > 1.0f)
-                    cleanliness = 1.0f;
-                else
-                {
-                    cleanliness += RoomManager.Ref.CleanSpeedRatio * numCleaners;
-                }
+                Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor;
+                if (Cleanliness > 1)
+                    Cleanliness = 1;
             }
 
 
 
-            thisRend.material.SetColor("_Color", Color.Lerp(Color.green, Color.white, cleanliness));
+            thisRend.material.SetColor("_Color", Color.Lerp(Color.green, Color.white, Cleanliness));
         }
     }
 
     public void SelfInitialize(GridIndex leftMostIndex)
     {
         //HAD TO DO ALL OF THE CREATEROOM INITIALIZATION HERE BECAUSE IT CANNOT BE INSTANTIATED IN THE WRONG POSITION THROUGH CREATEROOM
-        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom_Size2, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false);
+        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false);
 
         RoomData = new RoomInstanceData();
         RoomData.RoomId = Guid.NewGuid();
@@ -124,7 +122,7 @@ public class Room_Bedroom : RoomScript
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.OwnerSlotsAssignments[i] = Guid.Empty;
 
-        GridManager.Ref.RegisterAtGrid(RoomData.RoomSize, RoomData.RoomId, leftMostIndex);
+        GridManager.Ref.RegisterAtGrid(RoomData.RoomSize, RoomData.RoomId, leftMostIndex, false);
         RoomManager.Ref.AddRoom(RoomData.RoomId, new RoomRef(gameObject, this));
 
         #region Manual assignment of grid index movement directions
