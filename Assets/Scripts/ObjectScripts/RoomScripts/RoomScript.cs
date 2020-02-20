@@ -65,6 +65,8 @@ public class RoomScript : MonoBehaviour
 
     #region Helper Functions
 
+    public virtual void OnInitialization() { }
+
     public bool HasOwner()
     {
         for (int i = 0; i < RoomData.OwnerSlotsAssignments.Length; i++)

@@ -155,7 +155,8 @@ public class RoomManager : MonoBehaviour
         RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
         GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
 
-
+        //Let the room know that it has initialized
+        roomData.RoomScript.OnInitialization();
     }
 
     #region Old CreateRoom

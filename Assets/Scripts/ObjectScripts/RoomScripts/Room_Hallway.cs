@@ -11,16 +11,16 @@ public class Room_Hallway : RoomScript
 
     Room_Bedroom[] bedrooms;
 
-    protected override void Start()
+    public override void OnInitialization()
     {
-        base.Start();
+        base.OnInitialization();
         bedrooms = new Room_Bedroom[(int)RoomData.RoomSize / 2];
         for (int i = 0; i < bedrooms.Length; i++)
         {
             bedrooms[i] = Instantiate(Resources.Load<GameObject>(BedroomPrefabPath), BedroomPosition.position + (Vector3.right * i * 5), BedroomPosition.rotation, transform).GetComponent<Room_Bedroom>();
             int g = Mathf.CeilToInt(i * 2);
             bedrooms[i].SelfInitialize(RoomData.CoveredIndizes[Mathf.CeilToInt(i * 2) + 1].GetBack().GetLeft());
-            
+
         }
 
         #region Manual assignment of grid index movement directions
