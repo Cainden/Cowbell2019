@@ -226,8 +226,10 @@ public class RoomManager : MonoBehaviour
 
     public RoomRef GetRoomData(Guid roomId)
     {
-        Debug.Assert(IsRoomExisting(roomId));
-        return (_RoomList[roomId]);
+        if (IsRoomExisting(roomId))
+            return (_RoomList[roomId]);
+        else
+            return null;
     }
 
     public void SelectRoom(Guid roomId)

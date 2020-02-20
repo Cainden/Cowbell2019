@@ -240,7 +240,7 @@ public class ManScript : MonoBehaviour
     {
         SetOwnerOfRoom(assignedRoom);
         //ManData.AssignedRoom = assignedRoom;
-        ManData.AssignedRoom = RoomManager.Ref.GetRoomData(assignedRoom).RoomScript;
+        ManData.AssignedRoom = RoomManager.Ref.GetRoomData(assignedRoom)?.RoomScript;
         ManData.AssignedRoomSlot = assignedRoomSlot;
     }
 

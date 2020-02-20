@@ -13,7 +13,12 @@ public class ManScript_Guest : ManScript
     public override void SetOwnerOfRoom(Guid assignedRoom)
     {
         base.SetOwnerOfRoom(assignedRoom);
+
+        //Had to copy this from the base because returning in the base function doesnt exit this one
+        if (assignedRoom == Guid.Empty) return;
+
         RoomRef roomRefTemp = RoomManager.Ref.GetRoomData(assignedRoom);
+        
         if (!IsOwnerOfRoom())
         {
             //if room has free Owner slot, set the room reference that the man has to the room we're trying to assign them to
