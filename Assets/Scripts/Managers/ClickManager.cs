@@ -42,15 +42,25 @@ public class ClickManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) LeftMouseButtonDown();  // LMB pressed during last frame (only one event)
-        if (Input.GetMouseButtonDown(1)) RightMouseButtonDown(); // RMB pressed during last frame (only one event)
-        if (Input.GetMouseButtonUp(0)) LeftMouseButtonUp();    // LMB released during last frame (only one event)
-        if (Input.GetMouseButtonUp(1)) RightMouseButtonUp();   // RMB released during last frame (only one event)
+        if (Input.GetMouseButtonDown(0))
+			LeftMouseButtonDown();  // LMB pressed during last frame (only one event)
 
-        if (Input.GetMouseButton(0)) LeftMouseButton_IS_down();  // LMB is down right now
+		if (Input.GetMouseButtonUp(0))
+			LeftMouseButtonUp();    // LMB released during last frame (only one event)
+
+		//if (Input.GetMouseButtonDown(1))
+		//	RightMouseButtonDown(); // RMB pressed during last frame (only one event)
+        
+		//if (Input.GetMouseButtonUp(1)) 
+		//	RightMouseButtonUp();   // RMB released during last frame (only one event)
+
+        if (Input.GetMouseButton(0))
+			LeftMouseButton_IS_down();  // LMB is down right now
     }
 
-    void LeftMouseButtonDown()
+	#region input methods
+
+	void LeftMouseButtonDown()
     {
         if (MyEventSystem.IsPointerOverGameObject())
         {
@@ -216,8 +226,10 @@ public class ClickManager : MonoBehaviour
     void RightMouseButtonUp()
     {
     }
+	
+	#endregion
 
-    void LeftMouseButton_IS_down()
+	void LeftMouseButton_IS_down()
     {
         if (_WasGuiClick) return;
 
@@ -312,31 +324,6 @@ public class ClickManager : MonoBehaviour
         ManManager.Ref.RemoveManFromRoom(ManId);        
         ManManager.Ref.RemoveManFromList(ManId);
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    }
-
-    public void ViewSelectedManOwnedRoom()
-    {
-        if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
-        Guid ManId = StateManager.Ref.GetSelectedMan();
-
-        if (ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef != null)
-        {
-            Guid RoomId = ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef.RoomId;
-            RoomManager.Ref.SelectRoom(RoomId);
-        }
-
-        //For moving the camera's position. May implement later.
-        //GameObject ownedRoomObject = RoomManager.Ref.GetRoomData(RoomId).RoomObject;
-
-    }
-    public void ChangeSelectedManOwnedRoom()
-    {
-        if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
-        //Guid ManId = StateManager.Ref.GetSelectedMan();
-        //ManManager.Ref.MakeManLeave(ManId);
-        //ManManager.Ref.RemoveManOwnershipFromRoom(ManId);
-        //ManManager.Ref.RemoveManFromList(ManId);
-        StateManager.Ref.SetGameState(Enums.GameStates.ChangeOwnedRoom);
     }
 
     public void AddNewMan()
@@ -501,9 +488,9 @@ public class ClickManager : MonoBehaviour
     {
         InitiateBuilding(roomType);
     }
-    
-    #region Preset Build Functions
-    /*
+
+	#region Preset Build Functions
+	/*
     public void BuildDlg_Click_Elevator()
     {    
         InitiateBuilding(Enums.RoomTypes.Elevator);
@@ -573,106 +560,66 @@ public class ClickManager : MonoBehaviour
         InitiateBuilding(Enums.RoomSizes.Size6, Enums.RoomTypes.Common, Enums.RoomOverUnder.Under);
     }
     */
-    #endregion
+	#endregion
 
-    /// <summary>
-    //HIRE WINDOW BUTTONS
-    /// </summary>
-    public void HireDlg0_Click()
+	#region button methods
+	
+	public void Button_Close()
+	{
+		RightMouseButtonDown();
+	}
+
+	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>
+	public void Button_Hire(int _buttonNumber)
     {
         if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newHire = ManManager.Ref.hireList[0];
+        ManInstanceData newHire = ManManager.Ref.hireList[_buttonNumber];
 
         ManManager.Ref.CreateMan(newHire);
-        ManManager.Ref.hireList.RemoveAt(0);
+        ManManager.Ref.hireList.RemoveAt(_buttonNumber);
 
         StateManager.Ref.SetWaitingMan(newHire.ManId);
         GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
     }
 
-    public void HireDlg1_Click()
+	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>
+	public void Button_Book(int _buttonNumber)
     {
         if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newHire = ManManager.Ref.hireList[1];
-
-        ManManager.Ref.CreateMan(newHire);
-        ManManager.Ref.hireList.RemoveAt(1);
-
-        StateManager.Ref.SetWaitingMan(newHire.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
-    }
-
-    public void HireDlg2_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newHire = ManManager.Ref.hireList[2];
-
-        ManManager.Ref.CreateMan(newHire);
-        ManManager.Ref.hireList.RemoveAt(2);
-
-        StateManager.Ref.SetWaitingMan(newHire.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
-    }
-
-    public void HireDlg3_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newHire = ManManager.Ref.hireList[3];
-
-        ManManager.Ref.CreateMan(newHire);
-        ManManager.Ref.hireList.RemoveAt(3);
-
-        StateManager.Ref.SetWaitingMan(newHire.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
-    }
-    /// <summary>
-    //BOOKING WINDOW BUTTONS
-    /// </summary>
-    public void BookDlg0_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newGuest = ManManager.Ref.bookingList[0];
+        ManInstanceData newGuest = ManManager.Ref.bookingList[_buttonNumber];
 
         ManManager.Ref.CreateMan(newGuest);
-        ManManager.Ref.bookingList.RemoveAt(0);
+        ManManager.Ref.bookingList.RemoveAt(_buttonNumber);
 
         StateManager.Ref.SetWaitingMan(newGuest.ManId);
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
     }
 
-    public void BookDlg1_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newGuest = ManManager.Ref.bookingList[1];
+	public void ViewSelectedManOwnedRoom()
+	{
+		if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
+		Guid ManId = StateManager.Ref.GetSelectedMan();
 
-        ManManager.Ref.CreateMan(newGuest);
-        ManManager.Ref.bookingList.RemoveAt(1);
+		if (ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef != null)
+		{
+			Guid RoomId = ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef.RoomId;
+			RoomManager.Ref.SelectRoom(RoomId);
+		}
 
-        StateManager.Ref.SetWaitingMan(newGuest.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
-    }
+		//For moving the camera's position. May implement later.
+		//GameObject ownedRoomObject = RoomManager.Ref.GetRoomData(RoomId).RoomObject;
 
-    public void BookDlg2_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newGuest = ManManager.Ref.bookingList[2];
+	}
 
-        ManManager.Ref.CreateMan(newGuest);
-        ManManager.Ref.bookingList.RemoveAt(2);
+	public void ChangeSelectedManOwnedRoom()
+	{
+		if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
+		//Guid ManId = StateManager.Ref.GetSelectedMan();
+		//ManManager.Ref.MakeManLeave(ManId);
+		//ManManager.Ref.RemoveManOwnershipFromRoom(ManId);
+		//ManManager.Ref.RemoveManFromList(ManId);
+		StateManager.Ref.SetGameState(Enums.GameStates.ChangeOwnedRoom);
+	}
 
-        StateManager.Ref.SetWaitingMan(newGuest.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
-    }
-
-    public void BookDlg3_Click()
-    {
-        if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newGuest = ManManager.Ref.bookingList[3];
-
-        ManManager.Ref.CreateMan(newGuest);
-        ManManager.Ref.bookingList.RemoveAt(3);
-
-        StateManager.Ref.SetWaitingMan(newGuest.ManId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
-    }
+	#endregion
 }
