@@ -453,7 +453,7 @@ public class ClickManager : MonoBehaviour
     private void InitiateBuilding(Enums.RoomTypes RoomType)
     {
         // if there is no available build position, let the user know and don't try to build.
-        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
+        GridManager.BuildInfo[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
         if (BuildingIndexArray.Length == 0)
         {
             GuiManager.Ref.Initiate_UserInfoSmall("No Available Build Locations Available!");

@@ -1,10 +1,12 @@
 ﻿// This script is attached to the elevator rooms
-
+using System.Collections.Generic;
 using UnityEngine;
 
 public class RoomElevatorAnimation : MonoBehaviour
 {
     private Animator _Animator;
+
+    private Queue<System.Action> waitingLine;
 
     void Start()
     {

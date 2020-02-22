@@ -310,6 +310,11 @@ public class ManScript : MonoBehaviour
         _ActionList.Dequeue().ActionItem.Invoke();
     }
 
+    public void Add_AccessAction_ToList(Guid roomId)
+    {
+        _ActionList.Enqueue(new ActionData(() => StartCoroutine(WaitForRoomAccess(roomId))));
+    }
+
     public void Add_RunAction_ToList(Vector3 position)
     {
         _ActionList.Enqueue(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position)));
@@ -338,7 +343,11 @@ public class ManScript : MonoBehaviour
 
     public void Add_DoorOpenAction_ToList(Guid roomId)
     {
-        _ActionList.Enqueue(new ActionData(() => RoomManager.Ref.GetRoomData(roomId).RoomObject.GetComponent<RoomElevatorAnimation>().SetAnimation_OpenDoor()));
+        //Changed this lambda in preparation to set up the "line" system for elevators.
+        _ActionList.Enqueue(new ActionData(() => 
+        {
+            RoomManager.Ref.GetRoomData(roomId).RoomObject.GetComponent<RoomElevatorAnimation>().SetAnimation_OpenDoor();
+        }));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
@@ -362,6 +371,15 @@ public class ManScript : MonoBehaviour
         State = Enums.ManStates.Waiting;
         SetAnimation(State);
         yield return new WaitForSeconds(seconds);
+        State = Enums.ManStates.None; // Will trigger next action
+    }
+
+    private IEnumerator WaitForRoomAccess(Guid room)
+    {
+        State = Enums.ManStates.Waiting;
+        SetAnimation(State);
+        RoomScript r = RoomManager.Ref.GetRoomData(room).RoomScript;
+        yield return new WaitUntil(() => r.GetAccessRequest());
         State = Enums.ManStates.None; // Will trigger next action
     }
 

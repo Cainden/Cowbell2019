@@ -5,16 +5,16 @@ using System;
 namespace MySpace
 {
     [Serializable]
-    public class GridIndex
+    public struct GridIndex
     {
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
 
-        public GridIndex()
-        {
+        //public GridIndex()
+        //{
 
-        }
+        //}
 
         public GridIndex(GridIndex other)
         {
@@ -79,10 +79,11 @@ namespace MySpace
 
         public override bool Equals(object obj)
         {
-            if (obj == null) return (false);
-            GridIndex p = obj as GridIndex;
-            if ((object)p == null) return (false);
-            return (this == p);
+            //if (obj == null) return (false);
+            //GridIndex p = obj as GridIndex;
+            //if ((object)p == null) return (false);
+            //return (this == p);
+            return base.Equals(obj);
         }
 
         public override int GetHashCode()
@@ -90,12 +91,12 @@ namespace MySpace
             return (X + Y * Constants.GridSizeX + Z * Constants.GridSizeX * Constants.GridSizeY); // Unique number
         }
 
-        public void SetXY(int x, int y, int z)
-        {
-            X = x;
-            Y = y;
-            Z = z;
-        }
+        //public void SetXY(int x, int y, int z)
+        //{
+        //    X = x;
+        //    Y = y;
+        //    Z = z;
+        //}
 
         public bool IsValid()
         {

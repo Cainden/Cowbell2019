@@ -313,15 +313,21 @@ public class ManManager : MonoBehaviour
         if (manScript == null) return;
 
         Vector3 WorldPos;
+        Guid prevRoom = Guid.Empty;
 
         for (int i = 0; i < (pathIndizes.Length - 1); i++)
         {
             WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
+            Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
+            if (prevRoom != RoomID)
+            {
+                prevRoom = RoomID;
+                manScript.Add_AccessAction_ToList(RoomID);
+            }
             manScript.Add_RunAction_ToList(WorldPos);
 
             if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
             {
-                Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                     manScript.Add_DoorOpenAction_ToList(RoomID);
                 WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);

@@ -141,7 +141,135 @@ public class GridManager : MonoBehaviour
         return (_GridData[index.X, index.Y, index.Z].RoomId);
     }
 
-    public GridIndex[] GetPossibleBuildingindizes(Enums.RoomSizes roomSize)
+    //Note: Made this a struct and went pretty modular in case we wanted to specify any other building restrictions later down the line. Might need to add roomtype into the restrictions if that's the case.
+    #region Build Highlighting
+    internal enum Bool : byte { True = 1, False = 2, Null = 0 }
+
+    public struct BuildInfo
+    {
+        public GridIndex index;
+        public bool isDouble, goDown;
+
+        public BuildInfo(GridIndex index)
+        {
+            this.index = index;
+            isDouble = goDown = false;
+        }
+
+        public BuildInfo(GridIndex index, bool doubl)
+        {
+            this.index = index;
+            isDouble = doubl;
+            goDown = false;
+        }
+
+        public BuildInfo(GridIndex index, bool doubl, bool goDown)
+        {
+            this.index = index;
+            isDouble = doubl;
+            this.goDown = goDown;
+        }
+
+        public static bool ListContainsIndex(List<BuildInfo> list, GridIndex index)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == index)
+                    return true;
+            }
+            return false;
+        }
+
+        internal static Bool ListIndexIsDouble(List<BuildInfo>list, GridIndex index)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == index)
+                {
+                    if (list[i].isDouble)
+                        return Bool.True;
+                    else
+                        return Bool.False;
+                }
+            }
+            return Bool.Null;
+        }
+
+        internal static Bool ListIndexIsDouble(List<BuildInfo> list, GridIndex index, out bool down)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == index)
+                {
+                    down = list[i].goDown;
+                    if (list[i].isDouble)
+                        return Bool.True;
+                    else
+                        return Bool.False;
+                }
+            }
+            down = false;
+            return Bool.Null;
+        }
+
+        public static void RemoveIndexFromBuildList(List<BuildInfo> list, GridIndex index)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i] == index)
+                {
+                    list.RemoveAt(i);
+                    i--;
+                }
+            }
+        }
+
+        #region Operators & Overrides
+
+        public static bool operator ==(BuildInfo a, GridIndex b)
+        {
+            return a.index == b;
+        }
+
+        public static bool operator !=(BuildInfo a, GridIndex b)
+        {
+            return a.index != b;
+        }
+
+        public static bool operator ==(BuildInfo a, BuildInfo b)
+        {
+            return a == b;
+        }
+
+        public static bool operator !=(BuildInfo a, BuildInfo b)
+        {
+            return a != b;
+        }
+
+        public static bool operator ==(GridIndex b, BuildInfo a)
+        {
+            return a.index == b;
+        }
+
+        public static bool operator !=(GridIndex b, BuildInfo a)
+        {
+            return a.index != b;
+        }
+
+        //To remove annoying green errors
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        #endregion
+    }
+
+    public BuildInfo[] GetPossibleBuildingindizes(Enums.RoomSizes roomSize)
     {
         // Note: Returning only the leftmost index per possible location, as this is reference for building
 
@@ -149,22 +277,22 @@ public class GridManager : MonoBehaviour
         // We can build rooms of size 1/2/4/6 right and left of of existing rooms
         // We can build room size 1 below and above existing size 1 rooms
         
-        List<GridIndex> indexList = new List<GridIndex>();
+        List<BuildInfo> indexList = new List<BuildInfo>();
         CheckBuildingPositionsInRange(0, Constants.GridSizeY, roomSize, ref indexList);
 
         return (indexList.ToArray()); // Can also be empty
     }
 
-    void CheckBuildingPositionsInRange(int y0, int y1, Enums.RoomSizes roomSize, ref List<GridIndex> indexList)
+    void CheckBuildingPositionsInRange(int y0, int y1, Enums.RoomSizes roomSize, ref List<BuildInfo> indexList)
     {
         // Only checking the front plane for this (Z = 0)
         for (int y = y0; y < y1; y++)
             for (int x = 0; x < Constants.GridSizeX; x++)
             {
                 GridIndex index = new GridIndex(x, y, 0); // Grid index we now look at
-                if (_GridData[index.X, index.Y, 0].Occupied == false) continue; // Nothing there, so can not build next to it               
+                if (_GridData[index.X, index.Y, 0].Occupied == false) continue; // Nothing there, so can not build next to it            
 
-                // Special for size1 room: We can build above/below a size one
+                // Special for size1 room: We can build above/below a size 1 because it is an elevator
                 if ((roomSize == _GridData[x, y, 0].RoomSize) && (roomSize == Enums.RoomSizes.Size1))
                 {
                     CheckAboveBelowBuildingPositions(index, ref indexList);
@@ -174,7 +302,7 @@ public class GridManager : MonoBehaviour
             }
     }
 
-    void CheckAboveBelowBuildingPositions(GridIndex index, ref List<GridIndex> indexList)
+    void CheckAboveBelowBuildingPositions(GridIndex index, ref List<BuildInfo> indexList)
     {
         if (index == null) throw new ArgumentNullException("index");
         if (indexList == null) throw new ArgumentNullException("indexList");
@@ -185,7 +313,11 @@ public class GridManager : MonoBehaviour
             GridIndex IndexAbove = index.GetAbove();
             if (IndexAbove.IsValid() && (_GridData[IndexAbove.X, IndexAbove.Y, 0].Occupied == false))
             {
-                if (indexList.Contains(IndexAbove) == false) indexList.Add(IndexAbove);
+                if (!BuildInfo.ListContainsIndex(indexList, IndexAbove))
+                {
+                    DoubleCheckBuildingPositionsSize1(IndexAbove, ref indexList);
+                }
+                    
             }
         }
 
@@ -194,27 +326,135 @@ public class GridManager : MonoBehaviour
             GridIndex IndexBelow = index.GetBelow();
             if (IndexBelow.IsValid() && (_GridData[IndexBelow.X, IndexBelow.Y, 0].Occupied == false))
             {
-                if (indexList.Contains(IndexBelow) == false) indexList.Add(IndexBelow);
+                if (!BuildInfo.ListContainsIndex(indexList, IndexBelow))
+                {
+                    DoubleCheckBuildingPositionsSize1(IndexBelow, ref indexList);
+                }
+                    
             }
         }
     }
 
-    void CheckLeftRightBuildingPositions(GridIndex index, Enums.RoomSizes roomSize, ref List<GridIndex> indexList)
+    void CheckLeftRightBuildingPositions(GridIndex index, Enums.RoomSizes roomSize, ref List<BuildInfo> indexList)
     {
         // Left check
         GridIndex[] indizes = index.GetLeft((int)roomSize);
         if (GridIndex.IsValid(indizes) && IsGridAreaFree(indizes))
         {
-            if (indexList.Contains(indizes[0]) == false) indexList.Add(indizes[0]);
+            if (!BuildInfo.ListContainsIndex(indexList, indizes[0]))
+            {
+                if (roomSize == Enums.RoomSizes.Size1)
+                {
+                    DoubleCheckBuildingPositionsSize1(indizes[0], ref indexList);
+                }
+                else
+                    indexList.Add(new BuildInfo(indizes[0]));
+            }
+                
         }
 
         // Right check
         indizes = index.GetRight((int)roomSize);
         if (GridIndex.IsValid(indizes) && IsGridAreaFree(indizes))
         {
-            if (indexList.Contains(indizes[0]) == false) indexList.Add(indizes[0]);
+            if (!BuildInfo.ListContainsIndex(indexList, indizes[0]))
+            {
+                if (roomSize == Enums.RoomSizes.Size1)
+                {
+                    DoubleCheckBuildingPositionsSize1(indizes[0], ref indexList);
+                }
+                else 
+                    indexList.Add(new BuildInfo(indizes[0]));
+            }
+
         }
     }
+
+    void DoubleCheckBuildingPositionsSize1(GridIndex index, ref List<BuildInfo> indexList)
+    {
+        GridIndex checkB = index.GetBelow(), checkA = index.GetAbove(), checkBB = checkB.GetBelow(), checkAA = checkA.GetAbove();
+        bool botGood = checkB.IsValid() && (_GridData[checkB.X, checkB.Y, 0].Occupied == false) && checkB.Y > Constants.GridSurfaceY;
+        bool topGood = checkA.IsValid() && (_GridData[checkA.X, checkA.Y, 0].Occupied == false) && index.Y >= Constants.GridSurfaceY;
+
+        if (RoomManager.Ref.GetRoomData(checkB)?.RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator 
+            || RoomManager.Ref.GetRoomData(checkA)?.RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+        {
+            if (!BuildInfo.ListContainsIndex(indexList, index))
+            {
+                indexList.Add(new BuildInfo(index));
+            }
+            return;
+        }
+
+        if (botGood)
+        {
+            //will return null only when the list does not contain the index, otherwise it returns true or false depending on the isDouble value of the buildinfo index
+            //d is whether or not the doublehighlight is going downward
+            Bool has = BuildInfo.ListIndexIsDouble(indexList, checkBB, out bool d);
+            Bool has1 = BuildInfo.ListIndexIsDouble(indexList, checkB, out bool d1);
+            switch (has)
+            {
+                case Bool.True:
+                    //Even if the list contains two below, we can build going down here because that one is also going down
+                    if (d && has1 == Bool.Null)
+                    {
+                        indexList.Add(new BuildInfo(index, true, true));
+                    }
+                    //else
+                    //Do nothing here, the list already contains this index with a double going upward
+                    break;
+
+                case Bool.False:
+                    if (has1 == Bool.Null)
+                    {
+                        indexList.Add(new BuildInfo(checkB, true, true));
+                        BuildInfo.RemoveIndexFromBuildList(indexList, checkB); //If there was a position added with a double available to be built from another adjacent spot, wouldnt want to give the player a feelsbad
+                    }
+                    return;
+
+                case Bool.Null:
+                    //returned null, so the list does not contain this index yet.
+                    if (has1 == Bool.Null)
+                        indexList.Add(new BuildInfo(index, true, true));
+                    return;
+            }
+            return;
+        }
+        
+        if (topGood)
+        {
+            Bool h = BuildInfo.ListIndexIsDouble(indexList, checkB, out bool d);
+            switch (h)
+            {
+                case Bool.True:
+                    if (d)
+                    {
+                        Bool has1 = BuildInfo.ListIndexIsDouble(indexList, checkA, out bool d1);
+                        if (has1 == Bool.Null)
+                        {
+                            indexList.Add(new BuildInfo(checkA, true, true));
+                        }
+                        //indexList.Add(new BuildInfo(index, true));
+                    }
+                    //else
+                    //Do nothing here, the list already contains this index within a double going upward
+                    break;
+
+                case Bool.False:
+                    //Do nothing here, the list already contains this index
+                    break;
+
+                case Bool.Null:
+                    //returned null, so the list does not contain this index yet.
+                    indexList.Add(new BuildInfo(index, true));
+                    break;
+            }
+
+        }
+        
+    }
+
+    #endregion
 
     private void LinkRoom(GridIndex[] occupiedIndizes)
     {
