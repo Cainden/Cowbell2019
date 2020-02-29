@@ -28,7 +28,7 @@ public class Room_CleanerCloset : Room_WorkerQuarters
             }
             else if ((man.ManData.AssignedRoom as Room_Bedroom).Cleanliness >= 1)
             {
-                PathfindToClosestCloset(man);
+                PathfindToDirtyRoom(man);
             }
         }
         //Room is a cleaner closet
