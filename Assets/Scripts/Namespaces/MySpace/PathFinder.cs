@@ -57,6 +57,7 @@ namespace MySpace
             return (new List<GridIndex>());
         }
 
+        //We might want to remove this functionality because it is less modular in terms of overwriting any behavior on pathfinding units.
         // Cleanup the index path: A row of grid-indizes on same Y/Z-level
         // can be combined to just start/end index ("straight walking line")
         static private void CleanUpPath(ref List<GridIndex> Path)

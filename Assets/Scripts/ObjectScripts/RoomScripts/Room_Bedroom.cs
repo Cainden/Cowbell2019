@@ -12,8 +12,6 @@ public class Room_Bedroom : RoomScript
 
     #endregion
 
-    public override Enums.ManRole RoomRole => Enums.ManRole.Guest;
-
     #region Private Variables
     MeshRenderer thisRend;
 

@@ -5,8 +5,9 @@ using MySpace;
 using System;
 using System.Linq;
 
-public class Room_CleanerCloset : RoomScript
+public class Room_CleanerCloset : Room_WorkerQuarters
 {
+    [Tooltip("Ratio at which this cleanercloset rests up the cleaners in order for them to get back to work. Higher ratio is faster resting speed.")]
     /// <summary>
     /// Ratio at which this cleanercloset rests up the cleaners in order for them to get back to work. Higher ratio is faster resting speed.
     /// </summary>
@@ -14,27 +15,9 @@ public class Room_CleanerCloset : RoomScript
 
     public override Enums.ManRole RoomRole => Enums.ManRole.Cleaner;
 
-    public override void AssignManToRoomSlot(Guid manId, int slotIndex, bool assignedByPlayer)
-    {
-        base.AssignManToRoomSlot(manId, slotIndex, assignedByPlayer);
-        if (!assignedByPlayer)
-            return;
-        if (ManManager.Ref.GetManData(manId).ManScript.ManType == Enums.ManTypes.Worker)
-        {
-            ManManager.Ref.GetManData(manId).ManScript.Add_Action_ToList(new ActionData((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole));
-            (ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AddToDic(RoomRole, Cleaner);
-        }
-    }
-
-    public override void RemoveManFromRoomSlot(Guid manId)
-    {
-        base.RemoveManFromRoomSlot(manId);
-    }
-
-    private void Cleaner(ManScript_Worker man)
+    protected override void RoleBehavior(ManScript_Worker man)
     {
         //Room is a bedroom
-        print(man.ManData.AssignedRoom.RoomData.RoomType);
         if (man.ManData.AssignedRoom.RoomData.RoomType == Enums.RoomTypes.Bedroom)
         {
             man.currentTiredness -= Time.deltaTime;

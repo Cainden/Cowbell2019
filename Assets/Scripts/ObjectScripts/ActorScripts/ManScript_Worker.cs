@@ -56,7 +56,7 @@ public class ManScript_Worker : ManScript
         //role = RoomManager.Ref.GetRoomData(ManData.AssignedRoom).RoomScript.RoomRole;
 
         if (ManData.AssignedRoom != null)
-            role = ManData.AssignedRoom.RoomRole;
+            role = (ManData.AssignedRoom as Room_WorkerQuarters)?.RoomRole ?? Enums.ManRole.None;
     }
 
     #region Role State Functions

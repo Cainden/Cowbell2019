@@ -15,8 +15,6 @@ public class RoomScript : MonoBehaviour
 
     // Internals
     public bool RoomIsActive { get; private set; } // True if at least one man working here
-    
-    public virtual Enums.ManRole RoomRole { get { return Enums.ManRole.None; } }
 
     protected ManManager manManRef;
 

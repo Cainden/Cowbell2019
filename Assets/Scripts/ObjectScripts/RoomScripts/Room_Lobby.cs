@@ -5,8 +5,6 @@ using MySpace;
 
 public class Room_Lobby : RoomScript
 {
-    public override Enums.ManRole RoomRole => Enums.ManRole.None;
-
     public bool FindOpenBedroom(ManScript man)
     {
         //Get all bedroom rooms
