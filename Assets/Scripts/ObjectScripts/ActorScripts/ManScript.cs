@@ -112,6 +112,9 @@ public class ManScript : MonoBehaviour
                 break;
         }
     }
+
+    //This will primarily be overridden by the inherented classes for initializing their initial stat values.
+    public virtual void InitializeStats(StatDeviation statDev) { }
     #endregion
 
     #region State Methods
@@ -133,7 +136,7 @@ public class ManScript : MonoBehaviour
     {
         switch (State)
         {
-            case Enums.ManStates.Running: DoMovement(Constants.ManRunSpeed); break;
+            case Enums.ManStates.Running: DoMovement(); break;
             case Enums.ManStates.RotatingToPlayer: FaceTowardsPlayer(); break;
             case Enums.ManStates.Rotating: RotateToOrientation(); break;
             case Enums.ManStates.Idle:
@@ -179,10 +182,10 @@ public class ManScript : MonoBehaviour
     #region State Functionality Methods
 
     protected Vector3 _TargetPos;
-    private void DoMovement(float movementSpeed)
+    protected virtual void DoMovement()
     {
         float Distance = Vector3.Distance(transform.position, _TargetPos);
-        float Travel = movementSpeed * Time.deltaTime;
+        float Travel = Constants.ManRunSpeed * Time.deltaTime;
 
         if (Travel > Distance) // Target reached
         {
@@ -199,14 +202,14 @@ public class ManScript : MonoBehaviour
         }
     }
 
-    private void FaceTowardsWaypoint(Vector3 deltaPos)
+    protected virtual void FaceTowardsWaypoint(Vector3 deltaPos)
     {
         deltaPos.y = 0.0f;
         if (deltaPos.magnitude == 0) return;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
     }
 
-    private void FaceTowardsPlayer()
+    protected virtual void FaceTowardsPlayer()
     {
         Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
 
@@ -220,7 +223,7 @@ public class ManScript : MonoBehaviour
     }
 
     protected Quaternion _TargetRot;
-    private void RotateToOrientation()
+    protected virtual void RotateToOrientation()
     {
         transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
 

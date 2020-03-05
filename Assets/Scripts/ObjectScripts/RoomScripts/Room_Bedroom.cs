@@ -64,12 +64,12 @@ public class Room_Bedroom : RoomScript
                 if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Guest && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bStank = true;
-                    dirtyFactor += (occupant.ManScript as ManScript_Guest).dirtyFactor;
+                    dirtyFactor += (occupant.ManScript as ManScript_Guest).dirtiness;
                 }
                 else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Worker && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bClean = true;
-                    cleanFactor += (occupant.ManScript as ManScript_Worker).cleaningEfficieny;
+                    cleanFactor += 3 + ((occupant.ManScript as ManScript_Worker).Physicality * 0.5f);
                 }
                 occupant = null;
             }

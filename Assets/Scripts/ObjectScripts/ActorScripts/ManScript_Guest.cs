@@ -6,9 +6,17 @@ using System;
 
 public class ManScript_Guest : ManScript
 {
-    public float dirtyFactor = 1;
+    #region Variables
 
+    #region Stats
+
+
+    public float dirtiness = 1;
+
+
+    #endregion
     public override Enums.ManTypes ManType { get { return Enums.ManTypes.Guest; } }
+    #endregion
 
     public override void SetOwnerOfRoom(Guid assignedRoom)
     {

@@ -14,8 +14,6 @@ public class ManScript_Worker : ManScript
     public float tirednessThreshhold; //tiredness always increases by 1 per second, so a default of 1 minute seems decent.
     public float currentTiredness = 0;
 
-    public float cleaningEfficieny = 1;
-
     public float raiseValue = 1;
 
     public float delayTimer;
@@ -25,6 +23,55 @@ public class ManScript_Worker : ManScript
     #region Private Variables
 
     private Dictionary<Enums.ManRole, Action<ManScript_Worker>> States = new Dictionary<Enums.ManRole, Action<ManScript_Worker>>();
+
+    #endregion
+
+    #region Stats
+
+    private float speed = 1;
+    public float Speed
+    {
+        get { return speed; }
+        set
+        {
+            //General stats won't use the specialty stat max and minimum because general stats might vary greatly in number size (it is currently equivalent but that may change)
+            speed = Mathf.Clamp(value, 1, 10);
+        }
+    }
+
+    #region Specialty Stats
+
+    private int intelligence = 1;
+    public int Intelligence
+    {
+        get { return intelligence; }
+        set
+        {
+            intelligence = Mathf.Clamp(value, GameManager.StatMinimum, GameManager.StatMaximum);
+        }
+    }
+
+    private int physicality = 1;
+    public int Physicality
+    {
+        get { return physicality; }
+        set
+        {
+            physicality = Mathf.Clamp(value, GameManager.StatMinimum, GameManager.StatMaximum);
+        }
+    }
+
+    private int professionalism = 1;
+    public int Professionalism
+    {
+        get { return professionalism; }
+        set
+        {
+            professionalism = Mathf.Clamp(value, GameManager.StatMinimum, GameManager.StatMaximum);
+        }
+    }
+
+    #endregion
 
     #endregion
 
@@ -74,7 +121,58 @@ public class ManScript_Worker : ManScript
             States.Add(role, function);
     }
 
+    public override void InitializeStats(StatDeviation statDev)
+    {
+        //Gotta calculate the standard deviation based on the inputted values from the gamemanager
+        //float roll = 
+        Speed = 1;
+    }
+
     #endregion
+
+    protected override void DoMovement()
+    {
+        float Distance = Vector3.Distance(transform.position, _TargetPos);
+        float Travel = (Constants.ManRunSpeed + (Speed * 0.1f)) * Time.deltaTime;
+
+        if (Travel > Distance) // Target reached
+        {
+            transform.position = _TargetPos;
+            State = Enums.ManStates.None; // Will trigger next action
+            return;
+        }
+        else // Regular movement
+        {
+            Vector3 DeltaPos = (_TargetPos - transform.position);
+            DeltaPos.Normalize();
+            transform.position += (DeltaPos * Travel);
+            FaceTowardsWaypoint(DeltaPos);
+        }
+    }
+
+    protected override void FaceTowardsPlayer()
+    {
+        Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
+
+        if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
+        {
+            transform.rotation = TargetRotation;
+            State = Enums.ManStates.None; // Will trigger next action
+        }
+    }
+
+    protected override void RotateToOrientation()
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
+
+        if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
+        {
+            transform.rotation = _TargetRot;
+            State = Enums.ManStates.None; // Will trigger next action
+        }
+    }
 
     #region Pay Methods
 

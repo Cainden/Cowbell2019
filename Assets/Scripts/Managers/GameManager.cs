@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Roles roleInfo;
     private static Roles _roleInfo;
 
+    [SerializeField] int statMinimum = 1, statMaximum = 10;
+    public static int StatMinimum, StatMaximum;
+
     //Might not want to do this for the gamemanager?
     #region Singleton Management
 
@@ -41,6 +44,9 @@ public class GameManager : MonoBehaviour
         TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
         DebugMenu.SetActive(false);
         _roleInfo = roleInfo;
+
+        StatMaximum = statMaximum;
+        StatMinimum = statMinimum;
     }
 
     private void Update()
@@ -88,6 +94,12 @@ namespace MySpace
     {
         [Tooltip("Paid Daily")]
         public int income;
+    }
+
+    public struct StatDeviation
+    {
+        public float stdDev;
+        public float Avg;
     }
 }
 
