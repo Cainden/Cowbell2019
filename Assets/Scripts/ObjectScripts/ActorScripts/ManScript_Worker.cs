@@ -83,7 +83,14 @@ public class ManScript_Worker : ManScript
     public void PayWorkerInHoots(string reason, int amount)
     {
         OverheadTextManager.Ref.OverheadHoots(amount.ToString(), transform.position);
-        WalletManager.Ref.Hoots -= amount;
+        if (WalletManager.SubtractHoots(amount))
+        {
+            //Wallet had the amount to pay
+        }
+        else
+        {
+            //Wallet did NOT have the amount to pay
+        }
     }
 
     private void CheckIfRentTime()

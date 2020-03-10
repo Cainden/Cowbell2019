@@ -86,7 +86,7 @@ public class ManScript_Guest : ManScript
     public void PayUserInHoots(string reason, int amount)
     {
         OverheadTextManager.Ref.OverheadHoots(amount.ToString(), transform.position);
-        WalletManager.Ref.Hoots += amount;
+        WalletManager.AddHoots(amount);
     }
 
     private void CheckIfRentTime()
