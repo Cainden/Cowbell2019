@@ -43,7 +43,7 @@ public static class WalletManager
 
     public static bool SubtractHoots(int amount)
     {
-        if (amount < Hoots)
+        if (amount > Hoots)
             return false;
         else
         {

@@ -432,4 +432,22 @@ public class ManManager : MonoBehaviour
         Debug.LogError("Man type of " + manType + " was not found in the ManPrefabs list on the ManManager.");
         return null;
     }
+
+    public static bool FindOpenBedroomForMan(ManScript man)
+    {
+        //Get all bedroom rooms
+        var ar = RoomManager.Ref.GetAllActiveRoomsofType(Enums.RoomTypes.Bedroom);
+        for (int i = 0; i < ar.Length; i++)
+        {
+            if (!ar[i].RoomScript.HasOwner())
+            {
+                Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
+                Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
+                return true;
+            }
+        }
+
+        GuiManager.Ref.Initiate_UserInfoSmall("New Guests are waiting on a bedroom!");
+        return false;
+    }
 }
