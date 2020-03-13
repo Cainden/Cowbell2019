@@ -147,18 +147,18 @@ public class ManScript : MonoBehaviour
         SetAnimation(State);
     }
 
-
     protected void SetAnimation(Enums.ManStates state)
     {
         switch (state)
         {
             case Enums.ManStates.Idle:
-            case Enums.ManStates.RotatingToPlayer:
             case Enums.ManStates.Waiting:
                 if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
                     _Animator.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
+            case Enums.ManStates.Rotating:
+            case Enums.ManStates.RotatingToPlayer:
                 if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
                     _Animator.SetTrigger("RunningTrigger");
                 break;
@@ -176,7 +176,7 @@ public class ManScript : MonoBehaviour
     {
         State = state;
         _TargetRot = rotation;
-        //SetAnimation(_State);
+        //SetAnimation(state);
     }
 
     #region State Functionality Methods
