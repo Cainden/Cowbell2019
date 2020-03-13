@@ -266,8 +266,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4203951147202168}
   - component: {fileID: 65815410962120504}
-  - component: {fileID: 114499941899114612}
   - component: {fileID: 114295345331750346}
+  - component: {fileID: 8247717922884147287}
   m_Layer: 8
   m_Name: Room_Other_Elevator_Sz1
   m_TagString: Room
@@ -304,28 +304,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 4, z: 5.6}
   m_Center: {x: 0, y: 1.8, z: 2.8}
---- !u!114 &114499941899114612
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1966165223985586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RoomStats:
-    RoomName: Elevator
-    RoomSize: 1
-    RoomCategory: 1
-    RoomType: 1
-    ManSlotCount: 0
-    RoomDescription: The elevator room is of size 1. It cannot hold any men.
-    RoomOverUnder: 0
-    RoomCost: 175
-    locked: 0
 --- !u!114 &114295345331750346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -338,6 +316,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be17cf534678be24ab72e459e5f5b1c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8247717922884147287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1966165223985586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b5ea471dde65b644b50b86e15b79f90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RoomStats:
+    RoomName: Elevator
+    RoomSize: 1
+    RoomCategory: 1
+    RoomType: 1
+    ManSlotCount: 0
+    RoomDescription: The elevator room is of size 1. It cannot hold any men.
+    RoomOverUnder: 1
+    RoomCost: 175
+    locked: 0
 --- !u!1 &5672748077184739267
 GameObject:
   m_ObjectHideFlags: 0

@@ -55,9 +55,10 @@ public class ManScript_Guest : ManScript
     protected override void Start()
     {
         base.Start();
-        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
-        TransferOwnershipToNewRoom(RoomManager.lobbyId);
-        Add_Action_ToList(new ActionData(SendSignalToLobby));
+        //ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
+        //TransferOwnershipToNewRoom(RoomManager.lobbyId);
+        //Add_Action_ToList(new ActionData(SendSignalToLobby));
+        SendSignalToLobby();
     }
 
     protected override void Update()
@@ -68,15 +69,22 @@ public class ManScript_Guest : ManScript
 
     private void SendSignalToLobby()
     {
-        Room_Lobby r = ManData.OwnedRoomRef.RoomScript as Room_Lobby;
-        if (r != null)
-            if (!r.FindOpenBedroom(this))
-            {
-                BuildManager.BuildFinishedEvent -= SendSignalToLobby;
-                BuildManager.BuildFinishedEvent += SendSignalToLobby;
-            }
-            else
-                BuildManager.BuildFinishedEvent -= SendSignalToLobby;
+        ////Find the lobby
+        //Room_Lobby r = ManData.OwnedRoomRef.RoomScript as Room_Lobby;
+        ////if the man is not in the lobby
+        //if (r != null)
+            
+        //else
+        //    BuildManager.BuildFinishedEvent -= SendSignalToLobby;
+        if (!ManManager.FindOpenBedroomForMan(this))
+        {
+            BuildManager.BuildFinishedEvent -= SendSignalToLobby;
+            BuildManager.BuildFinishedEvent += SendSignalToLobby;
+            ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
+            TransferOwnershipToNewRoom(RoomManager.lobbyId);
+        }
+        else
+            BuildManager.BuildFinishedEvent -= SendSignalToLobby;
     }
 
     #region Rent Methods
@@ -86,7 +94,7 @@ public class ManScript_Guest : ManScript
     public void PayUserInHoots(string reason, int amount)
     {
         OverheadTextManager.Ref.OverheadHoots(amount.ToString(), transform.position);
-        WalletManager.Ref.Hoots += amount;
+        WalletManager.AddHoots(amount);
     }
 
     private void CheckIfRentTime()

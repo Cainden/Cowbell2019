@@ -313,15 +313,21 @@ public class ManManager : MonoBehaviour
         if (manScript == null) return;
 
         Vector3 WorldPos;
+        Guid prevRoom = Guid.Empty;
 
         for (int i = 0; i < (pathIndizes.Length - 1); i++)
         {
             WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
+            Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
+            if (prevRoom != RoomID)
+            {
+                prevRoom = RoomID;
+                manScript.Add_AccessAction_ToList(RoomID);
+            }
             manScript.Add_RunAction_ToList(WorldPos);
 
             if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
             {
-                Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                     manScript.Add_DoorOpenAction_ToList(RoomID);
                 WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);
@@ -425,5 +431,23 @@ public class ManManager : MonoBehaviour
         }
         Debug.LogError("Man type of " + manType + " was not found in the ManPrefabs list on the ManManager.");
         return null;
+    }
+
+    public static bool FindOpenBedroomForMan(ManScript man)
+    {
+        //Get all bedroom rooms
+        var ar = RoomManager.Ref.GetAllActiveRoomsofType(Enums.RoomTypes.Bedroom);
+        for (int i = 0; i < ar.Length; i++)
+        {
+            if (!ar[i].RoomScript.HasOwner())
+            {
+                Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
+                Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
+                return true;
+            }
+        }
+
+        GuiManager.Ref.Initiate_UserInfoSmall("New Guests are waiting on a bedroom!");
+        return false;
     }
 }

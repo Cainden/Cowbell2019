@@ -136,12 +136,23 @@ public class ClickManager : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskBuildPos))
             {
                 BuildPositionScript BuildPosScript = hitInfo.transform.GetComponent<BuildPositionScript>();
-                BuildManager.Ref.Build_Finished(BuildPosScript.RoomType,
+
+                if (WalletManager.SubtractHoots(RoomManager.Ref.GetCostByRoomType(BuildPosScript.RoomType)))
+                {
+                    BuildManager.Ref.Build_Finished(BuildPosScript.RoomType,
                                                 BuildPosScript.RoomOverUnder,
                                                 BuildPosScript.LeftmostIndex);
+                }
+                else
+                {
+                    //This can happen if the player builds right before an automated payment is made that causes them to lose money.
+                    GuiManager.Ref.Initiate_UserInfoSmall("Sorry, You don't have enough Hoots to build that room!");
+                }
+
+                
 
                 //For buying rooms
-                WalletManager.Ref.Hoots -= RoomManager.Ref.GetCostByRoomType(BuildPosScript.RoomType);
+                
 
                 StateManager.Ref.SetGameState(Enums.GameStates.Normal);
                 return (true);
@@ -459,14 +470,14 @@ public class ClickManager : MonoBehaviour
     private void InitiateBuilding(Enums.RoomTypes RoomType)
     {
         // if there is no available build position, let the user know and don't try to build.
-        GridIndex[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
+        GridManager.BuildInfo[] BuildingIndexArray = GridManager.Ref.GetPossibleBuildingindizes(RoomManager.Ref.GetRoomSizeByRoomType(RoomType));
         if (BuildingIndexArray.Length == 0)
         {
             GuiManager.Ref.Initiate_UserInfoSmall("No Available Build Locations Available!");
             return;
         }
 
-        if (WalletManager.Ref.Hoots - RoomManager.Ref.GetCostByRoomType(RoomType) >= 0)
+        if (WalletManager.Hoots - RoomManager.Ref.GetCostByRoomType(RoomType) >= 0)
         {
             //Money deductions now made in RayCastCheckBuildPositionClicked()
             //WalletManager.Ref.Hoots -= Constants.RoomCostDefinitions[RoomSize];

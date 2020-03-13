@@ -2,61 +2,63 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalletManager : MonoBehaviour
-{
-    private int monCoins;
-    private int hoots;
-    private int souls;
 
-    public int Hoots
+public static class WalletManager
+{
+    private static int monCoins = 0;
+    private static int hoots = 0;
+    private static int souls = 0;
+
+    public static int Hoots
     {
         get { return hoots; }
-        set
+        private set
         {
             hoots = value;
             GuiManager.Ref.UpdateHootCount(hoots);
         }
     }
-    public int Souls
+    public static int Souls
     {
         get { return souls; }
-        set
+        private set
         {
             souls = value;
             GuiManager.Ref.UpdateSoulCount(souls);
         }
     }
-    public int MonCoins
+    public static int MonCoins
     {
         get { return monCoins; }
-        set
+        private set
         {
            monCoins = value;
            GuiManager.Ref.UpdateMonCoinCount(monCoins);
         }
     }
 
-    //private GuiManager GUIRef = GuiManager.Ref;
 
+    //[HideInInspector]
+    //public static WalletManager Ref { get; private set; } // For external access of script
 
-    [HideInInspector]
-    public static WalletManager Ref { get; private set; } // For external access of script
-
-
-    void Awake()
+    public static bool SubtractHoots(int amount)
     {
-        if (Ref == null) Ref = GetComponent<WalletManager>();
+        if (amount > Hoots)
+            return false;
+        else
+        {
+            Hoots -= amount;
+            return true;
+        }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public static void AddHoots(int amount)
     {
-        Hoots = Souls = MonCoins = 0;
+        Hoots += amount;
     }
 
-    // Update is called once per frame
-    void Update()
+    public static void SetHoots(int amount)
     {
-        
+        Hoots = amount;
     }
 }

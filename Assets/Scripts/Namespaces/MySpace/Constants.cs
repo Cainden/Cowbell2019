@@ -42,13 +42,13 @@ namespace MySpace
         public static readonly ReadOnlyCollection<Vector3> NewManOutgoingPath = new ReadOnlyCollection<Vector3>(_NewManOutgoingPath);
 
         // Selector definitions
-        public static readonly Dictionary<Enums.RoomSizes, string> RoomBuildSelectorModels = new Dictionary<Enums.RoomSizes, string>
-        {
-            { Enums.RoomSizes.Size1, "RoomSelectors/BuildPosSelector_Size1" },
-            { Enums.RoomSizes.Size2, "RoomSelectors/BuildPosSelector_Size2" },
-            { Enums.RoomSizes.Size4, "RoomSelectors/BuildPosSelector_Size4" },
-            { Enums.RoomSizes.Size6, "RoomSelectors/BuildPosSelector_Size6" }
-        };
+        //public static readonly Dictionary<Enums.RoomSizes, string> RoomBuildSelectorModels = new Dictionary<Enums.RoomSizes, string>
+        //{
+        //    { Enums.RoomSizes.Size1, "RoomSelectors/BuildPosSelector_Size1" },
+        //    { Enums.RoomSizes.Size2, "RoomSelectors/BuildPosSelector_Size2" },
+        //    { Enums.RoomSizes.Size4, "RoomSelectors/BuildPosSelector_Size4" },
+        //    { Enums.RoomSizes.Size6, "RoomSelectors/BuildPosSelector_Size6" }
+        //};
 
         // Room cost definitions based on size for now
         /*

@@ -61,18 +61,18 @@ public class DebugToolsScript : MonoBehaviour
    public void InputField_SetHoots()
     {
         if(!string.IsNullOrWhiteSpace(ifHoots.text))
-            WalletManager.Ref.Hoots = int.Parse( ifHoots.text );
+            WalletManager.SetHoots(int.Parse(ifHoots.text));
     }
 
    public void InputField_SetSouls()
     {
         if (!string.IsNullOrWhiteSpace(ifSouls.text))
-            WalletManager.Ref.Souls = int.Parse(ifSouls.text);
+            WalletManager.SetHoots(int.Parse(ifSouls.text));
     }
 
    public void InputField_SetMonCoins()
     {
         if (!string.IsNullOrWhiteSpace(ifMonCoins.text))
-            WalletManager.Ref.MonCoins = int.Parse(ifMonCoins.text);
+            WalletManager.SetHoots(int.Parse(ifMonCoins.text));
     }
 }

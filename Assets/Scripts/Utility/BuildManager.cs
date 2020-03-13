@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour
 {
+    [SerializeField] GameObject BuildSelector_Sz1, BuildSelector_Sz1_2, BuildSelector_Sz2, BuildSelector_Sz4, BuildSelector_Sz6;
+
     [HideInInspector]
     public static BuildManager Ref { get; private set; } // For external access of script
  
@@ -19,7 +21,7 @@ public class BuildManager : MonoBehaviour
         if (Ref == null) Ref = GetComponent<BuildManager>();
     }
 
-    public void ShowRoomPositionSelectors(GridIndex[] indexArray, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder overUnder)
+    public void ShowRoomPositionSelectors(GridManager.BuildInfo[] indexArray, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder overUnder)
     {
         if (indexArray == null) return;
 
@@ -29,24 +31,28 @@ public class BuildManager : MonoBehaviour
             GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't build a room of this type now!");
             return;
         }
+        Debug.Assert(roomSize != Enums.RoomSizes.None);
 
         for (int i = 0; i < indexArray.Length; i++)
         {
-            Debug.Assert(roomSize != Enums.RoomSizes.None);
-
             //CHECK TO SEE IF BUILDING IS UNDER/OVERWORLD, SKIP TO NEXT ITERATION IF POSITION IS NOT COMPATIBLE WITH OVERUNDER TYPE
-            int yPos = indexArray[i].Y;
+            int yPos = indexArray[i].index.Y;
 
-            if ((yPos < Constants.GridSurfaceY && (int)overUnder == 1) ||
-                (yPos >= Constants.GridSurfaceY && (int)overUnder == -1))
+            if ((yPos < Constants.GridSurfaceY && (int)overUnder == 1) || (yPos >= Constants.GridSurfaceY && (int)overUnder == -1))
+            {
                 continue;
+            }
+                
 
-            GameObject go = Instantiate(Resources.Load<GameObject>(Constants.RoomBuildSelectorModels[roomSize]));
+            GameObject go = Instantiate(GetPrefab(roomSize, indexArray[i].isDouble));
             Debug.Assert(go != null);
 
-            go.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(indexArray[i]);
+            if (indexArray[i].isDouble)
+                go.transform.position = (Vector3.up * 0.2f) + (indexArray[i].goDown ? GridManager.Ref.GetWorldPositionFromGridIndex(indexArray[i].index.GetBelow()) : GridManager.Ref.GetWorldPositionFromGridIndex(indexArray[i].index));
+            else
+                go.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(indexArray[i].index);
 
-            go.transform.GetComponent<BuildPositionScript>().SetRoomInfoData(roomSize, roomType, overUnder, indexArray[i]);
+            go.transform.GetComponent<BuildPositionScript>().SetRoomInfoData(roomSize, roomType, overUnder, indexArray[i].index);
             go.SetActive(true);
 
             RoomPositionSelectors.Add(go);
@@ -64,5 +70,25 @@ public class BuildManager : MonoBehaviour
         HideRoomPositionSelectors();
         RoomManager.Ref.CreateRoom(Guid.NewGuid(), roomType, index);
         BuildFinishedEvent?.Invoke();
+    }
+
+    public GameObject GetPrefab(Enums.RoomSizes size, bool showDouble)
+    {
+        switch (size)
+        {
+            case Enums.RoomSizes.Size1:
+                if (!showDouble)
+                    return BuildSelector_Sz1;
+                else
+                    return BuildSelector_Sz1_2;
+            case Enums.RoomSizes.Size2:
+                return BuildSelector_Sz2;
+            case Enums.RoomSizes.Size4:
+                return BuildSelector_Sz4;
+            case Enums.RoomSizes.Size6:
+                return BuildSelector_Sz6;
+            default:
+                return null;
+        }
     }
 }

@@ -232,6 +232,11 @@ public class RoomManager : MonoBehaviour
             return null;
     }
 
+    public RoomRef GetRoomData(GridIndex gridIndex)
+    {
+        return GetRoomData(GridManager.Ref.GetGridTileRoomGuid(gridIndex));
+    }
+
     public void SelectRoom(Guid roomId)
     {
         GameObject Selector = null;
