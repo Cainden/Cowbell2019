@@ -5,131 +5,184 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    [HideInInspector]
-    public static CameraScript Ref { get; private set; } // For external access of script
+	public static CameraScript Ref { get; private set; }
+	Camera cam;
 
-    private bool    _CameraDragging;
-    private Vector2 _DragMousePosition;
-    private Vector2 _DragSum;
+	// Camera Panning
+	Plane panPlane;
+	//[Tooltip("The distance in front of the camera the Plane is generated for panning.")]
+	//[SerializeField] float panPlaneDistFromCam = 1;
+	public bool IsCamDragging { get; private set; }
+	Vector2 prevMousePos;
 
-    private float   _ZoomFactor; // 0..100%, far to near Z-Pos
-    private Vector2 _XLimitLeftRight;
-    private Vector2 _YLimitDownUp;    
+	//Vector2 _DragMousePosition;
+	//Vector2 dragSum;
+	//Vector3 mousePos;
+	float zoomFactor; // 0-100%, far to near Z-Pos
 
-    void Awake()
+	/// <summary>
+	/// x = left pos, y = right pos
+	/// </summary>
+	Vector2 xLimit;
+	/// <summary>
+	/// x = down pos, y = up pos
+	/// </summary>
+	Vector2 yLimit;
+
+	// Constants taken from constant namespace
+	[SerializeField] float CameraZoomMovementSpeed = 5.0f;
+	[SerializeField] float CameraDragMovementSpeed = 0.1f;
+	[SerializeField] float CameraKeyMovementSpeed = 4.0f;
+	[Tooltip("Pixel threshold to detect/invoke camera drag")]
+	[SerializeField] int CameraDragThreshold = 6;
+	[SerializeField] Vector2 CameraxZPositionLimits = new Vector2(-180.0f, -10.0f);
+	[SerializeField] Vector2 CameraxXPositionLimitsLeft = new Vector2(18.0f, -21.0f);
+	[SerializeField] Vector2 CameraxXPositionLimitsRight = new Vector2(18.0f, 58.0f);
+	[SerializeField] Vector2 CameraxYPositionLimitsDown = new Vector2(18.0f, -12.0f);
+	[SerializeField] Vector2 CameraxYPositionLimitsUp = new Vector2(48.0f, 67.0f);
+
+	#region Prebuild Methods
+
+	void Awake()
+	{
+		#region Singleton Managment
+		if (Ref && Ref != this)
+		{
+			Destroy(this);
+			return;
+		}
+		Ref = this;
+		DontDestroyOnLoad(this);
+		#endregion
+
+		cam = GetComponent<Camera>();
+		panPlane = new Plane();
+	}
+
+	void Start()
+	{
+		RecalculateLimits();
+	}
+
+	void Update()
+	{
+		CheckMouseWheelZoom();
+		CheckKeyMovement();
+	}
+
+	void LateUpdate()
+	{
+		CheckScrollScreenborder();
+		Limit_CameraPosition();
+	}
+
+	#endregion
+
+	#region Camera Dragging
+
+	public void CamPanStart()
+	{
+		//_DragMousePosition.x = Input.mousePosition.x;
+		//_DragMousePosition.y = Input.mousePosition.y;
+		//mousePos = Input.mousePosition;
+		//dragSum = new Vector2();
+		prevMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		IsCamDragging = false;
+	}
+
+	public void CamPanUpdate()
+	{
+		//PanZoom Tutorial https://youtu.be/KkYco_7-ULA
+		Vector3 delta1;
+		panPlane.SetNormalAndPosition(transform.forward, new Vector3(transform.position.x, transform.position.y, 0));
+		delta1 = PlanePosDelta(Input.mousePosition);
+		cam.transform.Translate(-delta1, Space.World);
+		prevMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+	}
+
+	Vector3 PlanePosDelta(Vector2 _screenPos)
+	{
+		Vector2 deltaPos = prevMousePos - new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+		Ray rayBefore = cam.ScreenPointToRay(_screenPos - deltaPos);
+		Ray rayCurr = cam.ScreenPointToRay(_screenPos);
+		if (panPlane.Raycast(rayBefore, out var rayBeforeOut) && panPlane.Raycast(rayCurr, out var rayCurrOut))
+		{
+			return rayBefore.GetPoint(rayBeforeOut) - rayCurr.GetPoint(rayCurrOut);
+		}
+		return Vector3.zero;
+	}
+
+	Vector3 PlanePos(Vector2 _screenPos)
+	{
+		Ray ray = cam.ScreenPointToRay(_screenPos);
+		if (panPlane.Raycast(ray, out var rayOut))
+		{
+			return ray.GetPoint(rayOut);
+		}
+		return Vector3.zero;
+	}
+
+	public void SetCameraDragging()
+	{
+		IsCamDragging = true;
+		GuiManager.Ref.SetCamDragCursor(true);
+	}
+
+	public void ResetCameraDragging()
+	{
+		IsCamDragging = false;
+		GuiManager.Ref.SetCamDragCursor(false);
+	}
+
+	#endregion
+
+	public static bool ZoomDisabled = false;
+	public void CheckMouseWheelZoom()
+	{
+		if (Input.mouseScrollDelta.y == 0.0f) return;
+		if (ZoomDisabled) return;
+
+		transform.Translate(new Vector3(0, 0, Input.mouseScrollDelta.y * CameraZoomMovementSpeed));
+		RecalculateLimits();
+	}
+
+	public void CheckKeyMovement()
+	{
+		if (Input.GetKey(KeyCode.D))
+		{
+			transform.Translate(new Vector3(CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
+		}
+		if (Input.GetKey(KeyCode.A))
+		{
+			transform.Translate(new Vector3(-CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
+		}
+		if (Input.GetKey(KeyCode.S))
+		{
+			transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * Time.deltaTime, 0));
+		}
+		if (Input.GetKey(KeyCode.W))
+		{
+			transform.Translate(new Vector3(0, CameraKeyMovementSpeed * Time.deltaTime, 0));
+		}
+	}
+
+	void RecalculateLimits()
     {
-        if (Ref == null) Ref = GetComponent<CameraScript>();
-    }
-
-    void Start ()
-    {
-        RecalculateLimits();
-    }
-	
-	void Update ()
-    {
-        CheckMouseWheelZoom();
-        CheckKeyMovement();
-    }
-
-    void LateUpdate()
-    {
-        CheckScrollScreenborder();
-        Limit_CameraPosition();
-    }
-
-    public static bool ZoomDisabled = false;
-    public void CheckMouseWheelZoom()
-    {
-        if (Input.mouseScrollDelta.y == 0.0f) return;
-        if (ZoomDisabled) return;
-
-        transform.Translate(new Vector3(0, 0, Input.mouseScrollDelta.y * Constants.CameraZoomMovementSpeed));
-        RecalculateLimits();        
-    }
-
-    public void CheckKeyMovement()
-    {
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(new Vector3(Constants.CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(new Vector3(-Constants.CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(new Vector3(0, -Constants.CameraKeyMovementSpeed * Time.deltaTime, 0));
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(new Vector3(0, Constants.CameraKeyMovementSpeed * Time.deltaTime, 0));
-        }
-    }
-
-    public void SetDragStartMousePosition(float x, float y)
-    {
-        _DragMousePosition.x = x;
-        _DragMousePosition.y = y;
-        _DragSum = new Vector2();
-        _CameraDragging = false;
-    }
-
-    public void MoveDragCamera()
-    {
-        float fDeltaX = Input.mousePosition.x - _DragMousePosition.x;
-        float fDeltaY = Input.mousePosition.y - _DragMousePosition.y;
-        _DragSum += new Vector2(Mathf.Abs(fDeltaX), Mathf.Abs(fDeltaY));
-
-        Camera.main.transform.Translate(new Vector3(-fDeltaX * Constants.CameraDragMovementSpeed,
-                                                    -fDeltaY * Constants.CameraDragMovementSpeed, 0));
-
-        _DragMousePosition.x = Input.mousePosition.x;
-        _DragMousePosition.y = Input.mousePosition.y;
-
-        if (_CameraDragging) return;
-
-        if ((_DragSum.x > Constants.CameraDragThreshold) || (_DragSum.y > Constants.CameraDragThreshold))
-        {
-            SetCameraDragging();
-        }
-    }
-
-    public bool IsCameraDragging()
-    {
-        return (_CameraDragging);
-    }
-
-    public void SetCameraDragging()
-    {
-        _CameraDragging = true;
-        GuiManager.Ref.SetCamDragCursor(true);
-    }
-
-    public void ResetCameraDragging()
-    {
-        _CameraDragging = false;
-        GuiManager.Ref.SetCamDragCursor(false);
-    }
-
-    void RecalculateLimits()
-    {
-        float ZPos = Mathf.Clamp(transform.position.z, Constants.CameraxZPositionLimits.x, Constants.CameraxZPositionLimits.y);
+        float ZPos = Mathf.Clamp(transform.position.z, CameraxZPositionLimits.x, CameraxZPositionLimits.y);
         transform.position = new Vector3(transform.position.x, transform.position.y, ZPos);
-        _ZoomFactor = (ZPos - Constants.CameraxZPositionLimits.x) / (Constants.CameraxZPositionLimits.y - Constants.CameraxZPositionLimits.x);
+        zoomFactor = (ZPos - CameraxZPositionLimits.x) / (CameraxZPositionLimits.y - CameraxZPositionLimits.x);
 
-        _XLimitLeftRight.x = (Constants.CameraxXPositionLimitsLeft.y - Constants.CameraxXPositionLimitsLeft.x) * _ZoomFactor + Constants.CameraxXPositionLimitsLeft.x;
-        _XLimitLeftRight.y = (Constants.CameraxXPositionLimitsRight.y - Constants.CameraxXPositionLimitsRight.x) * _ZoomFactor + Constants.CameraxXPositionLimitsRight.x;
+        xLimit.x = (CameraxXPositionLimitsLeft.y - CameraxXPositionLimitsLeft.x) * zoomFactor + CameraxXPositionLimitsLeft.x;
+        xLimit.y = (CameraxXPositionLimitsRight.y - CameraxXPositionLimitsRight.x) * zoomFactor + CameraxXPositionLimitsRight.x;
 
-        _YLimitDownUp.x = (Constants.CameraxYPositionLimitsDown.y - Constants.CameraxYPositionLimitsDown.x) * _ZoomFactor + Constants.CameraxYPositionLimitsDown.x;
-        _YLimitDownUp.y = (Constants.CameraxYPositionLimitsUp.y - Constants.CameraxYPositionLimitsUp.x) * _ZoomFactor + Constants.CameraxYPositionLimitsUp.x;
+        yLimit.x = (CameraxYPositionLimitsDown.y - CameraxYPositionLimitsDown.x) * zoomFactor + CameraxYPositionLimitsDown.x;
+        yLimit.y = (CameraxYPositionLimitsUp.y - CameraxYPositionLimitsUp.x) * zoomFactor + CameraxYPositionLimitsUp.x;
     }
 
     void Limit_CameraPosition()
     {
-        float XPos = Mathf.Clamp(transform.position.x, _XLimitLeftRight.x, _XLimitLeftRight.y);
-        float YPos = Mathf.Clamp(transform.position.y, _YLimitDownUp.x, _YLimitDownUp.y);
+        float XPos = Mathf.Clamp(transform.position.x, xLimit.x, xLimit.y);
+        float YPos = Mathf.Clamp(transform.position.y, yLimit.x, yLimit.y);
         transform.position = new Vector3(XPos, YPos, transform.position.z);
     }
 
@@ -137,24 +190,24 @@ public class CameraScript : MonoBehaviour
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManDragging) return;
 
-        float fZFactor = (1.0f - _ZoomFactor) * 10.0f + 7.5f; 
+        float fZFactor = (1.0f - zoomFactor) * 10.0f + 7.5f; 
 
         if (Input.mousePosition.x < 20)
         {
-            transform.Translate(new Vector3(-Constants.CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
+            transform.Translate(new Vector3(-CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
         }
         else if (Input.mousePosition.x > Screen.width - 20)
         {
-            transform.Translate(new Vector3(Constants.CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
+            transform.Translate(new Vector3(CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
         }
 
         if (Input.mousePosition.y < 20)
         {
-            transform.Translate(new Vector3(0, -Constants.CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
+            transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
         }
         else if (Input.mousePosition.y > Screen.height - 20)
         {
-            transform.Translate(new Vector3(0, Constants.CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
+            transform.Translate(new Vector3(0, CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
         }
     }
 }

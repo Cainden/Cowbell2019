@@ -8,10 +8,8 @@ using UnityEngine.EventSystems;
 
 public class ClickManager : MonoBehaviour
 {
-    public EventSystem MyEventSystem = null; // To be set in editor
-
-    [HideInInspector]
-    public static ClickManager Ref { get; private set; } // For external access of script
+	public static ClickManager Ref { get; private set; } // singleton
+	[SerializeField] EventSystem MyEventSystem = null; // To be set in editor
 
     private bool  _MouseOnRoom = false;
     private Guid  _MouseOnRoomGuid = Guid.Empty;
@@ -28,10 +26,18 @@ public class ClickManager : MonoBehaviour
 
     void Awake()
     {
-        if (Ref == null) Ref = GetComponent<ClickManager>();
-    }
+		#region Singleton Managment
+		if (Ref && Ref != this)
+		{
+			Destroy(this);
+			return;
+		}
+		Ref = this;
+		DontDestroyOnLoad(this);
+		#endregion
+	}
 
-    void Start()
+	void Start()
     {
         Debug.Assert(MyEventSystem != null);
 
@@ -71,7 +77,7 @@ public class ClickManager : MonoBehaviour
         if (StateManager.Ref.IsCameraDragAllowed())
         {
             // Prepare for camera dragging (will only become active if movement threshold is reached)
-            CameraScript.Ref.SetDragStartMousePosition(Input.mousePosition.x, Input.mousePosition.y);
+            CameraScript.Ref.CamPanStart();
         }
 
         if (RayCastCheckManClicked()) return;
@@ -216,7 +222,7 @@ public class ClickManager : MonoBehaviour
             return;
         }
 
-        if (CameraScript.Ref.IsCameraDragging() == true)
+        if (CameraScript.Ref.IsCamDragging == true)
         {
             CameraScript.Ref.ResetCameraDragging();
             return;
@@ -236,7 +242,7 @@ public class ClickManager : MonoBehaviour
         // In some modes, we could start to drag the camera
         if (StateManager.Ref.IsCameraDragAllowed())
         {
-            CameraScript.Ref.MoveDragCamera();
+            CameraScript.Ref.CamPanUpdate();
         }
 
         if (RayCastCheckManDraggingMouseIsDown()) return;

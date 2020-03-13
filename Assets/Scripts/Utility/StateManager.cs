@@ -205,7 +205,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsRoomSelectionAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {
@@ -218,7 +218,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsManSelectionAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {
@@ -231,7 +231,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsRoomBuildDialogAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {
@@ -244,7 +244,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsMainMenuDialogAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {
@@ -257,7 +257,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsHireDialogAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {
@@ -270,7 +270,7 @@ public class StateManager : MonoBehaviour
 
     public bool IsBookGuestDialogAllowed()
     {
-        if (CameraScript.Ref.IsCameraDragging()) return (false);
+        if (CameraScript.Ref.IsCamDragging) return (false);
 
         switch (_GameState)
         {

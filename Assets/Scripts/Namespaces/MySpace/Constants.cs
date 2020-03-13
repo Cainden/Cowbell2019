@@ -41,17 +41,6 @@ namespace MySpace
                                                                   new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f) };
         public static readonly ReadOnlyCollection<Vector3> NewManOutgoingPath = new ReadOnlyCollection<Vector3>(_NewManOutgoingPath);
 
-        // Camera definitions
-        public static readonly float CameraKeyMovementSpeed = 4.0f;
-        public static readonly float CameraZoomMovementSpeed = 5.0f;
-        public static readonly float CameraDragMovementSpeed = 0.1f;
-        public static readonly int CameraDragThreshold = 6;  // Pixel threshold to detect/invoke camera drag
-        public static readonly Vector2 CameraxZPositionLimits = new Vector2(-180.0f, -10.0f);
-        public static readonly Vector2 CameraxXPositionLimitsLeft = new Vector2(18.0f, -21.0f); // At min/max Zoomfactor
-        public static readonly Vector2 CameraxXPositionLimitsRight = new Vector2(18.0f, 58.0f); // At min/max Zoomfactor
-        public static readonly Vector2 CameraxYPositionLimitsDown = new Vector2(18.0f, -12.0f); // At min/max Zoomfactor
-        public static readonly Vector2 CameraxYPositionLimitsUp = new Vector2(48.0f, 67.0f); // At min/max Zoomfactor
-
         // Selector definitions
         public static readonly Dictionary<Enums.RoomSizes, string> RoomBuildSelectorModels = new Dictionary<Enums.RoomSizes, string>
         {

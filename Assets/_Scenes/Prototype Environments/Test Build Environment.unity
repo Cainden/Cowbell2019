@@ -130,7 +130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 94211984}
   - component: {fileID: 94211983}
-  - component: {fileID: 94211982}
   - component: {fileID: 94211981}
   - component: {fileID: 94211980}
   - component: {fileID: 94211985}
@@ -150,14 +149,6 @@ AudioListener:
   m_GameObject: {fileID: 94211979}
   m_Enabled: 1
 --- !u!124 &94211981
-Behaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94211979}
-  m_Enabled: 1
---- !u!92 &94211982
 Behaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,6 +225,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 301607672dffb9444b2464a92f6332fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panPlaneDistFromCam: 0.5
+  CameraZoomMovementSpeed: 5
+  CameraDragMovementSpeed: 0.1
+  CameraKeyMovementSpeed: 4
+  CameraDragThreshold: 6
+  CameraxZPositionLimits: {x: -180, y: -10}
+  CameraxXPositionLimitsLeft: {x: 18, y: -21}
+  CameraxXPositionLimitsRight: {x: 18, y: 58}
+  CameraxYPositionLimitsDown: {x: 18, y: -12}
+  CameraxYPositionLimitsUp: {x: 48, y: 67}
 --- !u!1 &114666916
 GameObject:
   m_ObjectHideFlags: 0

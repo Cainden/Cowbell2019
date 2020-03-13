@@ -72,7 +72,7 @@ public class GuiManager : MonoBehaviour
     {
         TextObject_GameState.text = "GameState:" + StateManager.Ref.GetGameState().ToString() +
                                     "  " +
-                                    "CamDrag: " + CameraScript.Ref.IsCameraDragging().ToString() +
+                                    "CamDrag: " + CameraScript.Ref.IsCamDragging.ToString() +
                                     "\r\n" +
                                     "SelRoom: " + StateManager.Ref.GetSelectedRoom().ToString() +
                                     "\r\n" +
