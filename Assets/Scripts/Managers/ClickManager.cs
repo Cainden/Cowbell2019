@@ -20,10 +20,6 @@ public class ClickManager : MonoBehaviour
     private int _LayerMaskRoom;
     private int _LayerMaskBuildPos;
 
-    //for refunding rooms if right click occurs during build
-    // Used in right click function
-    //public bool buildCancelled = false;
-
     void Awake()
     {
 		#region Singleton Managment
@@ -46,27 +42,39 @@ public class ClickManager : MonoBehaviour
         _LayerMaskBuildPos = LayerMask.GetMask("BuildPos");
     }
 
-    void Update()
+	public static event Action LeftClick_Down;
+	public static event Action LeftClick_Up;
+	public static event Action LeftClick;
+
+	void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-			LeftMouseButtonDown();  // LMB pressed during last frame (only one event)
+		if (Input.GetMouseButtonDown(0))
+			LeftClick_Down?.Invoke();
 
 		if (Input.GetMouseButtonUp(0))
-			LeftMouseButtonUp();    // LMB released during last frame (only one event)
-
-		//if (Input.GetMouseButtonDown(1))
-		//	RightMouseButtonDown(); // RMB pressed during last frame (only one event)
-        
-		//if (Input.GetMouseButtonUp(1)) 
-		//	RightMouseButtonUp();   // RMB released during last frame (only one event)
+			LeftClick_Up?.Invoke();
 
         if (Input.GetMouseButton(0))
-			LeftMouseButton_IS_down();  // LMB is down right now
-    }
+			LeftClick?.Invoke();
+	}
+
+	private void OnEnable()
+	{
+		ClickManager.LeftClick_Down += LeftMouseDown;
+		ClickManager.LeftClick_Up += LeftMouseUp;
+		ClickManager.LeftClick += LeftMouse;
+	}
+
+	private void OnDisable()
+	{
+		ClickManager.LeftClick_Down -= LeftMouseDown;
+		ClickManager.LeftClick_Up -= LeftMouseUp;
+		ClickManager.LeftClick -= LeftMouse;
+	}
 
 	#region input methods
 
-	void LeftMouseButtonDown()
+	void LeftMouseDown()
     {
         if (MyEventSystem.IsPointerOverGameObject())
         {
@@ -85,7 +93,84 @@ public class ClickManager : MonoBehaviour
         if (RayCastCheckBuildPositionClicked()) return;
     }
 
-    bool RayCastCheckManClicked()
+	void LeftMouseUp()
+	{
+		if (_WasGuiClick)
+		{
+			_WasGuiClick = false;
+			return;
+		}
+
+		if (_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
+		{
+			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
+			//VERY temporary, needs to be changed to be less spaghetti once it is tested and works
+			if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
+			{
+				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskRoom))
+				{
+					roomToChangeTo = RoomManager.Ref.GetRoomData((roomToChangeTo.RoomScript as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x).RoomData.RoomId);
+
+				}
+			}
+
+			if (roomToChangeTo.RoomScript.RoomHasFreeOwnerSlots())
+			{
+				ManManager.Ref.TransferOwnershipToRoom(StateManager.Ref.GetSelectedMan(), _MouseOnRoomGuid);
+				StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
+				return;
+			}
+			else
+			{
+				GuiManager.Ref.Initiate_UserInfoSmall("Sorry, that room is completely booked! Select another or Right Click to exit!");
+				return;
+			}
+		}
+
+		if (_MouseOnRoom && (StateManager.Ref.IsRoomSelectionAllowed()))
+		{
+			StateManager.Ref.SetGameState(Enums.GameStates.RoomSelected, _MouseOnRoomGuid);
+			_MouseOnRoom = false;
+			return;
+		}
+
+		if (StateManager.Ref.GetGameState() == Enums.GameStates.ManPressed)
+		{
+			StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
+			return;
+		}
+
+		if (StateManager.Ref.GetGameState() == Enums.GameStates.ManDragging)
+		{
+			ManManager.Ref.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom(), true);
+			StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+			return;
+		}
+
+		if (CameraScript.Ref.IsCamDragging == true)
+		{
+			CameraScript.Ref.ResetCameraDragging();
+			return;
+		}
+	}
+
+	void LeftMouse()
+	{
+		if (_WasGuiClick) return;
+
+		// In some modes, we could start to drag the camera
+		if (StateManager.Ref.IsCameraDragAllowed())
+		{
+			CameraScript.Ref.CamPanUpdate();
+		}
+
+		if (RayCastCheckManDraggingMouseIsDown()) return;
+		if (RayCastCheckRoomOverMouseIsDown()) return;
+	}
+
+	#endregion
+
+	bool RayCastCheckManClicked()
     {
         if (StateManager.Ref.IsManSelectionAllowed())
         {
@@ -160,104 +245,6 @@ public class ClickManager : MonoBehaviour
         }
 
         return (false);
-    }
-
-    void RightMouseButtonDown()
-    {
-        //switch to handle similar state mechanics to ChangeOwnedRoom state
-        switch (StateManager.Ref.GetGameState())
-        {
-            case Enums.GameStates.ChangeOwnedRoom:
-                StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
-                break;
-            default:
-                //buildCancelled = true;
-                StateManager.Ref.SetGameState(Enums.GameStates.Normal); // TODO: Probably need to refine this
-                //buildCancelled = false;
-                break;
-        }
-
-    }
-
-    void LeftMouseButtonUp()
-    {
-        if (_WasGuiClick)
-        {
-            _WasGuiClick = false;
-            return;
-        }
-
-        if(_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
-        {
-            RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
-            //VERY temporary, needs to be changed to be less spaghetti once it is tested and works
-            if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
-            {
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskRoom))
-                {
-                    roomToChangeTo = RoomManager.Ref.GetRoomData((roomToChangeTo.RoomScript as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x).RoomData.RoomId);
-                    
-                }
-            }
-
-            if (roomToChangeTo.RoomScript.RoomHasFreeOwnerSlots())
-            {
-                ManManager.Ref.TransferOwnershipToRoom(StateManager.Ref.GetSelectedMan(), _MouseOnRoomGuid);
-                StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
-                return;
-            }
-            else
-            {
-                GuiManager.Ref.Initiate_UserInfoSmall("Sorry, that room is completely booked! Select another or Right Click to exit!");
-                return;
-            }
-        }
-
-        if (_MouseOnRoom && (StateManager.Ref.IsRoomSelectionAllowed()))
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.RoomSelected, _MouseOnRoomGuid);
-            _MouseOnRoom = false;
-            return;
-        }
-
-        if (StateManager.Ref.GetGameState() == Enums.GameStates.ManPressed)
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
-            return;           
-        }
-
-        if (StateManager.Ref.GetGameState() == Enums.GameStates.ManDragging)
-        {
-            ManManager.Ref.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom(), true);
-            StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-            return;
-        }
-
-        if (CameraScript.Ref.IsCamDragging == true)
-        {
-            CameraScript.Ref.ResetCameraDragging();
-            return;
-        }
-    }
-
-    void RightMouseButtonUp()
-    {
-    }
-	
-	#endregion
-
-	void LeftMouseButton_IS_down()
-    {
-        if (_WasGuiClick) return;
-
-        // In some modes, we could start to drag the camera
-        if (StateManager.Ref.IsCameraDragAllowed())
-        {
-            CameraScript.Ref.CamPanUpdate();
-        }
-
-        if (RayCastCheckManDraggingMouseIsDown()) return;
-        if (RayCastCheckRoomOverMouseIsDown()) return;        
     }
 
     bool RayCastCheckManDraggingMouseIsDown()
@@ -583,7 +570,18 @@ public class ClickManager : MonoBehaviour
 	
 	public void Button_Close()
 	{
-		RightMouseButtonDown();
+		//switch to handle similar state mechanics to ChangeOwnedRoom state
+		switch (StateManager.Ref.GetGameState())
+		{
+			case Enums.GameStates.ChangeOwnedRoom:
+				StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
+				break;
+			default:
+				//buildCancelled = true;
+				StateManager.Ref.SetGameState(Enums.GameStates.Normal); // TODO: Probably need to refine this
+																		//buildCancelled = false;
+				break;
+		}
 	}
 
 	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>

@@ -8,16 +8,9 @@ public class CameraScript : MonoBehaviour
 	public static CameraScript Ref { get; private set; }
 	Camera cam;
 
-	// Camera Panning
 	Plane panPlane;
-	//[Tooltip("The distance in front of the camera the Plane is generated for panning.")]
-	//[SerializeField] float panPlaneDistFromCam = 1;
 	public bool IsCamDragging { get; private set; }
 	Vector2 prevMousePos;
-
-	//Vector2 _DragMousePosition;
-	//Vector2 dragSum;
-	//Vector3 mousePos;
 	float zoomFactor; // 0-100%, far to near Z-Pos
 
 	/// <summary>
@@ -29,12 +22,14 @@ public class CameraScript : MonoBehaviour
 	/// </summary>
 	Vector2 yLimit;
 
-	// Constants taken from constant namespace
+	
 	[SerializeField] float CameraZoomMovementSpeed = 5.0f;
 	[SerializeField] float CameraDragMovementSpeed = 0.1f;
 	[SerializeField] float CameraKeyMovementSpeed = 4.0f;
 	[Tooltip("Pixel threshold to detect/invoke camera drag")]
 	[SerializeField] int CameraDragThreshold = 6;
+
+	// Variables used in recalculate limits method
 	[SerializeField] Vector2 CameraxZPositionLimits = new Vector2(-180.0f, -10.0f);
 	[SerializeField] Vector2 CameraxXPositionLimitsLeft = new Vector2(18.0f, -21.0f);
 	[SerializeField] Vector2 CameraxXPositionLimitsRight = new Vector2(18.0f, 58.0f);
@@ -82,10 +77,6 @@ public class CameraScript : MonoBehaviour
 
 	public void CamPanStart()
 	{
-		//_DragMousePosition.x = Input.mousePosition.x;
-		//_DragMousePosition.y = Input.mousePosition.y;
-		//mousePos = Input.mousePosition;
-		//dragSum = new Vector2();
 		prevMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
 		IsCamDragging = false;
 	}
