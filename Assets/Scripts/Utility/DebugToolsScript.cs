@@ -58,21 +58,21 @@ public class DebugToolsScript : MonoBehaviour
         }
     }
 
-   public void InputField_SetHoots()
+   public void InputField_AddHoots()
     {
         if(!string.IsNullOrWhiteSpace(ifHoots.text))
-            WalletManager.SetHoots(int.Parse(ifHoots.text));
+            WalletManager.AddHoots(int.Parse(ifHoots.text));
     }
 
-   public void InputField_SetSouls()
+   public void InputField_AddSouls()
     {
         if (!string.IsNullOrWhiteSpace(ifSouls.text))
-            WalletManager.SetHoots(int.Parse(ifSouls.text));
+            WalletManager.AddHoots(int.Parse(ifSouls.text));
     }
 
-   public void InputField_SetMonCoins()
+   public void InputField_AddMonCoins()
     {
         if (!string.IsNullOrWhiteSpace(ifMonCoins.text))
-            WalletManager.SetHoots(int.Parse(ifMonCoins.text));
+            WalletManager.AddHoots(int.Parse(ifMonCoins.text));
     }
 }

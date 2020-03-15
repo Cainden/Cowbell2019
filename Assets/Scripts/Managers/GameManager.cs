@@ -7,10 +7,14 @@ using MySpace;
 
 public class GameManager : MonoBehaviour
 {
+    #region Serialized Variables
     [SerializeField] GameObject DebugMenu;
 
     [SerializeField] Roles roleInfo;
     private static Roles _roleInfo;
+
+    [SerializeField] int startingHoots = 1000;
+    #endregion
 
     //Might not want to do this for the gamemanager?
     #region Singleton Management
@@ -38,9 +42,13 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
+        //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
+        TimeManager.AddEventTriggerToGameTime(9, 0, 0, GiveGuest, true);
         DebugMenu.SetActive(false);
         _roleInfo = roleInfo;
+
+        //Might need to change this if loading a save
+        WalletManager.AddHoots(1000);
     }
 
     private void Update()
@@ -58,7 +66,7 @@ public class GameManager : MonoBehaviour
     private void GiveGuest()
     {
         ClickManager.Ref.AddNewGuest();
-        TimeManager.AddEventTriggerInSeconds(60, GiveGuest);
+        //TimeManager.AddEventTriggerInSeconds(60, GiveGuest);
     }
 
     public static RoleInfo GetRoleInfo(MySpace.Enums.ManRole role)
