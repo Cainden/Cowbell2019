@@ -5,9 +5,14 @@ using UnityEngine;
 
 public static class WalletManager
 {
-    private static int monCoins = 0;
-    private static int hoots = 0;
-    private static int souls = 0;
+    private static int monCoins;
+    private static int hoots;
+    private static int souls;
+
+    static WalletManager()
+    {
+        MonCoins = Hoots = Souls = 0;
+    }
 
     public static int Hoots
     {
@@ -15,7 +20,7 @@ public static class WalletManager
         private set
         {
             hoots = value;
-            GuiManager.Ref.UpdateHootCount(hoots);
+            GuiManager.Ref?.UpdateHootCount(hoots);
         }
     }
     public static int Souls
@@ -24,7 +29,7 @@ public static class WalletManager
         private set
         {
             souls = value;
-            GuiManager.Ref.UpdateSoulCount(souls);
+            GuiManager.Ref?.UpdateSoulCount(souls);
         }
     }
     public static int MonCoins
@@ -33,7 +38,7 @@ public static class WalletManager
         private set
         {
            monCoins = value;
-           GuiManager.Ref.UpdateMonCoinCount(monCoins);
+           GuiManager.Ref?.UpdateMonCoinCount(monCoins);
         }
     }
 
@@ -60,5 +65,47 @@ public static class WalletManager
     public static void SetHoots(int amount)
     {
         Hoots = amount;
+    }
+
+    public static bool SubtractMonCoins(int amount)
+    {
+        if (amount > MonCoins)
+            return false;
+        else
+        {
+            MonCoins -= amount;
+            return true;
+        }
+    }
+
+    public static void AddMonCoins(int amount)
+    {
+        MonCoins += amount;
+    }
+
+    public static void SetMonCoins(int amount)
+    {
+        MonCoins = amount;
+    }
+
+    public static bool SubtractSouls(int amount)
+    {
+        if (amount > Souls)
+            return false;
+        else
+        {
+            Souls -= amount;
+            return true;
+        }
+    }
+
+    public static void AddSouls(int amount)
+    {
+        Souls += amount;
+    }
+
+    public static void SetSouls(int amount)
+    {
+        Souls = amount;
     }
 }

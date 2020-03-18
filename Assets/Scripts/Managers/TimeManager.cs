@@ -18,8 +18,11 @@ public class TimeManager : MonoBehaviour
     /// number of seconds in a day  
     public float dayCycleLength = 1440;
 
+    [Tooltip("The hour at which the time will start")]
+    [SerializeField] float dayStartHour = 5;
+
     /// current time in game time (0 - dayCycleLength).  
-    public float currentCycleTime = 0;
+    [HideInInspector] public float currentCycleTime = 0;
 
     /// number of hours per day.  
     private float hoursPerDay = 24;
@@ -35,10 +38,10 @@ public class TimeManager : MonoBehaviour
     public float dawnTimeOffset;
 
     /// calculated hour of the day, based on the hoursPerDay setting.  
-    public int worldTimeHour;
+    [HideInInspector] public int worldTimeHour;
 
     /// calculated minutes of the day, based on the hoursPerDay setting.  
-    public int minutes;
+    [HideInInspector] public int minutes;
 
     /// The scene ambient color used for full daylight.  
     public Color fullLight = new Color(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
@@ -105,6 +108,8 @@ public class TimeManager : MonoBehaviour
         HourTime = dayCycleLength / hoursPerDay;
         MinuteTime = HourTime / 60;
         SecondsTime = MinuteTime / 60;
+
+        currentCycleTime = dayStartHour * HourTime;
 
         if (sun != null)
         { lightIntensity = sun.intensity; }
@@ -310,8 +315,10 @@ public class TimeManager : MonoBehaviour
     /// Updates the World-time hour based on the current time of day.  
     private void UpdateWorldTime()
     {
-        worldTimeHour = (int)((Mathf.Ceil((currentCycleTime / dayCycleLength) * hoursPerDay) + dawnTimeOffset) % hoursPerDay) + 1;
-        minutes = (int)(Mathf.Ceil((currentCycleTime * (60 / HourTime)) % 60));
+        //worldTimeHour = (int)((Mathf.Ceil((currentCycleTime / dayCycleLength) * hoursPerDay) + dawnTimeOffset) % hoursPerDay) + 1;
+        worldTimeHour = (int)(currentCycleTime / HourTime);
+        //minutes = (int)(Mathf.Ceil((currentCycleTime * (60 / HourTime)) % 60));
+        minutes = (int)((currentCycleTime - (worldTimeHour * HourTime)) / MinuteTime);
     }
     #endregion
 
@@ -325,19 +332,14 @@ public class TimeManager : MonoBehaviour
     private float lastFrame;
     private void CheckCurrentEvents()
     {
-        print(currentCycleTime);
-        //Events.Sort((e, e2) => 
-        //{
-        //    float result = e.EventTime - e2.EventTime;
-        //    if (result < 0)
-        //        return -1;
-        //    else if (result > 0)
-        //        return 1;
-        //    else
-        //        return 0;
-        //});
+        //This while loop is here to make sure that we don't miss an event trigger if the Events[1] event was also within the currentCycleTime and lastFrame.
+        Guid g = Events[0].ID;
+        while (Events[0].CheckEvent(lastFrame, currentCycleTime))
+        {
+            if (Events[0].ID.CompareTo(g) is 0)
+                break;
+        }
 
-        Events[0].CheckEvent(lastFrame, currentCycleTime);
         lastFrame = currentCycleTime;
     }
 
@@ -439,7 +441,7 @@ public class TimeManager : MonoBehaviour
 
         protected abstract void CallEvent();
 
-        public void CheckEvent(float x, float y)
+        public bool CheckEvent(float x, float y)
         {
             if (x > y)
             {
@@ -448,6 +450,7 @@ public class TimeManager : MonoBehaviour
                     if (EventTime < (y + Ref.dayCycleLength) && EventTime > x)
                     {
                         CallEvent();
+                        return true;
                     }
                 }
                 else if (EventTime < x)
@@ -455,6 +458,7 @@ public class TimeManager : MonoBehaviour
                     if (EventTime < y && EventTime > (x - Ref.dayCycleLength))
                     {
                         CallEvent();
+                        return true;
                     }
                 }
             }
@@ -463,8 +467,10 @@ public class TimeManager : MonoBehaviour
                 if (EventTime < y && EventTime > x)
                 {
                     CallEvent();
+                    return true;
                 }
             }
+            return false;
         }
 
         public float Ratio

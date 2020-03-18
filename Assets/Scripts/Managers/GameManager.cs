@@ -48,14 +48,14 @@ public class GameManager : MonoBehaviour
         _roleInfo = roleInfo;
 
         //Might need to change this if loading a save
-        WalletManager.AddHoots(1000);
+        WalletManager.SetHoots(1000);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            AppManager.Ref.ChangeApplicationState(MySpace.Enums.AppState.MainMenu);
+            AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
         if (Input.GetKeyDown(KeyCode.Tilde))
         {
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
         //TimeManager.AddEventTriggerInSeconds(60, GiveGuest);
     }
 
-    public static RoleInfo GetRoleInfo(MySpace.Enums.ManRole role)
+    public static RoleInfo GetRoleInfo(Enums.ManRole role)
     {
         switch (role)
         {
