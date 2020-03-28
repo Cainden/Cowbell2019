@@ -46,3 +46,24 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: BG
+    uniqueID: 152761941
+    locked: 0
+  - name: MidGround
+    uniqueID: 2333287045
+    locked: 0
+  - name: Fore
+    uniqueID: 2908920553
+    locked: 0
+  - name: hotelRoom
+    uniqueID: 796243403
+    locked: 0
+  - name: characters
+    uniqueID: 1364724267
+    locked: 0
+  - name: UI
+    uniqueID: 1760507411
+    locked: 0
+  - name: TEST
+    uniqueID: 1032323727
+    locked: 0
