@@ -30,6 +30,8 @@ namespace MySpace
 
         public bool Locked { get; set; }
 
+        public Sprite RoomSprite { get; set; }
+
 
         /// <summary>
         /// 
@@ -48,7 +50,8 @@ namespace MySpace
             string roomDescription,
             int roomCost,
             Enums.RoomOverUnder overUnder,
-            bool locked
+            bool locked,
+            Sprite sprite
             )
             //end parameters
         {
@@ -63,6 +66,7 @@ namespace MySpace
             RoomOverUnder = overUnder;
             RoomCost = roomCost;
             Locked = locked;
+            RoomSprite = sprite;
         }
     }
 }

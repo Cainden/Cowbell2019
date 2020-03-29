@@ -335,11 +335,11 @@ public class ClickManager : MonoBehaviour
         //if (StateManager.Ref.IsManWaiting()) return;
 
         Guid ManId = Guid.NewGuid();
-        ManInstanceData ManData = new ManInstanceData();
-        ManData.ManId = ManId;
-        ManData.ManType = Enums.ManTypes.StandardMan;
-        ManData.ManFirstName = NameFactory.GetNewFirstName();
-        ManData.ManLastName = NameFactory.GetNewLastName();
+        WorkerConstructionData ManData = new WorkerConstructionData();
+        ManData.manId = ManId;
+        ManData.manType = Enums.ManTypes.StandardMan;
+        ManData.manFirstName = NameFactory.GetNewFirstName();
+        ManData.manLastName = NameFactory.GetNewLastName();
 
         ManManager.Ref.hireList.Add(ManData);
 
@@ -353,11 +353,11 @@ public class ClickManager : MonoBehaviour
         //if (StateManager.Ref.IsManWaiting()) return;
 
         Guid ManId = Guid.NewGuid();
-        ManInstanceData ManData = new ManInstanceData();
-        ManData.ManId = ManId;
-        ManData.ManType = Enums.ManTypes.Worker;
-        ManData.ManFirstName = NameFactory.GetNewFirstName();
-        ManData.ManLastName = NameFactory.GetNewLastName();
+        WorkerConstructionData ManData = new WorkerConstructionData();
+        ManData.manId = ManId;
+        ManData.manType = Enums.ManTypes.Worker;
+        ManData.manFirstName = NameFactory.GetNewFirstName();
+        ManData.manLastName = NameFactory.GetNewLastName();
 
         ManManager.Ref.hireList.Add(ManData);
 
@@ -371,11 +371,11 @@ public class ClickManager : MonoBehaviour
         //if (StateManager.Ref.IsManWaiting()) return;
 
         Guid ManId = Guid.NewGuid();
-        ManInstanceData ManData = new ManInstanceData();
-        ManData.ManId = ManId;
-        ManData.ManType = Enums.ManTypes.Guest;
-        ManData.ManFirstName = NameFactory.GetNewFirstName();
-        ManData.ManLastName = NameFactory.GetNewLastName();
+        GuestConstructionData ManData = new GuestConstructionData();
+        ManData.manId = ManId;
+        ManData.manType = Enums.ManTypes.Guest;
+        ManData.manFirstName = NameFactory.GetNewFirstName();
+        ManData.manLastName = NameFactory.GetNewLastName();
 
         ManManager.Ref.bookingList.Add(ManData);
 
@@ -394,65 +394,63 @@ public class ClickManager : MonoBehaviour
         StartCoroutine(LoadSaveManager.Ref.LoadCurrentState());
     }
 
-    public void BuildButtonClicked()
-    {
-        if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-            (GuiManager.Ref.IsBuildRoomDlgActive()))
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-            return;
-        }
+    //DEPRECATED DUE TO NEW UI
+    //public void BuildButtonClicked()
+    //{
+    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
+    //        (GuiManager.Ref.IsBuildRoomDlgActive()))
+    //    {
+    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    //        return;
+    //    }
 
-        if (!StateManager.Ref.IsRoomBuildDialogAllowed()) return;
+    //    if (!StateManager.Ref.IsRoomBuildDialogAllowed()) return;
 
-        GuiManager.Ref.ShowBuildRoomDlg(true);
-        StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    }
+    //    GuiManager.Ref.ShowBuildRoomDlg(true);
+    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
+    //}
+    //public void HireButtonClicked()
+    //{
+    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
+    //       (GuiManager.Ref.IsHireDlgActive()))
+    //    {
+    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    //        return;
+    //    }
 
-    public void HireButtonClicked()
-    {
-        if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-           (GuiManager.Ref.IsHireDlgActive()))
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-            return;
-        }
+    //    if (!StateManager.Ref.IsHireDialogAllowed()) return;
 
-        if (!StateManager.Ref.IsHireDialogAllowed()) return;
+    //    GuiManager.Ref.ShowHireDlg(true);
+    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
+    //}
+    //public void BookButtonClicked()
+    //{
+    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
+    //       (GuiManager.Ref.IsBookGuestDlgActive()))
+    //    {
+    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    //        return;
+    //    }
 
-        GuiManager.Ref.ShowHireDlg(true);
-        StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    }
+    //    if (!StateManager.Ref.IsBookGuestDialogAllowed()) return;
 
-    public void BookButtonClicked()
-    {
-        if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-           (GuiManager.Ref.IsBookGuestDlgActive()))
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-            return;
-        }
+    //    GuiManager.Ref.ShowBookGuestDlg(true);
+    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
+    //}
+    //public void MainMenuButtonClicked()
+    //{
+    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
+    //        (GuiManager.Ref.IsMainMenuDlgActive()))
+    //    {
+    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    //        return;
+    //    }
 
-        if (!StateManager.Ref.IsBookGuestDialogAllowed()) return;
+    //    if (!StateManager.Ref.IsMainMenuDialogAllowed()) return;
 
-        GuiManager.Ref.ShowBookGuestDlg(true);
-        StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    }
-
-    public void MainMenuButtonClicked()
-    {
-        if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-            (GuiManager.Ref.IsMainMenuDlgActive()))
-        {
-            StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-            return;
-        }
-
-        if (!StateManager.Ref.IsMainMenuDialogAllowed()) return;
-
-        GuiManager.Ref.ShowMainMenuDlg(true);
-        StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    }
+    //    GuiManager.Ref.ShowMainMenuDlg(true);
+    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
+    //}
 
     private void InitiateBuilding(Enums.RoomTypes RoomType)
     {
@@ -588,12 +586,23 @@ public class ClickManager : MonoBehaviour
 	public void Button_Hire(int _buttonNumber)
     {
         if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newHire = ManManager.Ref.hireList[_buttonNumber];
+        WorkerConstructionData newHire = ManManager.Ref.hireList[_buttonNumber];
 
-        ManManager.Ref.CreateMan(newHire);
+        ManManager.Ref.CreateWorker(newHire);
         ManManager.Ref.hireList.RemoveAt(_buttonNumber);
 
-        StateManager.Ref.SetWaitingMan(newHire.ManId);
+        StateManager.Ref.SetWaitingMan(newHire.manId);
+        GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
+    }
+
+    public void Button_Hire(WorkerConstructionData worker)
+    {
+        if (StateManager.Ref.IsManWaiting()) return;
+
+        ManManager.Ref.CreateWorker(worker);
+        ManManager.Ref.hireList.Remove(worker);
+
+        StateManager.Ref.SetWaitingMan(worker.manId);
         GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
     }
 
@@ -601,12 +610,23 @@ public class ClickManager : MonoBehaviour
 	public void Button_Book(int _buttonNumber)
     {
         if (StateManager.Ref.IsManWaiting()) return;
-        ManInstanceData newGuest = ManManager.Ref.bookingList[_buttonNumber];
+        GuestConstructionData newGuest = ManManager.Ref.bookingList[_buttonNumber];
 
-        ManManager.Ref.CreateMan(newGuest);
+        ManManager.Ref.CreateGuest(newGuest);
         ManManager.Ref.bookingList.RemoveAt(_buttonNumber);
 
-        StateManager.Ref.SetWaitingMan(newGuest.ManId);
+        StateManager.Ref.SetWaitingMan(newGuest.manId);
+        GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
+    }
+
+    public void Button_Book(GuestConstructionData guest)
+    {
+        if (StateManager.Ref.IsManWaiting()) return;
+
+        ManManager.Ref.CreateGuest(guest);
+        ManManager.Ref.bookingList.Remove(guest);
+
+        StateManager.Ref.SetWaitingMan(guest.manId);
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
     }
 

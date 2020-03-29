@@ -151,10 +151,11 @@ public class StateManager : MonoBehaviour
                 GuiManager.Ref.SetNormalCursor();
                 BuildManager.Ref.HideRoomPositionSelectors();
                 RoomManager.Ref.HighlightNoRoom();
-                GuiManager.Ref.ShowBuildRoomDlg(false);
-                GuiManager.Ref.ShowMainMenuDlg(false);
-                GuiManager.Ref.ShowHireDlg(false);
-                GuiManager.Ref.ShowBookGuestDlg(false);
+                SidePanel.SetPanel(false);
+                //GuiManager.Ref.ShowBuildRoomDlg(false);
+                //GuiManager.Ref.ShowMainMenuDlg(false);
+                //GuiManager.Ref.ShowHireDlg(false);
+                //GuiManager.Ref.ShowBookGuestDlg(false);
                 break;
             case Enums.GameStates.GuiBlocking:
                 GuiManager.Ref.SetGuiBlockingCursor();
@@ -164,7 +165,8 @@ public class StateManager : MonoBehaviour
             case Enums.GameStates.BuildRoom:
                 ResetSelectedRoom();
                 ResetSelectedMan();
-                GuiManager.Ref.ShowBuildRoomDlg(false);
+                SidePanel.SetPanel(false);
+                //GuiManager.Ref.ShowBuildRoomDlg(false);
                 break;
             case Enums.GameStates.RoomSelected:
                 ResetSelectedMan();

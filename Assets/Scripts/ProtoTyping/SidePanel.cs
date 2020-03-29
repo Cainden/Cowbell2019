@@ -8,49 +8,82 @@ using UnityEngine.UI;
 
 public class SidePanel : MonoBehaviour
 {
+    //Give all scripts easy access to close the panel if they need to.
+    private static System.Action<bool> PanelEvent;
+
+    /// <summary>
+    /// Global Access to enable or disable the menu UI panel on the left side of the screen.
+    /// </summary>
+    /// <param name="value">True enables the panel while false disables it.</param>
+    public static void SetPanel(bool value)
+    {
+        PanelEvent?.Invoke(value);
+    }
 
 	public Animator sidepanel;
 	
 	bool openPanel = false;
-	public GameObject roomPanel;
+	public PopulateRoomsToBuy roomPanel;
 	public GameObject collapseBTN;
 
-	private void Update()
-	{
-		
-		if(openPanel == true)
-		{
-			
-			collapseBTN.SetActive(false);
-			sidepanel.SetBool("Panel_IN", true);
-		}
-		else
-		{
-			
-			sidepanel.SetBool("Panel_IN", false);
-			collapseBTN.SetActive(true);
-			closeRoom();
-		}
+    private void OnEnable()
+    {
+        PanelEvent -= SetPanelBool;
+        PanelEvent += SetPanelBool;
+    }
 
-	}
+    private void OnDisable()
+    {
+        PanelEvent -= SetPanelBool;
+    }
 
+    public void SetPanelOff()
+    {
+        //openPanel = false;
+        sidepanel.SetBool("Panel_IN", false);
+        collapseBTN.SetActive(true);
+        closeRoom();
+    }
 
-	public void openPanelSwitch()
-	{
-		openPanel = !openPanel;
-	}
+    public void SetPanelOn()
+    {
+        openPanel = true;
+        collapseBTN.SetActive(false);
+        sidepanel.SetBool("Panel_IN", true);
+    }
 
 	public void openRooms()
 	{
-		roomPanel.SetActive(true);
-
+		roomPanel.gameObject.SetActive(true);
+        roomPanel.DisplayRoomsToBuild();
 	}
 
 	public void closeRoom()
 	{
-		roomPanel.SetActive(false);
+		roomPanel.gameObject.SetActive(false);
 	}
 
-	
+	public void SetPanelBool(bool b)
+    {
+        if (b)
+            SetPanelOn();
+        else
+            SetPanelOff();
+    }
 
+    public void OpenHireList()
+    {
+        roomPanel.gameObject.SetActive(true);
+        roomPanel.DisplayWorkersToHire();
+    }
+
+    public void MonsterMenu()
+    {
+
+    }
+
+    public void BellMenu()
+    {
+
+    }
 }

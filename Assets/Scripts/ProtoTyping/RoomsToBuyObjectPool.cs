@@ -20,20 +20,19 @@ public class RoomsToBuyObjectPool : MonoBehaviour
 		{
 			// remove the instance from the collection of inactive instances
 			spawnedGameObject = inactiveInstances.Pop();
-		}
+
+            // put the instance in the root of the scene and enable it
+            spawnedGameObject.transform.SetParent(null);
+            spawnedGameObject.SetActive(true);
+        }
 		// otherwise, create a new instance
 		else
 		{
-			spawnedGameObject = (GameObject)GameObject.Instantiate(prefab);
+			spawnedGameObject = Instantiate(prefab);
 
 			// add the PooledObject component to the prefab so we know it came from this pool
-			PooledObject pooledObject = spawnedGameObject.AddComponent<PooledObject>();
-			pooledObject.pool = this;
+			spawnedGameObject.AddComponent<PooledObject>().pool = this;
 		}
-
-		// put the instance in the root of the scene and enable it
-		spawnedGameObject.transform.SetParent(null);
-		spawnedGameObject.SetActive(true);
 
 		// return a reference to the instance
 		return spawnedGameObject;

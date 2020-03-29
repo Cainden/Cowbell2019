@@ -29,4 +29,26 @@ namespace MySpace
             return (ManFirstName + " " + ManLastName);
         }
     }
+
+    public struct WorkerConstructionData
+    {
+        public Guid manId;
+        public Enums.ManTypes manType;
+        public string manFirstName;
+        public string manLastName;
+
+        //For stats display on the hire list
+        public float physicality, professionalism, intelligence; //base stats
+        public float speed, loyalty; //specialty stats
+    }
+
+    public struct GuestConstructionData
+    {
+        public Guid manId;
+        public Enums.ManTypes manType;
+        public string manFirstName;
+        public string manLastName;
+
+        public float dirtiness;
+    }
 }

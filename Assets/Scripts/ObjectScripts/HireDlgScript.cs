@@ -37,7 +37,7 @@ public class HireDlgScript : MonoBehaviour
         if (manRef.hireList.Count >= 1)
         {
             b0.gameObject.SetActive(true);
-            t0.text = manRef.hireList[0].ManFirstName + " " + manRef.hireList[0].ManLastName;
+            t0.text = manRef.hireList[0].manFirstName + " " + manRef.hireList[0].manLastName;
         }
         else
             b0.gameObject.SetActive(false);
@@ -45,7 +45,7 @@ public class HireDlgScript : MonoBehaviour
         if (manRef.hireList.Count >= 2)
         {
             b1.gameObject.SetActive(true);
-            t1.text = manRef.hireList[1].ManFirstName + " " + manRef.hireList[1].ManLastName;
+            t1.text = manRef.hireList[1].manFirstName + " " + manRef.hireList[1].manLastName;
         }
         else
             b1.gameObject.SetActive(false);
@@ -53,7 +53,7 @@ public class HireDlgScript : MonoBehaviour
         if (manRef.hireList.Count >= 3)
         {
             b2.gameObject.SetActive(true);
-            t2.text = manRef.hireList[2].ManFirstName + " " + manRef.hireList[2].ManLastName;
+            t2.text = manRef.hireList[2].manFirstName + " " + manRef.hireList[2].manLastName;
         }
         else
             b2.gameObject.SetActive(false);
@@ -61,7 +61,7 @@ public class HireDlgScript : MonoBehaviour
         if (manRef.hireList.Count >= 4)
         {
             b3.gameObject.SetActive(true);
-            t3.text = manRef.hireList[3].ManFirstName + " " + manRef.hireList[3].ManLastName;
+            t3.text = manRef.hireList[3].manFirstName + " " + manRef.hireList[3].manLastName;
         }
         else
             b3.gameObject.SetActive(false);

@@ -82,7 +82,8 @@ public class RoomManager : MonoBehaviour
                 room.RoomStats.RoomDescription,
                 room.RoomStats.RoomCost,
                 room.RoomStats.RoomOverUnder,
-                room.RoomStats.locked
+                room.RoomStats.locked,
+                room.RoomStats.roomSprite
                 );
         }
 
@@ -481,6 +482,21 @@ public class RoomManager : MonoBehaviour
         return rooms.ToArray();
     }
 
+    public static RoomDefData[] GetAllRoomsofCategory(Enums.RoomCategories[] categories, bool excludeUnbuildables = false)
+    {
+        List<RoomDefData> rooms = new List<RoomDefData>();
+
+        for (int i = 0; i < RoomDefinitions.Length; i++)
+        {
+            if (excludeUnbuildables && RoomDefinitions[i].RoomCost == 0)
+                continue;
+            if (categories.Contains(RoomDefinitions[i].RoomCategory))
+                rooms.Add(RoomDefinitions[i]);
+        }
+
+        return rooms.ToArray();
+    }
+
     public RoomRef[] GetAllActiveRoomsofType(params Enums.RoomTypes[] roomTypes)
     {
         return (from r in _RoomList where roomTypes.Contains(r.Value.RoomScript.RoomData.RoomType) select r.Value).ToArray();
@@ -567,6 +583,7 @@ public class RoomManager : MonoBehaviour
         [Tooltip("If set to true, the room will not be purchaseable until the player has unlocked it.")]
         public bool locked;
 
+        public Sprite roomSprite;
     }
     #endregion
 }
