@@ -44,7 +44,7 @@ public class BookGuestDlgScript : MonoBehaviour
         if (manRef.bookingList.Count >= 1)
         {
             b0.gameObject.SetActive(true);
-            t0.text = manRef.bookingList[0].ManFirstName + " " + manRef.bookingList[0].ManLastName;
+            t0.text = manRef.bookingList[0].manFirstName + " " + manRef.bookingList[0].manLastName;
         }
         else
             b0.gameObject.SetActive(false);
@@ -52,7 +52,7 @@ public class BookGuestDlgScript : MonoBehaviour
         if (manRef.bookingList.Count >= 2)
         {
             b1.gameObject.SetActive(true);
-            t1.text = manRef.bookingList[1].ManFirstName + " " + manRef.bookingList[1].ManLastName;
+            t1.text = manRef.bookingList[1].manFirstName + " " + manRef.bookingList[1].manLastName;
         }
         else
             b1.gameObject.SetActive(false);
@@ -60,7 +60,7 @@ public class BookGuestDlgScript : MonoBehaviour
         if (manRef.bookingList.Count >= 3)
         {
             b2.gameObject.SetActive(true);
-            t2.text = manRef.bookingList[2].ManFirstName + " " + manRef.bookingList[2].ManLastName;
+            t2.text = manRef.bookingList[2].manFirstName + " " + manRef.bookingList[2].manLastName;
         }
         else
             b2.gameObject.SetActive(false);
@@ -68,7 +68,7 @@ public class BookGuestDlgScript : MonoBehaviour
         if (manRef.bookingList.Count >= 4)
         {
             b3.gameObject.SetActive(true);
-            t3.text = manRef.bookingList[3].ManFirstName + " " + manRef.bookingList[3].ManLastName;
+            t3.text = manRef.bookingList[3].manFirstName + " " + manRef.bookingList[3].manLastName;
         }
         else
             b3.gameObject.SetActive(false);

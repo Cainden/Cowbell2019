@@ -37,19 +37,19 @@ public class ButtonScript : MonoBehaviour
     {
         ButtonScript[] ar = new ButtonScript[data.Length];
 
-        if (data.Length == 0)
-        {
-            // This will happen if there are no rooms of the given category for this button. Shouldn't happen in the final game, but this is here to make prototyping look cleaner.
-            prefab.SetActive(false);
-        }
+        //if (data.Length == 0)
+        //{
+        //    // This will happen if there are no rooms of the given category for this button. Shouldn't happen in the final game, but this is here to make prototyping look cleaner.
+        //    prefab.SetActive(false);
+        //}
 
         for (int i = 0; i < data.Length; i++)
         {
-            if (i == 0)
-            {
-                ar[i] = prefab.GetComponent<ButtonScript>().Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost, data[i].RoomName);
-                continue;
-            }
+            //if (i == 0)
+            //{
+            //    ar[i] = prefab.GetComponent<ButtonScript>().Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost, data[i].RoomName);
+            //    continue;
+            //}
             ar[i] = Instantiate(prefab, prefab.transform.position, prefab.transform.rotation, prefab.transform.parent).GetComponent<ButtonScript>().
                 Init(BuildDlgScript.yOffset * i, data[i].Locked, data[i].RoomCategory, data[i].RoomType, data[i].RoomCost, data[i].RoomName);
         }

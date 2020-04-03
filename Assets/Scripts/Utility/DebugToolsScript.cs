@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using MySpace;
 
 
 
 public class DebugToolsScript : MonoBehaviour
 {
 
-    public bool debugToolsActive = false;
+    public static bool debugToolsActive = false;
     public GameObject debugElementsUI = null;
     public InputField ifHoots = null;
     public InputField ifSouls = null;
@@ -53,26 +54,46 @@ public class DebugToolsScript : MonoBehaviour
         {
             debugToolsActive = !debugToolsActive;
             
-            debugElementsUI.SetActive(!debugElementsUI.activeInHierarchy);
+            debugElementsUI.SetActive(debugToolsActive);
 
         }
     }
 
-   public void InputField_AddHoots()
+    public void SetPanelActive(bool on)
+    {
+        debugElementsUI.SetActive(on);
+        debugToolsActive = on;
+    }
+
+    public void InputField_AddHoots()
     {
         if(!string.IsNullOrWhiteSpace(ifHoots.text))
             WalletManager.AddHoots(int.Parse(ifHoots.text));
     }
 
-   public void InputField_AddSouls()
+    public void InputField_AddSouls()
     {
         if (!string.IsNullOrWhiteSpace(ifSouls.text))
             WalletManager.AddHoots(int.Parse(ifSouls.text));
     }
 
-   public void InputField_AddMonCoins()
+    public void InputField_AddMonCoins()
     {
         if (!string.IsNullOrWhiteSpace(ifMonCoins.text))
             WalletManager.AddHoots(int.Parse(ifMonCoins.text));
+    }
+
+    public void CreateRandomGuest()
+    {
+        GuestConstructionData g = new GuestConstructionData()
+        {
+            dirtiness = 1,
+            manFirstName = NameFactory.GetNewFirstName(),
+            manLastName = NameFactory.GetNewLastName(),
+            manId = System.Guid.NewGuid(),
+            manType = Enums.ManTypes.Guest
+        };
+
+        ClickManager.Ref.Button_Book(g);
     }
 }

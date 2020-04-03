@@ -7,11 +7,11 @@ public static class WalletManager
 {
     private static int monCoins;
     private static int hoots;
-    private static int souls;
+    //private static int souls;
 
     static WalletManager()
     {
-        MonCoins = Hoots = Souls = 0;
+        MonCoins = Hoots = 0;
     }
 
     public static int Hoots
@@ -23,15 +23,15 @@ public static class WalletManager
             GuiManager.Ref?.UpdateHootCount(hoots);
         }
     }
-    public static int Souls
-    {
-        get { return souls; }
-        private set
-        {
-            souls = value;
-            GuiManager.Ref?.UpdateSoulCount(souls);
-        }
-    }
+    //public static int Souls
+    //{
+    //    get { return souls; }
+    //    private set
+    //    {
+    //        souls = value;
+    //        GuiManager.Ref?.UpdateSoulCount(souls);
+    //    }
+    //}
     public static int MonCoins
     {
         get { return monCoins; }
@@ -88,24 +88,24 @@ public static class WalletManager
         MonCoins = amount;
     }
 
-    public static bool SubtractSouls(int amount)
-    {
-        if (amount > Souls)
-            return false;
-        else
-        {
-            Souls -= amount;
-            return true;
-        }
-    }
+    //public static bool SubtractSouls(int amount)
+    //{
+    //    if (amount > Souls)
+    //        return false;
+    //    else
+    //    {
+    //        Souls -= amount;
+    //        return true;
+    //    }
+    //}
 
-    public static void AddSouls(int amount)
-    {
-        Souls += amount;
-    }
+    //public static void AddSouls(int amount)
+    //{
+    //    Souls += amount;
+    //}
 
-    public static void SetSouls(int amount)
-    {
-        Souls = amount;
-    }
+    //public static void SetSouls(int amount)
+    //{
+    //    Souls = amount;
+    //}
 }

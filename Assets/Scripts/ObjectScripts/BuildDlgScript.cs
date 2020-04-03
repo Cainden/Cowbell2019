@@ -14,6 +14,8 @@ public class BuildDlgScript : MonoBehaviour
     public ButtonScrollManager BuildWindowSel3;
     public ButtonScrollManager BuildWindowSel4;
 
+    public GameObject RoomButtonPrefab;
+
     /// <summary>
     /// The offset of each new button in the Y position, from the previous button.
     /// </summary>
@@ -21,16 +23,16 @@ public class BuildDlgScript : MonoBehaviour
 
     #region MonoMethods
 
-    void Start()
-    {
-        CheckReferences();
-        BuildWindowSel1.Init();
-        BuildWindowSel2.Init();
-        BuildWindowSel3.Init();
-        BuildWindowSel4.Init();
-        curState = ShowState.Type1;
-        SetBuildWindow(curState);
-    }
+    //void Start()
+    //{
+    //    CheckReferences();
+    //    BuildWindowSel1.Init(RoomButtonPrefab);
+    //    BuildWindowSel2.Init(RoomButtonPrefab);
+    //    BuildWindowSel3.Init(RoomButtonPrefab);
+    //    BuildWindowSel4.Init(RoomButtonPrefab);
+    //    curState = ShowState.Type1;
+    //    SetBuildWindow(curState);
+    //}
 
     private void CheckReferences()
     {

@@ -14,9 +14,17 @@ public class ManScript_Worker : ManScript
     public float tirednessThreshhold; //tiredness always increases by 1 per second, so a default of 1 minute seems decent.
     public float currentTiredness = 0;
 
-    public float cleaningEfficieny = 1;
+    #region Base Stats
 
-    public float raiseValue = 1;
+    public float physicality = 1;
+    public float intelligence = 1;
+    public float professionalism = 1;
+
+    #endregion
+    /// <summary>
+    /// Affects the salary of the worker for their given role. Also makes them more likely to stay if they are unhappy.
+    /// </summary>
+    public float loyalty = 1;
 
     public float delayTimer;
 
@@ -37,7 +45,7 @@ public class ManScript_Worker : ManScript
         States.Add(Enums.ManRole.Guest, Idle);
         tirednessThreshhold = 60;
         currentTiredness = 60;
-        raiseValue = 1;
+        loyalty = 1;
         delayTimer = 0;
     }
 
@@ -97,7 +105,7 @@ public class ManScript_Worker : ManScript
     {
         if (role != Enums.ManRole.None && !hasBeenPaid && TimeManager.Ref.worldTimeHour == 8)
         {
-            PayWorkerInHoots("Worker Payment", Mathf.FloorToInt(raiseValue * GameManager.GetRoleInfo(role).income));
+            PayWorkerInHoots("Worker Payment", Mathf.FloorToInt(loyalty * GameManager.GetRoleInfo(role).income));
             hasBeenPaid = true;
         }
         else if (TimeManager.Ref.worldTimeHour != 8)

@@ -71,7 +71,7 @@ public class Room_Bedroom : RoomScript
                 else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Worker && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bClean = true;
-                    cleanFactor += (occupant.ManScript as ManScript_Worker).cleaningEfficieny;
+                    cleanFactor += (occupant.ManScript as ManScript_Worker).physicality;
                 }
                 occupant = null;
             }
@@ -100,7 +100,7 @@ public class Room_Bedroom : RoomScript
     public void SelfInitialize(GridIndex leftMostIndex)
     {
         //HAD TO DO ALL OF THE CREATEROOM INITIALIZATION HERE BECAUSE IT CANNOT BE INSTANTIATED IN THE WRONG POSITION THROUGH CREATEROOM
-        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false);
+        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false, null);
 
         RoomData = new RoomInstanceData();
         RoomData.RoomId = Guid.NewGuid();

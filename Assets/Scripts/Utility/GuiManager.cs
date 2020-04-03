@@ -4,14 +4,15 @@ using MySpace;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GuiManager : MonoBehaviour
 {
     public Text TextObject_GameState = null; // To be set by editor
     public Text TextObject_ManCount = null;
-    public Text TextObject_HootCount = null;
-    public Text TextObject_SoulCount = null;
-    public Text TextObject_MonCoinCount = null;
+    public TextMeshProUGUI TextObject_HootCount = null;
+    //public TextMeshProUGUI TextObject_SoulCount = null;
+    public TextMeshProUGUI TextObject_MonCoinCount = null;
 
 
     public Texture2D CursorNormalTex = null;
@@ -23,9 +24,9 @@ public class GuiManager : MonoBehaviour
     public GameObject RoomInfoWindow = null;
     public GameObject ManInfoWindow = null;
     public GameObject BuildRoomDlg = null;
-    public GameObject MainMenuDlg = null;
-    public GameObject HireDlg = null;
-    public GameObject BookGuestDlg = null;
+    //public GameObject MainMenuDlg = null;
+    //public GameObject HireDlg = null;
+    //public GameObject BookGuestDlg = null;
 
     private Enums.CursorStates _CursorState = Enums.CursorStates.None;
     private Enums.CursorStates _PrevCursorState = Enums.CursorStates.None;
@@ -43,7 +44,7 @@ public class GuiManager : MonoBehaviour
         Debug.Assert(TextObject_GameState != null);
         Debug.Assert(TextObject_ManCount != null);
         Debug.Assert(TextObject_HootCount != null);
-        Debug.Assert(TextObject_SoulCount != null);
+        //Debug.Assert(TextObject_SoulCount != null);
         Debug.Assert(TextObject_MonCoinCount != null);
 
         Debug.Assert(CursorNormalTex != null);
@@ -55,9 +56,9 @@ public class GuiManager : MonoBehaviour
         Debug.Assert(RoomInfoWindow != null);
         Debug.Assert(ManInfoWindow != null);
         Debug.Assert(BuildRoomDlg != null);
-        Debug.Assert(MainMenuDlg != null);
-        Debug.Assert(HireDlg != null);
-        Debug.Assert(BookGuestDlg != null);
+        //Debug.Assert(MainMenuDlg != null);
+        //Debug.Assert(HireDlg != null);
+        //Debug.Assert(BookGuestDlg != null);
 
         SetCursorState(Enums.CursorStates.Normal);
         UpdateManCount(ManManager.Ref.GetManCount());
@@ -164,51 +165,51 @@ public class GuiManager : MonoBehaviour
         TextObject_HootCount.text = number.ToString();
     }
 
-    public void UpdateSoulCount(int number)
-    {
-        TextObject_SoulCount.text = number.ToString();
-    }
+    //public void UpdateSoulCount(int number)
+    //{
+    //    TextObject_SoulCount.text = number.ToString();
+    //}
 
     public void UpdateMonCoinCount(int number)
     {
         TextObject_MonCoinCount.text = number.ToString();
     }
 
-    public void ShowBuildRoomDlg(bool showIt)
-    {
-        BuildRoomDlg.GetComponent<BuildDlgScript>().SetActive(showIt);
-    }
+    //public void ShowBuildRoomDlg(bool showIt)
+    //{
+    //    BuildRoomDlg.GetComponent<BuildDlgScript>().SetActive(showIt);
+    //}
 
-    public void ShowHireDlg(bool showIt)
-    {
-        HireDlg.GetComponent<HireDlgScript>().SetActive(showIt);
-    }
-    public void ShowBookGuestDlg(bool showIt)
-    {
-        BookGuestDlg.GetComponent<BookGuestDlgScript>().SetActive(showIt);
-    }
-    public void ShowMainMenuDlg(bool showIt)
-    {
-        MainMenuDlg.SetActive(showIt);
-    }
+    //public void ShowHireDlg(bool showIt)
+    //{
+    //    HireDlg.GetComponent<HireDlgScript>().SetActive(showIt);
+    //}
+    //public void ShowBookGuestDlg(bool showIt)
+    //{
+    //    BookGuestDlg.GetComponent<BookGuestDlgScript>().SetActive(showIt);
+    //}
+    //public void ShowMainMenuDlg(bool showIt)
+    //{
+    //    MainMenuDlg.SetActive(showIt);
+    //}
 
     public bool IsBuildRoomDlgActive()
     {
         return (BuildRoomDlg.activeInHierarchy);
     }
 
-    public bool IsMainMenuDlgActive()
-    {
-        return (MainMenuDlg.activeInHierarchy);
-    }
+    //public bool IsMainMenuDlgActive()
+    //{
+    //    return (MainMenuDlg.activeInHierarchy);
+    //}
     public bool IsHireDlgActive()
     {
-        return (HireDlg.activeInHierarchy);
+        return (BuildRoomDlg.activeInHierarchy);
     }
 
-    public bool IsBookGuestDlgActive()
-    {
-        return (BookGuestDlg.activeInHierarchy);
-    }
+    //public bool IsBookGuestDlgActive()
+    //{
+    //    return (BookGuestDlg.activeInHierarchy);
+    //}
 }
 

@@ -23,9 +23,9 @@ public class ManManager : MonoBehaviour
     private Dictionary<Guid, ManRef> _ManList = new Dictionary<Guid, ManRef>();
 
     [HideInInspector]
-    public List<ManInstanceData> hireList = new List<ManInstanceData>();
+    public List<WorkerConstructionData> hireList = new List<WorkerConstructionData>();
     [HideInInspector]
-    public List<ManInstanceData> bookingList = new List<ManInstanceData>();
+    public List<GuestConstructionData> bookingList = new List<GuestConstructionData>();
     #endregion
 
     void Awake()
@@ -47,6 +47,52 @@ public class ManManager : MonoBehaviour
         ManData.ManLastName = NameFactory.GetNewLastName();
 
         CreateMan(ManData);
+    }
+
+    public void CreateWorker(WorkerConstructionData data)
+    {
+        ManScript_Worker script = InstantiateMan(data.manType).GetComponent<ManScript_Worker>();
+
+        script.ManData = new ManInstanceData()
+        {
+            ManId = data.manId,
+            ManType = data.manType,
+            ManFirstName = data.manFirstName,
+            ManLastName = data.manLastName
+        };
+
+        //Set Stats
+        script.physicality = data.physicality;
+        script.professionalism = data.professionalism;
+        script.intelligence = data.intelligence;
+        script.loyalty = data.loyalty;
+
+        _ManList[data.manId] = new ManRef(script.gameObject, script);
+        script.gameObject.transform.position = Constants.NewManIncomingPath[0];
+        AddIncomingPath(script);
+        GuiManager.Ref.UpdateManCount(_ManList.Count);
+    }
+
+    public void CreateGuest(GuestConstructionData data)
+    {
+        ManScript_Guest script = InstantiateMan(data.manType).GetComponent<ManScript_Guest>();
+
+        script.ManData = new ManInstanceData()
+        {
+            ManId = data.manId,
+            ManType = data.manType,
+            ManFirstName = data.manFirstName,
+            ManLastName = data.manLastName
+        };
+
+        //Set Stats
+        script.dirtyFactor = data.dirtiness;
+
+
+        _ManList[data.manId] = new ManRef(script.gameObject, script);
+        script.gameObject.transform.position = Constants.NewManIncomingPath[0];
+        AddIncomingPath(script);
+        GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
 
     public void CreateMan(ManInstanceData manData)

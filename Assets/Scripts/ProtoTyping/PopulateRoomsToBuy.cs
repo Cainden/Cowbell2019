@@ -2,48 +2,75 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using MySpace;
 
-[System.Serializable]
-public class Item
-{
-	public string roomName;
-	public Sprite roompic;
-	public float roomPrice;
+//[System.Serializable]
+//public struct Item
+//{
+//	public string roomName;
+//	public Sprite roompic;
+//	public float roomPrice;
 	
 
-}
+//}
 
 
 public class PopulateRoomsToBuy : MonoBehaviour
 {
-	public List<Item> itemlist;
+	//public List<Item> itemlist;
 	public Transform contentPanel;
-	public RoomsToBuyObjectPool buttonObjectPool;
+	public RoomsToBuyObjectPool buttonObjectPool, hireObjectPool;
 
-	// Start is called before the first frame update
-	void Start()
+	public void DisplayRoomsToBuild()
 	{
-		RefreshDisplay();
-	}
-	private void RefreshDisplay()
-	{
-		AddButton();
+        RefreshList();
+		AddRoomButtons();
+        //CameraScript.ZoomDisabled = true;
 	}
 
-	private void AddButton()
+    public void DisplayWorkersToHire()
+    {
+        RefreshList();
+        AddWorkerButtons();
+    }
+
+	private void AddRoomButtons()
 	{
-		for (int i = 0; i < itemlist.Count; i++)
+        RoomDefData[] itemList = RoomManager.GetAllRoomsofCategory(new Enums.RoomCategories[4] { Enums.RoomCategories.Miscellaneous , Enums.RoomCategories.Overworld, Enums.RoomCategories.Underworld, Enums.RoomCategories.Utility });
+
+		for (int i = 0; i < itemList.Length; i++)
 		{
-			Item item = itemlist[i];
+			//Item item = itemList[i];
 			// get object from the pool
 			GameObject newButton = buttonObjectPool.GetObject();
 			// parent the button to the content pool
-			newButton.transform.SetParent(contentPanel,false);
+			newButton.transform.SetParent(contentPanel, false);
 			// tell button to set it's self up
 			RoomsToBuy roomstobuy = newButton.GetComponent<RoomsToBuy>();
-			roomstobuy.Setup(item, this);
+			roomstobuy.Setup(itemList[i]);
 
 
 		}
 	}
+
+    private void AddWorkerButtons()
+    {
+        //Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
+        foreach (WorkerConstructionData man in ManManager.Ref.hireList)
+        {
+            GameObject newButton = hireObjectPool.GetObject();
+
+            newButton.transform.SetParent(contentPanel, false);
+
+            newButton.GetComponent<WorkerToHire>().Setup(man);
+        }
+    }
+
+    private void RefreshList()
+    {
+        foreach (PooledObject button in contentPanel.GetComponentsInChildren<PooledObject>())
+        {
+            button.pool.ReturnObject(button.gameObject);
+        }
+    }
 }

@@ -8,7 +8,7 @@ using MySpace;
 public class GameManager : MonoBehaviour
 {
     #region Serialized Variables
-    [SerializeField] GameObject DebugMenu;
+    [SerializeField] DebugToolsScript DebugMenu;
 
     [SerializeField] Roles roleInfo;
     private static Roles _roleInfo;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
     {
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
         TimeManager.AddEventTriggerToGameTime(9, 0, 0, GiveGuest, true);
-        DebugMenu.SetActive(false);
+        DebugMenu.SetPanelActive(false);
         _roleInfo = roleInfo;
 
         //Might need to change this if loading a save
@@ -57,16 +57,25 @@ public class GameManager : MonoBehaviour
         {
             AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
-        if (Input.GetKeyDown(KeyCode.Tilde))
-        {
-            DebugMenu.SetActive(!DebugMenu.activeInHierarchy);
-        }
+        //if (Input.GetKeyDown(KeyCode.BackQuote))
+        //{
+        //    DebugMenu.SetPanelActive(!DebugMenu.debugElementsUI);
+        //}
     }
 
     private void GiveGuest()
     {
-        ClickManager.Ref.AddNewGuest();
-        //TimeManager.AddEventTriggerInSeconds(60, GiveGuest);
+        GuestConstructionData g = new GuestConstructionData()
+        {
+            dirtiness = 1,
+            manFirstName = NameFactory.GetNewFirstName(),
+            manLastName = NameFactory.GetNewLastName(),
+            manId = System.Guid.NewGuid(),
+            manType = Enums.ManTypes.Guest
+        };
+
+        ClickManager.Ref.Button_Book(g);
+        //ClickManager.Ref.AddNewGuest();
     }
 
     public static RoleInfo GetRoleInfo(Enums.ManRole role)

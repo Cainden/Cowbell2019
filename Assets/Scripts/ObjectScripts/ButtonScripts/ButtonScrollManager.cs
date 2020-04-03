@@ -7,13 +7,13 @@ using UnityEngine.UI;
 public class ButtonScrollManager : MonoBehaviour
 {
     [SerializeField] Enums.RoomCategories category;
-    [SerializeField] GameObject button1, panel, scrollView;
+    [SerializeField] GameObject panel, scrollView;
     private ButtonScript[] buttons;
     //public bool Scrolling { get; set; }
 
-    public void Init()
+    public void Init(GameObject buttonPrefab)
     {
-        buttons = ButtonScript.CreateButtonArrayFromRoomData(RoomManager.GetAllRoomsofCategory(category, true), button1);
+        buttons = ButtonScript.CreateButtonArrayFromRoomData(RoomManager.GetAllRoomsofCategory(category, true), buttonPrefab);
 
         for (int i = 0; i < buttons.Length; i++)
         {
