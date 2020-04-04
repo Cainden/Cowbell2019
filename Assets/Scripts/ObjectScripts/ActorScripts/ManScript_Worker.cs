@@ -15,17 +15,23 @@ public class ManScript_Worker : ManScript
     public float currentTiredness = 0;
 
     #region Base Stats
+    //public float physicality = 1;
+    //public float intelligence = 1;
+    //public float professionalism = 1;
 
-    public float physicality = 1;
-    public float intelligence = 1;
-    public float professionalism = 1;
+    public SpecialtyStat[] specialStats;
+
+
 
     #endregion
     /// <summary>
     /// Affects the salary of the worker for their given role. Also makes them more likely to stay if they are unhappy.
     /// </summary>
-    public float loyalty = 1;
+    //public float loyalty = 1;
 
+    //public float speed = 1;
+
+    //public GeneralStat[] genStats; //This was moved to the base ManScript class.
     public float delayTimer;
 
     #endregion
@@ -45,7 +51,6 @@ public class ManScript_Worker : ManScript
         States.Add(Enums.ManRole.Guest, Idle);
         tirednessThreshhold = 60;
         currentTiredness = 60;
-        loyalty = 1;
         delayTimer = 0;
     }
 
@@ -105,7 +110,7 @@ public class ManScript_Worker : ManScript
     {
         if (role != Enums.ManRole.None && !hasBeenPaid && TimeManager.Ref.worldTimeHour == 8)
         {
-            PayWorkerInHoots("Worker Payment", Mathf.FloorToInt(loyalty * GameManager.GetRoleInfo(role).income));
+            PayWorkerInHoots("Worker Payment", Mathf.FloorToInt(genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value * GameManager.GetRoleInfo(role).income));
             hasBeenPaid = true;
         }
         else if (TimeManager.Ref.worldTimeHour != 8)
@@ -114,4 +119,117 @@ public class ManScript_Worker : ManScript
         }
     }
     #endregion
+
+
+    #region Stats
+
+    #region Stat Helper Functions
+
+    public float GetGeneralStatValue(GeneralStat.StatType type)
+    {
+        foreach (GeneralStat s in genStats)
+        {
+            if (s.statType == type)
+                return s.value;
+        }
+        Debug.LogWarning("False Value returned. The type '" + type + "' was not found in the genStats Array.");
+        return -1;
+    }
+
+    public GeneralStat GetGeneralStat(GeneralStat.StatType type)
+    {
+        foreach (GeneralStat s in genStats)
+        {
+            if (s.statType == type)
+                return s;
+        }
+        Debug.LogWarning("Null Stat returned. The type '" + type + "' was not found in the genStats Array.");
+        return null;
+    }
+
+    public float GetSpecialtyStatValue(SpecialtyStat.StatType type)
+    {
+        foreach (SpecialtyStat s in specialStats)
+        {
+            if (s.statType == type)
+                return s.value;
+        }
+        Debug.LogWarning("False Value returned. The type '" + type + "' was not found in the specialStats Array.");
+        return -1;
+    }
+
+    public SpecialtyStat GetSpecialtyStat(SpecialtyStat.StatType type)
+    {
+        foreach (SpecialtyStat s in specialStats)
+        {
+            if (s.statType == type)
+                return s;
+        }
+        Debug.LogWarning("Null Stat returned. The type '" + type + "' was not found in the specialStats Array.");
+        return null;
+    }
+
+    #endregion
+
+    public abstract class Stat
+    {
+        public const float StatMax = 10;
+
+        public string name;
+        public string Description;
+        public float value;
+    }
+
+    public class GeneralStat : Stat
+    {
+        public enum StatType : byte
+        {
+            Loyalty,
+            Speed,
+            Dirtiness
+        }
+
+        public StatType statType;
+    }
+
+    public class SpecialtyStat : Stat
+    {
+        public enum StatType : byte
+        {
+            Professionalism,
+            Physicality,
+            Intelligence
+        }
+
+        public StatType statType;
+    }
+    #endregion
+}
+
+namespace MySpace
+{
+    public static class StatExtensions
+    {
+        public static ManScript_Worker.SpecialtyStat GetSpecialtyStat(this ManScript_Worker.SpecialtyStat[] ar, ManScript_Worker.SpecialtyStat.StatType type)
+        {
+            foreach (ManScript_Worker.SpecialtyStat s in ar)
+            {
+                if (type == s.statType)
+                    return s;
+            }
+            Debug.LogWarning("Specialty Stat type '" + type + "', was not found in the given array!!");
+            return null;
+        }
+
+        public static ManScript_Worker.GeneralStat GetGeneralStat(this ManScript_Worker.GeneralStat[] ar, ManScript_Worker.GeneralStat.StatType type)
+        {
+            foreach (ManScript_Worker.GeneralStat s in ar)
+            {
+                if (type == s.statType)
+                    return s;
+            }
+            Debug.LogWarning("General Stat type '" + type + "', was not found in the given array!!");
+            return null;
+        }
+    }
 }

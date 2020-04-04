@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
-        TimeManager.AddEventTriggerToGameTime(9, 0, 0, GiveGuest, true);
+        TimeManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
         DebugMenu.SetPanelActive(false);
         _roleInfo = roleInfo;
 
@@ -63,19 +63,49 @@ public class GameManager : MonoBehaviour
         //}
     }
 
-    private void GiveGuest()
+    private void CreateBasicGuest()
     {
         GuestConstructionData g = new GuestConstructionData()
         {
-            dirtiness = 1,
             manFirstName = NameFactory.GetNewFirstName(),
             manLastName = NameFactory.GetNewLastName(),
             manId = System.Guid.NewGuid(),
-            manType = Enums.ManTypes.Guest
+            manType = Enums.ManTypes.Guest,
+            generalStats = new ManScript_Worker.GeneralStat[1] 
+            {
+                new ManScript_Worker.GeneralStat()
+                {
+                    name = "Dirtiness",
+                    statType = ManScript_Worker.GeneralStat.StatType.Dirtiness,
+                    value = 1,
+                    Description = "How quickly this guest dirties any room they stay in."
+                }
+            }
         };
 
-        ClickManager.Ref.Button_Book(g);
+        ClickManager.Ref.Button_Book(CreateDefaultGuest());
         //ClickManager.Ref.AddNewGuest();
+    }
+
+    public static GuestConstructionData CreateDefaultGuest()
+    {
+        return new GuestConstructionData()
+        {
+            manFirstName = NameFactory.GetNewFirstName(),
+            manLastName = NameFactory.GetNewLastName(),
+            manId = System.Guid.NewGuid(),
+            manType = Enums.ManTypes.Guest,
+            generalStats = new ManScript_Worker.GeneralStat[1]
+            {
+                new ManScript_Worker.GeneralStat()
+                {
+                    name = "Dirtiness",
+                    statType = ManScript_Worker.GeneralStat.StatType.Dirtiness,
+                    value = 1,
+                    Description = "How quickly this guest dirties any room they stay in."
+                }
+            }
+        };
     }
 
     public static RoleInfo GetRoleInfo(Enums.ManRole role)

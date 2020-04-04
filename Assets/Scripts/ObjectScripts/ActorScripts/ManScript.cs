@@ -26,6 +26,8 @@ public class ManScript : MonoBehaviour
     public virtual Enums.ManTypes ManType { get { return Enums.ManTypes.StandardMan; } }
 
     public Enums.ManRole role = Enums.ManRole.None;
+
+    public ManScript_Worker.GeneralStat[] genStats;
     #endregion
 
     #region Private Variables

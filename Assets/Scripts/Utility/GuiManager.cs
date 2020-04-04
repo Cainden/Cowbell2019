@@ -22,7 +22,8 @@ public class GuiManager : MonoBehaviour
 
     public GameObject GuiSmallUserInfoDlg = null;
     public GameObject RoomInfoWindow = null;
-    public GameObject ManInfoWindow = null;
+    //public GameObject ManInfoWindow = null;
+    public WorkerInfoWindowScript WorkerInfoWindow = null;
     public GameObject BuildRoomDlg = null;
     //public GameObject MainMenuDlg = null;
     //public GameObject HireDlg = null;
@@ -54,7 +55,7 @@ public class GuiManager : MonoBehaviour
 
         Debug.Assert(GuiSmallUserInfoDlg != null);
         Debug.Assert(RoomInfoWindow != null);
-        Debug.Assert(ManInfoWindow != null);
+        Debug.Assert(WorkerInfoWindow != null);
         Debug.Assert(BuildRoomDlg != null);
         //Debug.Assert(MainMenuDlg != null);
         //Debug.Assert(HireDlg != null);
@@ -145,14 +146,15 @@ public class GuiManager : MonoBehaviour
         RoomInfoWindow.GetComponent<RoomInfoWindowScript>().Deactivate();
     }
 
-    public void Show_ManInfoWindow(Guid roomId)
+    public void Show_ManInfoWindow(Guid manID)
     {
-        ManInfoWindow.GetComponent<ManInfoWindowScript>().Activate(roomId);
+        WorkerInfoWindow.Activate(manID);
     }
 
     public void Hide_ManInfoWindow()
     {
-        ManInfoWindow.GetComponent<ManInfoWindowScript>().Deactivate();
+        //ManInfoWindow.GetComponent<ManInfoWindowScript>().Deactivate();
+        WorkerInfoWindow.DeActivate();
     }    
     
     public void UpdateManCount(int number)

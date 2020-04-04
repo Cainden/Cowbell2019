@@ -38,8 +38,10 @@ namespace MySpace
         public string manLastName;
 
         //For stats display on the hire list
-        public float physicality, professionalism, intelligence; //base stats
-        public float speed, loyalty; //specialty stats
+        //public float physicality, professionalism, intelligence; //base stats
+        //public float speed, loyalty; //specialty stats
+        public ManScript_Worker.SpecialtyStat[] specialtyStats;
+        public ManScript_Worker.GeneralStat[] generalStats;
     }
 
     public struct GuestConstructionData
@@ -49,6 +51,7 @@ namespace MySpace
         public string manFirstName;
         public string manLastName;
 
-        public float dirtiness;
+        //public float dirtiness;
+        public ManScript_Worker.GeneralStat[] generalStats;
     }
 }

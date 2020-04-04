@@ -85,15 +85,6 @@ public class DebugToolsScript : MonoBehaviour
 
     public void CreateRandomGuest()
     {
-        GuestConstructionData g = new GuestConstructionData()
-        {
-            dirtiness = 1,
-            manFirstName = NameFactory.GetNewFirstName(),
-            manLastName = NameFactory.GetNewLastName(),
-            manId = System.Guid.NewGuid(),
-            manType = Enums.ManTypes.Guest
-        };
-
-        ClickManager.Ref.Button_Book(g);
+        ClickManager.Ref.Button_Book(GameManager.CreateDefaultGuest());
     }
 }

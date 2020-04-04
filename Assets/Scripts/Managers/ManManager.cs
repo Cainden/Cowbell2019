@@ -62,10 +62,13 @@ public class ManManager : MonoBehaviour
         };
 
         //Set Stats
-        script.physicality = data.physicality;
-        script.professionalism = data.professionalism;
-        script.intelligence = data.intelligence;
-        script.loyalty = data.loyalty;
+        //script.physicality = data.physicality;
+        //script.professionalism = data.professionalism;
+        //script.intelligence = data.intelligence;
+        //script.loyalty = data.loyalty;
+        //script.speed = data.speed;
+        script.specialStats = data.specialtyStats;
+        script.genStats = data.generalStats;
 
         _ManList[data.manId] = new ManRef(script.gameObject, script);
         script.gameObject.transform.position = Constants.NewManIncomingPath[0];
@@ -86,7 +89,8 @@ public class ManManager : MonoBehaviour
         };
 
         //Set Stats
-        script.dirtyFactor = data.dirtiness;
+        //script.dirtyFactor = data.dirtiness;
+        script.genStats = data.generalStats;
 
 
         _ManList[data.manId] = new ManRef(script.gameObject, script);
