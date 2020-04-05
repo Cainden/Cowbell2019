@@ -17,7 +17,7 @@ public class SceneManagement : MonoBehaviour
 	/// </summary>
 	[HideInInspector] public List<int> scenePrevActive { get; private set; } = new List<int>();
 
-	[Tooltip("The max history size for the list of previous active scenes. Defaults to 30. ")]
+	[Tooltip("The max history size for the list of previous active scenes. Defaults to 30.")]
 	[SerializeField] private int scenePrevActiveLength = 10;
 
 	private void Awake()

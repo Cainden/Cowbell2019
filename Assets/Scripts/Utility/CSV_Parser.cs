@@ -31,52 +31,64 @@ public class CSV_Parser
 	*/
 
 	static string splitRE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
-    static string rowSplitRE = @"
-								\r\n|
-								\n\r|
-								\n|
-								\r";
+    static string rowSplitRE = "\r\n|\n\r|\n|\r";
     static char[] trimChar = { '\"' };
 
-    public static List<Dictionary<string, object>> Parse(string filePath)
+    public static object[,] Parse(string filePath, bool ignoreHeaderRow = true)
     {
-        List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
-        
+		object[,] list;
+
 		TextAsset data = Resources.Load(filePath) as TextAsset;
 		string[] rows = Regex.Split(data.text, rowSplitRE); // split data into rows
-		if (rows.Length <= 1)
+		if (rows.Length <= 1) { return new object[0,0]; }
+
+		string headerTemp = rows[0].TrimEnd(','); // remove last comma, so the regax doesn't make an empty column
+		string[] headerRow = Regex.Split(headerTemp, splitRE); // Grab header Row
+
+		if (ignoreHeaderRow)
 		{
-			return list;
+			list = new string[rows.Length - 1, headerRow.Length];
 		}
-        string[] header = Regex.Split(rows[0], splitRE); // Grab Header Row
+		else
+		{
+			list = new string[rows.Length, headerRow.Length];
+		}
 
-        for (int i = 1; i < rows.Length; i++)
+		Debug.Log("");
+		
+
+		for (int i = ignoreHeaderRow ? 1 : 0; i < rows.Length; i++)
         {
+			// i is row number
             string[] values = Regex.Split(rows[i], splitRE);
-			if (values.Length == 0 || values[0] == "")
-			{
-				continue;
-			} // Loop and split each row into it's values until there's a row with no value, or until there's a row where the first value is blank
-
-            Dictionary<string, object> entry = new Dictionary<string, object>();
-            for (int j = 0; j < header.Length && j < values.Length; j++)
+			if (values.Length == 0 || values[0] == "") { continue; }
+            for (int j = 0; j < headerRow.Length && j < values.Length; j++)
             {
-                string value = values[j];
-                value = value.TrimStart(trimChar).TrimEnd(trimChar).Replace("\\", "");
-                object finalvalue = value;
-                int n;
-                float f;
-                if (int.TryParse(value, out n))
-                {
-                    finalvalue = n;
-                }
-                else if (float.TryParse(value, out f))
-                {
-                    finalvalue = f;
-                }
-                entry[header[j]] = finalvalue;
-            }
-            list.Add(entry);
+				// j is column number
+				string value = values[j];
+				value = value.TrimStart(trimChar).TrimEnd(trimChar).Replace("\\", "");
+				
+				object finalValue = value;
+				int n;
+				float f;
+				if (int.TryParse(value, out n))
+				{
+					finalValue = n;
+				}
+				else if (float.TryParse(value, out f))
+				{
+					finalValue = f;
+				}
+
+				if (ignoreHeaderRow)
+				{
+					list[i - 1, j] = finalValue;
+				}
+				else
+				{
+					list[i, j] = finalValue; // Assign final value
+				}
+			}
         }
         return list;
     }
