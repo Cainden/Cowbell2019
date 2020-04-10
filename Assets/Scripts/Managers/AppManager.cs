@@ -12,7 +12,6 @@ public class AppManager : MonoBehaviour
 
     #endregion
 
-
     #region Statics
     public static Enums.AppState CurState;
 

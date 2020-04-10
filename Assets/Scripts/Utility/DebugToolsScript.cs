@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.Events;
 using MySpace;
 
@@ -15,8 +16,9 @@ public class DebugToolsScript : MonoBehaviour
     public InputField ifHoots = null;
     public InputField ifSouls = null;
     public InputField ifMonCoins = null;
+	[SerializeField] TMP_Text timerTextComponent;
 
-    [HideInInspector]
+	[HideInInspector]
     public static DebugToolsScript Ref { get; private set; } // For external access of script
 
 
@@ -24,29 +26,16 @@ public class DebugToolsScript : MonoBehaviour
     {
         if (Ref == null) Ref = GetComponent<DebugToolsScript>();
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
-    // Update is called once per frame
     void Update()
     {
         CheckDebugInputs();
-
-        //if(ifHoots.text.Length > 0 && Input.GetKeyDown(KeyCode.KeypadEnter))
-        //{
-        //    InputField_SetHoots();
-        //}
-        //if (ifSouls.isFocused && Input.GetKeyDown(KeyCode.Return))
-        //{
-        //    InputField_SetSouls();
-        //}
-        //if (ifMonCoins.isFocused && Input.GetKeyDown(KeyCode.Return))
-        //{
-        //    InputField_SetMonCoins();
-        //}
     }
+
+	public void SetTimerText(string textToDisplay)
+	{
+		timerTextComponent.text = textToDisplay;
+	}
 
     void CheckDebugInputs()
     {
@@ -73,14 +62,14 @@ public class DebugToolsScript : MonoBehaviour
 
     public void InputField_AddSouls()
     {
-        if (!string.IsNullOrWhiteSpace(ifSouls.text))
-            WalletManager.AddHoots(int.Parse(ifSouls.text));
+        //if (!string.IsNullOrWhiteSpace(ifSouls.text))
+        //    WalletManager.AddMonCoins(int.Parse(ifSouls.text));
     }
 
     public void InputField_AddMonCoins()
     {
         if (!string.IsNullOrWhiteSpace(ifMonCoins.text))
-            WalletManager.AddHoots(int.Parse(ifMonCoins.text));
+            WalletManager.AddMonCoins(int.Parse(ifMonCoins.text));
     }
 
     public void CreateRandomGuest()
