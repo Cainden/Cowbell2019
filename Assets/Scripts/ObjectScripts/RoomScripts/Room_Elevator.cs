@@ -6,11 +6,14 @@ using MySpace;
 
 public class Room_Elevator : RoomScript
 {
+    private Animator _Animator;
+
     private List<Room_Elevator> eTower = null;
 
     public override void OnInitialization()
     {
         base.OnInitialization();
+        CheckReferences();
 
         Guid above = GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetAbove()), below = GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetBelow());
 
@@ -55,5 +58,43 @@ public class Room_Elevator : RoomScript
         }
 
         
+    }
+
+    private void CheckReferences()
+    {
+        _Animator = GetComponentInChildren<Animator>();
+        Debug.Assert(_Animator != null);
+    }
+
+    private bool manHere = false;
+    public void SetAnimation_OpenDoor(bool manEntering)
+    {
+        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorOpened"))
+            _Animator.SetTrigger("DoorOpenTrigger");
+        if (manEntering)
+        {
+            foreach(Room_Elevator r in eTower)
+            {
+                r.manHere = true;
+            }
+        }
+            
+    }
+
+    public void SetAnimation_CloseDoor(bool manLeaving)
+    {
+        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorClosedg")) _Animator.SetTrigger("DoorCloseTrigger");
+        if (manLeaving)
+        {
+            foreach (Room_Elevator r in eTower)
+            {
+                r.manHere = false;
+            }
+        }
+    }
+
+    public override bool GetAccessRequest()
+    {
+        return !manHere;
     }
 }
