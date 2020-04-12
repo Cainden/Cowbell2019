@@ -49,6 +49,9 @@ TagManager:
   - name: BG
     uniqueID: 152761941
     locked: 0
+  - name: FlatBG
+    uniqueID: 2307575901
+    locked: 0
   - name: MidGround
     uniqueID: 2333287045
     locked: 0
@@ -60,6 +63,9 @@ TagManager:
     locked: 0
   - name: characters
     uniqueID: 1364724267
+    locked: 0
+  - name: RoadnLights
+    uniqueID: 533270469
     locked: 0
   - name: UI
     uniqueID: 1760507411
