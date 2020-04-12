@@ -6,6 +6,20 @@ namespace MySpace
 {
     public class ActionData
     {
+        public enum ActionType
+        {
+            Movement,
+            Wait,
+            RoleAssignment,
+            RoomAssignment,
+            Die,
+            Elevator,
+            Animation,
+
+        }
+
+        public ActionType ActionMethod { get; set; }
+
         private Action _ActionItem;
 
         public Action ActionItem
@@ -14,7 +28,7 @@ namespace MySpace
             set { _ActionItem = value; }
         }
 
-        public ActionData(Action actionItem)
+        public ActionData(Action actionItem, ActionType type)
         {
             _ActionItem = actionItem;
         }

@@ -335,12 +335,25 @@ public class ClickManager : MonoBehaviour
         //if (StateManager.Ref.IsManWaiting()) return;
 
         Guid ManId = Guid.NewGuid();
+
+        #region TEMPORARY - THIS NEEDS TO BE MADE INTO A RANDOM FUNCTION OR BE A CALLABLE METHOD THAT RETURNS WorkerConstructionData!
         WorkerConstructionData ManData = new WorkerConstructionData();
         ManData.manId = ManId;
         ManData.manType = Enums.ManTypes.StandardMan;
         ManData.manFirstName = NameFactory.GetNewFirstName();
         ManData.manLastName = NameFactory.GetNewLastName();
-
+        ManData.generalStats = new ManScript_Worker.GeneralStat[2] 
+        {
+            new ManScript_Worker.GeneralStat()
+            {
+                name = "Speed", statType = ManScript_Worker.GeneralStat.StatType.Speed, value = 1, Description = "How quickly this worker moves."
+            },
+            new ManScript_Worker.GeneralStat()
+            {
+                statType = ManScript_Worker.GeneralStat.StatType.Loyalty, value = 1, name = "Loyalty", Description = "This value affects the salary of the worker. A higher value means he doesn't need to be paid as much."
+            }
+        };
+        #endregion
         ManManager.Ref.hireList.Add(ManData);
 
         //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);

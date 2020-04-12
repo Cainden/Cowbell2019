@@ -32,7 +32,7 @@ public class ManScript : MonoBehaviour
 
     #region Private Variables
     // Avatar movement
-    protected Queue<ActionData> _ActionList = new Queue<ActionData>();
+    protected List<ActionData> _ActionList = new List<ActionData>();
 
     protected Animator _Animator;
 
@@ -312,63 +312,64 @@ public class ManScript : MonoBehaviour
     protected void ProcessActions()
     {
         if (_ActionList.Count == 0) return;
-        _ActionList.Dequeue().ActionItem.Invoke();
+        _ActionList[0].ActionItem.Invoke();
+        _ActionList.RemoveAt(0);
     }
 
     public void Add_AccessAction_ToList(Guid roomId)
     {
-        _ActionList.Enqueue(new ActionData(() => StartCoroutine(WaitForRoomAccess(roomId))));
+        _ActionList.Add(new ActionData(() => StartCoroutine(WaitForRoomAccess(roomId)), ActionData.ActionType.Wait));
     }
 
     public void Add_RunAction_ToList(Vector3 position)
     {
-        _ActionList.Enqueue(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position)));
+        _ActionList.Add(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position), ActionData.ActionType.Movement));
     }
 
     public void Add_FacePlayerAction_ToList()
     {
-        _ActionList.Enqueue(new ActionData(() => SetFaceTowardsPlayer()));
+        _ActionList.Add(new ActionData(() => SetFaceTowardsPlayer(), ActionData.ActionType.Movement));
     }
 
     public void Add_RotateAction_ToList(Quaternion rotation)
     {
-        _ActionList.Enqueue(new ActionData(() => SetRotateToOrientation(Enums.ManStates.Rotating, rotation)));
+        _ActionList.Add(new ActionData(() => SetRotateToOrientation(Enums.ManStates.Rotating, rotation), ActionData.ActionType.Movement));
     }
 
     public void Add_IdleAction_ToList()
     {
-        _ActionList.Enqueue(new ActionData(() => SetAnimation(Enums.ManStates.Idle)));
+        _ActionList.Add(new ActionData(() => SetAnimation(Enums.ManStates.Idle), ActionData.ActionType.Animation));
     }
 
     // The working state can be of different animations, dependent on room (idle, working, ...)
     public void Add_WorkingAction_ToList(Enums.ManStates manState)
     {
-        _ActionList.Enqueue(new ActionData(() => SetAnimation(manState)));
+        _ActionList.Add(new ActionData(() => SetAnimation(manState), ActionData.ActionType.Animation));
     }
 
     public void Add_DoorOpenAction_ToList(Guid roomId)
     {
         //Changed this lambda in preparation to set up the "line" system for elevators.
-        _ActionList.Enqueue(new ActionData(() => 
+        _ActionList.Add(new ActionData(() => 
         {
-            RoomManager.Ref.GetRoomData(roomId).RoomObject.GetComponent<RoomElevatorAnimation>().SetAnimation_OpenDoor();
-        }));
+            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(true);
+        }, ActionData.ActionType.Elevator));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Enqueue(new ActionData(() => RoomManager.Ref.GetRoomData(roomId).RoomObject.GetComponent<RoomElevatorAnimation>().SetAnimation_CloseDoor()));
+        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(CheckNextActionType(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
     }
 
     public void Add_SelfDestruction_ToList()
     {
-        _ActionList.Enqueue(new ActionData(() => Destroy(gameObject)));
+        _ActionList.Add(new ActionData(() => Destroy(gameObject), ActionData.ActionType.Die));
     }
 
     public void Add_WaitTime_ToList(float seconds)
     {
         WaitCoroutine = WaitForSeconds(seconds);
-        _ActionList.Enqueue(new ActionData(() => StartCoroutine(WaitCoroutine)));
+        _ActionList.Add(new ActionData(() => StartCoroutine(WaitCoroutine), ActionData.ActionType.Wait));
     }
 
     private IEnumerator WaitForSeconds(float seconds)
@@ -390,9 +391,19 @@ public class ManScript : MonoBehaviour
 
     public void Add_Action_ToList(ActionData action)
     {
-        _ActionList.Enqueue(action);
+        _ActionList.Add(action);
+    }
+
+    private bool CheckNextActionType(ActionData.ActionType typeCheck)
+    {
+        //Make sure there is another action after the current one
+        if (_ActionList.Count > 1)
+        {
+            return _ActionList[1].ActionMethod == typeCheck;
+        }
+        else return false;
     }
     #endregion
 
-    
+
 }

@@ -6,9 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Scenes/Main Menu.unity
+    path: Assets/_Scenes/_Final/MainMenu.unity
     guid: 45df1c70fd5399143b2dfb722bf7061a
   - enabled: 1
-    path: Assets/_Scenes/Prototype Environments/Test Build Environment.unity
-    guid: 5b7e8d2a0dc88ae4a83edce7236772bd
+    path: Assets/_Scenes/Prototyping/MainHotelScene.unity
+    guid: faf3405636570c34abc9abd6b911bdfc
   m_configObjects: {}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Unity.Mathematics;
+using UnityEngine.UI;
 
 //Need Start on the Time Manager to happen before the GameManager
 [DefaultExecutionOrder(-10)]
@@ -82,9 +83,8 @@ public class TimeManager : MonoBehaviour
     /// faded to 0 during dusk, and faded from 0 back to this value during dawn.  
     private float lightIntensity;
 
-    // blend value of skybox using SkyBoxBlend Shader in render settings range 0-1  
-    private float SkyboxBlendFactor = 0.0f;
-
+	// blend value of skybox using SkyBoxBlend Shader in render settings range 0-1  
+	private float SkyboxBlendFactor = 0.0f;
     #endregion
 
     #region Initialization
@@ -151,8 +151,13 @@ public class TimeManager : MonoBehaviour
             menit = "0" + minutes;
         }
 
-        if (showTimeUI)
-            GUI.Button(new Rect(500, 20, 100, 26), currentPhase.ToString() + " : " + jam + ":" + menit);
+		if (showTimeUI)
+		{
+			if (DebugToolsScript.Ref)
+			{
+				DebugToolsScript.Ref.SetTimerText(currentPhase.ToString() + " : " + jam + ":" + menit);
+			}
+		}
     }
 
     // Update is called once per frame  

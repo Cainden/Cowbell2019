@@ -4,28 +4,26 @@ using UnityEngine;
 
 public class RoomElevatorAnimation : MonoBehaviour
 {
-    private Animator _Animator;
+    //private Animator _Animator;
 
-    private Queue<System.Action> waitingLine;
+    //void Start()
+    //{
+    //    CheckReferences();
+    //}
 
-    void Start()
-    {
-        CheckReferences();
-    }
+    //private void CheckReferences()
+    //{
+    //    _Animator = GetComponentInChildren<Animator>();
+    //    Debug.Assert(_Animator != null);
+    //}
 
-    private void CheckReferences()
-    {
-        _Animator = GetComponentInChildren<Animator>();
-        Debug.Assert(_Animator != null);
-    }
+    //public void SetAnimation_OpenDoor()
+    //{
+    //    if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorOpened")) _Animator.SetTrigger("DoorOpenTrigger");
+    //}
 
-    public void SetAnimation_OpenDoor()
-    {
-        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorOpened")) _Animator.SetTrigger("DoorOpenTrigger");
-    }
-
-    public void SetAnimation_CloseDoor()
-    {
-        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorClosedg")) _Animator.SetTrigger("DoorCloseTrigger");
-    }
+    //public void SetAnimation_CloseDoor()
+    //{
+    //    if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorClosedg")) _Animator.SetTrigger("DoorCloseTrigger");
+    //}
 }     
