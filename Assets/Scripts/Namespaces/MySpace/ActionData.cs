@@ -1,6 +1,7 @@
 ﻿// Data container class for a custom action item (e.g. used for avatar movement).
 
 using System;
+using UnityEngine;
 
 namespace MySpace
 {
@@ -31,6 +32,7 @@ namespace MySpace
         public ActionData(Action actionItem, ActionType type)
         {
             _ActionItem = actionItem;
+            ActionMethod = type;
         }
     }
 }

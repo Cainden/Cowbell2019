@@ -28,6 +28,7 @@ public class SidePanel : MonoBehaviour
 
     private void OnEnable()
     {
+        sidepanel.speed = 2;
         PanelEvent -= SetPanelBool;
         PanelEvent += SetPanelBool;
     }

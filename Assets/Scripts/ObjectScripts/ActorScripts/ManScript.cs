@@ -358,7 +358,7 @@ public class ManScript : MonoBehaviour
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(CheckNextActionType(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
+        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
     }
 
     public void Add_SelfDestruction_ToList()
@@ -394,12 +394,23 @@ public class ManScript : MonoBehaviour
         _ActionList.Add(action);
     }
 
-    private bool CheckNextActionType(ActionData.ActionType typeCheck)
+    /// <summary>
+    /// Checks if the given action type is in the action queue up to the given number
+    /// </summary>
+    /// <param name="typeCheck"></param>
+    /// <param name="actionsToCheck"></param>
+    /// <returns>true if there is an action of type <c>typeCheck</c> within the next <c>actionsToCheck</c> actions</returns>
+    private bool CheckElevatorActionQueue(ActionData.ActionType typeCheck, int actionsToCheck = 4)
     {
         //Make sure there is another action after the current one
-        if (_ActionList.Count > 1)
+        if (_ActionList.Count > actionsToCheck)
         {
-            return _ActionList[1].ActionMethod == typeCheck;
+            for (int i = 0; i < actionsToCheck; i++)
+            {
+                if (_ActionList[i].ActionMethod == typeCheck)
+                    return true;
+            }
+            return false;
         }
         else return false;
     }

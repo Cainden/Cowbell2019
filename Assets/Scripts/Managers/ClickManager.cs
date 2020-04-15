@@ -330,19 +330,37 @@ public class ClickManager : MonoBehaviour
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
     }
 
-    public void AddNewMan()
+    #region This function should no longer ever be called.
+    //public void AddNewMan()
+    //{
+    //    //if (StateManager.Ref.IsManWaiting()) return;
+
+    //    Guid ManId = Guid.NewGuid();
+
+    //    WorkerConstructionData ManData = new WorkerConstructionData();
+    //    ManData.manId = ManId;
+    //    ManData.manType = Enums.ManTypes.Worker;
+    //    ManData.manFirstName = NameFactory.GetNewFirstName();
+    //    ManData.manLastName = NameFactory.GetNewLastName();
+
+    //    ManManager.Ref.hireList.Add(ManData);
+
+    //    //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);
+    //    //StateManager.Ref.SetWaitingMan(ManId);
+    //    //GuiManager.Ref.Initiate_UserInfoSmall("New man incoming!");
+    //}
+    #endregion
+    
+    public void AddNewCleaner()
     {
         //if (StateManager.Ref.IsManWaiting()) return;
-
-        Guid ManId = Guid.NewGuid();
-
         #region TEMPORARY - THIS NEEDS TO BE MADE INTO A RANDOM FUNCTION OR BE A CALLABLE METHOD THAT RETURNS WorkerConstructionData!
         WorkerConstructionData ManData = new WorkerConstructionData();
-        ManData.manId = ManId;
-        ManData.manType = Enums.ManTypes.StandardMan;
+        ManData.manId = Guid.NewGuid();
+        ManData.manType = Enums.ManTypes.Worker;
         ManData.manFirstName = NameFactory.GetNewFirstName();
         ManData.manLastName = NameFactory.GetNewLastName();
-        ManData.generalStats = new ManScript_Worker.GeneralStat[2] 
+        ManData.generalStats = new ManScript_Worker.GeneralStat[2]
         {
             new ManScript_Worker.GeneralStat()
             {
@@ -353,29 +371,30 @@ public class ClickManager : MonoBehaviour
                 statType = ManScript_Worker.GeneralStat.StatType.Loyalty, value = 1, name = "Loyalty", Description = "This value affects the salary of the worker. A higher value means he doesn't need to be paid as much."
             }
         };
+        ManData.specialtyStats = new ManScript_Worker.SpecialtyStat[3]
+        {
+            new ManScript_Worker.SpecialtyStat()
+            {
+                name = "Intelligence", statType = ManScript_Worker.SpecialtyStat.StatType.Intelligence, value = 1, Description = "How good the worker is at non-physical tasks."
+            },
+            new ManScript_Worker.SpecialtyStat()
+            {
+                name = "Physicality", statType = ManScript_Worker.SpecialtyStat.StatType.Physicality, value = 1, Description = "How good the worker is at physical tasks."
+            },
+            new ManScript_Worker.SpecialtyStat()
+            {
+                name = "Professionalism", statType = ManScript_Worker.SpecialtyStat.StatType.Professionalism, value = 1, Description = "How effective the worker is at being interactable with guests."
+            }
+        };
         #endregion
-        ManManager.Ref.hireList.Add(ManData);
 
-        //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);
-        //StateManager.Ref.SetWaitingMan(ManId);
-        //GuiManager.Ref.Initiate_UserInfoSmall("New man incoming!");
+        AddNewCleaner(ManData);
     }
 
-    public void AddNewCleaner()
+    public void AddNewCleaner(WorkerConstructionData man)
     {
-        //if (StateManager.Ref.IsManWaiting()) return;
+        ManManager.Ref.hireList.Add(man);
 
-        Guid ManId = Guid.NewGuid();
-        WorkerConstructionData ManData = new WorkerConstructionData();
-        ManData.manId = ManId;
-        ManData.manType = Enums.ManTypes.Worker;
-        ManData.manFirstName = NameFactory.GetNewFirstName();
-        ManData.manLastName = NameFactory.GetNewLastName();
-
-        ManManager.Ref.hireList.Add(ManData);
-
-        //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);
-        //StateManager.Ref.SetWaitingMan(ManId);
         GuiManager.Ref.Initiate_UserInfoSmall("New Cleaner application received!");
     }
 
@@ -383,17 +402,15 @@ public class ClickManager : MonoBehaviour
     {
         //if (StateManager.Ref.IsManWaiting()) return;
 
-        Guid ManId = Guid.NewGuid();
-        GuestConstructionData ManData = new GuestConstructionData();
-        ManData.manId = ManId;
-        ManData.manType = Enums.ManTypes.Guest;
-        ManData.manFirstName = NameFactory.GetNewFirstName();
-        ManData.manLastName = NameFactory.GetNewLastName();
+        GuestConstructionData ManData = GameManager.CreateDefaultGuest();
 
-        ManManager.Ref.bookingList.Add(ManData);
+        AddNewGuest(ManData);
+    }
 
-        //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);
-        //StateManager.Ref.SetWaitingMan(ManId);
+    public void AddNewGuest(GuestConstructionData guest)
+    {
+        ManManager.Ref.bookingList.Add(guest);
+
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest waiting!");
     }
 

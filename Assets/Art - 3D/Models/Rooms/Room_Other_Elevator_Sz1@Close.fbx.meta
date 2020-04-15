@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 261a8adf95cbc284d93e6551531191fb
 ModelImporter:
-  serializedVersion: 26
+  serializedVersion: 19300
   internalIDToNameTable:
   - first:
       1: 100000
@@ -61,7 +61,7 @@ ModelImporter:
       name: MatRoom_Other_Elevator_Sz1
     second: {fileID: 2100000, guid: 42d14d2685dcdee409b82c0d280b3b3c, type: 2}
   materials:
-    importMaterials: 0
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 0
@@ -160,7 +160,6 @@ ModelImporter:
     normalSmoothingSource: 0
   referencedClips: []
   importAnimation: 1
-  copyAvatar: 1
   humanDescription:
     serializedVersion: 3
     human: []
@@ -179,8 +178,10 @@ ModelImporter:
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 351c16c0754a0b6498e9a1b705b184bf,
     type: 3}
+  autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 2
   additionalBone: 0
   userData: 
   assetBundleName: 

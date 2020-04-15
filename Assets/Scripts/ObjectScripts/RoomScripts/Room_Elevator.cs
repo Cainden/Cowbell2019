@@ -56,7 +56,6 @@ public class Room_Elevator : RoomScript
             RoomManager.Ref.CreateRoom(temp, Enums.RoomTypes.Elevator, RoomData.CoveredIndizes[0].GetAbove());
             eTower.Add(RoomManager.Ref.GetRoomData(temp).RoomScript as Room_Elevator);
         }
-
         
     }
 

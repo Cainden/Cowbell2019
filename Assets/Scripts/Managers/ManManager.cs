@@ -62,11 +62,6 @@ public class ManManager : MonoBehaviour
         };
 
         //Set Stats
-        //script.physicality = data.physicality;
-        //script.professionalism = data.professionalism;
-        //script.intelligence = data.intelligence;
-        //script.loyalty = data.loyalty;
-        //script.speed = data.speed;
         script.specialStats = data.specialtyStats;
         script.genStats = data.generalStats;
 
@@ -89,7 +84,6 @@ public class ManManager : MonoBehaviour
         };
 
         //Set Stats
-        //script.dirtyFactor = data.dirtiness;
         script.genStats = data.generalStats;
 
 
@@ -379,7 +373,11 @@ public class ManManager : MonoBehaviour
             if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
             {
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+                {
+                    manScript.Add_AccessAction_ToList(RoomID);
                     manScript.Add_DoorOpenAction_ToList(RoomID);
+                }
+                    
                 WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);
                 manScript.Add_RunAction_ToList(WorldPos);
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
