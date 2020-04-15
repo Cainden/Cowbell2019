@@ -101,7 +101,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    #region Net Revenue Stuff
+    //Can do more stuff with this later to access where the revenue came from or went to using the revenueinfo.
+
+    //Can just use the average profit per day as the return value for any rooms that pay based on guest actions outside of a regular time interval, like casino's or gift shops, etc.
+
+    public delegate void NetRevenueDelegate(List<RevenueInfo> list);
+    public static NetRevenueDelegate NetRevenueCalculationEvent;
+
+    public static int CalculateNetRevenue()
+    {
+        return (int)CalculateHardNetRevenue();
+    }
+
+    public static float CalculateHardNetRevenue()
+    {
+        List<RevenueInfo> list = new List<RevenueInfo>();
+        NetRevenueCalculationEvent?.Invoke(list);
+        float f = 0;
+        foreach (RevenueInfo i in list)
+        {
+            f += i.effect;
+        }
+        return f;
+    }
+    #endregion
 }
 
 namespace MySpace
@@ -117,6 +141,24 @@ namespace MySpace
     {
         [Tooltip("Paid Daily")]
         public int income;
+    }
+
+    public struct RevenueInfo
+    {
+        public enum RevenueType : byte { Worker, Guest, Room }
+
+        public float effect;
+        public RevenueType revenueType;
+        public System.Guid objectId;
+        public bool estimated;
+
+        public RevenueInfo(float value, RevenueType type, System.Guid id)
+        {
+            effect = value;
+            revenueType = type;
+            objectId = id;
+            estimated = false;
+        }
     }
 }
 

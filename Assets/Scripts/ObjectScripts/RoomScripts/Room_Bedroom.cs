@@ -10,6 +10,9 @@ public class Room_Bedroom : RoomScript
     [Tooltip("Amount of time between each tick of cleanliness increase/decrease")]
     public float cleanTickTime = 2;
 
+    [Tooltip("The cost of this room to stay in for guests")]
+    public int RentCost = 50;
+
     #endregion
 
     public override Enums.ManRole RoomRole => Enums.ManRole.Guest;

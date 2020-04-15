@@ -26,6 +26,20 @@ public class ManManager : MonoBehaviour
     public List<WorkerConstructionData> hireList = new List<WorkerConstructionData>();
     [HideInInspector]
     public List<GuestConstructionData> bookingList = new List<GuestConstructionData>();
+
+    public float ManRevenueCalculation
+    {
+        get
+        {
+            float t = 0;
+            foreach (ManRef man in _ManList.Values)
+            {
+                t += man.ManScript.GetNetRevenueCalculation;
+            }
+            return t;
+        }
+    }
+
     #endregion
 
     void Awake()

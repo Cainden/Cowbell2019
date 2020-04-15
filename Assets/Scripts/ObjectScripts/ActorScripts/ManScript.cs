@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManScript : MonoBehaviour
+public abstract class ManScript : MonoBehaviour
 {
     #region Variables
     #region Inspector Variables
@@ -28,6 +28,9 @@ public class ManScript : MonoBehaviour
     public Enums.ManRole role = Enums.ManRole.None;
 
     public ManScript_Worker.GeneralStat[] genStats;
+
+    public abstract float GetNetRevenueCalculation { get; }
+    public abstract RevenueInfo.RevenueType RevenueType { get; }
     #endregion
 
     #region Private Variables
@@ -70,6 +73,22 @@ public class ManScript : MonoBehaviour
     protected virtual void Update()
     {
         StateUpdate();
+    }
+
+    protected virtual void OnEnable()
+    {
+        GameManager.NetRevenueCalculationEvent -= RevenueCalc;
+        GameManager.NetRevenueCalculationEvent += RevenueCalc;
+    }
+
+    protected virtual void OnDisable()
+    {
+        GameManager.NetRevenueCalculationEvent -= RevenueCalc;
+    }
+
+    void RevenueCalc(List<RevenueInfo> list)
+    {
+        list.Add(new RevenueInfo(GetNetRevenueCalculation, RevenueType, ManData.ManId));
     }
     #endregion
 

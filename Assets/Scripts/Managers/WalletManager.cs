@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public static class WalletManager
 {
     private static int monCoins;

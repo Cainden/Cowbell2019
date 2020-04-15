@@ -21,7 +21,20 @@ public class ManScript_Worker : ManScript
 
     public SpecialtyStat[] specialStats;
 
+    public override float GetNetRevenueCalculation
+    {
+        get
+        {
+            if (role == Enums.ManRole.None)
+                return 0;
+            else
+            {
+                return GameManager.GetRoleInfo(role).income * GetGeneralStatValue(GeneralStat.StatType.Loyalty);
+            }
+        }
+    }
 
+    public override RevenueInfo.RevenueType RevenueType => RevenueInfo.RevenueType.Worker;
 
     #endregion
     /// <summary>

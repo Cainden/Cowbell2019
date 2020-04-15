@@ -10,6 +10,18 @@ public class ManScript_Guest : ManScript
 
     public override Enums.ManTypes ManType { get { return Enums.ManTypes.Guest; } }
 
+    public override float GetNetRevenueCalculation
+    {
+        get
+        {
+            if (ManData.OwnedRoomRef.RoomType != Enums.RoomTypes.Bedroom)
+                return 0;
+            return -(ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost;
+        }
+    }
+
+    public override RevenueInfo.RevenueType RevenueType => RevenueInfo.RevenueType.Guest;
+
     public override void SetOwnerOfRoom(Guid assignedRoom)
     {
         base.SetOwnerOfRoom(assignedRoom);
@@ -101,7 +113,7 @@ public class ManScript_Guest : ManScript
     {
         if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8)
         {
-            PayUserInHoots("Rent", (int)ManData.OwnedRoomRef.RoomSize * 50);
+            PayUserInHoots("Rent", (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost);
             hasPaidRent = true;
         }
         else if (TimeManager.Ref.worldTimeHour != 8)
