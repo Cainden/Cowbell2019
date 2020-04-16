@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
+using MySpace.Stats;
 
 //A Manager of game-loop changing functionality between the tycoon-style daytime gameplay and the nighttime gameplay.
 
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     private static Roles _roleInfo;
 
     [SerializeField] int startingHoots = 1000;
+
+    [SerializeField] WorkerConstructionData[] workersToMake;
     #endregion
 
     //Might not want to do this for the gamemanager?
@@ -49,6 +52,11 @@ public class GameManager : MonoBehaviour
 
         //Might need to change this if loading a save
         WalletManager.SetHoots(1000);
+        foreach (WorkerConstructionData d in workersToMake)
+        {
+            ClickManager.Ref.AddNewCleaner(d);
+        }
+        
     }
 
     private void Update()
@@ -77,14 +85,12 @@ public class GameManager : MonoBehaviour
             manLastName = NameFactory.GetNewLastName(),
             manId = System.Guid.NewGuid(),
             manType = Enums.ManTypes.Guest,
-            generalStats = new ManScript_Worker.GeneralStat[1]
+            generalStats = new GeneralStat[1]
             {
-                new ManScript_Worker.GeneralStat()
+                new GeneralStat()
                 {
-                    name = "Dirtiness",
-                    statType = ManScript_Worker.GeneralStat.StatType.Dirtiness,
+                    statType = GeneralStat.StatType.Dirtiness,
                     value = 1,
-                    Description = "How quickly this guest dirties any room they stay in."
                 }
             }
         };

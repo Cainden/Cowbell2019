@@ -5,6 +5,7 @@ using System;
 using System.Xml;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using MySpace.Stats;
 
 public class ClickManager : MonoBehaviour
 {
@@ -360,30 +361,30 @@ public class ClickManager : MonoBehaviour
         ManData.manType = Enums.ManTypes.Worker;
         ManData.manFirstName = NameFactory.GetNewFirstName();
         ManData.manLastName = NameFactory.GetNewLastName();
-        ManData.generalStats = new ManScript_Worker.GeneralStat[2]
+        ManData.generalStats = new GeneralStat[2]
         {
-            new ManScript_Worker.GeneralStat()
+            new GeneralStat()
             {
-                name = "Speed", statType = ManScript_Worker.GeneralStat.StatType.Speed, value = 1, Description = "How quickly this worker moves."
+                statType = GeneralStat.StatType.Speed, value = 1
             },
-            new ManScript_Worker.GeneralStat()
+            new GeneralStat()
             {
-                statType = ManScript_Worker.GeneralStat.StatType.Loyalty, value = 1, name = "Loyalty", Description = "This value affects the salary of the worker. A higher value means he doesn't need to be paid as much."
+                statType = GeneralStat.StatType.Loyalty, value = 1
             }
         };
-        ManData.specialtyStats = new ManScript_Worker.SpecialtyStat[3]
+        ManData.specialtyStats = new SpecialtyStat[3]
         {
-            new ManScript_Worker.SpecialtyStat()
+            new SpecialtyStat()
             {
-                name = "Intelligence", statType = ManScript_Worker.SpecialtyStat.StatType.Intelligence, value = 1, Description = "How good the worker is at non-physical tasks."
+                statType = SpecialtyStat.StatType.Intelligence, value = 1
             },
-            new ManScript_Worker.SpecialtyStat()
+            new SpecialtyStat()
             {
-                name = "Physicality", statType = ManScript_Worker.SpecialtyStat.StatType.Physicality, value = 1, Description = "How good the worker is at physical tasks."
+                statType = SpecialtyStat.StatType.Physicality, value = 1
             },
-            new ManScript_Worker.SpecialtyStat()
+            new SpecialtyStat()
             {
-                name = "Professionalism", statType = ManScript_Worker.SpecialtyStat.StatType.Professionalism, value = 1, Description = "How effective the worker is at being interactable with guests."
+                statType = SpecialtyStat.StatType.Professionalism, value = 1
             }
         };
         #endregion

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using MySpace;
+using MySpace.Stats;
 using TMPro;
 
 public class WorkerInfoWindowScript : MonoBehaviour
@@ -78,7 +79,7 @@ public class WorkerInfoWindowScript : MonoBehaviour
         roleText.text = worker.role.ToString();
 
         genstat1Name.text = "Speed";
-        genstat1FrontSlider.fillAmount = worker.GetGeneralStatValue(ManScript_Worker.GeneralStat.StatType.Speed) / ManScript_Worker.Stat.StatMax;
+        genstat1FrontSlider.fillAmount = worker.GetGeneralStatValue(GeneralStat.StatType.Speed) / Stat.StatMax;
 
         //workerImage.sprite = worker.
 
@@ -93,18 +94,18 @@ public class WorkerInfoWindowScript : MonoBehaviour
         nameText.text = guest.ManName;
 
         genstat1Name.text = "Dirtiness";
-        genstat1FrontSlider.fillAmount = guest.dirtyFactor / ManScript_Worker.Stat.StatMax;
+        genstat1FrontSlider.fillAmount = guest.dirtyFactor / Stat.StatMax;
     }
 
     private IEnumerator InfoUpdateWorker()
     {
         while (active && worker)
         {
-            physicalityFrontSlider.fillAmount = worker.GetSpecialtyStatValue(ManScript_Worker.SpecialtyStat.StatType.Physicality) / ManScript_Worker.Stat.StatMax;
+            physicalityFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
             //physicalityRearSlider.fillAmount = worker. ???
-            intelligenceFrontSlider.fillAmount = worker.GetSpecialtyStatValue(ManScript_Worker.SpecialtyStat.StatType.Intelligence) / ManScript_Worker.Stat.StatMax;
+            intelligenceFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
             //intelligenceRearSlider.fillAmount = worker. ???
-            professionalismFrontSlider.fillAmount = worker.GetSpecialtyStatValue(ManScript_Worker.SpecialtyStat.StatType.Professionalism) / ManScript_Worker.Stat.StatMax;
+            professionalismFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
 
 
 

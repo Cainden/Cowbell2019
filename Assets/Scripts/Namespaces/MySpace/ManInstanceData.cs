@@ -4,6 +4,7 @@ using System.Xml;
 
 namespace MySpace
 {
+    using Stats;
     [Serializable]
     public class ManInstanceData
     {
@@ -30,6 +31,7 @@ namespace MySpace
         }
     }
 
+    [Serializable]
     public struct WorkerConstructionData
     {
         public Guid manId;
@@ -40,10 +42,11 @@ namespace MySpace
         //For stats display on the hire list
         //public float physicality, professionalism, intelligence; //base stats
         //public float speed, loyalty; //specialty stats
-        public ManScript_Worker.SpecialtyStat[] specialtyStats;
-        public ManScript_Worker.GeneralStat[] generalStats;
+        public SpecialtyStat[] specialtyStats;
+        public GeneralStat[] generalStats;
     }
 
+    [Serializable]
     public struct GuestConstructionData
     {
         public Guid manId;
@@ -52,6 +55,6 @@ namespace MySpace
         public string manLastName;
 
         //public float dirtiness;
-        public ManScript_Worker.GeneralStat[] generalStats;
+        public GeneralStat[] generalStats;
     }
 }

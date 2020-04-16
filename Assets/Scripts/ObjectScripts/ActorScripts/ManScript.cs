@@ -27,7 +27,7 @@ public abstract class ManScript : MonoBehaviour
 
     public Enums.ManRole role = Enums.ManRole.None;
 
-    public ManScript_Worker.GeneralStat[] genStats;
+    public MySpace.Stats.GeneralStat[] genStats;
 
     public abstract float GetNetRevenueCalculation { get; }
     public abstract RevenueInfo.RevenueType RevenueType { get; }

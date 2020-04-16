@@ -11,7 +11,7 @@ public abstract class Room_WorkQuarters : RoomScript
     /// <summary>
     /// Purely for UI display purposes, this is to be set to return any/all BaseStatTypes used by the work quarters from workers to do their jobs.
     /// </summary>
-    public ManScript_Worker.SpecialtyStat.StatType[] specialStatsUsed;
+    public MySpace.Stats.SpecialtyStat.StatType[] specialStatsUsed;
 
     public override void AssignManToRoomSlot(System.Guid manId, int slotIndex, bool assignedByPlayer)
     {

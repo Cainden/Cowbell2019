@@ -74,7 +74,7 @@ public class Room_Bedroom : RoomScript
                 else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Worker && occupant.ManScript.State == Enums.ManStates.None)
                 {
                     bClean = true;
-                    cleanFactor += (occupant.ManScript as ManScript_Worker).GetSpecialtyStatValue(ManScript_Worker.SpecialtyStat.StatType.Physicality);
+                    cleanFactor += (occupant.ManScript as ManScript_Worker).GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality);
                 }
                 occupant = null;
             }

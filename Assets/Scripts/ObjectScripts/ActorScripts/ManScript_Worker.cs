@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 using System;
+using MySpace.Stats;
 
 public class ManScript_Worker : ManScript
 {
@@ -134,8 +135,7 @@ public class ManScript_Worker : ManScript
     #endregion
 
 
-    #region Stats
-
+    
     #region Stat Helper Functions
 
     public float GetGeneralStatValue(GeneralStat.StatType type)
@@ -183,49 +183,16 @@ public class ManScript_Worker : ManScript
     }
 
     #endregion
-
-    public abstract class Stat
-    {
-        public const float StatMax = 10;
-
-        public string name;
-        public string Description;
-        public float value;
-    }
-
-    public class GeneralStat : Stat
-    {
-        public enum StatType : byte
-        {
-            Loyalty,
-            Speed,
-            Dirtiness
-        }
-
-        public StatType statType;
-    }
-
-    public class SpecialtyStat : Stat
-    {
-        public enum StatType : byte
-        {
-            Professionalism,
-            Physicality,
-            Intelligence
-        }
-
-        public StatType statType;
-    }
-    #endregion
 }
 
+#region stats
 namespace MySpace
 {
     public static class StatExtensions
     {
-        public static ManScript_Worker.SpecialtyStat GetSpecialtyStat(this ManScript_Worker.SpecialtyStat[] ar, ManScript_Worker.SpecialtyStat.StatType type)
+        public static SpecialtyStat GetSpecialtyStat(this SpecialtyStat[] ar, SpecialtyStat.StatType type)
         {
-            foreach (ManScript_Worker.SpecialtyStat s in ar)
+            foreach (SpecialtyStat s in ar)
             {
                 if (type == s.statType)
                     return s;
@@ -234,9 +201,9 @@ namespace MySpace
             return null;
         }
 
-        public static ManScript_Worker.GeneralStat GetGeneralStat(this ManScript_Worker.GeneralStat[] ar, ManScript_Worker.GeneralStat.StatType type)
+        public static GeneralStat GetGeneralStat(this GeneralStat[] ar, GeneralStat.StatType type)
         {
-            foreach (ManScript_Worker.GeneralStat s in ar)
+            foreach (GeneralStat s in ar)
             {
                 if (type == s.statType)
                     return s;
@@ -244,5 +211,88 @@ namespace MySpace
             Debug.LogWarning("General Stat type '" + type + "', was not found in the given array!!");
             return null;
         }
+
+        
     }
+
+    namespace Stats
+    {
+        public abstract class Stat
+        {
+            public const float StatMax = 10;
+
+            public abstract string Name { get; }
+            public float value;
+        }
+
+        [Serializable]
+        public class GeneralStat : Stat
+        {
+            public enum StatType : byte
+            {
+                Loyalty,
+                Speed,
+                Dirtiness
+            }
+
+            public StatType statType;
+
+            public string Desc
+            {
+                get
+                {
+                    switch (statType)
+                    {
+                        case StatType.Loyalty:
+                            return "This value affects the salary of the worker. A higher value means he doesn't need to be paid as much.";
+                        case StatType.Speed:
+                            return "How quickly this worker moves.";
+                        case StatType.Dirtiness:
+                            return "How quickly this guest dirties any room they stay in.";
+                        default:
+                            Debug.LogWarning("There is no description written for GeneralStat.StatType of type '" + statType + "'!");
+                            return "";
+                    }
+                }
+            }
+
+            public override string Name { get { return statType.ToString(); } }
+        }
+
+        [Serializable]
+        public class SpecialtyStat : Stat
+        {
+            public enum StatType : byte
+            {
+                Professionalism,
+                Physicality,
+                Intelligence
+            }
+
+            public StatType statType;
+
+            public string Desc
+            {
+                get
+                {
+                    switch (statType)
+                    {
+                        case StatType.Professionalism:
+                            return "How effective the worker is at being interactable with guests.";
+                        case StatType.Physicality:
+                            return "How good the worker is at physical tasks.";
+                        case StatType.Intelligence:
+                            return "How good the worker is at non-physical tasks.";
+                        default:
+                            Debug.LogWarning("There is no description written for SpecialtyStat.StatType of type '" + statType + "'!");
+                            return "";
+                    }
+                }
+            }
+
+            public override string Name { get { return statType.ToString(); } }
+        }
+    }
+    
 }
+#endregion
