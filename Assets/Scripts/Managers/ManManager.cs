@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
-using System.Linq;
+//using System.Linq;
 
 public class ManManager : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class ManManager : MonoBehaviour
     [HideInInspector]
     public static ManManager Ref { get; private set; } // For external access of script
 
-    private Dictionary<Guid, ManRef> _ManList = new Dictionary<Guid, ManRef>();
+    private Dictionary<Guid, ManRef<ManScript>> _ManList = new Dictionary<Guid, ManRef<ManScript>>();
 
     [HideInInspector]
     public List<WorkerConstructionData> hireList = new List<WorkerConstructionData>();
@@ -32,7 +32,7 @@ public class ManManager : MonoBehaviour
         get
         {
             float t = 0;
-            foreach (ManRef man in _ManList.Values)
+            foreach (ManRef<ManScript> man in _ManList.Values)
             {
                 t += man.ManScript.GetNetRevenueCalculation;
             }
@@ -79,7 +79,7 @@ public class ManManager : MonoBehaviour
         script.specialStats = data.specialtyStats;
         script.genStats = data.generalStats;
 
-        _ManList[data.manId] = new ManRef(script.gameObject, script);
+        _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         script.gameObject.transform.position = Constants.NewManIncomingPath[0];
         AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
@@ -100,8 +100,7 @@ public class ManManager : MonoBehaviour
         //Set Stats
         script.genStats = data.generalStats;
 
-
-        _ManList[data.manId] = new ManRef(script.gameObject, script);
+        _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         script.gameObject.transform.position = Constants.NewManIncomingPath[0];
         AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
@@ -115,7 +114,7 @@ public class ManManager : MonoBehaviour
         ManScript ManScript = ManObject.GetComponent<ManScript>();
         ManScript.ManData = manData;
 
-        _ManList[manData.ManId] = new ManRef(ManObject, ManScript);
+        _ManList[manData.ManId] = new ManRef<ManScript>(ManObject, ManScript);
         ManObject.transform.position = Constants.NewManIncomingPath[0];
         AddIncomingPath(ManScript);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
@@ -143,7 +142,7 @@ public class ManManager : MonoBehaviour
     public void RemoveManFromList(Guid manId)
     {
         Debug.Assert(IsManExisting(manId));
-        _ManList[manId].ManObject = null;
+        //_ManList[manId].ManObject = null;
         _ManList.Remove(manId);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
@@ -177,18 +176,32 @@ public class ManManager : MonoBehaviour
         ManScript.Add_SelfDestruction_ToList();
     }
 
-    public ManRef GetManData(Guid manId)
+    public ManRef<ManScript> GetManData(Guid manId)
     {
         Debug.Assert(IsManExisting(manId));
-        return (_ManList[manId]);
+        return _ManList[manId];
     }
 
-    public void MoveManToClosestRoomOfType(ManScript man, params Enums.RoomTypes[] types)
+    public ManRef<T> GetManData<T>(Guid manId) where T : ManScript
+    {
+        Debug.Assert(IsManExisting(manId));
+        if (!(_ManList[manId].ManScript is T))
+            Debug.LogError("Given manId " + manId + ", was not the given type: " + typeof(T) + "!");
+        return new ManRef<T>(_ManList[manId].ManObject, (T)_ManList[manId].ManScript);
+    }
+
+    public bool IsManTypeOf<T>(Guid manId) where T : ManScript
+    {
+        Debug.Assert(IsManExisting(manId));
+        return _ManList[manId].ManScript is T;
+    }
+
+    public void MoveManToClosestRoomOfType<T>(ManScript man) where T : Room_CleanerCloset
     {
         Guid chosen = Guid.Empty;
         int shortest = int.MaxValue;
-        var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
-        foreach (Room_CleanerCloset room in ar)
+        //var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
+        foreach (T room in RoomManager.Ref.GetAllActiveRoomsofType<T>())
         {
             var path = GridManager.Ref.GetIndexPath(man.ManData.AssignedRoom.RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
             if (path.Length < shortest)
@@ -201,12 +214,12 @@ public class ManManager : MonoBehaviour
             MoveManToNewRoom(man.ManData.ManId, chosen);
     }
 
-    public void MoveManToClosestRoomOfType(Guid manId, params Enums.RoomTypes[] types)
+    public void MoveManToClosestRoomOfType<T>(Guid manId) where T : Room_CleanerCloset
     {
         Guid chosen = Guid.Empty;
         int shortest = int.MaxValue;
-        var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
-        foreach (Room_CleanerCloset room in ar)
+        //var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
+        foreach (T room in RoomManager.Ref.GetAllActiveRoomsofType<T>())
         {
             var path = GridManager.Ref.GetIndexPath(GetManData(manId).ManScript.ManData.AssignedRoom.RoomData.CoveredIndizes[GetManData(manId).ManScript.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
             if (path.Length < shortest)
@@ -418,11 +431,11 @@ public class ManManager : MonoBehaviour
 
     public void RemoveAllAvatars()
     {
-        foreach (KeyValuePair<Guid, ManRef> Entry in _ManList)
-        {
-            Destroy(Entry.Value.ManObject);
-            Entry.Value.ManObject = null;
-        }
+        //foreach (KeyValuePair<Guid, ManRef<ManScript>> Entry in _ManList)
+        //{
+        //    Destroy(Entry.Value.ManObject);
+        //    //Entry.Value.ManObject = null;
+        //}
 
         _ManList.Clear();
     }
@@ -440,7 +453,7 @@ public class ManManager : MonoBehaviour
         
         // Saving as an array. Key GUID is also in the data
         int Count = 0;
-        foreach (KeyValuePair<Guid, ManRef> Entry in _ManList)
+        foreach (KeyValuePair<Guid, ManRef<ManScript>> Entry in _ManList)
         {
             tmpOutput[Count] = Entry.Value.ManScript.ManData;
             Count++;
@@ -498,13 +511,15 @@ public class ManManager : MonoBehaviour
     public static bool FindOpenBedroomForMan(ManScript man)
     {
         //Get all bedroom rooms
-        var ar = RoomManager.Ref.GetAllActiveRoomsofType(Enums.RoomTypes.Bedroom);
+        var ar = RoomManager.Ref.GetAllActiveRoomsofType<Room_Bedroom>();
         for (int i = 0; i < ar.Length; i++)
         {
-            if (!ar[i].RoomScript.HasOwner())
+            if (!ar[i].HasOwner())
             {
-                Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
-                Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomScript.RoomData.RoomId);
+                if (ar[i].Cleanliness < 1)
+                    continue;
+                Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
+                Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
                 return true;
             }
         }

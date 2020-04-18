@@ -106,7 +106,7 @@ public class ClickManager : MonoBehaviour
 		{
 			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
 			//VERY temporary, needs to be changed to be less spaghetti once it is tested and works
-			if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
+			if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskRoom))
 				{
@@ -283,7 +283,7 @@ public class ClickManager : MonoBehaviour
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskRoom))
             {
                 Guid RoomID = hitInfo.transform.GetComponent<RoomScript>().RoomData.RoomId;
-                if (ManManager.Ref.GetManData(StateManager.Ref.GetSelectedMan()).ManScript.ManData.ManType == Enums.ManTypes.Guest)
+                if (ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
                 {
                     if (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway != null)
                     {

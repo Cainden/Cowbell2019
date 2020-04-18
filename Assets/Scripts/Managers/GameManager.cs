@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 using MySpace.Stats;
+using Unity.Mathematics;
 
 //A Manager of game-loop changing functionality between the tycoon-style daytime gameplay and the nighttime gameplay.
 
@@ -11,8 +12,9 @@ public class GameManager : MonoBehaviour
     #region Serialized Variables
     [SerializeField] DebugToolsScript DebugMenu;
 
-    [SerializeField] Roles roleInfo;
-    private static Roles _roleInfo;
+    [SerializeField] RoleInfo[] roles;
+    //private static Roles _roleInfo;
+    private static Dictionary<Enums.ManRole, RoleInfo> roleDic = new Dictionary<Enums.ManRole, RoleInfo>();
 
     [SerializeField] int startingHoots = 1000;
 
@@ -48,7 +50,17 @@ public class GameManager : MonoBehaviour
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
         TimeManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
         DebugMenu.SetPanelActive(false);
-        _roleInfo = roleInfo;
+
+        foreach (RoleInfo r in roles)
+        {
+            roleDic.Add(r.role, 
+                new RoleInfo()
+                {
+                    incomeMinimum = Mathf.Round(r.incomeMinimum),
+                    incomeMaximum = Mathf.Round(r.incomeMaximum),
+                    role = r.role
+                });
+        }
 
         //Might need to change this if loading a save
         WalletManager.SetHoots(1000);
@@ -98,13 +110,17 @@ public class GameManager : MonoBehaviour
 
     public static RoleInfo GetRoleInfo(Enums.ManRole role)
     {
-        switch (role)
-        {
-            case MySpace.Enums.ManRole.Cleaner:
-                return _roleInfo.Cleaner;
-            default:
-                return new RoleInfo();
-        }
+        return roleDic[role];
+    }
+
+    public static int GetRoleSalary(Enums.ManRole role, float loyalty)
+    {
+        float sMin = roleDic[role].incomeMinimum, sMax = roleDic[role].incomeMaximum;
+        if (sMin > sMax)
+            Debug.LogError("The role of '" + role + "' has a higher minimum income than maximum!");
+        float t = (sMax - sMin) / 9;
+
+        return Mathf.RoundToInt(sMin + (t * (loyalty - 1)));
     }
 
     #region Net Revenue Stuff
@@ -117,7 +133,7 @@ public class GameManager : MonoBehaviour
 
     public static int CalculateNetRevenue()
     {
-        return (int)CalculateHardNetRevenue();
+        return Mathf.RoundToInt(CalculateHardNetRevenue());
     }
 
     public static float CalculateHardNetRevenue()
@@ -137,16 +153,12 @@ public class GameManager : MonoBehaviour
 namespace MySpace
 {
     [System.Serializable]
-    public struct Roles
-    {
-        public RoleInfo Cleaner;
-    }
-
-    [System.Serializable]
     public struct RoleInfo
     {
+        public Enums.ManRole role;
+
         [Tooltip("Paid Daily")]
-        public int income;
+        public float incomeMinimum, incomeMaximum;
     }
 
     public struct RevenueInfo

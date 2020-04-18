@@ -501,6 +501,11 @@ public class RoomManager : MonoBehaviour
     {
         return (from r in _RoomList where roomTypes.Contains(r.Value.RoomScript.RoomData.RoomType) select r.Value).ToArray();
     }
+
+    public T[] GetAllActiveRoomsofType<T>() where T : RoomScript
+    {
+        return (from r in _RoomList where r.Value.RoomScript.GetType() is T select r.Value.RoomScript as T).ToArray();
+    }
     #endregion
 
     #region RoomInfo Helper Functions

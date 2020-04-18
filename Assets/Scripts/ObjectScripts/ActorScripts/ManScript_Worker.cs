@@ -30,7 +30,7 @@ public class ManScript_Worker : ManScript
                 return 0;
             else
             {
-                return GameManager.GetRoleInfo(role).income * GetGeneralStatValue(GeneralStat.StatType.Loyalty);
+                return GameManager.GetRoleSalary(role, genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value);
             }
         }
     }
@@ -124,7 +124,7 @@ public class ManScript_Worker : ManScript
     {
         if (role != Enums.ManRole.None && !hasBeenPaid && TimeManager.Ref.worldTimeHour == 8)
         {
-            PayWorkerInHoots("Worker Payment", Mathf.FloorToInt(genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value * GameManager.GetRoleInfo(role).income));
+            PayWorkerInHoots("Worker Payment", GameManager.GetRoleSalary(role, genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value));
             hasBeenPaid = true;
         }
         else if (TimeManager.Ref.worldTimeHour != 8)

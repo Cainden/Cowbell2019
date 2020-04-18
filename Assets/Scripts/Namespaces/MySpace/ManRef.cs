@@ -6,24 +6,13 @@ using UnityEngine;
 namespace MySpace
 {
     // Simple dataset to reference Man objects. All other data is stored in object script
-    public class ManRef
+    public struct ManRef<T> where T : ManScript
     {
-        private GameObject _ManObject;
-        private ManScript _ManScript;
+        public GameObject ManObject { get; set; }
 
-        public GameObject ManObject
-        {
-            get { return _ManObject; }
-            set { _ManObject = value; }
-        }
+        public T ManScript { get; set; }
 
-        public ManScript ManScript
-        {
-            get { return _ManScript; }
-            set { _ManScript = value; }
-        }
-
-        public ManRef(GameObject manObject, ManScript manScript)
+        public ManRef(GameObject manObject, T manScript)
         {
             ManObject = manObject;
             ManScript = manScript;

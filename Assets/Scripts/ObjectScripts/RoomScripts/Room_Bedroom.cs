@@ -29,7 +29,8 @@ public class Room_Bedroom : RoomScript
     public const float cleanlinessThreshhold = 0.4f;
 
     //Here as a fillable reference instead of creating a local reference-type variable each frame of update
-    ManRef occupant;
+    //ManRef<ManScript_Guest> occupantG;
+    //ManRef<ManScript_Worker> occupantW;
     #endregion
 
     protected override void Start()
@@ -60,23 +61,24 @@ public class Room_Bedroom : RoomScript
 
             for (int i = 0; i < numMen; i++)
             {
-                if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+                Guid id = RoomData.ManSlotsAssignments[i];
+                if (id == Guid.Empty)
                     continue;
 
-                //Moved this to a field instead of a local variable to save cpu since it was in update
-                occupant = manManRef.GetManData(RoomData.ManSlotsAssignments[i]);
+                if (!(manManRef.GetManData(id).ManScript.State == Enums.ManStates.None))
+                    continue;
 
-                if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Guest && occupant.ManScript.State == Enums.ManStates.None)
+                if (manManRef.IsManTypeOf<ManScript_Guest>(id))
                 {
                     bStank = true;
-                    dirtyFactor += (occupant.ManScript as ManScript_Guest).dirtyFactor;
+                    dirtyFactor += (manManRef.GetManData(id).ManScript as ManScript_Guest).dirtyFactor;
                 }
-                else if (occupant.ManScript.ManData.ManType == Enums.ManTypes.Worker && occupant.ManScript.State == Enums.ManStates.None)
+                else if (manManRef.IsManTypeOf<ManScript_Worker>(id))
                 {
                     bClean = true;
-                    cleanFactor += (occupant.ManScript as ManScript_Worker).GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality);
+                    cleanFactor += (manManRef.GetManData(id).ManScript as ManScript_Worker).GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality);
                 }
-                occupant = null;
+                //occupant = null;
             }
 
 

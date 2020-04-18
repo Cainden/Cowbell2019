@@ -201,7 +201,7 @@ public class RoomScript : MonoBehaviour
         for (int i = 0; i < RoomData.ManSlotCount; i++)
         {
             if(RoomData.OwnerSlotsAssignments[i] != Guid.Empty)
-                manManRef.GetManData( RoomData.OwnerSlotsAssignments[i] ).ManScript.RemoveRoomOwnership();
+                manManRef.GetManData(RoomData.OwnerSlotsAssignments[i]).ManScript.RemoveRoomOwnership();
         }
     }
 
@@ -223,41 +223,33 @@ public class RoomScript : MonoBehaviour
         }
     }
 
-    protected void ApplyWithAllMen(Action<ManRef> action)
+    protected void ApplyWithAllMenOfType<T>(Action<ManRef<T>> action) where T : ManScript
     {
-        int menFound = 0;
-        for (int i = 0; menFound < CountMen(); i++)
+        int menFound = 0, c = CountMen();
+        for (int i = 0; menFound < c; i++)
         {
-            restart:
-            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
             {
-                i++;
-                goto restart;
-            }
-            else
-            {
+                if (!manManRef.IsManTypeOf<T>(RoomData.ManSlotsAssignments[i]))
+                    continue;
                 menFound++;
-                action(manManRef.GetManData(RoomData.ManSlotsAssignments[i]));
+                action(manManRef.GetManData<T>(RoomData.ManSlotsAssignments[i]));
             }
         }
     }
 
-    protected ManRef[] GetAllMen()
+    protected ManRef<T>[] GetAllMenOfType<T>() where T : ManScript
     {
-        List<ManRef> men = new List<ManRef>();
-        int menFound = 0;
-        for (int i = 0; menFound < CountMen(); i++)
+        List<ManRef<T>> men = new List<ManRef<T>>();
+        int menFound = 0, c = CountMen();
+        for (int i = 0; menFound < c; i++)
         {
-            restart:
-            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
             {
-                i++;
-                goto restart;
-            }
-            else
-            {
+                if (!manManRef.IsManTypeOf<T>(RoomData.ManSlotsAssignments[i]))
+                    continue;
                 menFound++;
-                men.Add(manManRef.GetManData(RoomData.ManSlotsAssignments[i]));
+                men.Add(manManRef.GetManData<T>(RoomData.ManSlotsAssignments[i]));
             }
         }
         return men.ToArray();

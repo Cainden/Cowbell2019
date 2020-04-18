@@ -14,7 +14,7 @@ public class BuildManager : MonoBehaviour
  
     private List<GameObject> RoomPositionSelectors = new List<GameObject>();
 
-    public static Action BuildFinishedEvent;
+    public static event Action BuildFinishedEvent;
 
     void Awake()
     {

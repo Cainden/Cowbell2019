@@ -24,7 +24,7 @@ public class ManInfoWindowScript : MonoBehaviour
 
     public void Activate(Guid manId)
     {
-        ManRef manRef = ManManager.Ref.GetManData(manId);
+        ManRef<ManScript> manRef = ManManager.Ref.GetManData(manId);
         ManNameText.text = manRef.ManScript.ManData.GetManFullName();
         
         gameObject.SetActive(true);

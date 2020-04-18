@@ -92,11 +92,16 @@ public class ManScript_Guest : ManScript
         {
             BuildManager.BuildFinishedEvent -= SendSignalToLobby;
             BuildManager.BuildFinishedEvent += SendSignalToLobby;
+            Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
+            Room_CleanerCloset.RoomFinishedCleaningEvent += SendSignalToLobby;
             ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
             TransferOwnershipToNewRoom(RoomManager.lobbyId);
         }
         else
+        {
             BuildManager.BuildFinishedEvent -= SendSignalToLobby;
+            Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
+        }
     }
 
     #region Rent Methods

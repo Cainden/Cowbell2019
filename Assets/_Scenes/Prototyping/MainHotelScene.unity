@@ -5200,9 +5200,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DebugMenu: {fileID: 1331259067}
-  roleInfo:
-    Cleaner:
-      income: 50
+  roles:
+  - role: 2
+    incomeMinimum: 50
+    incomeMaximum: 100
   startingHoots: 1000
   workersToMake:
   - manType: 2

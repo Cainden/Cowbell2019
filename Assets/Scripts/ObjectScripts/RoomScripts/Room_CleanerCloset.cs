@@ -14,6 +14,8 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
     public override Enums.ManRole RoomRole => Enums.ManRole.Cleaner;
 
+    public static event Action RoomFinishedCleaningEvent;
+
     public override Action<ManScript_Worker> GetRoleFunction => Cleaner;
 
     public override void RemoveManFromRoomSlot(Guid manId)
@@ -35,6 +37,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
             else if ((man.ManData.AssignedRoom as Room_Bedroom).Cleanliness >= 1)
             {
                 PathfindToClosestCloset(man);
+                RoomFinishedCleaningEvent?.Invoke();
             }
         }
         //Room is a cleaner closet
@@ -62,7 +65,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
     void PathfindToClosestCloset(ManScript_Worker man)
     {
         //This is where we will change how we find the room that the cleaner needs to go to.
-        ManManager.Ref.MoveManToClosestRoomOfType(man, Enums.RoomTypes.CleanerCloset);
+        ManManager.Ref.MoveManToClosestRoomOfType<Room_CleanerCloset>(man);
     }
 
     void PathfindToDirtyRoom(ManScript_Worker man)
