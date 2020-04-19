@@ -285,24 +285,27 @@ public class ClickManager : MonoBehaviour
                 Guid RoomID = hitInfo.transform.GetComponent<RoomScript>().RoomData.RoomId;
                 if (ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
                 {
-                    if (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway != null)
+                    if (RoomManager.IsRoomOfType<Room_Bedroom>(RoomID))
                     {
                         Room_Bedroom bedroom = (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
                         RoomManager.Ref.HighlightBedroom(bedroom.RoomData.RoomId, bedroom.transform.position);
                         return false;
                     }
                 }
-                
-                // Highlight box
-                
-                RoomManager.Ref.HighlightRoom(RoomID);
-            }
-            else
-            {
+                else if (ManManager.Ref.IsManTypeOf<ManScript_Worker>(StateManager.Ref.GetSelectedMan()))
+                {
+                    if (RoomManager.IsRoomOfType<Room_WorkQuarters>(RoomID))
+                    {
+                        RoomManager.Ref.HighlightRoom(RoomID);
+                        return false;
+                    }
+                }
                 RoomManager.Ref.HighlightNoRoom();
+                StateManager.Ref.SetCurrentHoveredRoom(RoomID);
+                return false;
             }
         }
-
+        RoomManager.Ref.HighlightNoRoom();
         return (false);
     }    
 
@@ -394,6 +397,8 @@ public class ClickManager : MonoBehaviour
 
     public void AddNewCleaner(WorkerConstructionData man)
     {
+        if (man.manId == Guid.Empty)
+            man.manId = Guid.NewGuid();
         ManManager.Ref.hireList.Add(man);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Cleaner application received!");

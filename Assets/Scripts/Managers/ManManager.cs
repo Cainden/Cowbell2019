@@ -243,15 +243,13 @@ public class ManManager : MonoBehaviour
         //NPC is Overworld only trying to travel to Underworld
         if (ManScript.ManData.ManType > 0 && NewRoomScript.RoomData.RoomOverUnder < 0)
         {
-            GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
-            return;
+            goto CannotAssign;
         }
 
         //NPC is Underworld only trying to travel to Overworld
         if (ManScript.ManData.ManType < 0 && NewRoomScript.RoomData.RoomOverUnder > 0)
         {
-            GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
-            return;
+            goto CannotAssign;
         }
 
 
@@ -263,8 +261,12 @@ public class ManManager : MonoBehaviour
 
         if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots() == false))
         {
-            GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
-            return;
+            goto CannotAssign;
+        }
+
+        if (!RoomManager.IsRoomOfType<Room_WorkQuarters>(NewRoomScript) && ManScript.ManType == Enums.ManTypes.Worker)
+        {
+            goto CannotAssign;
         }
 
         if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots() == true))
@@ -313,6 +315,10 @@ public class ManManager : MonoBehaviour
             OldRoomScript.AssignManToRoomSlot(OtherManGuid, NewManSlotIndex2, fromPlayer);
             
         }
+        return;
+
+        CannotAssign:
+        GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
     }
 
     public void RemoveManFromRoom(Guid manId)

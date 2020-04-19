@@ -35,7 +35,7 @@ public class StateManager : MonoBehaviour
         ResetSelectedMan();
         ResetSelectedRoom();
         SetWaitingMan(Guid.Empty);
-        SetHighlightedRoom(Guid.Empty);
+        SetCurrentHoveredRoom(Guid.Empty);
     }
 
     private void SetSelectedRoom(Guid RoomID)
@@ -49,7 +49,7 @@ public class StateManager : MonoBehaviour
         return (_SelectedRoom);
     }
 
-    public void SetHighlightedRoom(Guid roomId)
+    public void SetCurrentHoveredRoom(Guid roomId)
     {
         _HighlightedRoom = roomId;
     }

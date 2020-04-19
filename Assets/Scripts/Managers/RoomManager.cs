@@ -343,17 +343,17 @@ public class RoomManager : MonoBehaviour
                 HighlightNoRoom();
                 return;
             case Enums.RoomSizes.Size2:
-                StateManager.Ref.SetHighlightedRoom(roomId);
+                StateManager.Ref.SetCurrentHoveredRoom(roomId);
                 RoomHighlighterSz2.transform.position = _RoomList[roomId].RoomObject.transform.position;
                 RoomHighlighterSz2.SetActive(true);
                 break;
             case Enums.RoomSizes.Size4:
-                StateManager.Ref.SetHighlightedRoom(roomId);
+                StateManager.Ref.SetCurrentHoveredRoom(roomId);
                 RoomHighlighterSz4.transform.position = _RoomList[roomId].RoomObject.transform.position;
                 RoomHighlighterSz4.SetActive(true);
                 break;
             case Enums.RoomSizes.Size6:
-                StateManager.Ref.SetHighlightedRoom(roomId);
+                StateManager.Ref.SetCurrentHoveredRoom(roomId);
                 RoomHighlighterSz6.transform.position = _RoomList[roomId].RoomObject.transform.position;
                 RoomHighlighterSz6.SetActive(true);
                 break;
@@ -370,7 +370,7 @@ public class RoomManager : MonoBehaviour
         RoomHighlighterSz4.SetActive(false);
         RoomHighlighterSz6.SetActive(false);
         RoomHighlighter_Bedroom.SetActive(false);
-        StateManager.Ref.SetHighlightedRoom(Guid.Empty);
+        StateManager.Ref.SetCurrentHoveredRoom(Guid.Empty);
     }
 
     public void HighlightBedroom(Guid hallwayId, Vector3 highlightPosition)
@@ -384,7 +384,7 @@ public class RoomManager : MonoBehaviour
         RoomHighlighterSz4.SetActive(false);
         RoomHighlighterSz6.SetActive(false);
 
-        StateManager.Ref.SetHighlightedRoom(hallwayId);
+        StateManager.Ref.SetCurrentHoveredRoom(hallwayId);
         RoomHighlighter_Bedroom.transform.position = highlightPosition;
         RoomHighlighter_Bedroom.SetActive(true);
     }
@@ -504,7 +504,17 @@ public class RoomManager : MonoBehaviour
 
     public T[] GetAllActiveRoomsofType<T>() where T : RoomScript
     {
-        return (from r in _RoomList where r.Value.RoomScript.GetType() is T select r.Value.RoomScript as T).ToArray();
+        return (from r in _RoomList where r.Value.RoomScript is T select r.Value.RoomScript as T).ToArray();
+    }
+
+    public static bool IsRoomOfType<T>(Guid id) where T : RoomScript
+    {
+        return IsRoomOfType<T>(Ref.GetRoomData(id).RoomScript);
+    }
+
+    public static bool IsRoomOfType<T>(RoomScript room) where T : RoomScript
+    {
+        return room is T;
     }
     #endregion
 
