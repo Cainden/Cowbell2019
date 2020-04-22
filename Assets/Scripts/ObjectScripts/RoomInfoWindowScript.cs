@@ -3,19 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class RoomInfoWindowScript : MonoBehaviour
 {
-    public Text RoomNameText;
-    public Text RoomInfoText1;
-    public Text RoomInfoText2;
+    public TextMeshProUGUI RoomNameText;
+    public TextMeshProUGUI StankText;
+    public TextMeshProUGUI RoomInfoText;
+
+    public GameObject ManInfoParent;
+
+    
 
     void Start ()
     {
         Deactivate();
         Debug.Assert(RoomNameText != null);
-        Debug.Assert(RoomInfoText1 != null);
-        Debug.Assert(RoomInfoText2 != null);
+        Debug.Assert(StankText != null);
+        Debug.Assert(RoomInfoText != null);
     }
 
     public void Activate(Guid roomId)
@@ -24,13 +29,11 @@ public class RoomInfoWindowScript : MonoBehaviour
 
         RoomNameText.text = RoomScript.RoomData.RoomName;
 
-        string Info;
+        string Info = /*"Category: " + */RoomScript.RoomData.RoomCategory.ToString()/* + "\r\n"*/;
+        //Info += "Size: " + RoomScript.RoomData.RoomSize.ToString() + "\r\n";
+        StankText.text = Info;
 
-        Info = "Category: " + RoomScript.RoomData.RoomCategory.ToString() + "\r\n";
-        Info += "Size: " + RoomScript.RoomData.RoomSize.ToString() + "\r\n";
-        RoomInfoText1.text = Info;
-
-        RoomInfoText2.text = RoomManager.GetRoomDefData(RoomScript.RoomData.RoomType).RoomDescription;
+        RoomInfoText.text = RoomManager.GetRoomDefData(RoomScript.RoomData.RoomType).RoomDescription;
         gameObject.SetActive(true);
     }
 
