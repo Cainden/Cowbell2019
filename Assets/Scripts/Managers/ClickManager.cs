@@ -379,15 +379,15 @@ public class ClickManager : MonoBehaviour
         {
             new SpecialtyStat()
             {
-                statType = SpecialtyStat.StatType.Intelligence, value = 1
+                statType = SpecialtyStat.StatType.Intelligence, BaseValue = 1, experience = 0
             },
             new SpecialtyStat()
             {
-                statType = SpecialtyStat.StatType.Physicality, value = 1
+                statType = SpecialtyStat.StatType.Physicality, BaseValue = 1, experience = 0
             },
             new SpecialtyStat()
             {
-                statType = SpecialtyStat.StatType.Professionalism, value = 1
+                statType = SpecialtyStat.StatType.Professionalism, BaseValue = 1, experience = 0
             }
         };
         #endregion

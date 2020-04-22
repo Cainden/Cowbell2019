@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Unity.Mathematics;
 using UnityEngine.UI;
+using MySpace.Events;
 
 //Need Start on the Time Manager to happen before the GameManager
 [DefaultExecutionOrder(-10)]
@@ -23,7 +24,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] float dayStartHour = 5;
 
     /// current time in game time (0 - dayCycleLength).  
-    [HideInInspector] public float currentCycleTime = 0;
+    internal static float currentCycleTime;
 
     /// number of hours per day.  
     private float hoursPerDay = 24;
@@ -113,7 +114,6 @@ public class TimeManager : MonoBehaviour
 
         if (sun != null)
         { lightIntensity = sun.intensity; }
-        InitializeEventDic();
     }
 
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
@@ -200,7 +200,7 @@ public class TimeManager : MonoBehaviour
         //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
 
         //currentCycleTime = currentCycleTime % dayCycleLength;
-        CheckCurrentEvents();
+        EventManager.CheckCurrentEvents(currentCycleTime);
     }
 
     #endregion
@@ -327,98 +327,7 @@ public class TimeManager : MonoBehaviour
     }
     #endregion
 
-    #region Event Helper Functions
-    private void InitializeEventDic()
-    {
-        //Check for loading save data here
-        Events = new List<Event>();
-    }
-
-    private float lastFrame;
-    private void CheckCurrentEvents()
-    {
-        //This while loop is here to make sure that we don't miss an event trigger if the Events[1] event was also within the currentCycleTime and lastFrame.
-        Guid g = Events[0].ID;
-        while (Events[0].CheckEvent(lastFrame, currentCycleTime))
-        {
-            if (Events[0].ID.CompareTo(g) is 0)
-                break;
-        }
-
-        lastFrame = currentCycleTime;
-    }
-
-    private static void RePositionEvent(Event e)
-    {
-        for (int i = 0; i < Events.Count; i++)
-        {
-            float t = Events[i].EventTime, t2 = e.EventTime;
-            if (((t < Ref.currentCycleTime) ? t + Ref.currentCycleTime : t) < ((t2 < Ref.currentCycleTime) ? t2 + Ref.currentCycleTime : t2))
-                continue;
-            else
-            {
-                Events.Insert(i, e);
-            }
-        }
-        Events.Add(e);
-    }
-
-    /// <summary>
-    /// Add an event to trigger during the day cycle at the inputted specific second during the day/night cycle.
-    /// </summary>
-    /// <param name="time">The second at which the event will occur.</param>
-    /// <param name="action">The event to be triggered at the specified time.</param>
-    public static void AddEventToClock(int time, Action action, bool repeating = false)
-    {
-        RePositionEvent(new ClockEvent(out Guid id, repeating, action, time));
-    }
-
-    /// <summary>
-    /// Add an event to trigger during the day cycle at the inputted ratio'd time. (Ex: 0.5f will have the event trigger at second 60 during a 120 second dayCycleLength.)
-    /// </summary>
-    /// <param name="ratioTime">The time at which the event will occur.</param>
-    /// <param name="action">The event to be triggered at the specified time.</param>
-    public static void AddEventToClock(float ratioTime, Action action, bool repeating = false)
-    {
-        if (ratioTime > 1)
-            ratioTime = 1;
-        RePositionEvent(new ClockEvent(out Guid id, repeating, action, Ref.dayCycleLength * ratioTime));
-    }
-
-    /// <summary>
-    /// Add an event to trigger in a given amount of seconds.
-    /// </summary>
-    /// <param name="seconds">Aount of seconds it will take for the event to occur.</param>
-    /// <param name="action">The event to be triggered at the specified time.</param>
-    public static void AddEventTriggerInSeconds(float seconds, Action action, bool repeating = false)
-    {
-        RePositionEvent(new TimeEvent(out Guid id, repeating, action, seconds));
-    }
-
-    public static void AddEventTriggerToGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
-    {
-        float tt = Ref.dayCycleLength;
-        float h = (tt / 24) * hours;
-        float m = (h / 60) * minutes;
-        float s = (m / 60) * seconds;
-        RePositionEvent(new ClockEvent(out Guid id, repeating, action, h + m + s));
-    }
-
-    public static void AddEventTriggerBasedOnGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
-    {
-        float tt = Ref.dayCycleLength;
-        float h = (tt / 24) * hours;
-        float m = (h / 60) * minutes;
-        float s = (m / 60) * seconds;
-        RePositionEvent(new ClockEvent(out Guid id, repeating, action, Ref.currentCycleTime + h + m + s));
-    }
-
-    #endregion
-
-    #region Time Event Classes
-    //private static List<Event> Events;
-    private static List<Event> Events;
-
+    
     public enum DayPhase
     {
         Night = 0,
@@ -426,103 +335,243 @@ public class TimeManager : MonoBehaviour
         Day = 2,
         Dusk = 3
     }
+}
 
-    private abstract class Event
+namespace MySpace
+{
+    namespace Events
     {
-        public Event(out Guid iD, bool repeating, Action action)
+        using MySpace.Events.EventTypes;
+        public static class EventManager
         {
-            iD = ID = Guid.NewGuid();
-            Repeating = repeating;
-            Action = action;
-        }
 
-        public bool Repeating;
+            internal static List<Event> Events;
 
-        public Guid ID;
-
-        public Action Action;
-
-        public float EventTime;
-
-        protected abstract void CallEvent();
-
-        public bool CheckEvent(float x, float y)
-        {
-            if (x > y)
+            static EventManager()
             {
-                if (EventTime > y)
+                Events = new List<Event>();
+            }
+
+            static float lastFrame;
+            public static void CheckCurrentEvents(float cct)
+            {
+                //This while loop is here to make sure that we don't miss an event trigger if the Events[1] event was also within the currentCycleTime and lastFrame.
+                Guid g = Events[0].ID;
+                while (Events[0].CheckEvent(lastFrame, cct))
                 {
-                    if (EventTime < (y + Ref.dayCycleLength) && EventTime > x)
+                    if (Events[0].ID.CompareTo(g) is 0)
+                        break;
+                }
+
+                lastFrame = cct;
+            }
+
+            #region Event Helper Functions
+            internal static void RePositionEvent(Event e)
+            {
+                for (int i = 0; i < Events.Count; i++)
+                {
+                    float t = Events[i].EventTime, t2 = e.EventTime;
+                    if (((t < TimeManager.currentCycleTime) ? t + TimeManager.currentCycleTime : t) < ((t2 < TimeManager.currentCycleTime) ? t2 + TimeManager.currentCycleTime : t2))
+                        continue;
+                    else
                     {
-                        CallEvent();
-                        return true;
+                        Events.Insert(i, e);
                     }
                 }
-                else if (EventTime < x)
+                Events.Add(e);
+            }
+
+            /// <summary>
+            /// Add an event to trigger during the day cycle at the inputted specific second during the day/night cycle.
+            /// </summary>
+            /// <param name="time">The second at which the event will occur.</param>
+            /// <param name="action">The event to be triggered at the specified time.</param>
+            public static void AddEventToClock(int time, Action action, bool repeating = false)
+            {
+                RePositionEvent(new ClockEvent(out Guid id, repeating, action, time));
+            }
+
+            /// <summary>
+            /// Add an event to trigger during the day cycle at the inputted ratio'd time. (Ex: 0.5f will have the event trigger at second 60 during a 120 second dayCycleLength.)
+            /// </summary>
+            /// <param name="ratioTime">The time at which the event will occur.</param>
+            /// <param name="action">The event to be triggered at the specified time.</param>
+            public static void AddEventToClock(float ratioTime, Action action, bool repeating = false)
+            {
+                if (ratioTime > 1)
+                    ratioTime = 1;
+                RePositionEvent(new ClockEvent(out Guid id, repeating, action, TimeManager.Ref.dayCycleLength * ratioTime));
+            }
+
+            /// <summary>
+            /// Add an event to trigger in a given amount of seconds.
+            /// </summary>
+            /// <param name="seconds">Aount of seconds it will take for the event to occur.</param>
+            /// <param name="action">The event to be triggered at the specified time.</param>
+            public static void AddEventTriggerInSeconds(float seconds, Action action, bool repeating = false)
+            {
+                RePositionEvent(new TimeEvent(out Guid id, repeating, action, seconds));
+            }
+
+            public static void AddEventTriggerToGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
+            {
+                float tt = TimeManager.Ref.dayCycleLength;
+                float h = (tt / 24) * hours;
+                float m = (h / 60) * minutes;
+                float s = (m / 60) * seconds;
+                RePositionEvent(new ClockEvent(out Guid id, repeating, action, h + m + s));
+            }
+
+            public static void AddEventTriggerBasedOnGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
+            {
+                float tt = TimeManager.Ref.dayCycleLength;
+                float h = (tt / 24) * hours;
+                float m = (h / 60) * minutes;
+                float s = (m / 60) * seconds;
+                RePositionEvent(new ClockEvent(out Guid id, repeating, action, TimeManager.currentCycleTime + h + m + s));
+            }
+
+            public static void SetEventEnabled(Guid id, bool enabled)
+            {
+                foreach (Event e in Events)
                 {
-                    if (EventTime < y && EventTime > (x - Ref.dayCycleLength))
+                    if (e.ID == id)
+                        e.Active = enabled;
+                }
+            }
+
+            public static Event GetEvent(Guid id)
+            {
+                foreach (Event e in Events)
+                {
+                    if (e.ID == id)
+                        return e;
+                }
+                return null;
+            }
+
+            public static T GetEvent<T>(Guid id) where T : Event
+            {
+                foreach (T e in Events)
+                {
+                    if (e.ID == id)
+                        return e;
+                }
+                Debug.LogError("Event ID: " + id.ToString() + " was not found in the events list!");
+                return null;
+            }
+
+            public static void RemoveEvent(Guid id)
+            {
+                Events.Remove(GetEvent(id));
+            }
+            #endregion
+        }
+
+        namespace EventTypes
+        {
+            public abstract class Event
+            {
+                public Event(out Guid iD, bool repeating, Action action)
+                {
+                    iD = ID = Guid.NewGuid();
+                    Repeating = repeating;
+                    Action = action;
+                    Active = true;
+                }
+
+                public bool Active;
+
+                public bool Repeating;
+
+                public Guid ID;
+
+                public Action Action;
+
+                public float EventTime;
+
+                protected abstract void CallEvent();
+
+                public bool CheckEvent(float x, float y)
+                {
+                    if (x > y)
                     {
-                        CallEvent();
-                        return true;
+                        if (EventTime > y)
+                        {
+                            if (EventTime < (y + TimeManager.Ref.dayCycleLength) && EventTime > x)
+                            {
+                                CallEvent();
+                                return true;
+                            }
+                        }
+                        else if (EventTime < x)
+                        {
+                            if (EventTime < y && EventTime > (x - TimeManager.Ref.dayCycleLength))
+                            {
+                                CallEvent();
+                                return true;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (EventTime < y && EventTime > x)
+                        {
+                            CallEvent();
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+
+                public float Ratio
+                {
+                    get
+                    {
+                        return EventTime / TimeManager.Ref.dayCycleLength;
                     }
                 }
             }
-            else
+
+            public class ClockEvent : Event
             {
-                if (EventTime < y && EventTime > x)
+                public ClockEvent(out Guid iD, bool repeating, Action action, float time) : base(out iD, repeating, action)
                 {
-                    CallEvent();
-                    return true;
+                    EventTime = time;
+                }
+
+                protected override void CallEvent()
+                {
+                    Action();
+                    EventManager.Events.Remove(this);
+                    if (Repeating)
+                        EventManager.RePositionEvent(this);
                 }
             }
-            return false;
-        }
 
-        public float Ratio
-        {
-            get
+            public class TimeEvent : Event
             {
-                return EventTime / Ref.dayCycleLength;
+                private float seconds;
+
+                public TimeEvent(out Guid iD, bool repeating, Action action, float seconds) : base(out iD, repeating, action)
+                {
+                    this.seconds = seconds;
+                    EventTime = (TimeManager.currentCycleTime + seconds) % TimeManager.Ref.dayCycleLength;
+                }
+
+                protected override void CallEvent()
+                {
+                    Action();
+                    EventManager.Events.Remove(this);
+                    if (!Repeating)
+                        return;
+
+                    EventTime = (TimeManager.currentCycleTime + seconds) % TimeManager.Ref.dayCycleLength;
+                    EventManager.RePositionEvent(this);
+                }
             }
         }
     }
 
-    private class ClockEvent : Event
-    {
-        public ClockEvent(out Guid iD, bool repeating, Action action, float time) : base(out iD, repeating, action)
-        {
-            EventTime = time;
-        }
-
-        protected override void CallEvent()
-        {
-            Action();
-            Events.Remove(this);
-            if (Repeating)
-                RePositionEvent(this);
-        }
-    }
-
-    private class TimeEvent : Event
-    {
-        private float seconds;
-
-        public TimeEvent(out Guid iD, bool repeating, Action action, float seconds) : base(out iD, repeating, action)
-        {
-            this.seconds = seconds;
-            EventTime = (Ref.currentCycleTime + seconds) % Ref.dayCycleLength;
-        }
-
-        protected override void CallEvent()
-        {
-            Action();
-            Events.Remove(this);
-            if (!Repeating)
-                return;
-
-            EventTime = (Ref.currentCycleTime + seconds) % Ref.dayCycleLength;
-            RePositionEvent(this);
-        }
-    }
-    #endregion
 }
