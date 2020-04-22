@@ -116,7 +116,7 @@ public class ManScript_Guest : ManScript
 
     private void CheckIfRentTime()
     {
-        if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8)
+        if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8 && RoomManager.IsRoomOfType<Room_Bedroom>(ManData.OwnedRoomRef.RoomScript))
         {
             PayUserInHoots("Rent", (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost);
             hasPaidRent = true;

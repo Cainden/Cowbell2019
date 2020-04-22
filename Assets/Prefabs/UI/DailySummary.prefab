@@ -2467,7 +2467,7 @@ GameObject:
   - component: {fileID: 9179439171855146399}
   - component: {fileID: 9179439171855146398}
   m_Layer: 5
-  m_Name: DailySummery
+  m_Name: DailySummary
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
