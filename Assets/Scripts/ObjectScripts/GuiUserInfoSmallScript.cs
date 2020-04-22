@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class GuiUserInfoSmallScript : MonoBehaviour
 {
-    public UnityEngine.UI.Text InfoText = null; // To be set by editor
+    public TextMeshProUGUI TitleText;
+    public TextMeshProUGUI InfoText = null; // To be set by editor
 
     private bool _IsMoving = false;
     private float _PosY1 = 128.0f * 5;
@@ -16,6 +18,8 @@ public class GuiUserInfoSmallScript : MonoBehaviour
     {
         gameObject.SetActive(false);
         Debug.Assert(InfoText != null);
+        Debug.Assert(TitleText != null);
+        TitleText.text = "";
 
         //Start slightly above the screen
         _PosY1 = Screen.height * 0.75f;
@@ -42,8 +46,9 @@ public class GuiUserInfoSmallScript : MonoBehaviour
         }
     }
 
-    public void StartInfoText(string sInfoText)
+    public void StartInfoText(string sInfoText, string sTitleText = "")
     {
+        TitleText.text = sTitleText;
         InfoText.text = sInfoText;
         transform.position = new Vector3(transform.position.x, _PosY1);
         StopAllCoroutines();
