@@ -105,6 +105,7 @@ public class ClickManager : MonoBehaviour
 		if (_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
 		{
 			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
+
 			//VERY temporary, needs to be changed to be less spaghetti once it is tested and works
 			if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
 			{

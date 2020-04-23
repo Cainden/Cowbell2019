@@ -4,6 +4,7 @@ using UnityEngine;
 using MySpace;
 using System;
 using System.Linq;
+using MySpace.Stats;
 
 public class Room_CleanerCloset : Room_WorkQuarters
 {
@@ -17,6 +18,8 @@ public class Room_CleanerCloset : Room_WorkQuarters
     public static event Action RoomFinishedCleaningEvent;
 
     public override Action<ManScript_Worker> GetRoleFunction => Cleaner;
+
+    public override SpecialtyStat.StatType[] specialStatsUsed => new SpecialtyStat.StatType[1] { SpecialtyStat.StatType.Physicality };
 
     public override void RemoveManFromRoomSlot(Guid manId)
     {

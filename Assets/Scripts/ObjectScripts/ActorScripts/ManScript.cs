@@ -65,6 +65,7 @@ public abstract class ManScript : MonoBehaviour
         _Renderers = GetComponentsInChildren<Renderer>();
         SetMaterials();
         CheckReferences();
+        ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
     }
 
     /// <summary>
@@ -132,6 +133,12 @@ public abstract class ManScript : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public virtual Sprite GetSprite()
+    {
+        Debug.LogWarning("GetSprite() is still returning null! Men do not have sprites yet!");
+        return null;
     }
     #endregion
 

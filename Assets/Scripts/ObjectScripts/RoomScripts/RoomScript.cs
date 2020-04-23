@@ -223,7 +223,7 @@ public class RoomScript : MonoBehaviour
         }
     }
 
-    protected void ApplyWithAllMenOfType<T>(Action<ManRef<T>> action) where T : ManScript
+    public void ApplyWithAllMenOfType<T>(Action<ManRef<T>> action) where T : ManScript
     {
         int menFound = 0, c = CountMen();
         for (int i = 0; menFound < c; i++)
@@ -238,7 +238,7 @@ public class RoomScript : MonoBehaviour
         }
     }
 
-    protected ManRef<T>[] GetAllMenOfType<T>() where T : ManScript
+    public ManRef<T>[] GetAllMenOfType<T>() where T : ManScript
     {
         List<ManRef<T>> men = new List<ManRef<T>>();
         int menFound = 0, c = CountMen();

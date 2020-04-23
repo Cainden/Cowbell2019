@@ -57,4 +57,10 @@ public class Room_Hallway : RoomScript
 
         return bedrooms[Mathf.FloorToInt(x / 5)];
     }
+
+    public Room_Bedroom GetBedroomFromRayCheck()
+    {
+        Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, LayerMask.GetMask("Room"));
+        return GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
+    }
 }
