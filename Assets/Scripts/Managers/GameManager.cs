@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
-        TimeManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
+        MySpace.Events.EventManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
         DebugMenu.SetPanelActive(false);
 
         foreach (RoleInfo r in roles)

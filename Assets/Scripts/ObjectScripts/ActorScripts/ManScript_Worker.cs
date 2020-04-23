@@ -290,7 +290,20 @@ namespace MySpace
                 }
             }
 
+            public float experience;
+
+            public float GetCurrentExp { get { return IsStatMaxed ? -1 : experience; } }
+
+            public int changedValue = 0;
+
             public override string Name { get { return statType.ToString(); } }
+
+            public bool IsStatMaxed { get { return (changedValue + base.value) >= StatMax; } }
+
+            //Hide the base value, since we want the modified value to be used for specialty stats
+            public new float value { get { return changedValue + base.value; } }
+            //Allow the hidden base value to be accessable to make sure you're getting the number you want and not the modified value
+            public float BaseValue { get { return base.value; } set { base.value = value; } }
         }
     }
     
