@@ -141,6 +141,11 @@ public class GuiManager : MonoBehaviour
         RoomInfoWindow.GetComponent<RoomInfoWindowScript>().Activate(roomId);
     }
 
+    public void Show_RoomInfoWindow(RoomScript room)
+    {
+        RoomInfoWindow.GetComponent<RoomInfoWindowScript>().Activate(room);
+    }
+
     public void Hide_RoomInfoWindow()
     {
         RoomInfoWindow.GetComponent<RoomInfoWindowScript>().Deactivate();

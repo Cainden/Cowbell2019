@@ -7,11 +7,7 @@ public abstract class Room_WorkQuarters : RoomScript
 {
     public abstract System.Action<ManScript_Worker> GetRoleFunction { get; }
 
-    [Tooltip("Purely for UI display purposes, this is to be set to return any/all BaseStatTypes used by the work quarters from workers to do their jobs.")]
-    /// <summary>
-    /// Purely for UI display purposes, this is to be set to return any/all BaseStatTypes used by the work quarters from workers to do their jobs.
-    /// </summary>
-    public MySpace.Stats.SpecialtyStat.StatType[] specialStatsUsed;
+    public abstract MySpace.Stats.SpecialtyStat.StatType[] specialStatsUsed { get; }
 
     public override void AssignManToRoomSlot(System.Guid manId, int slotIndex, bool assignedByPlayer)
     {

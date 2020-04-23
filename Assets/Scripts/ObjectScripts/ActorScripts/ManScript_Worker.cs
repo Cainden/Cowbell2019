@@ -223,6 +223,7 @@ namespace MySpace
 
             public abstract string Name { get; }
             public float value;
+            public abstract Sprite GetSprite { get; }
         }
 
         [Serializable]
@@ -257,6 +258,27 @@ namespace MySpace
             }
 
             public override string Name { get { return statType.ToString(); } }
+
+            public override Sprite GetSprite
+            {
+                get
+                {
+                    Debug.LogWarning("General stats still automatically return null when asked for their sprite!");
+                    //Will want to use resources here to load specific sprites for each stat type
+                    switch (statType)
+                    {
+                        case StatType.Loyalty:
+                            return null;
+                        case StatType.Speed:
+                            return null;
+                        case StatType.Dirtiness:
+                            return null;
+                        default:
+                            Debug.LogWarning("There is no sprite referenced in resources for GeneralStat.StatType of type '" + statType + "'!");
+                            return null;
+                    }
+                }
+            }
         }
 
         [Serializable]
@@ -304,6 +326,27 @@ namespace MySpace
             public new float value { get { return changedValue + base.value; } }
             //Allow the hidden base value to be accessable to make sure you're getting the number you want and not the modified value
             public float BaseValue { get { return base.value; } set { base.value = value; } }
+
+            public override Sprite GetSprite
+            {
+                get
+                {
+                    Debug.LogWarning("Specialty stats still automatically return null when asked for their sprite!");
+                    //Will want to use resources here to load specific sprites for each stat type
+                    switch (statType)
+                    {
+                        case StatType.Professionalism:
+                            return null;
+                        case StatType.Physicality:
+                            return null;
+                        case StatType.Intelligence:
+                            return null;
+                        default:
+                            Debug.LogWarning("There is no sprite referenced in resources for SpecialtyStat.StatType of type '" + statType + "'!");
+                            return null;
+                    }
+                }
+            }
         }
     }
     

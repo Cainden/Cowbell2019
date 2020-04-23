@@ -133,6 +133,7 @@ public class RoomManager : MonoBehaviour
         RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
         RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+        RoomData.RoomDescription = RoomDefData.RoomDescription;
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;

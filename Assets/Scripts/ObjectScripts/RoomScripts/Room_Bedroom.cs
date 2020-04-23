@@ -7,8 +7,7 @@ using System;
 public class Room_Bedroom : RoomScript
 {
     #region Serialized Variables
-    [Tooltip("Amount of time between each tick of cleanliness increase/decrease")]
-    public float cleanTickTime = 2;
+    public const float cleanTickTime = 2;
 
     [Tooltip("The cost of this room to stay in for guests")]
     public int RentCost = 50;
@@ -48,7 +47,7 @@ public class Room_Bedroom : RoomScript
         base.Update();
 
         fElapsedTime += Time.deltaTime;
-        if (RoomIsActive && fElapsedTime > cleanTickTime )
+        if (RoomIsActive && fElapsedTime > cleanTickTime)
         {
             int numMen = CountMen();
             fElapsedTime = 0.0f;
@@ -84,14 +83,14 @@ public class Room_Bedroom : RoomScript
 
             if (bStank)
             {
-                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor;
+                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime;
 
                 if (Cleanliness < 0)
                     Cleanliness = 0;
             }
             if (bClean)
             {
-                Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor;
+                Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime;
                 if (Cleanliness > 1)
                     Cleanliness = 1;
             }
@@ -105,7 +104,7 @@ public class Room_Bedroom : RoomScript
     public void SelfInitialize(GridIndex leftMostIndex)
     {
         //HAD TO DO ALL OF THE CREATEROOM INITIALIZATION HERE BECAUSE IT CANNOT BE INSTANTIATED IN THE WRONG POSITION THROUGH CREATEROOM
-        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "Base Bedroom", 0, Enums.RoomOverUnder.Over, false, null);
+        RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "The room in which all Hootel guests stay. These rooms become dirtied by guests over time and need to be cleaned by cleaners.", 0, Enums.RoomOverUnder.Over, false, null);
 
         RoomData = new RoomInstanceData();
         RoomData.RoomId = Guid.NewGuid();
@@ -120,6 +119,7 @@ public class Room_Bedroom : RoomScript
         RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.RoomScript = this;
+        RoomData.RoomDescription = RoomDefData.RoomDescription;
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
