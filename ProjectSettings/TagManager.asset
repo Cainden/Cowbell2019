@@ -46,25 +46,25 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: BG
-    uniqueID: 152761941
-    locked: 0
-  - name: FlatBG
+  - name: FlatBackground
     uniqueID: 2307575901
     locked: 0
-  - name: MidGround
+  - name: Background
+    uniqueID: 152761941
+    locked: 0
+  - name: Midground
     uniqueID: 2333287045
     locked: 0
-  - name: Fore
+  - name: Foreground
     uniqueID: 2908920553
     locked: 0
-  - name: hotelRoom
+  - name: HotelRoom
     uniqueID: 796243403
     locked: 0
-  - name: characters
+  - name: Characters
     uniqueID: 1364724267
     locked: 0
-  - name: RoadnLights
+  - name: RoadAndLights
     uniqueID: 533270469
     locked: 0
   - name: UI
