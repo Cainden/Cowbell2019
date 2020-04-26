@@ -138,28 +138,6 @@ public class ManScript_Worker : ManScript
     
     #region Stat Helper Functions
 
-    public float GetGeneralStatValue(GeneralStat.StatType type)
-    {
-        foreach (GeneralStat s in genStats)
-        {
-            if (s.statType == type)
-                return s.value;
-        }
-        Debug.LogWarning("False Value returned. The type '" + type + "' was not found in the genStats Array.");
-        return -1;
-    }
-
-    public GeneralStat GetGeneralStat(GeneralStat.StatType type)
-    {
-        foreach (GeneralStat s in genStats)
-        {
-            if (s.statType == type)
-                return s;
-        }
-        Debug.LogWarning("Null Stat returned. The type '" + type + "' was not found in the genStats Array.");
-        return null;
-    }
-
     public float GetSpecialtyStatValue(SpecialtyStat.StatType type)
     {
         foreach (SpecialtyStat s in specialStats)

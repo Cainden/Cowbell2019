@@ -34,14 +34,10 @@ public class Room_Bedroom : RoomScript
 
     protected override void Start()
     {
-        base.Start();
-        //thisRend = obj.GetComponent<Renderer>();
-        thisRend = GetComponentInChildren<MeshRenderer>();
-        thisRend.material.color = Color.white;
-        Cleanliness = 1.0f;
+        //We are calling start in Self_Initialize, so there's no need to have it called again here.
+        //base.Start();
     }
 
-    
     protected override void Update()
     {
         base.Update();
@@ -140,6 +136,11 @@ public class Room_Bedroom : RoomScript
         //disable front movement from the other index
         GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
         #endregion
+
+        Cleanliness = 1.0f;
+        thisRend = GetComponentInChildren<MeshRenderer>();
+        thisRend.material.color = Color.white;
+        base.Start();
 
         Enums.ManStates[] CreateNewArray(int length)
         {

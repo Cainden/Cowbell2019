@@ -1,6 +1,7 @@
 ﻿// Object script for general behaviour of one man avatar
 
 using MySpace;
+using MySpace.Stats;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,9 @@ public abstract class ManScript : MonoBehaviour
     #region Inspector Variables
 
     public string ManName;
+
+    [SerializeField] GameObject FrontMesh, SideMesh, MeshParent;
+    [SerializeField] Animator FrontMeshAnim, SideMeshAnim;
 
     #endregion
 
@@ -27,7 +31,8 @@ public abstract class ManScript : MonoBehaviour
 
     public Enums.ManRole role = Enums.ManRole.None;
 
-    public MySpace.Stats.GeneralStat[] genStats;
+    [HideInInspector]
+    public GeneralStat[] genStats;
 
     public abstract float GetNetRevenueCalculation { get; }
     public abstract RevenueInfo.RevenueType RevenueType { get; }
@@ -37,9 +42,43 @@ public abstract class ManScript : MonoBehaviour
     // Avatar movement
     protected List<ActionData> _ActionList = new List<ActionData>();
 
-    protected Animator _Animator;
+    //protected Animator _Animator;
+    protected Animator[] animators;
+    protected int curAnim;
+    protected Animator GetCurrAnim { get { return animators[curAnim]; } }
+    protected int SetCurrAnim
+    {
+        set
+        {
+            curAnim = value;
+            if (curAnim == 0)
+            {
+                FrontMesh.SetActive(true);
+                SideMesh.SetActive(false);
+            }
+            else
+            {
+                FrontMesh.SetActive(false);
+                SideMesh.SetActive(true);
+            }
+        }
+    }
 
+    protected string GetCurrAnimIdleName
+    {
+        get
+        {
+            return "TEMP_Idle";
+        }
+    }
 
+    protected string GetCurrAnimRunName
+    {
+        get
+        {
+            return curAnim == 0 ? "Worker_Walk_Slide" : "Walkforward";
+        }
+    }
 
     #region Material Handling
     private Renderer[] _Renderers;
@@ -61,11 +100,13 @@ public abstract class ManScript : MonoBehaviour
     /// </summary>
     protected virtual void Start()
     {
-        _Animator = GetComponentInChildren<Animator>();
+        //_Animator = GetComponentInChildren<Animator>();
         _Renderers = GetComponentsInChildren<Renderer>();
         SetMaterials();
         CheckReferences();
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
+        animators = new Animator[2] { FrontMeshAnim, SideMeshAnim };
+        SetCurrAnim = 0;
     }
 
     /// <summary>
@@ -74,8 +115,10 @@ public abstract class ManScript : MonoBehaviour
     protected virtual void Update()
     {
         StateUpdate();
+        print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
+    #region Net Revenue Calculation
     protected virtual void OnEnable()
     {
         GameManager.NetRevenueCalculationEvent -= RevenueCalc;
@@ -92,12 +135,16 @@ public abstract class ManScript : MonoBehaviour
         list.Add(new RevenueInfo(GetNetRevenueCalculation, RevenueType, ManData.ManId));
     }
     #endregion
+    #endregion
 
     #region Helper Methods
     protected void CheckReferences()
     {
         Debug.Assert(ManData != null);
-        Debug.Assert(_Animator != null);
+        Debug.Assert(FrontMesh != null);
+        Debug.Assert(FrontMeshAnim != null);
+        Debug.Assert(SideMesh != null);
+        Debug.Assert(SideMeshAnim != null);
         Debug.Assert(_Renderers != null);
         Debug.Assert(_MaterialNormal != null);
         Debug.Assert(_MaterialHighlight != null);
@@ -140,6 +187,70 @@ public abstract class ManScript : MonoBehaviour
         Debug.LogWarning("GetSprite() is still returning null! Men do not have sprites yet!");
         return null;
     }
+
+    private void SetAnimatorRotation(Vector3 currDirection)
+    {
+        if (curAnim == 0)
+        {
+            if (Mathf.Abs(currDirection.x) * 5 > Mathf.Abs(currDirection.z))
+            {
+                SetCurrAnim = 1;
+                SetAnimatorRotation(currDirection);
+                return;
+            }
+            if (currDirection.z > 0)
+            {
+                if (MeshParent.transform.rotation.eulerAngles.y != 0)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else
+            {
+                if (MeshParent.transform.rotation.eulerAngles.y != 180)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
+        else
+        {
+            if (Mathf.Abs(currDirection.x) * 5 < Mathf.Abs(currDirection.z))
+            {
+                SetCurrAnim = 0;
+                SetAnimatorRotation(currDirection);
+                return;
+            }
+            if (currDirection.x > 0)
+            {
+                if (MeshParent.transform.rotation.eulerAngles.y != 180)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+            else
+            {
+                if (MeshParent.transform.rotation.eulerAngles.y != 0)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+    }
+
+    public float GetGeneralStatValue(GeneralStat.StatType type)
+    {
+        foreach (GeneralStat s in genStats)
+        {
+            if (s.statType == type)
+                return s.value;
+        }
+        Debug.LogWarning("False Value returned. The type '" + type + "' was not found in the genStats Array.");
+        return -1;
+    }
+
+    public GeneralStat GetGeneralStat(GeneralStat.StatType type)
+    {
+        foreach (GeneralStat s in genStats)
+        {
+            if (s.statType == type)
+                return s;
+        }
+        Debug.LogWarning("Null Stat returned. The type '" + type + "' was not found in the genStats Array.");
+        return null;
+    }
     #endregion
 
     #region State Methods
@@ -162,8 +273,8 @@ public abstract class ManScript : MonoBehaviour
         switch (State)
         {
             case Enums.ManStates.Running: DoMovement(Constants.ManRunSpeed); break;
-            case Enums.ManStates.RotatingToPlayer: FaceTowardsPlayer(); break;
-            case Enums.ManStates.Rotating: RotateToOrientation(); break;
+            //case Enums.ManStates.RotatingToPlayer: FaceTowardsPlayer(); break;
+            //case Enums.ManStates.Rotating: RotateToOrientation(); break;
             case Enums.ManStates.Idle:
             case Enums.ManStates.None: ProcessActions(); break;
         }
@@ -171,24 +282,49 @@ public abstract class ManScript : MonoBehaviour
 
     private void SetFaceTowardsPlayer()
     {
-        State = Enums.ManStates.RotatingToPlayer;
-        SetAnimation(State);
+        FaceTowardsPlayer();
+        SetAnimation(State, 2);
     }
 
-    protected void SetAnimation(Enums.ManStates state)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
+    protected void SetAnimation(Enums.ManStates state, int dir)
     {
+        switch (dir)
+        {
+            case 0:
+                SetAnimatorRotation(Vector3.zero);
+                break;
+            case 1:
+                SetAnimatorRotation(Vector3.forward);
+                break;
+            case 2:
+                SetAnimatorRotation(Vector3.back);
+                break;
+            case 3:
+                SetAnimatorRotation(Vector3.left);
+                break;
+            case 4:
+                SetAnimatorRotation(Vector3.right);
+                break;
+            default:
+                SetAnimatorRotation(_TargetPos - transform.position);
+                break;
+        }
+
         switch (state)
         {
             case Enums.ManStates.Idle:
             case Enums.ManStates.Waiting:
-                if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-                    _Animator.SetTrigger("IdleTrigger");
+                //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimIdleName))
+                    GetCurrAnim.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
-            case Enums.ManStates.Rotating:
-            case Enums.ManStates.RotatingToPlayer:
-                if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("Running"))
-                    _Animator.SetTrigger("RunningTrigger");
+                //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimRunName))
+                    GetCurrAnim.SetTrigger("RunningTrigger");
                 break;
         }
     }
@@ -197,25 +333,24 @@ public abstract class ManScript : MonoBehaviour
     {
         State = state;
         _TargetPos = position;
-        SetAnimation(State);
+        SetAnimation(State, -1);
     }
 
-    protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
-    {
-        State = state;
-        _TargetRot = rotation;
-        //SetAnimation(state);
-    }
+    //protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
+    //{
+    //    State = state;
+    //    _TargetRot = rotation;
+    //    //SetAnimation(state);
+    //}
 
     #region State Functionality Methods
 
     protected Vector3 _TargetPos;
     private void DoMovement(float movementSpeed)
     {
-        float Distance = Vector3.Distance(transform.position, _TargetPos);
-        float Travel = movementSpeed * Time.deltaTime;
+        float Travel = (movementSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
-        if (Travel > Distance) // Target reached
+        if (Travel > Vector3.Distance(transform.position, _TargetPos)) // Target reached
         {
             transform.position = _TargetPos;
             State = Enums.ManStates.None; // Will trigger next action
@@ -223,44 +358,45 @@ public abstract class ManScript : MonoBehaviour
         }
         else // Regular movement
         {
-            Vector3 DeltaPos = (_TargetPos - transform.position);
-            DeltaPos.Normalize();
-            transform.position += (DeltaPos * Travel);
-            FaceTowardsWaypoint(DeltaPos);
+            Vector3 dir = (_TargetPos - transform.position);
+            dir.Normalize();
+            transform.position += (dir * Travel);
+            //SetAnimation(Enums.ManStates.Running, -1);
         }
     }
 
-    private void FaceTowardsWaypoint(Vector3 deltaPos)
-    {
-        deltaPos.y = 0.0f;
-        if (deltaPos.magnitude == 0) return;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
-    }
+    //private void FaceTowardsWaypoint(Vector3 deltaPos)
+    //{
+    //    deltaPos.y = 0.0f;
+    //    if (deltaPos.magnitude == 0) return;
+    //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
+    //}
 
     private void FaceTowardsPlayer()
     {
-        Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
+        //Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
+        //transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
 
-        if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
-        {
-            transform.rotation = TargetRotation;
-            State = Enums.ManStates.None; // Will trigger next action
-        }
+        //if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
+        //{
+        //    transform.rotation = TargetRotation;
+        //    State = Enums.ManStates.None; // Will trigger next action
+        //}
+        SetAnimation(State, 2);
     }
 
-    protected Quaternion _TargetRot;
-    private void RotateToOrientation()
-    {
-        transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
+    //protected Quaternion _TargetRot;
+    //private void RotateToOrientation()
+    //{
+    //    transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
 
-        if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
-        {
-            transform.rotation = _TargetRot;
-            State = Enums.ManStates.None; // Will trigger next action
-        }
-    }
+    //    if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
+    //    {
+    //        transform.rotation = _TargetRot;
+    //        State = Enums.ManStates.None; // Will trigger next action
+    //    }
+    //}
 
     #endregion
 
@@ -349,6 +485,10 @@ public abstract class ManScript : MonoBehaviour
 
     public void Add_RunAction_ToList(Vector3 position)
     {
+        if (position == Vector3.zero)
+        {
+            Debug.Log("WTF!");
+        }
         _ActionList.Add(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position), ActionData.ActionType.Movement));
     }
 
@@ -357,20 +497,20 @@ public abstract class ManScript : MonoBehaviour
         _ActionList.Add(new ActionData(() => SetFaceTowardsPlayer(), ActionData.ActionType.Movement));
     }
 
-    public void Add_RotateAction_ToList(Quaternion rotation)
-    {
-        _ActionList.Add(new ActionData(() => SetRotateToOrientation(Enums.ManStates.Rotating, rotation), ActionData.ActionType.Movement));
-    }
+    //public void Add_RotateAction_ToList(Quaternion rotation)
+    //{
+    //    _ActionList.Add(new ActionData(() => SetRotateToOrientation(Enums.ManStates.Rotating, rotation), ActionData.ActionType.Movement));
+    //}
 
     public void Add_IdleAction_ToList()
     {
-        _ActionList.Add(new ActionData(() => SetAnimation(Enums.ManStates.Idle), ActionData.ActionType.Animation));
+        _ActionList.Add(new ActionData(() => SetAnimation(Enums.ManStates.Idle, 2), ActionData.ActionType.Animation));
     }
 
     // The working state can be of different animations, dependent on room (idle, working, ...)
     public void Add_WorkingAction_ToList(Enums.ManStates manState)
     {
-        _ActionList.Add(new ActionData(() => SetAnimation(manState), ActionData.ActionType.Animation));
+        _ActionList.Add(new ActionData(() => SetAnimation(manState, 0), ActionData.ActionType.Animation));
     }
 
     public void Add_DoorOpenAction_ToList(Guid roomId)
@@ -401,7 +541,7 @@ public abstract class ManScript : MonoBehaviour
     private IEnumerator WaitForSeconds(float seconds)
     {
         State = Enums.ManStates.Waiting;
-        SetAnimation(State);
+        SetAnimation(State, 0);
         yield return new WaitForSeconds(seconds);
         State = Enums.ManStates.None; // Will trigger next action
     }
@@ -409,7 +549,7 @@ public abstract class ManScript : MonoBehaviour
     private IEnumerator WaitForRoomAccess(Guid room)
     {
         State = Enums.ManStates.Waiting;
-        SetAnimation(State);
+        SetAnimation(State, 0);
         RoomScript r = RoomManager.Ref.GetRoomData(room).RoomScript;
         yield return new WaitUntil(() => r.GetAccessRequest());
         State = Enums.ManStates.None; // Will trigger next action
