@@ -380,7 +380,7 @@ public class ManManager : MonoBehaviour
 
         
         ManScript.Add_RunAction_ToList(NewRoomScript.RoomData.ManSlotsPositions[newSlotIndex]);
-        ManScript.Add_RotateAction_ToList(NewRoomScript.RoomData.ManSlotsRotations[newSlotIndex]);
+        //ManScript.Add_RotateAction_ToList(NewRoomScript.RoomData.ManSlotsRotations[newSlotIndex]);
         ManScript.Add_WorkingAction_ToList(NewRoomScript.RoomData.ManWorkingStates[newSlotIndex]);
     }
 

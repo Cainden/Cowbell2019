@@ -97,12 +97,17 @@ public class GameManager : MonoBehaviour
             manLastName = NameFactory.GetNewLastName(),
             manId = System.Guid.NewGuid(),
             manType = Enums.ManTypes.Guest,
-            generalStats = new GeneralStat[1]
+            generalStats = new GeneralStat[2]
             {
                 new GeneralStat()
                 {
                     statType = GeneralStat.StatType.Dirtiness,
-                    value = 1,
+                    value = 1
+                },
+                new GeneralStat()
+                {
+                    statType = GeneralStat.StatType.Speed,
+                    value = 1
                 }
             }
         };
