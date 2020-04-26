@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: WorkerFrontSpriteLib
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: head
+    m_Hash: -1477183844
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: 1666860647800814656, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -9047830424773867545, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: body
+    m_Hash: -609743950
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -5317688509844233935, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -8606287467439857178, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: L_arm
+    m_Hash: -1353647577
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: 4758724543998880768, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 5376893854297613914, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: R_arm
+    m_Hash: 1887491012
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -3435507303373324650, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 2024079205028618452, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: L_leg
+    m_Hash: 1121846524
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -4788804672401812162, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 245676247456247185, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: R_leg
+    m_Hash: -1660015329
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -1757005873612504909, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 3318606686731865764, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: r_foot
+    m_Hash: -1516194820
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -8060215837441684292, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 3545055164724474546, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: l_foot
+    m_Hash: -1669541865
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: 6446756496877017325, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 7944862833390775521, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
+  - m_Name: tail
+    m_Hash: 2084025437
+    m_CategoryList:
+    - m_Name: template
+      m_Hash: -1755308157
+      m_Sprite: {fileID: -3611543868840244511, guid: ed44ac2bbae61a449be038ba504486d1,
+        type: 3}
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -1730274080843699539, guid: a6287d51b7124004cbbe7974ee556fc8,
+        type: 3}
