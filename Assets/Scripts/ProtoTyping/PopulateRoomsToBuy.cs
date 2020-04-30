@@ -40,16 +40,10 @@ public class PopulateRoomsToBuy : MonoBehaviour
 
 		for (int i = 0; i < itemList.Length; i++)
 		{
-			//Item item = itemList[i];
-			// get object from the pool
-			GameObject newButton = buttonObjectPool.GetObject();
-			// parent the button to the content pool
-			newButton.transform.SetParent(contentPanel, false);
-			// tell button to set it's self up
-			RoomsToBuy roomstobuy = newButton.GetComponent<RoomsToBuy>();
+			GameObject newButton = buttonObjectPool.GetObject(); // get object from the pool
+			newButton.transform.SetParent(contentPanel, false); // parent the button to the content pool			
+			RoomsToBuy roomstobuy = newButton.GetComponent<RoomsToBuy>(); // tell button to set it's self up
 			roomstobuy.Setup(itemList[i]);
-
-
 		}
 	}
 
