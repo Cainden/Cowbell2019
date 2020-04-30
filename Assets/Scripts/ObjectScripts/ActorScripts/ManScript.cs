@@ -64,11 +64,13 @@ public abstract class ManScript : MonoBehaviour
         }
     }
 
+    [SerializeField] string IdleSideName, WalkSideName, IdleFrontName, WalkFrontName;
+
     protected string GetCurrAnimIdleName
     {
         get
         {
-            return "TEMP_Idle";
+            return curAnim == 0 ? IdleSideName : IdleFrontName;
         }
     }
 
@@ -76,7 +78,7 @@ public abstract class ManScript : MonoBehaviour
     {
         get
         {
-            return curAnim == 0 ? "Worker_Walk_Slide" : "Walkforward";
+            return curAnim == 0 ? WalkSideName : WalkFrontName;
         }
     }
 
@@ -200,13 +202,13 @@ public abstract class ManScript : MonoBehaviour
             }
             if (currDirection.z > 0)
             {
-                if (MeshParent.transform.rotation.eulerAngles.y != 0)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
+                if (MeshParent.transform.rotation.eulerAngles.y != 180)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
             else
             {
-                if (MeshParent.transform.rotation.eulerAngles.y != 180)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+                if (MeshParent.transform.rotation.eulerAngles.y != 0)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
         else
@@ -219,13 +221,13 @@ public abstract class ManScript : MonoBehaviour
             }
             if (currDirection.x > 0)
             {
-                if (MeshParent.transform.rotation.eulerAngles.y != 180)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
+                if (MeshParent.transform.rotation.eulerAngles.y != 0)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             else
             {
-                if (MeshParent.transform.rotation.eulerAngles.y != 0)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
+                if (MeshParent.transform.rotation.eulerAngles.y != 180)
+                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
             }
         }
     }
