@@ -1,0 +1,174 @@
+fileFormatVersion: 2
+guid: 0389734d75ebdd74e93d2ec4422e74f0
+ModelImporter:
+  serializedVersion: 19300
+  internalIDToNameTable:
+  - first:
+      74: -6104743234347040476
+    second: LobbyBackWall|PlaneAction.001
+  - first:
+      74: 2497062927633787248
+    second: LobbyRwall|PlaneAction.001
+  - first:
+      74: -5941607845726268907
+    second: LobbyRWallBack|PlaneAction.001
+  - first:
+      74: 87845534296350915
+    second: LobbyLwall|PlaneAction.001
+  - first:
+      74: -834193636182066684
+    second: LobbyFloor|PlaneAction.001
+  - first:
+      74: -8527790347325294143
+    second: Lobbybootom|PlaneAction.001
+  - first:
+      74: 8567900342450722445
+    second: LobbyRoofTOP|PlaneAction.001
+  - first:
+      74: 1275296318257799686
+    second: LobbyBackWall.009|PlaneAction.001
+  - first:
+      74: -7425455007868565392
+    second: LobbyRoof|PlaneAction.001
+  - first:
+      74: -3542872989634239818
+    second: LobbyRwall_Frame_Facing|PlaneAction.001
+  - first:
+      74: 3498793430368548757
+    second: LobbyRwall_Frame_TOP|PlaneAction.001
+  - first:
+      74: -2034873646027189227
+    second: LobbyRwall_Frame_BACK|PlaneAction.001
+  - first:
+      74: -8114953263453516379
+    second: LobbyRwall_Frame_Floor|PlaneAction.001
+  - first:
+      74: -7716965696327907702
+    second: LobbyLwall_Frame_Facing|PlaneAction.001
+  - first:
+      74: -4198517215415184837
+    second: LobbyLwall_Frame_Floor|PlaneAction.001
+  - first:
+      74: -7805716946305944112
+    second: LobbyLwall_Frame_Back|PlaneAction.001
+  - first:
+      74: 1837691793644103590
+    second: LobbyLwall_Frame_top|PlaneAction.001
+  - first:
+      74: 7151961883950823281
+    second: LobbyLwallBack|PlaneAction.001
+  - first:
+      74: -1718139029072065045
+    second: LobbyRdoorFram|PlaneAction.001
+  - first:
+      74: 6335210352619885582
+    second: LobbyTopDoorFrame|PlaneAction.001
+  - first:
+      74: 7518042322491005535
+    second: LobbyLdoorFram|PlaneAction.001
+  - first:
+      74: -1602890277763726257
+    second: LobbyBottomDoorFrame|PlaneAction.001
+  - first:
+      74: 6664153426072410541
+    second: LobbyBackWall.025|PlaneAction.001
+  - first:
+      74: 1551448093850132075
+    second: LobbyBackWall.026|PlaneAction.001
+  - first:
+      74: -2334196514939892196
+    second: LobbyBackWall.027|PlaneAction.001
+  - first:
+      74: 2321165440703640319
+    second: LobbyBackWall.028|PlaneAction.001
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
