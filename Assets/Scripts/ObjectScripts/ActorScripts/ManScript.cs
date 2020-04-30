@@ -115,7 +115,7 @@ public abstract class ManScript : MonoBehaviour
     protected virtual void Update()
     {
         StateUpdate();
-        print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
+        //print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
     #region Net Revenue Calculation

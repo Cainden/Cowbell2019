@@ -10,7 +10,7 @@ using MySpace;
 
 public class DebugToolsScript : MonoBehaviour
 {
-
+    public Toggle guestDraggableToggle = null;
     public static bool debugToolsActive = false;
     public GameObject debugElementsUI = null;
     public InputField ifHoots = null;
@@ -25,6 +25,17 @@ public class DebugToolsScript : MonoBehaviour
     void Awake()
     {
         if (Ref == null) Ref = GetComponent<DebugToolsScript>();
+    }
+
+    private void OnEnable()
+    {
+        guestDraggableToggle.SetIsOnWithoutNotify(ClickManager.GuestsDraggable);
+        guestDraggableToggle.onValueChanged.AddListener(SetGuestDraggable);
+    }
+
+    private void OnDisable()
+    {
+        guestDraggableToggle.onValueChanged.RemoveListener(SetGuestDraggable);
     }
 
     void Update()
@@ -75,5 +86,10 @@ public class DebugToolsScript : MonoBehaviour
     public void CreateRandomGuest()
     {
         ClickManager.Ref.Button_Book(GameManager.CreateDefaultGuest());
+    }
+
+    public void SetGuestDraggable(bool enabled)
+    {
+        ClickManager.GuestsDraggable = enabled;
     }
 }

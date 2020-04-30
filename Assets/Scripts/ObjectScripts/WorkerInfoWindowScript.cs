@@ -81,6 +81,11 @@ public class WorkerInfoWindowScript : MonoBehaviour
         genstat1Name.text = "Speed";
         genstat1FrontSlider.fillAmount = worker.GetGeneralStatValue(GeneralStat.StatType.Speed) / Stat.StatMax;
 
+        //The base value won't change, so there's no need to have it call this multiple times.
+        professionalismFrontSlider.fillAmount = worker.GetSpecialtyStat(SpecialtyStat.StatType.Professionalism).BaseValue / Stat.StatMax;
+        intelligenceFrontSlider.fillAmount = worker.GetSpecialtyStat(SpecialtyStat.StatType.Intelligence).BaseValue / Stat.StatMax;
+        physicalityFrontSlider.fillAmount = worker.GetSpecialtyStat(SpecialtyStat.StatType.Physicality).BaseValue / Stat.StatMax;
+
         //workerImage.sprite = worker.
 
         StartCoroutine(InfoUpdateWorker());
@@ -101,13 +106,14 @@ public class WorkerInfoWindowScript : MonoBehaviour
     {
         while (active && worker)
         {
-            physicalityFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
-            //physicalityRearSlider.fillAmount = worker. ???
-            intelligenceFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
-            //intelligenceRearSlider.fillAmount = worker. ???
-            professionalismFrontSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
+            physicalityRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
+            intelligenceRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
+            professionalismRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
+            
 
-
+            physicalityExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Physicality).GetCurrentExp;
+            intelligenceExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Intelligence).GetCurrentExp;
+            professionalismExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Professionalism).GetCurrentExp;
 
 
             yield return null;
