@@ -40,10 +40,11 @@ public class PopulateRoomsToBuy : MonoBehaviour
 
 		for (int i = 0; i < itemList.Length; i++)
 		{
+            if (itemList[i].RoomCost <= 0) //Rooms with a cost of 0 or less should not be displayed as purchasable, these include the lobbies or other pre-built rooms
+                continue;
 			GameObject newButton = buttonObjectPool.GetObject(); // get object from the pool
-			newButton.transform.SetParent(contentPanel, true); // parent the button to the content pool			
-			RoomsToBuy roomstobuy = newButton.GetComponent<RoomsToBuy>(); // tell button to set it's self up
-			roomstobuy.Setup(itemList[i]);
+			newButton.transform.SetParent(contentPanel, true); // parent the button to the content pool
+            newButton.GetComponent<RoomsToBuy>().Setup(itemList[i]);
 		}
 	}
 
@@ -54,7 +55,7 @@ public class PopulateRoomsToBuy : MonoBehaviour
         {
             GameObject newButton = hireObjectPool.GetObject();
 
-            newButton.transform.SetParent(contentPanel, false);
+            newButton.transform.SetParent(contentPanel, true);
 
             newButton.GetComponent<WorkerToHire>().Setup(man);
         }
