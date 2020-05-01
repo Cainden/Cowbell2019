@@ -21,6 +21,20 @@ public class ClickManager : MonoBehaviour
     private int _LayerMaskRoom;
     private int _LayerMaskBuildPos;
 
+    public static event Action<bool> SetGuestLayerEvent;
+    public static bool GuestsDraggable
+    {
+        get => guestsDraggable;
+        set
+        {
+            guestsDraggable = value;
+            SetGuestLayerEvent?.Invoke(value);
+        }
+    }
+    private static bool guestsDraggable = false;
+
+
+
     void Awake()
     {
 		#region Singleton Managment
@@ -102,7 +116,13 @@ public class ClickManager : MonoBehaviour
 			return;
 		}
 
-		if (_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
+        if (CameraScript.Ref.IsCamDragging == true)
+        {
+            CameraScript.Ref.ResetCameraDragging();
+            return;
+        }
+
+        if (_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
 		{
 			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
 
@@ -148,12 +168,6 @@ public class ClickManager : MonoBehaviour
 			StateManager.Ref.SetGameState(Enums.GameStates.Normal);
 			return;
 		}
-
-		if (CameraScript.Ref.IsCamDragging == true)
-		{
-			CameraScript.Ref.ResetCameraDragging();
-			return;
-		}
 	}
 
 	void LeftMouse()
@@ -183,12 +197,15 @@ public class ClickManager : MonoBehaviour
             {
                 _MouseOnManDownTime = Time.time;
                 Guid ManId = hitInfo.transform.GetComponent<ManScript>().ManData.ManId;
-                StateManager.Ref.SetGameState(Enums.GameStates.ManPressed, ManId);
-                return (true);
+                if (!guestsDraggable && ManManager.Ref.GetManData(ManId).ManScript.ManType == Enums.ManTypes.Guest)
+                    StateManager.Ref.SetGameState(Enums.GameStates.ManSelected, ManId);
+                else
+                    StateManager.Ref.SetGameState(Enums.GameStates.ManPressed, ManId);
+                return true;
             }
         }
 
-        return (false);
+        return false;
     }
 
     bool RayCastCheckRoomClicked()
@@ -256,10 +273,9 @@ public class ClickManager : MonoBehaviour
         {
             // Check if LMB has been pressed on a man, is still over it and held
             // long enough to enter ManDragging mode
-            RaycastHit hitInfo;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskMan))
+            if (Physics.Raycast(ray, out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskMan))
             {
                 if ((Time.time - _MouseOnManDownTime) > Constants.MouseDragInvokeDownTime)
                 {

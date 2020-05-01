@@ -76,9 +76,26 @@ public class TimeManager : MonoBehaviour
     private float quarterDay;
     private float halfquarterDay;
 
+    /// <summary>
+    /// Real world time that in-game hours take in seconds
+    /// </summary>
     public static float HourTime { get; private set; }
+    /// <summary>
+    /// Real world time that in-game minutes take in seconds
+    /// </summary>
     public static float MinuteTime { get; private set; }
+    /// <summary>
+    /// Real world time that in-game seconds take
+    /// </summary>
     public static float SecondsTime { get; private set; }
+
+    public static float RatioCycleTime
+    {
+        get
+        {
+            return currentCycleTime / Ref.dayCycleLength;
+        }
+    }
 
     /// The specified intensity of the directional light, if one exists. This value will be  
     /// faded to 0 during dusk, and faded from 0 back to this value during dawn.  
@@ -359,7 +376,7 @@ namespace MySpace
                 Guid g = Events[0].ID;
                 while (Events[0].CheckEvent(lastFrame, cct))
                 {
-                    if (Events[0].ID.CompareTo(g) is 0)
+                    if (Events[0].ID == g)
                         break;
                 }
 
@@ -369,14 +386,19 @@ namespace MySpace
             #region Event Helper Functions
             internal static void RePositionEvent(Event e)
             {
+                float r = TimeManager.RatioCycleTime;
+                float t = e.Ratio;
+                if (t <= r)
+                    t += 1;
                 for (int i = 0; i < Events.Count; i++)
                 {
-                    float t = Events[i].EventTime, t2 = e.EventTime;
-                    if (((t < TimeManager.currentCycleTime) ? t + TimeManager.currentCycleTime : t) < ((t2 < TimeManager.currentCycleTime) ? t2 + TimeManager.currentCycleTime : t2))
-                        continue;
-                    else
+                    float t2 = Events[i].Ratio;
+                    if (t2 <= r)
+                        t2 += 1;
+                    if (t < t2)
                     {
                         Events.Insert(i, e);
+                        return;
                     }
                 }
                 Events.Add(e);
@@ -416,19 +438,17 @@ namespace MySpace
 
             public static void AddEventTriggerToGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
             {
-                float tt = TimeManager.Ref.dayCycleLength;
-                float h = (tt / 24) * hours;
-                float m = (h / 60) * minutes;
-                float s = (m / 60) * seconds;
+                float h = TimeManager.HourTime * hours;
+                float m = TimeManager.MinuteTime * minutes;
+                float s = TimeManager.SecondsTime * seconds;
                 RePositionEvent(new ClockEvent(out Guid id, repeating, action, h + m + s));
             }
 
             public static void AddEventTriggerBasedOnGameTime(int hours, int minutes, int seconds, Action action, bool repeating = false)
             {
-                float tt = TimeManager.Ref.dayCycleLength;
-                float h = (tt / 24) * hours;
-                float m = (h / 60) * minutes;
-                float s = (m / 60) * seconds;
+                float h = TimeManager.HourTime * hours;
+                float m = TimeManager.MinuteTime * minutes;
+                float s = TimeManager.SecondsTime * seconds;
                 RePositionEvent(new ClockEvent(out Guid id, repeating, action, TimeManager.currentCycleTime + h + m + s));
             }
 
@@ -495,6 +515,10 @@ namespace MySpace
 
                 public bool CheckEvent(float x, float y)
                 {
+                    if (x > 119)
+                    {
+
+                    }
                     if (x > y)
                     {
                         if (EventTime > y)

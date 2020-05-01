@@ -47,7 +47,7 @@ public class RoomsToBuyObjectPool : MonoBehaviour
 		if (pooledObject != null && pooledObject.pool == this)
 		{
 			// make the instance a child of this and disable it
-			toReturn.transform.SetParent(transform,false);
+			toReturn.transform.SetParent(transform, true);
 			toReturn.SetActive(false);
 
 			// add the instance to the collection of inactive instances

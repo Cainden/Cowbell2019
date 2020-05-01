@@ -24,6 +24,7 @@ public class GuiManager : MonoBehaviour
     public GameObject RoomInfoWindow = null;
     //public GameObject ManInfoWindow = null;
     public WorkerInfoWindowScript WorkerInfoWindow = null;
+    public DailySummaryScript DailySummaryPanel = null;
     public GameObject BuildRoomDlg = null;
     //public GameObject MainMenuDlg = null;
     //public GameObject HireDlg = null;
