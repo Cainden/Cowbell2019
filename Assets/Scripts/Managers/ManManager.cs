@@ -264,7 +264,7 @@ public class ManManager : MonoBehaviour
             goto CannotAssign;
         }
 
-        if (!RoomManager.IsRoomOfType<Room_WorkQuarters>(NewRoomScript) && ManScript.ManType == Enums.ManTypes.Worker)
+        if (fromPlayer && !RoomManager.IsRoomOfType<Room_WorkQuarters>(NewRoomScript) && ManScript.ManType == Enums.ManTypes.Worker)
         {
             goto CannotAssign;
         }

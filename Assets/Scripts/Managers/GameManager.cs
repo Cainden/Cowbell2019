@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviour
     {
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
         MySpace.Events.EventManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
+        MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
         DebugMenu.SetPanelActive(false);
 
         foreach (RoleInfo r in roles)
@@ -77,6 +78,10 @@ public class GameManager : MonoBehaviour
         {
             AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            InitiateEndOfDay();
+        }
         //if (Input.GetKeyDown(KeyCode.BackQuote))
         //{
         //    DebugMenu.SetPanelActive(!DebugMenu.debugElementsUI);
@@ -87,6 +92,11 @@ public class GameManager : MonoBehaviour
     {
         ClickManager.Ref.Button_Book(CreateDefaultGuest());
         //ClickManager.Ref.AddNewGuest();
+    }
+
+    public void InitiateEndOfDay()
+    {
+        GuiManager.Ref.DailySummaryPanel.Enable("No Name", 0.95f);
     }
 
     public static GuestConstructionData CreateDefaultGuest()
@@ -152,6 +162,13 @@ public class GameManager : MonoBehaviour
         }
         return f;
     }
+
+    public static List<RevenueInfo> GetNetRevenueInfo()
+    {
+        List<RevenueInfo> list = new List<RevenueInfo>();
+        NetRevenueCalculationEvent?.Invoke(list);
+        return list;
+    }
     #endregion
 }
 
@@ -170,9 +187,16 @@ namespace MySpace
     {
         public enum RevenueType : byte { Worker, Guest, Room }
 
+        /// <summary>
+        /// The increase or decrease in value that this object has on the revnue of each given day.
+        /// </summary>
         public float effect;
         public RevenueType revenueType;
         public System.Guid objectId;
+
+        /// <summary>
+        /// If the revenue is estimated or simply a hard known value. Estimated values will come from non-daily sources, like a bar or casino that relies on guest usage.
+        /// </summary>
         public bool estimated;
 
         public RevenueInfo(float value, RevenueType type, System.Guid id)

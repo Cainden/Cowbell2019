@@ -502,7 +502,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1572628178334771262}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2195080385777746284}
+        m_MethodName: ProceedToNextDayClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1743560064861721679
 GameObject:
   m_ObjectHideFlags: 0
@@ -2846,7 +2857,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 9040415772792066417}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2195080385777746284}
+        m_MethodName: FinancesClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9179439170951187211
 GameObject:
   m_ObjectHideFlags: 0
@@ -3014,6 +3036,7 @@ GameObject:
   - component: {fileID: 9179439171855146397}
   - component: {fileID: 9179439171855146399}
   - component: {fileID: 9179439171855146398}
+  - component: {fileID: 2195080385777746284}
   m_Layer: 5
   m_Name: DailySummary
   m_TagString: Untagged
@@ -3083,6 +3106,32 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2195080385777746284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9179439171855146396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f7f325fb4383549a708baa5f2cd29c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Title: {fileID: 9179439170951187213}
+  HappinessText: {fileID: 6509469524939135230}
+  BucksInText: {fileID: 8397427323200275235}
+  BucksOutText: {fileID: 7289165390561186816}
+  TotalText: {fileID: 8184769860370646854}
+  HappyFace: {fileID: 4705719895554686949}
+  AlmostHappyFace: {fileID: 9051813128700193747}
+  NotHappyFace: {fileID: 6365688187101073302}
+  LyeydownFace: {fileID: 4189373742989503157}
+  BotheyesdownFace: {fileID: 4155805042081323737}
+  SadFace: {fileID: 3936171393062363811}
+  ScaredFace: {fileID: 4145948621623231859}
+  SickFace: {fileID: 1541378664549960807}
+  MonsterFace: {fileID: 1743560064861721679}
 --- !u!1 &9179439172507298166
 GameObject:
   m_ObjectHideFlags: 0
