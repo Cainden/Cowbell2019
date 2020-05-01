@@ -70,6 +70,7 @@ public abstract class ManScript : MonoBehaviour
     {
         get
         {
+            //print("Getting Idle Anim Name " + curAnim + ": " + (curAnim == 0 ? IdleSideName : IdleFrontName));
             return curAnim == 0 ? IdleSideName : IdleFrontName;
         }
     }
@@ -78,6 +79,7 @@ public abstract class ManScript : MonoBehaviour
     {
         get
         {
+            //print("Getting Walk Anim Name " + curAnim + ": " + (curAnim == 0 ? WalkSideName : WalkFrontName));
             return curAnim == 0 ? WalkSideName : WalkFrontName;
         }
     }
@@ -322,11 +324,11 @@ public abstract class ManScript : MonoBehaviour
             case Enums.ManStates.Idle:
             case Enums.ManStates.Waiting:
                 //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimIdleName))
-                    GetCurrAnim.SetTrigger("IdleTrigger");
+                GetCurrAnim.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
                 //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimRunName))
-                    GetCurrAnim.SetTrigger("RunningTrigger");
+                GetCurrAnim.SetTrigger("RunningTrigger");
                 break;
         }
     }
