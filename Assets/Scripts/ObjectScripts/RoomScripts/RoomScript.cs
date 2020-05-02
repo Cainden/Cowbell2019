@@ -241,14 +241,12 @@ public class RoomScript : MonoBehaviour
     public ManRef<T>[] GetAllMenOfType<T>() where T : ManScript
     {
         List<ManRef<T>> men = new List<ManRef<T>>();
-        int menFound = 0, c = CountMen();
-        for (int i = 0; menFound < c; i++)
+        for (int i = 0; i < RoomData.ManSlotsAssignments.Length; i++)
         {
             if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
             {
                 if (!manManRef.IsManTypeOf<T>(RoomData.ManSlotsAssignments[i]))
                     continue;
-                menFound++;
                 men.Add(manManRef.GetManData<T>(RoomData.ManSlotsAssignments[i]));
             }
         }

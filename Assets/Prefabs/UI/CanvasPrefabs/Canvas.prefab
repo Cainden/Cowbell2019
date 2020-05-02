@@ -3778,6 +3778,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6851528480464684524}
     m_Modifications:
+    - target: {fileID: 231303987042987073, guid: 88e610c5374914a4983caab4c7d7025b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6851528480780740418}
+    - target: {fileID: 231303987042987073, guid: 88e610c5374914a4983caab4c7d7025b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Button_Close
+      objectReference: {fileID: 0}
     - target: {fileID: 3499295711223015152, guid: 88e610c5374914a4983caab4c7d7025b,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -5345,7 +5355,7 @@ PrefabInstance:
     - target: {fileID: 3268648552144230352, guid: e900beaa473580c48a15ad4c07cd56d1,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 400
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3268648552144230352, guid: e900beaa473580c48a15ad4c07cd56d1,
         type: 3}
