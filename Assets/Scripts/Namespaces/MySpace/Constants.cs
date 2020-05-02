@@ -17,7 +17,7 @@ namespace MySpace
 
         public static readonly float GridElementWidth = 2.5f;  // X-Size
         public static readonly float GridElementHeight = 4.0f; // Y-Size
-        public static readonly float GridElementDepth = 5.0f;  // Z-Size
+        public static readonly float GridElementDepth = 4.0f;  // Z-Size
 
         // Selection definitions
         public static readonly float MouseDragInvokeDownTime = 0.5f;

@@ -68,10 +68,12 @@ public class RoomScript : MonoBehaviour
     public virtual void OnInitialization() { }
 
     //To be used, most specifically, by elevators for the waiting in line functionality for guests/workers
-    public virtual bool GetAccessRequest()
+    public virtual bool GetAccessRequest(ManScript man)
     {
         return true;
     }
+
+    public virtual void ManHasEntered(ManScript man) { }
 
     public bool HasOwner()
     {

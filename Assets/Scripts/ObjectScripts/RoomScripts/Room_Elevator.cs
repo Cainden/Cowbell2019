@@ -62,38 +62,43 @@ public class Room_Elevator : RoomScript
     private void CheckReferences()
     {
         _Animator = GetComponentInChildren<Animator>();
+        _Animator.speed = 2;
         Debug.Assert(_Animator != null);
     }
 
-    private bool manHere = false;
-    public void SetAnimation_OpenDoor(bool manEntering)
+    private ManScript manHere = null;
+    public void SetAnimation_OpenDoor()
     {
-        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorOpened"))
-            _Animator.SetTrigger("DoorOpenTrigger");
-        if (manEntering)
-        {
-            foreach(Room_Elevator r in eTower)
-            {
-                r.manHere = true;
-            }
-        }
-            
+        _Animator.SetBool("Ele_DoorOpen", true);
+        //_Animator.SetTrigger("DoorOpenTrigger");
     }
 
     public void SetAnimation_CloseDoor(bool manLeaving)
     {
-        if (!_Animator.GetCurrentAnimatorStateInfo(0).IsName("DoorClosedg")) _Animator.SetTrigger("DoorCloseTrigger");
+        _Animator.SetBool("Ele_DoorOpen", false);
+        //_Animator.SetTrigger("DoorCloseTrigger");
         if (manLeaving)
         {
             foreach (Room_Elevator r in eTower)
             {
-                r.manHere = false;
+                r.manHere = null;
             }
         }
     }
 
-    public override bool GetAccessRequest()
+    public override void ManHasEntered(ManScript man)
     {
-        return !manHere;
+        foreach (Room_Elevator r in eTower)
+        {
+            r.manHere = man;
+        }
+    }
+
+    public override bool GetAccessRequest(ManScript man)
+    {
+        if (manHere == null)
+            return true;
+        else
+            return man == manHere;
     }
 }

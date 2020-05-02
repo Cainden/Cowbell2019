@@ -446,13 +446,13 @@ public abstract class ManScript : MonoBehaviour
         //Changed this lambda in preparation to set up the "line" system for elevators.
         _ActionList.Add(new ActionData(() => 
         {
-            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(true);
+            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(/*true*/);
         }, ActionData.ActionType.Elevator));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
+        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
     }
 
     public void Add_SelfDestruction_ToList()
@@ -476,10 +476,15 @@ public abstract class ManScript : MonoBehaviour
 
     private IEnumerator WaitForRoomAccess(Guid room)
     {
-        State = Enums.ManStates.Waiting;
-        SetAnimation(State, 0);
-        RoomScript r = RoomManager.Ref.GetRoomData(room).RoomScript;
-        yield return new WaitUntil(() => r.GetAccessRequest());
+        var r = RoomManager.Ref.GetRoomData(room).RoomScript;
+        if (!r.GetAccessRequest(this))
+        {
+            State = Enums.ManStates.Waiting;
+            SetAnimation(State, 0);
+
+            yield return new WaitUntil(() => r.GetAccessRequest(this));
+        }
+        r.ManHasEntered(this); //Notify the room that there is now a man in the room
         State = Enums.ManStates.None; // Will trigger next action
     }
 
@@ -499,7 +504,7 @@ public abstract class ManScript : MonoBehaviour
         //Make sure there is another action after the current one
         if (_ActionList.Count > actionsToCheck)
         {
-            for (int i = 0; i < actionsToCheck; i++)
+            for (int i = 1; i < actionsToCheck; i++)
             {
                 if (_ActionList[i].ActionMethod == typeCheck)
                     return true;
