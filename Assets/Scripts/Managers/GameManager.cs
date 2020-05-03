@@ -78,14 +78,6 @@ public class GameManager : MonoBehaviour
         {
             AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            InitiateEndOfDay();
-        }
-        //if (Input.GetKeyDown(KeyCode.BackQuote))
-        //{
-        //    DebugMenu.SetPanelActive(!DebugMenu.debugElementsUI);
-        //}
     }
 
     private void CreateBasicGuest()

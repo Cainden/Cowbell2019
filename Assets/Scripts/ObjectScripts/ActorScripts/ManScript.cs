@@ -14,8 +14,7 @@ public abstract class ManScript : MonoBehaviour
 
     public string ManName;
 
-    [SerializeField] GameObject FrontMesh, SideMesh, MeshParent;
-    [SerializeField] Animator FrontMeshAnim, SideMeshAnim;
+    [SerializeField] GameObject MeshParent;
 
     #endregion
 
@@ -43,44 +42,7 @@ public abstract class ManScript : MonoBehaviour
     protected List<ActionData> _ActionList = new List<ActionData>();
 
     //protected Animator _Animator;
-    protected Animator[] animators;
-    protected int curAnim;
-    protected Animator GetCurrAnim { get { return animators[curAnim]; } }
-    protected int SetCurrAnim
-    {
-        set
-        {
-            curAnim = value;
-            if (curAnim == 0)
-            {
-                FrontMesh.SetActive(true);
-                SideMesh.SetActive(false);
-            }
-            else
-            {
-                FrontMesh.SetActive(false);
-                SideMesh.SetActive(true);
-            }
-        }
-    }
-
-    [SerializeField] string IdleSideName, WalkSideName, IdleFrontName, WalkFrontName;
-
-    protected string GetCurrAnimIdleName
-    {
-        get
-        {
-            return curAnim == 0 ? IdleSideName : IdleFrontName;
-        }
-    }
-
-    protected string GetCurrAnimRunName
-    {
-        get
-        {
-            return curAnim == 0 ? WalkSideName : WalkFrontName;
-        }
-    }
+    [SerializeField] protected Animator animator;
 
     #region Material Handling
     private Renderer[] _Renderers;
@@ -107,8 +69,6 @@ public abstract class ManScript : MonoBehaviour
         SetMaterials();
         CheckReferences();
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
-        animators = new Animator[2] { FrontMeshAnim, SideMeshAnim };
-        SetCurrAnim = 0;
     }
 
     /// <summary>
@@ -143,10 +103,6 @@ public abstract class ManScript : MonoBehaviour
     protected void CheckReferences()
     {
         Debug.Assert(ManData != null);
-        Debug.Assert(FrontMesh != null);
-        Debug.Assert(FrontMeshAnim != null);
-        Debug.Assert(SideMesh != null);
-        Debug.Assert(SideMeshAnim != null);
         Debug.Assert(_Renderers != null);
         Debug.Assert(_MaterialNormal != null);
         Debug.Assert(_MaterialHighlight != null);
@@ -192,43 +148,15 @@ public abstract class ManScript : MonoBehaviour
 
     private void SetAnimatorRotation(Vector3 currDirection)
     {
-        if (curAnim == 0)
+        if (currDirection.x > 0)
         {
-            if (Mathf.Abs(currDirection.x) * 5 > Mathf.Abs(currDirection.z))
-            {
-                SetCurrAnim = 1;
-                SetAnimatorRotation(currDirection);
-                return;
-            }
-            if (currDirection.z > 0)
-            {
-                if (MeshParent.transform.rotation.eulerAngles.y != 180)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
-            else
-            {
-                if (MeshParent.transform.rotation.eulerAngles.y != 0)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
+            if (MeshParent.transform.rotation.eulerAngles.y != 0)
+                MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
-        else
+        else if (currDirection.x < 0)
         {
-            if (Mathf.Abs(currDirection.x) * 5 < Mathf.Abs(currDirection.z))
-            {
-                SetCurrAnim = 0;
-                SetAnimatorRotation(currDirection);
-                return;
-            }
-            if (currDirection.x > 0)
-            {
-                if (MeshParent.transform.rotation.eulerAngles.y != 0)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else
-            {
-                if (MeshParent.transform.rotation.eulerAngles.y != 180)
-                    MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
-            }
+            if (MeshParent.transform.rotation.eulerAngles.y != 180)
+                MeshParent.transform.rotation = Quaternion.Euler(0, 180, 0);
         }
     }
 
@@ -321,12 +249,10 @@ public abstract class ManScript : MonoBehaviour
         {
             case Enums.ManStates.Idle:
             case Enums.ManStates.Waiting:
-                //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimIdleName))
-                    GetCurrAnim.SetTrigger("IdleTrigger");
+                animator.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
-                //if (!GetCurrAnim.GetCurrentAnimatorStateInfo(0).IsName(GetCurrAnimRunName))
-                    GetCurrAnim.SetTrigger("RunningTrigger");
+                animator.SetTrigger("RunningTrigger");
                 break;
         }
     }
@@ -520,13 +446,13 @@ public abstract class ManScript : MonoBehaviour
         //Changed this lambda in preparation to set up the "line" system for elevators.
         _ActionList.Add(new ActionData(() => 
         {
-            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(true);
+            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(/*true*/);
         }, ActionData.ActionType.Elevator));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
+        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
     }
 
     public void Add_SelfDestruction_ToList()
@@ -550,10 +476,15 @@ public abstract class ManScript : MonoBehaviour
 
     private IEnumerator WaitForRoomAccess(Guid room)
     {
-        State = Enums.ManStates.Waiting;
-        SetAnimation(State, 0);
-        RoomScript r = RoomManager.Ref.GetRoomData(room).RoomScript;
-        yield return new WaitUntil(() => r.GetAccessRequest());
+        var r = RoomManager.Ref.GetRoomData(room).RoomScript;
+        if (!r.GetAccessRequest(this))
+        {
+            State = Enums.ManStates.Waiting;
+            SetAnimation(State, 0);
+
+            yield return new WaitUntil(() => r.GetAccessRequest(this));
+        }
+        r.ManHasEntered(this); //Notify the room that there is now a man in the room
         State = Enums.ManStates.None; // Will trigger next action
     }
 
@@ -573,7 +504,7 @@ public abstract class ManScript : MonoBehaviour
         //Make sure there is another action after the current one
         if (_ActionList.Count > actionsToCheck)
         {
-            for (int i = 0; i < actionsToCheck; i++)
+            for (int i = 1; i < actionsToCheck; i++)
             {
                 if (_ActionList[i].ActionMethod == typeCheck)
                     return true;
