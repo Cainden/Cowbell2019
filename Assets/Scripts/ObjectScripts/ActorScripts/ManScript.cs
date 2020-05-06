@@ -69,6 +69,7 @@ public abstract class ManScript : MonoBehaviour
         SetMaterials();
         CheckReferences();
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
+        animator.speed = (1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * 2;
     }
 
     /// <summary>
@@ -252,10 +253,32 @@ public abstract class ManScript : MonoBehaviour
                 animator.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
-                animator.SetTrigger("RunningTrigger");
+                CheckMovementDir((_TargetPos - transform.position).normalized);
                 break;
         }
+
+        void CheckMovementDir(Vector3 d)
+        {
+            if (d.y > 0)
+            {
+                if (d.x + d.z < d.y * 0.1f)
+                    //Might want a flying animation here eventually if we end up doing that, or a specific animation for being in an elevator?
+                    animator.SetTrigger("IdleTrigger");
+                else
+                    goto Run;
+            }
+            else
+            {
+                goto Run;
+            }
+            return;
+
+        Run:
+            animator.SetTrigger("RunningTrigger");
+        }
     }
+
+    
 
     protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
     {
@@ -443,16 +466,21 @@ public abstract class ManScript : MonoBehaviour
 
     public void Add_DoorOpenAction_ToList(Guid roomId)
     {
-        //Changed this lambda in preparation to set up the "line" system for elevators.
         _ActionList.Add(new ActionData(() => 
         {
             (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(/*true*/);
+            StartCoroutine(WaitForDoor(RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator, false));
         }, ActionData.ActionType.Elevator));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator)), ActionData.ActionType.Elevator));
+        _ActionList.Add(new ActionData(() => 
+        {
+            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator));
+            if (CheckElevatorActionQueue(ActionData.ActionType.Elevator))
+                StartCoroutine(WaitForDoor(RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator, true));
+        }, ActionData.ActionType.Elevator));
     }
 
     public void Add_SelfDestruction_ToList()
@@ -486,6 +514,18 @@ public abstract class ManScript : MonoBehaviour
         }
         r.ManHasEntered(this); //Notify the room that there is now a man in the room
         State = Enums.ManStates.None; // Will trigger next action
+    }
+
+    private IEnumerator WaitForDoor(Room_Elevator room, bool closed)
+    {
+        Enums.ManStates s = State;
+        State = Enums.ManStates.Waiting;
+        SetAnimation(State, 0);
+        yield return new WaitUntil(() => room.CheckDoor(closed) == false);
+        yield return new WaitUntil(() => room.CheckDoor(closed));
+
+        State = s;
+        SetAnimation(s, 0);
     }
 
     public void Add_Action_ToList(ActionData action)

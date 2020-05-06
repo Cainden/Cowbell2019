@@ -8,6 +8,52 @@ public class Room_Elevator : RoomScript
 {
     private Animator _Animator;
 
+    #region DoorUtilityFunctions
+    float c = -1;
+    private float clipLength
+    {
+        get
+        {
+            if (c < 0)
+            {
+                c = _Animator.runtimeAnimatorController.animationClips[0].length;
+            }
+            return c;
+        }
+    }
+    private bool GetDoorIsOpen
+    {
+        get
+        {
+            if (_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= clipLength && !_Animator.IsInTransition(0))
+            {
+                return _Animator.GetBool("Ele_DoorOpen");
+            }
+            else
+                return false;
+        }
+    }
+    private bool GetDoorIsClosed
+    {
+        get
+        {
+            if (_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= clipLength && !_Animator.IsInTransition(0))
+            {
+                return !_Animator.GetBool("Ele_DoorOpen");
+            }
+            else
+                return false;
+        }
+    }
+    public bool CheckDoor(bool closed)
+    {
+        if (closed)
+            return GetDoorIsClosed;
+        else
+            return GetDoorIsOpen;
+    }
+    #endregion
+
     private List<Room_Elevator> eTower = null;
 
     public override void OnInitialization()
@@ -62,7 +108,6 @@ public class Room_Elevator : RoomScript
     private void CheckReferences()
     {
         _Animator = GetComponentInChildren<Animator>();
-        _Animator.speed = 2;
         Debug.Assert(_Animator != null);
     }
 
@@ -70,13 +115,11 @@ public class Room_Elevator : RoomScript
     public void SetAnimation_OpenDoor()
     {
         _Animator.SetBool("Ele_DoorOpen", true);
-        //_Animator.SetTrigger("DoorOpenTrigger");
     }
 
     public void SetAnimation_CloseDoor(bool manLeaving)
     {
         _Animator.SetBool("Ele_DoorOpen", false);
-        //_Animator.SetTrigger("DoorCloseTrigger");
         if (manLeaving)
         {
             foreach (Room_Elevator r in eTower)
