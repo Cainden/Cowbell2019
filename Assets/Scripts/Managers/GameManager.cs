@@ -191,12 +191,12 @@ namespace MySpace
         /// </summary>
         public bool estimated;
 
-        public RevenueInfo(float value, RevenueType type, System.Guid id)
+        public RevenueInfo(float value, RevenueType type, System.Guid id, bool estimated = false)
         {
             effect = value;
             revenueType = type;
             objectId = id;
-            estimated = false;
+            this.estimated = estimated;
         }
     }
 }
