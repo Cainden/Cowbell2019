@@ -376,6 +376,11 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 7e1a00a6c4b395846b5c272cbbec2719,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d4f6b29c2df3b47488130760739a7483, type: 2}
     - target: {fileID: -927199367670048503, guid: 7e1a00a6c4b395846b5c272cbbec2719,
         type: 3}
       propertyPath: m_Name
