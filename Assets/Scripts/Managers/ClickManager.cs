@@ -350,27 +350,6 @@ public class ClickManager : MonoBehaviour
         ManManager.Ref.RemoveManFromList(ManId);
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
     }
-
-    #region This function should no longer ever be called.
-    //public void AddNewMan()
-    //{
-    //    //if (StateManager.Ref.IsManWaiting()) return;
-
-    //    Guid ManId = Guid.NewGuid();
-
-    //    WorkerConstructionData ManData = new WorkerConstructionData();
-    //    ManData.manId = ManId;
-    //    ManData.manType = Enums.ManTypes.Worker;
-    //    ManData.manFirstName = NameFactory.GetNewFirstName();
-    //    ManData.manLastName = NameFactory.GetNewLastName();
-
-    //    ManManager.Ref.hireList.Add(ManData);
-
-    //    //ManManager.Ref.CreateMan(ManId, Enums.ManTypes.StandardMan);
-    //    //StateManager.Ref.SetWaitingMan(ManId);
-    //    //GuiManager.Ref.Initiate_UserInfoSmall("New man incoming!");
-    //}
-    #endregion
     
     public void AddNewCleaner()
     {
@@ -446,64 +425,6 @@ public class ClickManager : MonoBehaviour
     {
         StartCoroutine(LoadSaveManager.Ref.LoadCurrentState());
     }
-
-    //DEPRECATED DUE TO NEW UI
-    //public void BuildButtonClicked()
-    //{
-    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-    //        (GuiManager.Ref.IsBuildRoomDlgActive()))
-    //    {
-    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    //        return;
-    //    }
-
-    //    if (!StateManager.Ref.IsRoomBuildDialogAllowed()) return;
-
-    //    GuiManager.Ref.ShowBuildRoomDlg(true);
-    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    //}
-    //public void HireButtonClicked()
-    //{
-    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-    //       (GuiManager.Ref.IsHireDlgActive()))
-    //    {
-    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    //        return;
-    //    }
-
-    //    if (!StateManager.Ref.IsHireDialogAllowed()) return;
-
-    //    GuiManager.Ref.ShowHireDlg(true);
-    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    //}
-    //public void BookButtonClicked()
-    //{
-    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-    //       (GuiManager.Ref.IsBookGuestDlgActive()))
-    //    {
-    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    //        return;
-    //    }
-
-    //    if (!StateManager.Ref.IsBookGuestDialogAllowed()) return;
-
-    //    GuiManager.Ref.ShowBookGuestDlg(true);
-    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    //}
-    //public void MainMenuButtonClicked()
-    //{
-    //    if ((StateManager.Ref.GetGameState() == Enums.GameStates.GuiBlocking) &&
-    //        (GuiManager.Ref.IsMainMenuDlgActive()))
-    //    {
-    //        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    //        return;
-    //    }
-
-    //    if (!StateManager.Ref.IsMainMenuDialogAllowed()) return;
-
-    //    GuiManager.Ref.ShowMainMenuDlg(true);
-    //    StateManager.Ref.SetGameState(Enums.GameStates.GuiBlocking);
-    //}
 
     private void InitiateBuilding(Enums.RoomTypes RoomType)
     {

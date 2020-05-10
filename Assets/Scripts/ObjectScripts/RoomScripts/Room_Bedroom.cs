@@ -6,8 +6,11 @@ using System;
 
 public class Room_Bedroom : RoomScript
 {
+    public const float cleanTickTime = 1;
+
     #region Serialized Variables
-    public const float cleanTickTime = 2;
+    [SerializeField] Shader stankShade;
+    [SerializeField] Material stankMatSet;
 
     [Tooltip("The cost of this room to stay in for guests")]
     public int RentCost = 50;
@@ -17,8 +20,8 @@ public class Room_Bedroom : RoomScript
     public override Enums.ManRole RoomRole => Enums.ManRole.Guest;
 
     #region Private Variables
-    MeshRenderer thisRend;
-
+    ParticleSystem stankParts;
+    Material stankMat;
     private float fElapsedTime = 0;
 
     // Room Attributes
@@ -91,9 +94,7 @@ public class Room_Bedroom : RoomScript
                     Cleanliness = 1;
             }
 
-
-
-            thisRend.material.SetColor("_Color", Color.Lerp(Color.green, Color.white, Cleanliness));
+            SetShaderValue();
         }
     }
 
@@ -137,10 +138,16 @@ public class Room_Bedroom : RoomScript
         GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
         #endregion
 
-        Cleanliness = 1.0f;
-        thisRend = GetComponentInChildren<MeshRenderer>();
-        thisRend.material.color = Color.white;
+        Cleanliness = 1;
+        stankParts = GetComponentInChildren<ParticleSystem>();
+        
+        stankParts.GetComponentInChildren<Renderer>().material = Instantiate(stankMatSet);
+        stankMat = stankParts.GetComponentInChildren<Renderer>().material;
+        stankMat.shader = Instantiate(stankShade);
+
+        //Call start now so that it happens before waiting for the next frame.
         base.Start();
+        SetShaderValue();
 
         Enums.ManStates[] CreateNewArray(int length)
         {
@@ -151,5 +158,24 @@ public class Room_Bedroom : RoomScript
             }
             return ar;
         }
+    }
+
+    private void SetShaderValue()
+    {
+        //Cleanliness below 80 % should spawn the particles
+        if (Cleanliness > 0.8f)
+        {
+            if (stankParts.gameObject.activeInHierarchy)
+                stankParts.gameObject.SetActive(false);
+            return;
+        }
+        else if (!stankParts.gameObject.activeInHierarchy)
+        {
+            stankParts.gameObject.SetActive(true);
+        }
+
+        //The 1.25 multiplier is to offset the 80% activation value. The 0.4 multiplier is to make it so that the particle shader float is never above 0.4
+        stankMat.SetFloat("trans", (1 - (Cleanliness * 1.25f)) * 0.4f);
+        //print(stankMat.GetFloat("trans"));
     }
 }

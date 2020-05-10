@@ -88,7 +88,15 @@ public class CameraScript : MonoBehaviour
 		panPlane.SetNormalAndPosition(transform.forward, new Vector3(transform.position.x, transform.position.y, 0));
 		delta1 = PlanePosDelta(Input.mousePosition);
 		cam.transform.Translate(-delta1, Space.World);
-		prevMousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        Vector2 mPos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        if (!IsCamDragging)
+        {
+            if (mPos != prevMousePos)
+            {
+                SetCameraDragging();
+            }
+        }
+		prevMousePos = mPos;
 	}
 
 	Vector3 PlanePosDelta(Vector2 _screenPos)
