@@ -54,6 +54,8 @@ public abstract class ManScript : MonoBehaviour
     // Couroutines
     private IEnumerator WaitCoroutine;
 
+    private MoodBubbleScript moodScript;
+
 
     #endregion
     #endregion
@@ -70,6 +72,7 @@ public abstract class ManScript : MonoBehaviour
         CheckReferences();
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
         animator.speed = (1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * 2;
+        moodScript = GetComponentInChildren<MoodBubbleScript>();
     }
 
     /// <summary>
@@ -181,6 +184,23 @@ public abstract class ManScript : MonoBehaviour
         }
         Debug.LogWarning("Null Stat returned. The type '" + type + "' was not found in the genStats Array.");
         return null;
+    }
+
+    public void SetMood(Enums.ManMood mood, bool displayMoodChange, float? displayDuration = null)
+    {
+        if (!moodScript)
+            return;
+        if (displayMoodChange)
+            moodScript.DisplayMood(mood, displayDuration);
+        else
+            moodScript.SetMood(mood);
+    }
+
+    public Enums.ManMood GetMood()
+    {
+        if (!moodScript)
+            return Enums.ManMood.Happy;
+        return moodScript.CurrentMood;
     }
     #endregion
 

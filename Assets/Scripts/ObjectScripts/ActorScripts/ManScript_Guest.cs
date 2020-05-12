@@ -70,6 +70,7 @@ public class ManScript_Guest : ManScript
         //ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         //TransferOwnershipToNewRoom(RoomManager.lobbyId);
         //Add_Action_ToList(new ActionData(SendSignalToLobby));
+        waiting = false;
         SendSignalToLobby();
     }
 
@@ -79,6 +80,7 @@ public class ManScript_Guest : ManScript
         CheckIfRentTime();
     }
 
+    bool waiting;
     private void SendSignalToLobby()
     {
         ////Find the lobby
@@ -96,11 +98,18 @@ public class ManScript_Guest : ManScript
             Room_CleanerCloset.RoomFinishedCleaningEvent += SendSignalToLobby;
             ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
             TransferOwnershipToNewRoom(RoomManager.lobbyId);
+            waiting = true;
+            SetMood(Enums.ManMood.Angry, true);
         }
         else
         {
             BuildManager.BuildFinishedEvent -= SendSignalToLobby;
             Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
+            if (waiting)
+            {
+                SetMood(Enums.ManMood.Neutral, true, 3);
+                waiting = false;
+            }
         }
     }
 

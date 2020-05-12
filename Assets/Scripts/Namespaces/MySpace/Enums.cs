@@ -101,5 +101,45 @@ namespace MySpace
             Guest,
             Cleaner,
         }
+
+        public enum ManMood : byte
+        {
+            /// <summary>
+            /// almost happy face
+            /// </summary>
+            Neutral = 1,
+            /// <summary>
+            /// happy face
+            /// </summary>
+            Happy = 0,
+            /// <summary>
+            /// sad face
+            /// </summary>
+            Sad = 4,
+            /// <summary>
+            /// both-eyes-down face
+            /// </summary>
+            Angry = 3,
+            /// <summary>
+            /// no face selected yet
+            /// </summary>
+            Sleepy = 100, //??
+            /// <summary>
+            /// not happy face
+            /// </summary>
+            Bored = 2,
+            /// <summary>
+            /// sick face
+            /// </summary>
+            Sick = 7,
+            /// <summary>
+            /// scared face
+            /// </summary>
+            Scared = 5,
+            /// <summary>
+            /// monster face
+            /// </summary>
+            MonsterAlert = 6
+        }
     }
 }
