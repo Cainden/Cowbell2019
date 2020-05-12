@@ -396,14 +396,25 @@ public class ManManager : MonoBehaviour
         {
             WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
             Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
-            
-            manScript.Add_RunAction_ToList(WorldPos);
-            
+
+            if (i > 0 && pathIndizes[i - 1].Y != pathIndizes[i].Y) // Going up an elevator
+            {
+                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+                {
+                    manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, true);
+                    //Dont need the movement action since the elevator will move the character with the elevator box
+                }
+            }
+            else
+                manScript.Add_RunAction_ToList(WorldPos);
+
+
             if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
             {
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                 {
                     manScript.Add_AccessAction_ToList(RoomID);
+                    manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, false);
                     manScript.Add_DoorOpenAction_ToList(RoomID);
                 }
                     

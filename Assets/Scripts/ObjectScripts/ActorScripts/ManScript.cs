@@ -503,6 +503,18 @@ public abstract class ManScript : MonoBehaviour
         }, ActionData.ActionType.Elevator));
     }
 
+    public void Add_ElevatorMovementAction_ToList(Room_Elevator room, int YIndex, bool moveMan)
+    {
+        _ActionList.Add(new ActionData(() =>
+        {
+            if (moveMan)
+                room.MoveBoxToFloor(YIndex, this);
+            else
+                room.MoveBoxToFloor(YIndex);
+            StartCoroutine(WaitForRoomAccess(room));
+        }, ActionData.ActionType.Elevator));
+    }
+
     public void Add_SelfDestruction_ToList()
     {
         _ActionList.Add(new ActionData(() => Destroy(gameObject), ActionData.ActionType.Die));
@@ -536,6 +548,19 @@ public abstract class ManScript : MonoBehaviour
         State = Enums.ManStates.None; // Will trigger next action
     }
 
+    private IEnumerator WaitForRoomAccess(RoomScript room)
+    {
+        if (!room.GetAccessRequest(this))
+        {
+            State = Enums.ManStates.Waiting;
+            SetAnimation(State, 0);
+
+            yield return new WaitUntil(() => room.GetAccessRequest(this));
+        }
+        room.ManHasEntered(this); //Notify the room that there is now a man in the room
+        State = Enums.ManStates.None; // Will trigger next action
+    }
+
     private IEnumerator WaitForDoor(Room_Elevator room, bool closed)
     {
         Enums.ManStates s = State;
@@ -546,6 +571,14 @@ public abstract class ManScript : MonoBehaviour
 
         State = s;
         SetAnimation(s, 0);
+    }
+
+    private IEnumerator WaitForElevatorMovement(Room_Elevator room)
+    {
+        State = Enums.ManStates.Waiting;
+        SetAnimation(State, 0);
+        yield return new WaitUntil(() => !room.BoxMoving); //Wait until the elevator box has reached it's destination
+        State = Enums.ManStates.None;
     }
 
     public void Add_Action_ToList(ActionData action)
