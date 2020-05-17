@@ -58,6 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b5ea471dde65b644b50b86e15b79f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeshBothOpen: {fileID: 8664459326464954025}
+  MeshROpen: {fileID: 0}
+  MeshLOpen: {fileID: 0}
   RoomStats:
     RoomName: Elevator
     RoomSize: 1
@@ -77,6 +80,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4203951147202168}
     m_Modifications:
+    - target: {fileID: 2528587347890475381, guid: 0d3be83f9551a054dac2ea0ddcce8373,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3623800203132539500, guid: 0d3be83f9551a054dac2ea0ddcce8373,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5497610312551439583, guid: 0d3be83f9551a054dac2ea0ddcce8373,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -142,6 +155,12 @@ PrefabInstance:
 --- !u!4 &450196958012801050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5497610312551439583, guid: 0d3be83f9551a054dac2ea0ddcce8373,
+    type: 3}
+  m_PrefabInstance: {fileID: 5364918330869652677}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8664459326464954025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3623800203132539500, guid: 0d3be83f9551a054dac2ea0ddcce8373,
     type: 3}
   m_PrefabInstance: {fileID: 5364918330869652677}
   m_PrefabAsset: {fileID: 0}

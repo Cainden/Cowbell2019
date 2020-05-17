@@ -363,6 +363,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402c51b6c3d566e4ea258f6906579295, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeshBothOpen: {fileID: 7599563955905493902}
+  MeshROpen: {fileID: 0}
+  MeshLOpen: {fileID: 0}
   RoomStats:
     RoomName: 
     RoomSize: 2

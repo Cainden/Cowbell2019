@@ -75,16 +75,16 @@ public class ClickManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		ClickManager.LeftClick_Down += LeftMouseDown;
-		ClickManager.LeftClick_Up += LeftMouseUp;
-		ClickManager.LeftClick += LeftMouse;
+		LeftClick_Down += LeftMouseDown;
+		LeftClick_Up += LeftMouseUp;
+		LeftClick += LeftMouse;
 	}
 
 	private void OnDisable()
 	{
-		ClickManager.LeftClick_Down -= LeftMouseDown;
-		ClickManager.LeftClick_Up -= LeftMouseUp;
-		ClickManager.LeftClick -= LeftMouse;
+		LeftClick_Down -= LeftMouseDown;
+		LeftClick_Up -= LeftMouseUp;
+		LeftClick -= LeftMouse;
 	}
 
 	#region input methods

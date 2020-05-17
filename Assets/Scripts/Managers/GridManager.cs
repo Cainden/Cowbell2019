@@ -137,7 +137,9 @@ public class GridManager : MonoBehaviour
     public Guid GetGridTileRoomGuid(GridIndex index)
     {
         if (index == null) throw new ArgumentNullException("index");
-        Debug.Assert(index.IsValid() == true);
+        //Debug.Assert(index.IsValid() == true);
+        if (!index.IsValid())
+            return Guid.Empty;
         return (_GridData[index.X, index.Y, index.Z].RoomId);
     }
 

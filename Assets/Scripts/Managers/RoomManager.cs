@@ -160,48 +160,6 @@ public class RoomManager : MonoBehaviour
         //Let the room know that it has initialized
         roomData.RoomScript.OnInitialization();
     }
-
-    #region Old CreateRoom
-    //public void CreateRoom(Guid roomId, Enums.RoomTypes roomType, Enums.RoomSizes roomSize, Enums.RoomOverUnder roomOverUnder, GridIndex leftMostIndex)
-    //{
-    //    RoomDefData RoomDefData = GetRoomDefData(roomType, roomSize, roomOverUnder);
-
-    //    RoomInstanceData RoomData = new RoomInstanceData();
-    //    RoomData.RoomId = roomId;
-    //    RoomData.RoomName = RoomDefData.RoomName;
-    //    RoomData.RoomSize = RoomDefData.RoomSize;
-    //    RoomData.RoomCategory = RoomDefData.RoomCategory;
-    //    RoomData.RoomType = RoomDefData.RoomType;
-    //    RoomData.RoomOverUnder = RoomDefData.RoomOverUnder;
-    //    RoomData.ManSlotCount = RoomDefData.ManSlotCount;
-    //    RoomData.ManSlotsPositions = new Vector3[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
-    //    RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
-    //    RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
-    //    RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
-
-    //    for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
-    //    RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
-    //    RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(roomSize, leftMostIndex);
-
-    //    for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.OwnerSlotsAssignments[i] = Guid.Empty;
-
-    //    CreateRoom(RoomData);
-    //}
-
-    //public void CreateRoom(RoomInstanceData roomData)
-    //{
-    //    if (roomData == null) return;
-
-    //    GameObject RoomObject = InstantiateRoom(roomData.RoomType, roomData.RoomSize, roomData.RoomOverUnder);
-    //    RoomScript RoomScript = RoomObject.GetComponent<RoomScript>();
-    //    RoomScript.RoomData = roomData;
-
-    //    _RoomList[roomData.RoomId] = new RoomRef(RoomObject, RoomScript);
-    //    RoomObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(roomData.GetLeftMostIndex());
-    //    GridManager.Ref.RegisterAtGrid(roomData.RoomSize, roomData.RoomId, roomData.GetLeftMostIndex());
-    //}
-    #endregion
-
     #endregion
 
     #region HelperFunction Library
@@ -236,6 +194,8 @@ public class RoomManager : MonoBehaviour
 
     public RoomRef GetRoomData(GridIndex gridIndex)
     {
+        if (!gridIndex.IsValid())
+            return null;
         return GetRoomData(GridManager.Ref.GetGridTileRoomGuid(gridIndex));
     }
 
