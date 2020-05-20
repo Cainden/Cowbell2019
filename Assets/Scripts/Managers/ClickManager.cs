@@ -344,11 +344,20 @@ public class ClickManager : MonoBehaviour
     public void DeleteSelectedMan()
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
-        Guid ManId = StateManager.Ref.GetSelectedMan();
-        ManManager.Ref.MakeManLeave(ManId);
-        ManManager.Ref.RemoveManFromRoom(ManId);        
-        ManManager.Ref.RemoveManFromList(ManId);
+        DeleteMan(StateManager.Ref.GetSelectedMan());
+    }
+
+    public void DeleteMan(Guid manId)
+    {
+        ManManager.Ref.MakeManLeave(manId);
+        ManManager.Ref.RemoveManFromRoom(manId);
+        ManManager.Ref.RemoveManFromList(manId);
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
+    }
+
+    public void DeleteMan(ManScript man)
+    {
+        DeleteMan(man.ManData.ManId);
     }
     
     public void AddNewCleaner()

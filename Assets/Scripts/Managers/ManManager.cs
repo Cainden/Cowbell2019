@@ -150,6 +150,7 @@ public class ManManager : MonoBehaviour
     public void MakeManLeave(Guid manId)
     {
         ManScript ManScript = _ManList[manId].ManScript;
+        _ManList.Remove(manId);
 
         // Disable the raycast option
         ManScript.SetGhostState();
@@ -174,6 +175,7 @@ public class ManManager : MonoBehaviour
 
         // Submit self-destruction of object
         ManScript.Add_SelfDestruction_ToList();
+        
     }
 
     public ManRef<ManScript> GetManData(Guid manId)

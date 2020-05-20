@@ -69,7 +69,7 @@ public class Room_Bedroom : RoomScript
                 if (manManRef.IsManTypeOf<ManScript_Guest>(id))
                 {
                     bStank = true;
-                    dirtyFactor += (manManRef.GetManData(id).ManScript as ManScript_Guest).dirtyFactor;
+                    dirtyFactor += manManRef.GetManData(id).ManScript.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Dirtiness);
                 }
                 else if (manManRef.IsManTypeOf<ManScript_Worker>(id))
                 {

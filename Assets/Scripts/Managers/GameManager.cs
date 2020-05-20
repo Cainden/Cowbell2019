@@ -10,6 +10,13 @@ using Unity.Mathematics;
 public class GameManager : MonoBehaviour
 {
     #region Serialized Variables
+    [Header("Guest Stay Time")]
+    public int guestMaxStayTimeDays;
+    public int guestMinStayTimeDays;
+    public int guestMaxStayTimeHours;
+    public int guestMinStayTimeHours;
+
+    [Header("===================================================================================================================================================================================")]
     [SerializeField] DebugToolsScript DebugMenu;
 
     [SerializeField] RoleInfo[] roles;
@@ -78,7 +85,73 @@ public class GameManager : MonoBehaviour
         {
             AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Testing(40, 1.5f);
+        }
     }
+
+    #region
+
+    void Testing(float avg, float standDev)
+    {
+        float r = 41.5f;
+
+        float result = 0;
+
+        int count = 0;
+        while (r > -9999f)
+        {
+            count++;
+            float sig = Mathf.Sqrt(standDev);
+            float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
+
+            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
+
+            result += (f1 * f2);
+            r -= 1;
+        }
+
+
+        //float sig = Mathf.Sqrt(standDev);
+        //float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
+
+        //float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
+
+        //float result = f1 * f2;
+
+        Debug.Log("Count = " + count + "  result = " + result);
+    }
+
+    void CumulativeTesting(float avg, float standDev)
+    {
+        float r = UnityEngine.Random.Range(0f, 1f);
+        float c = avg, lastIncrement = c * 0.5f;
+
+
+
+
+        for (int i = 0; i < 100; i++)
+        {
+            float sig = Mathf.Sqrt(standDev);
+            float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
+
+            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
+            //float f2 = Mathf.Pow(math.E, -Mathf.Pow((r - avg) / sig, 2) * 0.5f);
+
+            float result = f1 * f2;
+        }
+
+        
+
+        //Debug.Log("r = " + r + "  result = " + result);
+
+
+
+
+    }
+
+    #endregion
 
     private void CreateBasicGuest()
     {
@@ -128,6 +201,16 @@ public class GameManager : MonoBehaviour
         float t = (sMax - sMin) / 9;
 
         return Mathf.RoundToInt(sMin + (t * (loyalty - 1)));
+    }
+
+    public static float GetRandomizedGuestStayTime(/*input a guest stay multiplier of some kind here maybe?*/)
+    {
+        float dayTime = TimeManager.Ref.dayCycleLength;
+        float rDays = UnityEngine.Random.Range(Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
+        float rHours = UnityEngine.Random.Range(Ref.guestMinStayTimeHours, Ref.guestMaxStayTimeHours);
+
+
+        return (rDays * TimeManager.Ref.dayCycleLength) + (rHours * TimeManager.HourTime);
     }
 
     #region Net Revenue Stuff

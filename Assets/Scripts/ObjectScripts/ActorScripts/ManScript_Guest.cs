@@ -6,8 +6,6 @@ using System;
 
 public class ManScript_Guest : ManScript
 {
-    public float dirtyFactor = 1;
-
     public override Enums.ManTypes ManType { get { return Enums.ManTypes.Guest; } }
 
     public override float GetNetRevenueCalculation
@@ -72,12 +70,16 @@ public class ManScript_Guest : ManScript
         //Add_Action_ToList(new ActionData(SendSignalToLobby));
         waiting = false;
         SendSignalToLobby();
+
+        //I don't want to make this a time-based event, because it should be able to be reduced depending on the guest's experience at the hootel.
+        stayTime = GameManager.GetRandomizedGuestStayTime();
     }
 
     protected override void Update()
     {
         base.Update();
         CheckIfRentTime();
+        CheckStayTime();
     }
 
     bool waiting;
@@ -135,5 +137,29 @@ public class ManScript_Guest : ManScript
             hasPaidRent = false;
         }
     }
+    #endregion
+
+    #region Guest Stay Time Methods
+    private float stayTime;
+
+    private void CheckStayTime()
+    {
+        stayTime -= Time.deltaTime;
+        if (stayTime <= 0)
+        {
+            ClickManager.Ref.DeleteMan(this);
+        }
+    }
+
+    public void LowerStayTime(float amount)
+    {
+        stayTime -= amount;
+    }
+
+    public void LowerStayTime(int days, int hours)
+    {
+        stayTime -= (days * TimeManager.Ref.dayCycleLength) + (hours * TimeManager.HourTime);
+    }
+
     #endregion
 }

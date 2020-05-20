@@ -39856,266 +39856,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0647142ad441aaf4487a0b99e6b28ade, type: 3}
---- !u!1 &1050968214
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1050968216}
-  - component: {fileID: 1050968215}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1050968215
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050968214}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 199d4b02989321e4f99d5d58dc3201f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DebugMenu: {fileID: 1331259067}
-  roles:
-  - role: 2
-    incomeMinimum: 50
-    incomeMaximum: 100
-  startingHoots: 1000
-  workersToMake:
-  - manType: 2
-    manFirstName: 1 Stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 1
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 1
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 1
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 1
-      statType: 0
-    - value: 1
-      statType: 1
-  - manType: 2
-    manFirstName: 2 Stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 2
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 2
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 2
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 2
-      statType: 0
-    - value: 2
-      statType: 1
-  - manType: 2
-    manFirstName: 3 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 3
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 3
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 3
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 3
-      statType: 0
-    - value: 3
-      statType: 1
-  - manType: 2
-    manFirstName: 4 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 4
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 4
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 4
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 4
-      statType: 0
-    - value: 4
-      statType: 1
-  - manType: 2
-    manFirstName: 5 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 5
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 5
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 5
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 5
-      statType: 0
-    - value: 5
-      statType: 1
-  - manType: 2
-    manFirstName: 6 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 6
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 6
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 6
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 6
-      statType: 0
-    - value: 6
-      statType: 1
-  - manType: 2
-    manFirstName: 7 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 7
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 7
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 7
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 7
-      statType: 0
-    - value: 7
-      statType: 1
-  - manType: 2
-    manFirstName: 8 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 8
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 8
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 8
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 8
-      statType: 0
-    - value: 8
-      statType: 1
-  - manType: 2
-    manFirstName: 9 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 9
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 9
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 9
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 9
-      statType: 0
-    - value: 9
-      statType: 1
-  - manType: 2
-    manFirstName: 10 stat
-    manLastName: Guy
-    specialtyStats:
-    - value: 10
-      statType: 0
-      experience: 0
-      changedValue: 0
-    - value: 10
-      statType: 1
-      experience: 0
-      changedValue: 0
-    - value: 10
-      statType: 2
-      experience: 0
-      changedValue: 0
-    generalStats:
-    - value: 10
-      statType: 0
-    - value: 10
-      statType: 1
---- !u!4 &1050968216
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1050968214}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 433.67654, y: 234.48032, z: -1197.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1051928941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2393752684172816300, guid: 0647142ad441aaf4487a0b99e6b28ade,
@@ -79374,6 +79114,80 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fc230055b419d648a2dffec533bb376, type: 3}
+--- !u!1001 &7824208365335819638
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7824208366114158048, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158049, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: DebugMenu
+      value: 
+      objectReference: {fileID: 1331259067}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 433.67654
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 234.48032
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1197.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7824208366114158062, guid: 01eb20fcaf6f65848ae8ddb3410e2b81,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 01eb20fcaf6f65848ae8ddb3410e2b81, type: 3}
 --- !u!1001 &7870926889597476208
 PrefabInstance:
   m_ObjectHideFlags: 0
