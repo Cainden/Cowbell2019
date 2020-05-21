@@ -13,8 +13,6 @@ public class GameManager : MonoBehaviour
     [Header("Guest Stay Time")]
     public int guestMaxStayTimeDays;
     public int guestMinStayTimeDays;
-    public int guestMaxStayTimeHours;
-    public int guestMinStayTimeHours;
 
     [Header("===================================================================================================================================================================================")]
     [SerializeField] DebugToolsScript DebugMenu;
@@ -203,14 +201,9 @@ public class GameManager : MonoBehaviour
         return Mathf.RoundToInt(sMin + (t * (loyalty - 1)));
     }
 
-    public static float GetRandomizedGuestStayTime(/*input a guest stay multiplier of some kind here maybe?*/)
+    public static int GetRandomizedGuestStayTime(/*input a guest stay multiplier of some kind here maybe?*/)
     {
-        float dayTime = TimeManager.Ref.dayCycleLength;
-        float rDays = UnityEngine.Random.Range(Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
-        float rHours = UnityEngine.Random.Range(Ref.guestMinStayTimeHours, Ref.guestMaxStayTimeHours);
-
-
-        return (rDays * TimeManager.Ref.dayCycleLength) + (rHours * TimeManager.HourTime);
+        return UnityEngine.Random.Range(Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
     }
 
     #region Net Revenue Stuff

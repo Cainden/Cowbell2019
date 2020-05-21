@@ -79,7 +79,6 @@ public class ManScript_Guest : ManScript
     {
         base.Update();
         CheckIfRentTime();
-        CheckStayTime();
     }
 
     bool waiting;
@@ -129,6 +128,15 @@ public class ManScript_Guest : ManScript
     {
         if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8 && RoomManager.IsRoomOfType<Room_Bedroom>(ManData.OwnedRoomRef.RoomScript))
         {
+            stayTime--;
+            if (stayTime <= 0)
+            {
+                ClickManager.Ref.DeleteMan(this);
+                hasPaidRent = true;
+                return;
+            }
+
+
             PayUserInHoots("Rent", (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost);
             hasPaidRent = true;
         }
@@ -140,25 +148,16 @@ public class ManScript_Guest : ManScript
     #endregion
 
     #region Guest Stay Time Methods
-    private float stayTime;
+    private int stayTime;
 
-    private void CheckStayTime()
-    {
-        stayTime -= Time.deltaTime;
-        if (stayTime <= 0)
-        {
-            ClickManager.Ref.DeleteMan(this);
-        }
-    }
-
-    public void LowerStayTime(float amount)
+    public void LowerStayTime(int amount)
     {
         stayTime -= amount;
     }
 
-    public void LowerStayTime(int days, int hours)
+    public void OverRideLeave()
     {
-        stayTime -= (days * TimeManager.Ref.dayCycleLength) + (hours * TimeManager.HourTime);
+
     }
 
     #endregion
