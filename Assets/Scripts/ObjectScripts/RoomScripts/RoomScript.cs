@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class RoomScript : MonoBehaviour
 {
+    [SerializeField] GameObject MeshBothOpen = null, MeshROpen = null, MeshLOpen = null;
+
     // Instance specific data. Kept separate for easier serialization
     [HideInInspector] public RoomInstanceData RoomData;
 
@@ -43,6 +45,8 @@ public class RoomScript : MonoBehaviour
         Debug.Assert(RoomData.ManSlotCount == RoomData.ManSlotsPositions.Length);
         Debug.Assert(RoomData.ManSlotCount == RoomData.ManSlotsRotations.Length);
         Debug.Assert(RoomData.ManSlotCount == RoomData.ManSlotsAssignments.Length);
+        Debug.Assert(MeshBothOpen != null);
+        //dont need to assert the other two, not all rooms will have all options (like the lobby)
     }
 
     private void AssignManSlotPositions() // Get men positions from model
@@ -65,7 +69,11 @@ public class RoomScript : MonoBehaviour
 
     #region Helper Functions
 
-    public virtual void OnInitialization() { }
+    public virtual void OnInitialization()
+    {
+        ReCheckAdjacency();
+        HaveAdjacentsCheckAdjacency();
+    }
 
     //To be used, most specifically, by elevators for the waiting in line functionality for guests/workers
     public virtual bool GetAccessRequest(ManScript man)
@@ -254,5 +262,87 @@ public class RoomScript : MonoBehaviour
         }
         return men.ToArray();
     }
+    #endregion
+
+    #region Adjacency Check
+
+    private void HaveAdjacentsCheckAdjacency()
+    {
+        RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetLeft()))?.RoomScript?.ReCheckAdjacency();
+        RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.GetRightMostIndex().GetRight()))?.RoomScript?.ReCheckAdjacency();
+    }
+
+    public void ReCheckAdjacency()
+    {
+        bool left = CheckIsRoomLeft();
+        bool right = CheckIsRoomRight();
+        if (left && right)
+        {
+            MeshBothOpen.SetActive(true);
+            if (MeshLOpen != null)
+                MeshLOpen?.SetActive(false);
+            if (MeshROpen != null)
+                MeshROpen?.SetActive(false);
+        }
+        else if (MeshLOpen != null && left)
+        {
+            MeshBothOpen.SetActive(false);
+            if (MeshLOpen != null)
+                MeshLOpen?.SetActive(true);
+            if (MeshROpen != null)
+                MeshROpen?.SetActive(false);
+        }
+        else if (MeshROpen != null && right)
+        {
+            MeshBothOpen.SetActive(false);
+            if (MeshLOpen != null)
+                MeshLOpen?.SetActive(false);
+            if (MeshROpen != null)
+                MeshROpen?.SetActive(true);
+        }
+        else
+        {
+            MeshBothOpen.SetActive(true);
+            if (MeshLOpen != null)
+                MeshLOpen.SetActive(false);
+            if (MeshROpen != null)
+                MeshROpen?.SetActive(false);
+        }
+    }
+
+    public bool CheckIsRoomLeft()
+    {
+        return RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetLeft())) != null;
+    }
+
+    public bool CheckIsRoomLeft(out RoomScript room)
+    {
+        room = RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetLeft())).RoomScript;
+        return room != null;
+    }
+
+    public bool CheckIsRoomLeft<T>(out T room) where T : RoomScript
+    {
+        room = RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetLeft())).RoomScript as T;
+        return room != null;
+    }
+
+    public bool CheckIsRoomRight()
+    {
+        return RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.GetRightMostIndex().GetRight())) != null;
+    }
+
+    public bool CheckIsRoomRight(out RoomScript room)
+    {
+        room = RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.GetRightMostIndex().GetRight())).RoomScript;
+        return room != null;
+    }
+
+    public bool CheckIsRoomRight<T>(out T room) where T : RoomScript
+    {
+        room = RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(RoomData.GetRightMostIndex().GetRight())).RoomScript as T;
+        return room != null;
+    }
+
     #endregion
 }

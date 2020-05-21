@@ -44,5 +44,16 @@ namespace MySpace
         {
             return (CoveredIndizes[0]);
         }
+
+        public GridIndex GetRightMostIndex()
+        {
+            GridIndex index = CoveredIndizes[0];
+            foreach (GridIndex i in CoveredIndizes)
+            {
+                if (i.X > index.X)
+                    index = i;
+            }
+            return index;
+        }
     }
 }

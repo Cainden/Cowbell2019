@@ -6,8 +6,6 @@ using System;
 
 public class ManScript_Guest : ManScript
 {
-    public float dirtyFactor = 1;
-
     public override Enums.ManTypes ManType { get { return Enums.ManTypes.Guest; } }
 
     public override float GetNetRevenueCalculation
@@ -70,7 +68,11 @@ public class ManScript_Guest : ManScript
         //ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         //TransferOwnershipToNewRoom(RoomManager.lobbyId);
         //Add_Action_ToList(new ActionData(SendSignalToLobby));
+        waiting = false;
         SendSignalToLobby();
+
+        //I don't want to make this a time-based event, because it should be able to be reduced depending on the guest's experience at the hootel.
+        stayTime = GameManager.GetRandomizedGuestStayTime();
     }
 
     protected override void Update()
@@ -79,6 +81,7 @@ public class ManScript_Guest : ManScript
         CheckIfRentTime();
     }
 
+    bool waiting;
     private void SendSignalToLobby()
     {
         ////Find the lobby
@@ -96,11 +99,18 @@ public class ManScript_Guest : ManScript
             Room_CleanerCloset.RoomFinishedCleaningEvent += SendSignalToLobby;
             ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
             TransferOwnershipToNewRoom(RoomManager.lobbyId);
+            waiting = true;
+            SetMood(Enums.ManMood.Angry, true);
         }
         else
         {
             BuildManager.BuildFinishedEvent -= SendSignalToLobby;
             Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
+            if (waiting)
+            {
+                SetMood(Enums.ManMood.Neutral, true, 3);
+                waiting = false;
+            }
         }
     }
 
@@ -118,6 +128,15 @@ public class ManScript_Guest : ManScript
     {
         if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8 && RoomManager.IsRoomOfType<Room_Bedroom>(ManData.OwnedRoomRef.RoomScript))
         {
+            stayTime--;
+            if (stayTime <= 0)
+            {
+                ClickManager.Ref.DeleteMan(this);
+                hasPaidRent = true;
+                return;
+            }
+
+
             PayUserInHoots("Rent", (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost);
             hasPaidRent = true;
         }
@@ -126,5 +145,20 @@ public class ManScript_Guest : ManScript
             hasPaidRent = false;
         }
     }
+    #endregion
+
+    #region Guest Stay Time Methods
+    private int stayTime;
+
+    public void LowerStayTime(int amount)
+    {
+        stayTime -= amount;
+    }
+
+    public void OverRideLeave()
+    {
+
+    }
+
     #endregion
 }

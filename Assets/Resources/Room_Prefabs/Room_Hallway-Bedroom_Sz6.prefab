@@ -186,6 +186,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597299ce084c6714c9527eb277cae1e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MeshBothOpen: {fileID: 7953257449171232499}
+  MeshROpen: {fileID: 0}
+  MeshLOpen: {fileID: 0}
   RoomStats:
     RoomName: Long Hallway
     RoomSize: 6

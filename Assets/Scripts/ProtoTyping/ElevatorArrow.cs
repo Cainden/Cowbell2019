@@ -4,25 +4,15 @@ using UnityEngine;
 
 public class ElevatorArrow : MonoBehaviour
 {
-	[SerializeField]
-	public int roomNumbers = 1;
-	public float speed;
+	[SerializeField] float minAngle, maxAngle;
 
-	Quaternion targetAngle ;
-	public Quaternion currentAngle;
-	// Start is called before the first frame update
-	private void Start()
-	{
-		
-		currentAngle = transform.rotation;
-	}
+    public void SetArrowAngle(float t)
+    {
+        transform.localRotation = Quaternion.Euler(Mathf.Lerp(minAngle, maxAngle, t), 90, 90);
+    }
 
-
-	private void Update()
-	{
-		targetAngle = Quaternion.Euler(270 , 90, 90);
-		transform.rotation = Quaternion.Slerp(currentAngle, targetAngle, Time.time * speed);
-	}
-
-
+    public void SetArrowAngle(int angle)
+    {
+        transform.localRotation = Quaternion.Euler(angle, 90, 90);
+    }
 }

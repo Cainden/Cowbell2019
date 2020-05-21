@@ -99,7 +99,7 @@ public class WorkerInfoWindowScript : MonoBehaviour
         nameText.text = guest.ManName;
 
         genstat1Name.text = "Dirtiness";
-        genstat1FrontSlider.fillAmount = guest.dirtyFactor / Stat.StatMax;
+        genstat1FrontSlider.fillAmount = guest.GetGeneralStatValue(GeneralStat.StatType.Dirtiness) / Stat.StatMax;
     }
 
     private IEnumerator InfoUpdateWorker()
