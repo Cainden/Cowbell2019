@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3473645074216339847}
   - component: {fileID: 5581628686957815569}
   - component: {fileID: 2615274632320999130}
-  - component: {fileID: 6247333586110093836}
   m_Layer: 0
   m_Name: ornaateRailing-11.004
   m_TagString: Untagged
@@ -27,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 773638140270754106}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0.13437033, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: 0.13437033, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -80,17 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093836
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 773638140270754106}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &1003609683496319735
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +90,6 @@ GameObject:
   - component: {fileID: 4537277155948565900}
   - component: {fileID: 3773135424162175315}
   - component: {fileID: 5575603417740155650}
-  - component: {fileID: 6247333586110093832}
   m_Layer: 0
   m_Name: steamExport
   m_TagString: Untagged
@@ -118,7 +105,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1003609683496319735}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -0.5503297, y: 7.43578, z: 6.6257}
+  m_LocalPosition: {x: -0.5503297, y: 7.43578, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -171,17 +158,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093832
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1003609683496319735}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 2
 --- !u!1 &1443299260299723752
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +169,6 @@ GameObject:
   - component: {fileID: 8266373285611467610}
   - component: {fileID: 770480947665644479}
   - component: {fileID: 8437895934955594175}
-  - component: {fileID: 6247333586110093875}
   m_Layer: 0
   m_Name: hooDoor-19
   m_TagString: Untagged
@@ -209,7 +184,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1443299260299723752}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 6.3267703, y: -5.34702, z: 6.0546}
+  m_LocalPosition: {x: 6.3267703, y: -5.34702, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -262,17 +237,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093875
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1443299260299723752}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &2010685579859596474
 GameObject:
   m_ObjectHideFlags: 0
@@ -284,7 +248,6 @@ GameObject:
   - component: {fileID: 690385541448344114}
   - component: {fileID: 7213228441314823129}
   - component: {fileID: 5243360039888200722}
-  - component: {fileID: 6247333586110093838}
   m_Layer: 0
   m_Name: ornaateRailing-11.002
   m_TagString: Untagged
@@ -300,7 +263,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2010685579859596474}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 5.2158785, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: 5.2158785, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -353,17 +316,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093838
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2010685579859596474}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &2707527444406649621
 GameObject:
   m_ObjectHideFlags: 0
@@ -388,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2707527444406649621}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: -66.8, y: 0.47, z: 33.49}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6080995632794718930}
@@ -416,7 +368,6 @@ GameObject:
   - component: {fileID: 6718076962831100278}
   - component: {fileID: 517348494850000766}
   - component: {fileID: 1148100198136853917}
-  - component: {fileID: 6247333586110093835}
   m_Layer: 0
   m_Name: Plane.001
   m_TagString: Untagged
@@ -432,7 +383,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2925354415821013693}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 6.11, y: -1.61, z: 6.9935}
+  m_LocalPosition: {x: 6.11, y: -1.61, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -485,17 +436,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093835
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2925354415821013693}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &3596744462609947890
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,7 +447,6 @@ GameObject:
   - component: {fileID: 6906537479807089710}
   - component: {fileID: 2877993239807159517}
   - component: {fileID: 5879015186601047723}
-  - component: {fileID: 6247333586110093872}
   m_Layer: 0
   m_Name: ornaateRailing-11
   m_TagString: Untagged
@@ -523,7 +462,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3596744462609947890}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 10.31127, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: 10.31127, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -576,17 +515,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093872
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3596744462609947890}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &4111403073091222352
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,7 +526,6 @@ GameObject:
   - component: {fileID: 8658238244063119923}
   - component: {fileID: 7809191387066385115}
   - component: {fileID: 2705907645989377241}
-  - component: {fileID: 6247333586110093834}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -614,7 +541,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4111403073091222352}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 6.4432707, y: -1.98492, z: 6.3208}
+  m_LocalPosition: {x: 6.4432707, y: -1.98492, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -667,17 +594,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093834
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4111403073091222352}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 1
 --- !u!1 &4477238597682474423
 GameObject:
   m_ObjectHideFlags: 0
@@ -689,7 +605,6 @@ GameObject:
   - component: {fileID: 3445532621875975833}
   - component: {fileID: 7957220163468893260}
   - component: {fileID: 545093586545073465}
-  - component: {fileID: 6247333586110093837}
   m_Layer: 0
   m_Name: ornaateRailing-11.005
   m_TagString: Untagged
@@ -705,7 +620,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4477238597682474423}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -2.4097295, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: -2.4097295, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -758,17 +673,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093837
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4477238597682474423}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &6617675040968101099
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,7 +684,6 @@ GameObject:
   - component: {fileID: 7972556738058282049}
   - component: {fileID: 1457614865078781549}
   - component: {fileID: 6597321000579426136}
-  - component: {fileID: 6247333586110093873}
   m_Layer: 0
   m_Name: ornaateRailing-11.001
   m_TagString: Untagged
@@ -796,7 +699,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6617675040968101099}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 7.767071, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: 7.767071, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -849,17 +752,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093873
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6617675040968101099}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &8096813950379165992
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +763,6 @@ GameObject:
   - component: {fileID: 6080995632794718930}
   - component: {fileID: 3376992568774883585}
   - component: {fileID: 798850212816240572}
-  - component: {fileID: 6247333586110093874}
   m_Layer: 0
   m_Name: clock-18
   m_TagString: Untagged
@@ -887,7 +778,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8096813950379165992}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 6.59, y: 1.3620799, z: 6.08}
+  m_LocalPosition: {x: 6.59, y: 1.3620799, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -940,17 +831,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!210 &6247333586110093874
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8096813950379165992}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
-  m_SortingOrder: 0
 --- !u!1 &9147583108748309852
 GameObject:
   m_ObjectHideFlags: 0
@@ -962,7 +842,6 @@ GameObject:
   - component: {fileID: 3960593048572057809}
   - component: {fileID: 3698146972203671779}
   - component: {fileID: 9117577383464710983}
-  - component: {fileID: 6247333586110093839}
   m_Layer: 0
   m_Name: ornaateRailing-11.003
   m_TagString: Untagged
@@ -978,7 +857,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9147583108748309852}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 2.6716704, y: 7.6910796, z: 6.2607}
+  m_LocalPosition: {x: 2.6716704, y: 7.6910796, z: 0}
   m_LocalScale: {x: 1.7653, y: 1.7653, z: 1.7653}
   m_Children: []
   m_Father: {fileID: 1425468470403543302}
@@ -1030,15 +909,4 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!210 &6247333586110093839
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9147583108748309852}
-  m_Enabled: 1
-  m_SortingLayerID: -1961680251
-  m_SortingLayer: 3
   m_SortingOrder: 0
