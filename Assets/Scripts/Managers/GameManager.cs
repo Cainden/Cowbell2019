@@ -83,70 +83,45 @@ public class GameManager : MonoBehaviour
         {
             AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Testing(40, 1.5f);
-        }
     }
 
     #region
-
-    void Testing(float avg, float standDev)
+    /// <summary>
+    /// Returns a random number calculated with weight based on the standard deviation off of average given.
+    /// </summary>
+    /// <param name="avg">The average value. If a random number of 0.5 from 0 to 1 is chosen, this function will return the average.</param>
+    /// <param name="standDev">The standard deviation of the number distribution</param>
+    /// <param name="accuracy">An increased number of accurace increases the accuracy of the iterative process. An accuracy of 2 will loop 100 times, an accuracy of 4 will loop 1000 times. Any accuracy above 15 will treat the accuracy as 15.</param>
+    /// <returns></returns>
+    public static float GetApproximatedRandomValue(float avg, float standDev, int accuracy = 4)
     {
-        float r = 41.5f;
+        //Make sure we don't overload the computer
+        if (accuracy > 15)
+            accuracy = 15;
+        //To make sure that it's accurate at least to some degree
+        else if (accuracy < 1)
+            accuracy = 1;
 
+        float r = UnityEngine.Random.Range(0f, 1f);
+        float total = standDev * 6, increment = total / Mathf.Pow(10, accuracy);
         float result = 0;
 
-        int count = 0;
-        while (r > -9999f)
+        //f1 doesn't use the iteration for each loop so it doesnt need to be calculated more than once.
+        float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * Mathf.Sqrt(standDev));
+
+        for (float i = (total * -0.5f) + avg; i < (total * 0.5f) + avg; i += increment)
         {
-            count++;
-            float sig = Mathf.Sqrt(standDev);
-            float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
+            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(i - avg, 2) / (2 * standDev)));
 
-            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
-
-            result += (f1 * f2);
-            r -= 1;
+            result += f1 * f2 * increment;
+            if (result >= r)
+            {
+                return i;
+            }
         }
 
-
-        //float sig = Mathf.Sqrt(standDev);
-        //float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
-
-        //float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
-
-        //float result = f1 * f2;
-
-        Debug.Log("Count = " + count + "  result = " + result);
-    }
-
-    void CumulativeTesting(float avg, float standDev)
-    {
-        float r = UnityEngine.Random.Range(0f, 1f);
-        float c = avg, lastIncrement = c * 0.5f;
-
-
-
-
-        for (int i = 0; i < 100; i++)
-        {
-            float sig = Mathf.Sqrt(standDev);
-            float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * sig);
-
-            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(r - avg, 2) / (2 * standDev)));
-            //float f2 = Mathf.Pow(math.E, -Mathf.Pow((r - avg) / sig, 2) * 0.5f);
-
-            float result = f1 * f2;
-        }
-
-        
-
-        //Debug.Log("r = " + r + "  result = " + result);
-
-
-
-
+        //if for some reason it fails, just return the average
+        return avg;
     }
 
     #endregion
