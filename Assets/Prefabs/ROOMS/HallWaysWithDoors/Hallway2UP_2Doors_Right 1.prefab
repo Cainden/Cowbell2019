@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2056624253749187544
+--- !u!1 &4875913527703901362
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,45 +8,45 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3085459443433513419}
-  - component: {fileID: 6308073835005844477}
-  - component: {fileID: 339545479131850500}
+  - component: {fileID: 8498820665649325729}
+  - component: {fileID: 624565360825851031}
+  - component: {fileID: 6599584941309304942}
   m_Layer: 0
-  m_Name: Hallway2UP_1Doors
+  m_Name: Hallway2UP_2Doors_Right 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3085459443433513419
+--- !u!4 &8498820665649325729
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056624253749187544}
+  m_GameObject: {fileID: 4875913527703901362}
   m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.00000034203276, y: 0.00000005675975, z: -0.00000009578207}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6308073835005844477
+--- !u!33 &624565360825851031
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056624253749187544}
-  m_Mesh: {fileID: -5408707956779085603, guid: a34b3a75f994d81459f205a5efc93d4b, type: 3}
---- !u!23 &339545479131850500
+  m_GameObject: {fileID: 4875913527703901362}
+  m_Mesh: {fileID: 1754262882503550557, guid: e5629d3757715d54bb163c8a3a6ccb98, type: 3}
+--- !u!23 &6599584941309304942
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2056624253749187544}
+  m_GameObject: {fileID: 4875913527703901362}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4364e8836e7ebcc46a693a41172ff1b2, type: 2}
+  - {fileID: 2100000, guid: bd2404ffc91b6da4c9fc3305714c148d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
