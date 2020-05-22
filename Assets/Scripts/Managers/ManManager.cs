@@ -150,7 +150,6 @@ public class ManManager : MonoBehaviour
     public void MakeManLeave(Guid manId)
     {
         ManScript ManScript = _ManList[manId].ManScript;
-        _ManList.Remove(manId);
 
         // Disable the raycast option
         ManScript.SetGhostState();
@@ -540,7 +539,7 @@ public class ManManager : MonoBehaviour
         {
             if (!ar[i].HasOwner())
             {
-                if (ar[i].Cleanliness < 1)
+                if (ar[i].Cleanliness <= 0.8f)
                     continue;
                 Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
                 Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
