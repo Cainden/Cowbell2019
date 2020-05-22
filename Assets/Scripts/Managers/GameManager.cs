@@ -178,7 +178,7 @@ public class GameManager : MonoBehaviour
 
     public static int GetRandomizedGuestStayTime(/*input a guest stay multiplier of some kind here maybe?*/)
     {
-        return UnityEngine.Random.Range(Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
+        return Mathf.Clamp((int)GetApproximatedRandomValue(3, 2), Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
     }
 
     #region Net Revenue Stuff
