@@ -63,4 +63,31 @@ public class Room_Hallway : RoomScript
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, LayerMask.GetMask("Room"));
         return GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
     }
+
+    public override bool GetAccessRequest(ManScript man)
+    {
+        if (CheckManPositionToBedrooms(man, out int index))
+        {
+            return bedrooms[index].GetAccessRequest(man);
+        }
+        else
+            return true;
+    }
+
+
+    
+    private bool CheckManPositionToBedrooms(ManScript man, out int index)
+    {
+        GridIndex pos = GridManager.Ref.GetXYGridIndexFromWorldPosition(man.transform.position);
+        for (int i = 0; i < bedrooms.Length; i++)
+        {
+            if (pos == bedrooms[i].RoomData.CoveredIndizes[bedrooms[i].RoomData.CoveredIndizes.Length - 1])
+            {
+                index = i;
+                return true;
+            }
+        }
+        index = 0;
+        return false;
+    }
 }

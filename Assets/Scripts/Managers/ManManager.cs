@@ -403,14 +403,14 @@ public class ManManager : MonoBehaviour
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                 {
                     manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, true);
+
                     //Dont need the movement action since the elevator will move the character with the elevator box
+                    continue;
                 }
             }
-            else
-                manScript.Add_RunAction_ToList(WorldPos);
 
 
-            if (pathIndizes[i].Z != pathIndizes[i + 1].Z) // Going to pass elevator door
+            if (pathIndizes[i].Z != pathIndizes[i + 1].Z && (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator || RoomManager.Ref.GetRoomData(prevRoom).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)) // Going to pass elevator door
             {
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                 {
@@ -418,7 +418,9 @@ public class ManManager : MonoBehaviour
                     manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, false);
                     manScript.Add_DoorOpenAction_ToList(RoomID);
                 }
-                    
+                else
+                    manScript.Add_AccessAction_ToList(RoomID);
+
                 WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);
                 manScript.Add_RunAction_ToList(WorldPos);
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
@@ -428,12 +430,14 @@ public class ManManager : MonoBehaviour
                 {
                     prevRoom = RoomID;
                 }
+                continue;
             }
             else if (prevRoom != RoomID)
             {
                 prevRoom = RoomID;
                 manScript.Add_AccessAction_ToList(RoomID);
             }
+            manScript.Add_RunAction_ToList(WorldPos);
         }
 
         WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[pathIndizes.Length - 1], Constants.GridPositionWalkZOffset);

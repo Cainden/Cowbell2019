@@ -20,6 +20,50 @@ public class Room_Bedroom : RoomScript
     public override Enums.ManRole RoomRole => Enums.ManRole.Guest;
 
     #region Private Variables
+    float c = -1;
+    private float clipLength
+    {
+        get
+        {
+            if (c < 0)
+            {
+                c = doorAnim.runtimeAnimatorController.animationClips[0].length;
+            }
+            return c;
+        }
+    }
+    private bool GetDoorIsOpen
+    {
+        get
+        {
+            if (doorAnim.GetCurrentAnimatorStateInfo(0).normalizedTime >= clipLength && !doorAnim.IsInTransition(0))
+            {
+                return doorAnim.GetBool("SingleDoorOpen");
+            }
+            else
+                return false;
+        }
+    }
+    private bool GetDoorIsClosed
+    {
+        get
+        {
+            if (doorAnim.GetCurrentAnimatorStateInfo(0).normalizedTime >= clipLength && !doorAnim.IsInTransition(0))
+            {
+                return !doorAnim.GetBool("SingleDoorOpen");
+            }
+            else
+                return false;
+        }
+    }
+    public bool CheckDoor(bool closed)
+    {
+        if (closed)
+            return GetDoorIsClosed;
+        else
+            return GetDoorIsOpen;
+    }
+
     ParticleSystem stankParts;
     Material stankMat;
     private float fElapsedTime = 0;
@@ -30,9 +74,7 @@ public class Room_Bedroom : RoomScript
 
     public const float cleanlinessThreshhold = 0.4f;
 
-    //Here as a fillable reference instead of creating a local reference-type variable each frame of update
-    //ManRef<ManScript_Guest> occupantG;
-    //ManRef<ManScript_Worker> occupantW;
+    private Animator doorAnim;
     #endregion
 
     protected override void Start()
@@ -148,6 +190,7 @@ public class Room_Bedroom : RoomScript
         //Call start now so that it happens before waiting for the next frame.
         base.Start();
         SetShaderValue();
+        doorAnim = MeshBothOpen.GetComponentInChildren<Animator>();
 
         Enums.ManStates[] CreateNewArray(int length)
         {
@@ -177,5 +220,50 @@ public class Room_Bedroom : RoomScript
         //The 1.25 multiplier is to offset the 80% activation value. The 0.4 multiplier is to make it so that the particle shader float is never above 0.4
         stankMat.SetFloat("trans", (1 - (Cleanliness * 1.25f)) * 0.4f);
         //print(stankMat.GetFloat("trans"));
+    }
+
+    Guid waitingMan, secondMan;
+    public override bool GetAccessRequest(ManScript man)
+    {
+        if (waitingMan != Guid.Empty)
+        {
+            if (man.ManData.ManId != waitingMan) //a second man is waiting as well
+            {
+                secondMan = man.ManData.ManId;
+                return false;
+            }
+
+            if (CheckDoor(false))
+            {
+                man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
+                return true;
+            }
+            else
+                return false;
+        }
+        if (secondMan != Guid.Empty)
+        {
+            secondMan = Guid.Empty;
+            waitingMan = secondMan;
+        }
+        waitingMan = man.ManData.ManId;
+        if (CheckDoor(false))
+        {
+            man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
+            waitingMan = Guid.Empty;
+            return true;
+        }
+        else
+        {
+            if (!doorAnim.GetBool("SingleDoorOpen"))
+                doorAnim.SetBool("SingleDoorOpen", true);
+            return false;
+        }
+    }
+
+    public void CloseDoor()
+    {
+        if (secondMan == Guid.Empty)
+            doorAnim.SetBool("SingleDoorOpen", false);
     }
 }

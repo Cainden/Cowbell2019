@@ -171,6 +171,8 @@ public class Room_Elevator : RoomScript
             return man == manHere && !BoxMoving;
     }
 
+    #region Elevator Box Stuff
+
     private Vector3 boxPos;
     public void ResetBox(Transform box)
     {
@@ -256,4 +258,6 @@ public class Room_Elevator : RoomScript
         }
         SetTowerMoving(false);
     }
+
+    #endregion
 }

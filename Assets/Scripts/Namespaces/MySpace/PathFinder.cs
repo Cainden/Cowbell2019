@@ -41,7 +41,7 @@ namespace MySpace
                                 newPath.Add(nextIndex);
                                 if (nextIndex == endIndex)
                                 {
-                                    CleanUpPath(ref newPath);
+                                    //CleanUpPath(ref newPath);
                                     return (newPath);
                                 }
                                 Working = true;

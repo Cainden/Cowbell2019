@@ -108,40 +108,41 @@ public abstract class ManScript : MonoBehaviour
     {
         Debug.Assert(ManData != null);
         Debug.Assert(_Renderers != null);
-        Debug.Assert(_MaterialNormal != null);
-        Debug.Assert(_MaterialHighlight != null);
-        Debug.Assert(_MaterialGhost != null);
+        //Debug.Assert(_MaterialNormal != null);
+        //Debug.Assert(_MaterialHighlight != null);
+        //Debug.Assert(_MaterialGhost != null);
     }
 
     private void SetMaterials()
     {
-        _MaterialNormal = GetComponentInChildren<Renderer>().material;
-        _MaterialHighlight = Resources.Load<Material>(Constants.ManSelectedMaterial);
-        _MaterialGhost = Resources.Load<Material>(Constants.ManGhostMaterial);
-        switch (ManType)
-        {
-            case Enums.ManTypes.Max: // Who is Max? lol
-                break;
-            case Enums.ManTypes.Monster:
-                _MaterialNormal.color = Color.red;
-                _MaterialGhost.color = Color.red;
-                break;
-            case Enums.ManTypes.None:
-            case Enums.ManTypes.StandardMan:
-                break;
-            case Enums.ManTypes.Worker:
-                _MaterialNormal.color = Color.blue;
-                _MaterialGhost.color = Color.blue;
-                break;
-            case Enums.ManTypes.Guest:
-                _MaterialNormal.color = Color.green;
-                _MaterialGhost.color = Color.green;
-                break;
-            case Enums.ManTypes.MC: // MC is main character? not sure what this one is either.
-                break;
-            default:
-                break;
-        }
+        //HAVE THIS DISABLED FOR NOW
+        //_MaterialNormal = GetComponentInChildren<Renderer>().material;
+        //_MaterialHighlight = Resources.Load<Material>(Constants.ManSelectedMaterial);
+        //_MaterialGhost = Resources.Load<Material>(Constants.ManGhostMaterial);
+        //switch (ManType)
+        //{
+        //    case Enums.ManTypes.Max: // Who is Max? lol
+        //        break;
+        //    case Enums.ManTypes.Monster:
+        //        _MaterialNormal.color = Color.red;
+        //        _MaterialGhost.color = Color.red;
+        //        break;
+        //    case Enums.ManTypes.None:
+        //    case Enums.ManTypes.StandardMan:
+        //        break;
+        //    case Enums.ManTypes.Worker:
+        //        _MaterialNormal.color = Color.blue;
+        //        _MaterialGhost.color = Color.blue;
+        //        break;
+        //    case Enums.ManTypes.Guest:
+        //        _MaterialNormal.color = Color.green;
+        //        _MaterialGhost.color = Color.green;
+        //        break;
+        //    case Enums.ManTypes.MC: // MC is main character? not sure what this one is either.
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     public virtual Sprite GetSprite()
@@ -224,8 +225,6 @@ public abstract class ManScript : MonoBehaviour
         switch (State)
         {
             case Enums.ManStates.Running: DoMovement(Constants.ManRunSpeed); break;
-            //case Enums.ManStates.RotatingToPlayer: FaceTowardsPlayer(); break;
-            //case Enums.ManStates.Rotating: RotateToOrientation(); break;
             case Enums.ManStates.Idle:
             case Enums.ManStates.None: ProcessActions(); break;
         }
@@ -307,13 +306,6 @@ public abstract class ManScript : MonoBehaviour
         SetAnimation(State, -1);
     }
 
-    //protected void SetRotateToOrientation(Enums.ManStates state, Quaternion rotation)
-    //{
-    //    State = state;
-    //    _TargetRot = rotation;
-    //    //SetAnimation(state);
-    //}
-
     #region State Functionality Methods
 
     protected Vector3 _TargetPos;
@@ -336,38 +328,10 @@ public abstract class ManScript : MonoBehaviour
         }
     }
 
-    //private void FaceTowardsWaypoint(Vector3 deltaPos)
-    //{
-    //    deltaPos.y = 0.0f;
-    //    if (deltaPos.magnitude == 0) return;
-    //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(deltaPos), 0.15f);
-    //}
-
     private void FaceTowardsPlayer()
     {
-        //Quaternion TargetRotation = Quaternion.Euler(0, 180, 0);
-
-        //transform.rotation = Quaternion.Slerp(transform.rotation, TargetRotation, 0.10f);
-
-        //if (Mathf.Abs(transform.rotation.eulerAngles.y - TargetRotation.eulerAngles.y) < 1.0f)
-        //{
-        //    transform.rotation = TargetRotation;
-        //    State = Enums.ManStates.None; // Will trigger next action
-        //}
         SetAnimation(State, 2);
     }
-
-    //protected Quaternion _TargetRot;
-    //private void RotateToOrientation()
-    //{
-    //    transform.rotation = Quaternion.Slerp(transform.rotation, _TargetRot, 0.10f);
-
-    //    if (Mathf.Abs(transform.rotation.eulerAngles.y - _TargetRot.eulerAngles.y) < 1.0f)
-    //    {
-    //        transform.rotation = _TargetRot;
-    //        State = Enums.ManStates.None; // Will trigger next action
-    //    }
-    //}
 
     #endregion
 
@@ -458,7 +422,7 @@ public abstract class ManScript : MonoBehaviour
     {
         if (position == Vector3.zero)
         {
-            Debug.Log("WTF!");
+            Debug.LogError("WTF!");
         }
         _ActionList.Add(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position), ActionData.ActionType.Movement));
     }
@@ -541,7 +505,7 @@ public abstract class ManScript : MonoBehaviour
         {
             State = Enums.ManStates.Waiting;
             SetAnimation(State, 0);
-
+            yield return null;
             yield return new WaitUntil(() => r.GetAccessRequest(this));
         }
         r.ManHasEntered(this); //Notify the room that there is now a man in the room
@@ -554,7 +518,7 @@ public abstract class ManScript : MonoBehaviour
         {
             State = Enums.ManStates.Waiting;
             SetAnimation(State, 0);
-
+            yield return null;
             yield return new WaitUntil(() => room.GetAccessRequest(this));
         }
         room.ManHasEntered(this); //Notify the room that there is now a man in the room
@@ -586,6 +550,11 @@ public abstract class ManScript : MonoBehaviour
         _ActionList.Add(action);
     }
 
+    public void Add_Action_ToList(ActionData action, int index)
+    {
+        _ActionList.Insert(index, action);
+    }
+
     /// <summary>
     /// Checks if the given action type is in the action queue up to the given number
     /// </summary>
@@ -607,6 +576,5 @@ public abstract class ManScript : MonoBehaviour
         else return false;
     }
     #endregion
-
 
 }

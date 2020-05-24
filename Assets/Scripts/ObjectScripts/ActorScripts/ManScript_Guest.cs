@@ -129,7 +129,6 @@ public class ManScript_Guest : ManScript
         if (IsOwnerOfRoom() && !hasPaidRent && TimeManager.Ref.worldTimeHour == 8 && RoomManager.IsRoomOfType<Room_Bedroom>(ManData.OwnedRoomRef.RoomScript))
         {
             stayTime--;
-            stayTime = 0;
             if (stayTime <= 0)
             {
                 ClickManager.Ref.DeleteMan(this);

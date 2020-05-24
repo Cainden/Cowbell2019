@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class RoomScript : MonoBehaviour
 {
-    [SerializeField] GameObject MeshBothOpen = null, MeshROpen = null, MeshLOpen = null;
+    [SerializeField]protected GameObject MeshBothOpen = null, MeshROpen = null, MeshLOpen = null;
 
     // Instance specific data. Kept separate for easier serialization
     [HideInInspector] public RoomInstanceData RoomData;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 using MySpace.Stats;
-using Unity.Mathematics;
 
 //A Manager of game-loop changing functionality between the tycoon-style daytime gameplay and the nighttime gameplay.
 
@@ -107,11 +106,11 @@ public class GameManager : MonoBehaviour
         float result = 0;
 
         //f1 doesn't use the iteration for each loop so it doesnt need to be calculated more than once.
-        float f1 = 1f / (Mathf.Sqrt(2 * Mathf.PI) * Mathf.Sqrt(standDev));
+        float f1 = 1f / (2.506628274631f/* sqRoot of PI*2 */ * Mathf.Sqrt(standDev));
 
         for (float i = (total * -0.5f) + avg; i < (total * 0.5f) + avg; i += increment)
         {
-            float f2 = Mathf.Pow(math.E, -(Mathf.Pow(i - avg, 2) / (2 * standDev)));
+            float f2 = Mathf.Pow(Unity.Mathematics.math.E, -(Mathf.Pow(i - avg, 2) / (2 * standDev)));
 
             result += f1 * f2 * increment;
             if (result >= r)
