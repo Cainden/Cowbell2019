@@ -393,7 +393,7 @@ public class ManManager : MonoBehaviour
         Vector3 WorldPos;
         Guid prevRoom = Guid.Empty;
 
-        for (int i = 0; i < (pathIndizes.Length - 1); i++)
+        for (int i = 0; i < pathIndizes.Length; i++)
         {
             WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
             Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
@@ -409,8 +409,7 @@ public class ManManager : MonoBehaviour
                 }
             }
 
-
-            if (pathIndizes[i].Z != pathIndizes[i + 1].Z && (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator || RoomManager.Ref.GetRoomData(prevRoom).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)) // Going to pass elevator door
+            if (i > 0 && pathIndizes[i - 1].Z != pathIndizes[i].Z && (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator || RoomManager.Ref.GetRoomData(prevRoom).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)) // Going to pass elevator door
             {
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                 {
@@ -421,11 +420,10 @@ public class ManManager : MonoBehaviour
                 else
                     manScript.Add_AccessAction_ToList(RoomID);
 
-                WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i + 1], Constants.GridPositionWalkZOffset);
+                WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
                 manScript.Add_RunAction_ToList(WorldPos);
                 if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
                     manScript.Add_DoorCloseAction_ToList(RoomID);
-                i++;
                 if (prevRoom != RoomID)
                 {
                     prevRoom = RoomID;
@@ -435,13 +433,11 @@ public class ManManager : MonoBehaviour
             else if (prevRoom != RoomID)
             {
                 prevRoom = RoomID;
-                manScript.Add_AccessAction_ToList(RoomID);
+                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType != Enums.RoomTypes.Elevator)
+                    manScript.Add_AccessAction_ToList(RoomID);
             }
             manScript.Add_RunAction_ToList(WorldPos);
         }
-
-        WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[pathIndizes.Length - 1], Constants.GridPositionWalkZOffset);
-        manScript.Add_RunAction_ToList(WorldPos);
     }
 
     public void SetHighlightedMan(Guid manId)

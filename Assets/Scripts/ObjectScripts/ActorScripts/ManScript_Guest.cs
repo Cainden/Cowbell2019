@@ -14,7 +14,7 @@ public class ManScript_Guest : ManScript
         {
             if (ManData.OwnedRoomRef.RoomType != Enums.RoomTypes.Bedroom)
                 return 0;
-            return -(ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost;
+            return (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost;
         }
     }
 
