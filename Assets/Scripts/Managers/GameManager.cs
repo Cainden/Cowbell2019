@@ -25,6 +25,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] WorkerConstructionData[] workersToMake;
     #endregion
 
+    public static event System.Action<float> OnGameSpeedChanged;
+    public static float GameSpeed
+    {
+        get => Time.timeScale;
+        set
+        {
+            if (value < 0)
+                Time.timeScale = 0;
+            else if (value > 5)
+                Time.timeScale = 5;
+            else
+                Time.timeScale = value;
+            OnGameSpeedChanged?.Invoke(Time.timeScale);
+        }
+    }
+
     //Might not want to do this for the gamemanager?
     #region Singleton Management
 
@@ -55,6 +71,7 @@ public class GameManager : MonoBehaviour
         MySpace.Events.EventManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
         MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
         DebugMenu.SetPanelActive(false);
+        GameSpeed = 1;
 
         foreach (RoleInfo r in roles)
         {
