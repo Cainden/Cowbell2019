@@ -9,9 +9,11 @@ using MySpace.Stats;
 public class Room_CleanerCloset : Room_WorkQuarters
 {
     /// <summary>
-    /// Ratio at which this cleanercloset rests up the cleaners in order for them to get back to work. Higher ratio is faster resting speed.
+    /// Ratio at which this cleanercloset rests up the cleaners in order for them to get back to work. 
+    /// Higher ratio is faster resting speed. The value affects cleaning rate linearly. 
+    /// A restRatio of 2 doubles the cleaning speed of all cleaners, a rest ratio of .5f would halve the cleaning speed of all cleaners.
     /// </summary>
-    public float restRatio = 2;
+    public const float restRatio = 2;
 
     public override Enums.ManRole RoomRole => Enums.ManRole.Cleaner;
 
@@ -26,11 +28,12 @@ public class Room_CleanerCloset : Room_WorkQuarters
         base.RemoveManFromRoomSlot(manId);
     }
 
-    private void Cleaner(ManScript_Worker man)
+    private static void Cleaner(ManScript_Worker man)
     {
         //Room is a bedroom
         if (man.ManData.AssignedRoom.RoomData.RoomType == Enums.RoomTypes.Bedroom)
         {
+            (man.ManData.AssignedRoom as Room_Bedroom).CleanRoom(man.GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality));
             man.currentTiredness -= Time.deltaTime;
             if (man.currentTiredness < 0)
             {
@@ -39,7 +42,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
             }
             else if ((man.ManData.AssignedRoom as Room_Bedroom).Cleanliness >= 1)
             {
-                PathfindToClosestCloset(man);
+                PathfindToDirtyRoom(man);
                 RoomFinishedCleaningEvent?.Invoke();
             }
         }
@@ -65,13 +68,13 @@ public class Room_CleanerCloset : Room_WorkQuarters
     #region Pathfinding Helper Functions
 
     //Made these into separate functions because the logic that dictates how each room type is found will probably change and differ a lot in future development.
-    void PathfindToClosestCloset(ManScript_Worker man)
+    static void PathfindToClosestCloset(ManScript_Worker man)
     {
         //This is where we will change how we find the room that the cleaner needs to go to.
         ManManager.Ref.MoveManToClosestRoomOfType<Room_CleanerCloset>(man);
     }
 
-    void PathfindToDirtyRoom(ManScript_Worker man)
+    static void PathfindToDirtyRoom(ManScript_Worker man)
     {
         //Below here is where we will change how we find the room that the cleaner needs to go to.
 
@@ -89,6 +92,8 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
         if (chosen != null)
             ManManager.Ref.MoveManToNewRoom(man.ManData.ManId, chosen.RoomData.RoomId);
+        else if (man.ManData.AssignedRoom.RoomData.RoomType != Enums.RoomTypes.CleanerCloset)
+            PathfindToClosestCloset(man);
     }
     #endregion
 }

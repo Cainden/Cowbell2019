@@ -26,6 +26,7 @@ public class GuiManager : MonoBehaviour
     public WorkerInfoWindowScript WorkerInfoWindow = null;
     public DailySummaryScript DailySummaryPanel = null;
     public GameObject BuildRoomDlg = null;
+    public Button CancelButton = null;
     //public GameObject MainMenuDlg = null;
     //public GameObject HireDlg = null;
     //public GameObject BookGuestDlg = null;
@@ -61,6 +62,9 @@ public class GuiManager : MonoBehaviour
         //Debug.Assert(MainMenuDlg != null);
         //Debug.Assert(HireDlg != null);
         //Debug.Assert(BookGuestDlg != null);
+        Debug.Assert(CancelButton != null);
+        CancelButton?.onClick.AddListener(ClickManager.Ref.Button_Close);
+        SetCancelButton(false);
 
         SetCursorState(Enums.CursorStates.Normal);
         UpdateManCount(ManManager.Ref.GetManCount());
@@ -219,5 +223,10 @@ public class GuiManager : MonoBehaviour
     //{
     //    return (BookGuestDlg.activeInHierarchy);
     //}
+
+    public void SetCancelButton(bool enabled)
+    {
+        CancelButton.gameObject.SetActive(enabled);
+    }
 }
 

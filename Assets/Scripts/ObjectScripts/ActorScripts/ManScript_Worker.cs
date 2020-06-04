@@ -30,7 +30,7 @@ public class ManScript_Worker : ManScript
                 return 0;
             else
             {
-                return GameManager.GetRoleSalary(role, genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value);
+                return -GameManager.GetRoleSalary(role, genStats.GetGeneralStat(GeneralStat.StatType.Loyalty).value);
             }
         }
     }
@@ -52,7 +52,7 @@ public class ManScript_Worker : ManScript
 
     #region Private Variables
 
-    private Dictionary<Enums.ManRole, Action<ManScript_Worker>> States = new Dictionary<Enums.ManRole, Action<ManScript_Worker>>();
+    private static Dictionary<Enums.ManRole, Action<ManScript_Worker>> States = new Dictionary<Enums.ManRole, Action<ManScript_Worker>>();
 
     #endregion
 
@@ -61,8 +61,10 @@ public class ManScript_Worker : ManScript
     protected override void Start()
     {
         base.Start();
-        States.Add(Enums.ManRole.None, Idle);
-        States.Add(Enums.ManRole.Guest, Idle);
+        if (!States.ContainsKey(Enums.ManRole.None))
+            States.Add(Enums.ManRole.None, Idle);
+        if (!States.ContainsKey(Enums.ManRole.Guest))
+            States.Add(Enums.ManRole.Guest, Idle);
         tirednessThreshhold = 60;
         currentTiredness = 60;
         delayTimer = 0;
@@ -87,7 +89,7 @@ public class ManScript_Worker : ManScript
     }
 
     #region Role State Functions
-    private void Idle(ManScript_Worker man)
+    private static void Idle(ManScript_Worker man)
     {
         //Do nothing! (for now. Add some animations of some sort here for idling later)
     }

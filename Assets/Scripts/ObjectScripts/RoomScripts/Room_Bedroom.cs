@@ -93,8 +93,7 @@ public class Room_Bedroom : RoomScript
             int numMen = CountMen();
             fElapsedTime = 0.0f;
             bool bStank = false; // If true deteriorates room
-            bool bClean = false; // If true cleans room. 
-            float cleanFactor = 0, dirtyFactor = 0;
+            float dirtyFactor = 0, mult = (cleanTickTime / .01667f) * 0.01f;
             //Check to see if Room is occupied by Guest and decrease cleanliness. 
             //If room is occupied by Cleaners, increase cleanliness.
             //Make it so Cleaners cannot occupy the rooms at the same time as guests?
@@ -113,27 +112,14 @@ public class Room_Bedroom : RoomScript
                     bStank = true;
                     dirtyFactor += manManRef.GetManData(id).ManScript.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Dirtiness);
                 }
-                else if (manManRef.IsManTypeOf<ManScript_Worker>(id))
-                {
-                    bClean = true;
-                    cleanFactor += (manManRef.GetManData(id).ManScript as ManScript_Worker).GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality);
-                }
-                //occupant = null;
             }
-
 
             if (bStank)
             {
-                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime;
-
+                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime * mult;
+                print("dirty: " + RoomManager.Ref.CleanSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime);
                 if (Cleanliness < 0)
                     Cleanliness = 0;
-            }
-            if (bClean)
-            {
-                Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime;
-                if (Cleanliness > 1)
-                    Cleanliness = 1;
             }
 
             SetShaderValue();
@@ -225,6 +211,7 @@ public class Room_Bedroom : RoomScript
     Guid waitingMan, secondMan;
     public override bool GetAccessRequest(ManScript man)
     {
+        redo:
         if (waitingMan != Guid.Empty)
         {
             if (man.ManData.ManId != waitingMan) //a second man is waiting as well
@@ -236,6 +223,7 @@ public class Room_Bedroom : RoomScript
             if (CheckDoor(false))
             {
                 man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
+                waitingMan = Guid.Empty;
                 return true;
             }
             else
@@ -245,16 +233,17 @@ public class Room_Bedroom : RoomScript
         {
             secondMan = Guid.Empty;
             waitingMan = secondMan;
+            goto redo;
         }
-        waitingMan = man.ManData.ManId;
+        
         if (CheckDoor(false))
         {
             man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
-            waitingMan = Guid.Empty;
             return true;
         }
         else
         {
+            waitingMan = man.ManData.ManId;
             if (!doorAnim.GetBool("SingleDoorOpen"))
                 doorAnim.SetBool("SingleDoorOpen", true);
             return false;
@@ -265,5 +254,13 @@ public class Room_Bedroom : RoomScript
     {
         if (secondMan == Guid.Empty)
             doorAnim.SetBool("SingleDoorOpen", false);
+    }
+
+    public void CleanRoom(float cleanFactor)
+    {
+        Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime * 0.01f;
+        print("clean: " + RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime);
+        if (Cleanliness > 1)
+            Cleanliness = 1;
     }
 }

@@ -152,6 +152,7 @@ public class StateManager : MonoBehaviour
                 BuildManager.Ref.HideRoomPositionSelectors();
                 RoomManager.Ref.HighlightNoRoom();
                 SidePanel.SetPanel(false);
+                GuiManager.Ref.SetCancelButton(false);
                 //GuiManager.Ref.ShowBuildRoomDlg(false);
                 //GuiManager.Ref.ShowMainMenuDlg(false);
                 //GuiManager.Ref.ShowHireDlg(false);
@@ -166,6 +167,7 @@ public class StateManager : MonoBehaviour
                 ResetSelectedRoom();
                 ResetSelectedMan();
                 SidePanel.SetPanel(false);
+                GuiManager.Ref.SetCancelButton(true);
                 //GuiManager.Ref.ShowBuildRoomDlg(false);
                 break;
             case Enums.GameStates.RoomSelected:
