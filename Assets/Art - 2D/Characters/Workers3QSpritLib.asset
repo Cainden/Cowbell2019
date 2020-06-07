@@ -1,0 +1,129 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bf7c34a0dc4e6348bea04faa70406ee, type: 3}
+  m_Name: Workers3QSpritLib
+  m_EditorClassIdentifier: 
+  m_Labels:
+  - m_Name: Head
+    m_Hash: 130111906
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -7135520571592066417, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: -8183562493873159601, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: -1060636306656895266, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: 2885375095229074346, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+  - m_Name: body
+    m_Hash: -609743950
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 4298907923340887239, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: -3103902953851373799, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: 4008044325847091898, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: 5696767484573426134, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+  - m_Name: frontArm
+    m_Hash: 1828590937
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 2431697276317247516, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: -9099152488649867489, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: -4465750131778629237, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: -1084110672345763552, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+  - m_Name: backArm
+    m_Hash: 789234356
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: 8445062543165820744, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: -2960905156494581220, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: -1255329885532474617, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: 8197424766972076315, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+  - m_Name: frontLeg
+    m_Hash: -2123306110
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -5445868018770231683, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: 1321245761415222511, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: -7341634595600000462, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: -1428350836384374455, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+  - m_Name: BackLeg
+    m_Hash: 221840883
+    m_CategoryList:
+    - m_Name: Maid
+      m_Hash: -19952828
+      m_Sprite: {fileID: -4674377571196196748, guid: ae6f85270e9fa3b4ca9fa092a4308634,
+        type: 3}
+    - m_Name: bellHop
+      m_Hash: 950473856
+      m_Sprite: {fileID: 151792216404502741, guid: aad81ae647b8faa4eac2cb102460e885,
+        type: 3}
+    - m_Name: Handy
+      m_Hash: 1195046370
+      m_Sprite: {fileID: -6468459282460176884, guid: 937180d13a72f924ab779a6479ee8ca3,
+        type: 3}
+    - m_Name: Template
+      m_Hash: 1846967765
+      m_Sprite: {fileID: -8562206161607514971, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
