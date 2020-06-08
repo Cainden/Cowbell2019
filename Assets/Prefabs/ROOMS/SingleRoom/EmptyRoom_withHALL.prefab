@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 4369462809315115563}
   - component: {fileID: 8043422531162078930}
   m_Layer: 0
-  m_Name: SingleRoom2Doors
+  m_Name: EmptyRoom_withHALL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4753679120176330781
 Transform:

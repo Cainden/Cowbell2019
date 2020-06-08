@@ -9,6 +9,7 @@ TagManager:
   - Man
   - Ufo
   - FloatingText
+  - NavBaker
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Man
   - BuildPos
   - PostProssesing
-  - 
+  - Navmesh
   - 
   - 
   - 
