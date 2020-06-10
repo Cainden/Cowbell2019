@@ -65,6 +65,7 @@ public class Room_Elevator : RoomScript
     {
         base.OnInitialization();
         CheckReferences();
+        SetupGridEvents();
 
         boxPos = eBox.position;
 
@@ -129,10 +130,66 @@ public class Room_Elevator : RoomScript
         Debug.Assert(arrow != null);
     }
 
+    private void SetupGridEvents()
+    {
+        //Going up elevator
+        GridIndex start = RoomData.CoveredIndizes[0].GetBack(), end = start.GetAbove();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            start = start,
+            end = end,
+            OnIndexStart = MoveBoxandManToUpperFloor,
+            OverrideMovementUpdate = ManUpdateOverride,
+        });
+
+        //Going down elevator
+        start = RoomData.CoveredIndizes[0].GetBack();
+        end = start.GetBelow();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            start = start,
+            end = end,
+            OnIndexStart = MoveBoxAndManToLowerFloor,
+            OverrideMovementUpdate = ManUpdateOverride,
+        });
+
+        //Leaving elevator
+        start = RoomData.CoveredIndizes[0].GetBack();
+        end = RoomData.CoveredIndizes[0];
+        
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            start = start,
+            end = end,
+            OnIndexEnd = CloseDoorManLeaving,
+            WaitForStart = WaitForDoorOpenFunc,
+            PreStartWaitAction = SetAnimation_OpenDoor
+        });
+
+        //Going into elevator
+        start = RoomData.CoveredIndizes[0];
+        end = start.GetBack();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            start = start,
+            end = end,
+            PreStartWaitAction = MoveBoxToThisFloor,
+            WaitForStart = WaitFunc,
+            OnIndexStart = ManHasEntered,
+            WaitForEnd = WaitForDoorCloseFunc,
+            PreEndWaitAction = CloseDoorManInside
+        });
+        GridManager.AddPreWaitActionToStart(SetAnimation_OpenDoor, new IndexPair(start, end));
+        GridManager.AddWaitActionToStartOfIndexPair(WaitForDoorOpenFunc, new IndexPair(start, end));
+        GridManager.AddWaitActionToStartOfIndexPair(WaitForBoxFunc, new IndexPair(start, end));
+    }
+
+    float delay = 0;
     private ManScript manHere = null;
-    public void SetAnimation_OpenDoor()
+    public void SetAnimation_OpenDoor(ManScript man)
     {
         _Animator.SetBool("Ele_DoorOpen", true);
+        delay = 0;
     }
 
     public void SetAnimation_CloseDoor(bool manLeaving)
@@ -145,6 +202,14 @@ public class Room_Elevator : RoomScript
                 r.manHere = null;
             }
         }
+        delay = 0;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (delay < 0.3f)
+            delay += Time.deltaTime;
     }
 
     public override void ManHasEntered(ManScript man)
@@ -169,6 +234,44 @@ public class Room_Elevator : RoomScript
             return !BoxMoving;
         else
             return man == manHere && !BoxMoving;
+    }
+
+    private void CloseDoorManLeaving(ManScript man)
+    {
+        SetAnimation_CloseDoor(true);
+    }
+
+    private void CloseDoorManInside(ManScript man)
+    {
+        SetAnimation_CloseDoor(false);
+    }
+
+    private void WaitFunc(ManScript man, ref bool good)
+    {
+        if (manHere != null)
+            good = false;
+    }
+
+    private void WaitForDoorOpenFunc(ManScript man, ref bool good)
+    {
+        if (!CheckDoor(false))
+            good = false;
+        if (delay < 0.3f) //This is for the weird thing with Unity animators that delays the animation state change by a few frames when you change a variable in the animator controller
+            good = false;
+    }
+
+    private void WaitForDoorCloseFunc(ManScript man, ref bool good)
+    {
+        if (!CheckDoor(true))
+            good = false;
+        if (delay < 0.3f) //This is for the weird thing with Unity animators that delays the animation state change by a few frames when you change a variable in the animator controller
+            good = false;
+    }
+
+    private void WaitForBoxFunc(ManScript man, ref bool good)
+    {
+        if (BoxMoving)
+            good = false;
     }
 
     #region Elevator Box Stuff
@@ -203,6 +306,31 @@ public class Room_Elevator : RoomScript
                 StartCoroutine(BoxMove(room, manToMove));
             }
         }
+    }
+
+    public void MoveBoxToThisFloor(ManScript man)
+    {
+        StartCoroutine(BoxMove(this));
+    }
+
+    public void MoveBoxandManToUpperFloor(ManScript man)
+    {
+        MoveBoxToFloor(RoomData.CoveredIndizes[0].GetAbove().Y, man);
+    }
+
+    public void MoveBoxAndManToLowerFloor(ManScript man)
+    {
+        MoveBoxToFloor(RoomData.CoveredIndizes[0].GetBelow().Y, man);
+    }
+
+    private bool ManUpdateOverride(ManScript man, Vector3 target)
+    {
+        if (man.State != Enums.ManStates.Idle)
+            man.SetAnimation(Enums.ManStates.Idle, 0);
+        if (!BoxMoving)
+            return true;
+        else
+            return false;
     }
 
     private float GetBoxTIndex(Vector3 boxPos)

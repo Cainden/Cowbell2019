@@ -168,33 +168,6 @@ public class ManScript_Worker : ManScript
 #region stats
 namespace MySpace
 {
-    public static class StatExtensions
-    {
-        public static SpecialtyStat GetSpecialtyStat(this SpecialtyStat[] ar, SpecialtyStat.StatType type)
-        {
-            foreach (SpecialtyStat s in ar)
-            {
-                if (type == s.statType)
-                    return s;
-            }
-            Debug.LogWarning("Specialty Stat type '" + type + "', was not found in the given array!!");
-            return null;
-        }
-
-        public static GeneralStat GetGeneralStat(this GeneralStat[] ar, GeneralStat.StatType type)
-        {
-            foreach (GeneralStat s in ar)
-            {
-                if (type == s.statType)
-                    return s;
-            }
-            Debug.LogWarning("General Stat type '" + type + "', was not found in the given array!!");
-            return null;
-        }
-
-        
-    }
-
     namespace Stats
     {
         public abstract class Stat

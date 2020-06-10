@@ -7,10 +7,17 @@ namespace MySpace
     [Serializable]
     public struct GridIndex
     {
+        #region Variables
+
+        public static GridIndex Zero { get => new GridIndex(0, 0, 0); }
+
         public int X { get; set; }
         public int Y { get; set; }
         public int Z { get; set; }
 
+        #endregion
+
+        #region Constructors
         //public GridIndex()
         //{
 
@@ -18,7 +25,7 @@ namespace MySpace
 
         public GridIndex(GridIndex other)
         {
-            if (other == null) throw new ArgumentNullException("other");
+            if (other == Zero) throw new ArgumentNullException("other");
             X = other.X;
             Y = other.Y;
             Z = other.Z;
@@ -31,6 +38,10 @@ namespace MySpace
             Z = z;
         }
 
+        #endregion
+
+        #region Operators
+
         public GridIndex Add(GridIndex other)
         {
             return (this + other);
@@ -38,8 +49,8 @@ namespace MySpace
 
         public static GridIndex operator +(GridIndex c1, GridIndex c2)
         {
-            if (c1 == null) throw new ArgumentNullException("c1");
-            if (c2 == null) throw new ArgumentNullException("c2");
+            //if (c1 == null) throw new ArgumentNullException("c1"); //GridIndex is now a struct and as such, cannot be null.
+            //if (c2 == null) throw new ArgumentNullException("c2");
 
             GridIndex r = new GridIndex();
             r.X = c1.X + c2.X;
@@ -91,12 +102,27 @@ namespace MySpace
             return (X + Y * Constants.GridSizeX + Z * Constants.GridSizeX * Constants.GridSizeY); // Unique number
         }
 
-        //public void SetXY(int x, int y, int z)
-        //{
-        //    X = x;
-        //    Y = y;
-        //    Z = z;
-        //}
+        public static bool operator ==(GridIndex l, UnityEngine.Vector3 r)
+        {
+            return l.X == r.x && l.Y == r.y && l.Z == r.z;
+        }
+        public static bool operator ==(UnityEngine.Vector3 r, GridIndex l)
+        {
+            return l.X == r.x && l.Y == r.y && l.Z == r.z;
+        }
+
+        public static bool operator !=(GridIndex l, UnityEngine.Vector3 r)
+        {
+            return l.X != r.x || l.Y != r.y || l.Z != r.z;
+        }
+        public static bool operator !=(UnityEngine.Vector3 r, GridIndex l)
+        {
+            return l.X != r.x || l.Y != r.y || l.Z != r.z;
+        }
+
+        #endregion
+
+        #region Helper Functions
 
         public bool IsValid()
         {
@@ -117,6 +143,8 @@ namespace MySpace
 
             return (true);
         }
+
+        #region Directional
 
         public GridIndex GetLeft()
         {
@@ -226,9 +254,68 @@ namespace MySpace
             return (false);
         }
 
+        #endregion
+
         public override string ToString()
         {
             return (X.ToString() + "/" + Y.ToString() + "/" + Z.ToString());
         }
+
+        #endregion
     }
+
+    public class IndexEvent
+    {
+        public Guid eventId = Guid.NewGuid();
+
+        public GridIndex start, end;
+
+        public Action<ManScript> PreStartWaitAction;
+        public WaitAction WaitForStart;
+        public Action<ManScript> OnIndexStart;
+        public Action<ManScript> PreEndWaitAction;
+        public WaitAction WaitForEnd;
+        public Action<ManScript> OnIndexEnd;
+
+        /// <summary>
+        /// Will return true once the update is finished with whatever it needs
+        /// </summary>
+        public Func<ManScript, UnityEngine.Vector3, bool> OverrideMovementUpdate;
+        
+    }
+
+    public struct IndexPair
+    {
+        public GridIndex start, end;
+
+        public IndexPair(GridIndex Start, GridIndex End)
+        {
+            start = Start;
+            end = End;
+        }
+
+        public static bool operator ==(IndexPair l, IndexPair r)
+        {
+            return l.start == r.start && l.end == r.end;
+        }
+
+        public static bool operator !=(IndexPair l, IndexPair r)
+        {
+            return l.start != r.start || l.end != r.end;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is IndexPair)
+                return (IndexPair)obj == this;
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return start.GetHashCode() + end.GetHashCode();
+        }
+    }
+
+    public delegate void WaitAction(ManScript man, ref bool until);
 }

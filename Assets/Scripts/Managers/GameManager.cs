@@ -266,5 +266,64 @@ namespace MySpace
             this.estimated = estimated;
         }
     }
+
+    public static class Extensions
+    {
+        public static SpecialtyStat GetSpecialtyStat(this SpecialtyStat[] ar, SpecialtyStat.StatType type)
+        {
+            foreach (SpecialtyStat s in ar)
+            {
+                if (type == s.statType)
+                    return s;
+            }
+            Debug.LogWarning("Specialty Stat type '" + type + "', was not found in the given array!!");
+            return null;
+        }
+
+        public static GeneralStat GetGeneralStat(this GeneralStat[] ar, GeneralStat.StatType type)
+        {
+            foreach (GeneralStat s in ar)
+            {
+                if (type == s.statType)
+                    return s;
+            }
+            Debug.LogWarning("General Stat type '" + type + "', was not found in the given array!!");
+            return null;
+        }
+
+        public static void Add(this System.Action action, System.Action addition)
+        {
+            action -= addition;
+            action += addition;
+        }
+
+        public static void Remove(this System.Action action, System.Action addition)
+        {
+            action -= addition;
+        }
+    }
+
+    #region Containers
+    public struct Container<T1, T2>
+    {
+        public T1 object1;
+        public T2 object2;
+    }
+
+    public struct Container<T1, T2, T3>
+    {
+        public T1 object1;
+        public T2 object2;
+        public T3 object3;
+    }
+
+    public struct Container<T1, T2, T3, T4>
+    {
+        public T1 object1;
+        public T2 object2;
+        public T3 object3;
+        public T4 object4;
+    }
+    #endregion
 }
 

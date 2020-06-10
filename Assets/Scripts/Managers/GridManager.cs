@@ -16,6 +16,156 @@ public class GridManager : MonoBehaviour
     // Here, links between the grid tiles are stored. Kept separate for use in pathfinding
     private static TileMap _GridMovements = new TileMap();
 
+    #region GridEvents
+    private static Dictionary<IndexPair, IndexEvent> GridEventsDic = new Dictionary<IndexPair, IndexEvent>();
+
+    public static void ClearGridEvents()
+    {
+        GridEventsDic = new Dictionary<IndexPair, IndexEvent>();
+    }
+
+    public static void AddEventToGrid(IndexPair indices, IndexEvent eventData)
+    {
+        if (!GridEventsDic.ContainsKey(indices))
+        {
+            GridEventsDic.Add(indices, eventData);
+        }
+        else
+        {
+            Debug.LogError("Attempting to add an event to Index Pair (" + indices.start + " + " + indices.end + ") when it already contains eventData!");
+        }
+    }
+
+    public static void AddWaitActionToStartOfIndexPair(WaitAction func, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].WaitForStart -= func;
+        GridEventsDic[pair].WaitForStart += func;
+    }
+
+    public static void AddWaitActionToEndOfIndexPair(WaitAction func, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].WaitForEnd -= func;
+        GridEventsDic[pair].WaitForEnd += func;
+    }
+
+    public static void AddStartActionToIndexPair(Action<ManScript> action, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].OnIndexStart -= action;
+        GridEventsDic[pair].OnIndexStart += action;
+    }
+
+    public static void AddEndActionToIndexPair(Action<ManScript> action, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].OnIndexEnd -= action;
+        GridEventsDic[pair].OnIndexEnd += action;
+    }
+
+    public static void AddUpdateOverrideActionToIndexPair(Func<ManScript, Vector3, bool> action, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].OverrideMovementUpdate -= action;
+        GridEventsDic[pair].OverrideMovementUpdate += action;
+    }
+
+    public static void AddPreWaitActionToStart(Action<ManScript> action, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].PreStartWaitAction -= action;
+        GridEventsDic[pair].PreStartWaitAction += action;
+    }
+
+    public static void AddPreWaitActionToEnd(Action<ManScript> action, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
+        GridEventsDic[pair].PreEndWaitAction -= action;
+        GridEventsDic[pair].PreEndWaitAction += action;
+    }
+
+    public static bool WaitForPairStart(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return true;
+        bool good = true;
+        GridEventsDic[pair]?.WaitForStart?.Invoke(man, ref good);
+        return good;
+    }
+
+    public static bool WaitForPairEnd(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return true;
+        bool good = true;
+        GridEventsDic[pair]?.WaitForEnd?.Invoke(man, ref good);
+        return good;
+    }
+
+    public static bool HasOverrideMovement(IndexPair pair)
+    {
+        if (pair.start.Y != pair.end.Y)
+        {
+
+        }
+        if (!GridEventsDic.ContainsKey(pair))
+            return false;
+        if (GridEventsDic[pair]?.OverrideMovementUpdate != null)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public static bool DoUpdateOnIndexPair(ManScript man, IndexPair pair, Vector3 target)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+        {
+            Debug.LogError("A character is attempting to override it's update without an available update override function! IndexPair: (" + pair.start + " + " + pair.end + ")");
+            return true;
+        }
+        return GridEventsDic[pair]?.OverrideMovementUpdate?.Invoke(man, target) ?? true;
+    }
+
+    public static void CallPairStartEvent(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return;
+        GridEventsDic[pair]?.OnIndexStart?.Invoke(man);
+    }
+
+    public static void CallPairEndEvent(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return;
+        GridEventsDic[pair]?.OnIndexEnd?.Invoke(man);
+    }
+
+    public static void CallPreWaitActionStart(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return;
+        GridEventsDic[pair].PreStartWaitAction?.Invoke(man);
+    }
+
+    public static void CallPreWaitActionEnd(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return;
+        GridEventsDic[pair].PreEndWaitAction?.Invoke(man);
+    }
+
+    #endregion
+
     void Awake()
     {
         if (Ref == null) Ref = GetComponent<GridManager>();
@@ -33,7 +183,7 @@ public class GridManager : MonoBehaviour
 
     public GridIndex[] GetOccupiedindizes(Enums.RoomSizes roomSize, GridIndex leftMostIndex)
     {
-        if (leftMostIndex == null) throw new ArgumentNullException("leftMostIndex");
+        if (leftMostIndex == GridIndex.Zero) throw new ArgumentNullException("leftMostIndex");
 
         GridIndex[] Occupiedindizes;
         
@@ -91,7 +241,7 @@ public class GridManager : MonoBehaviour
 
     public Vector3 GetWorldPositionFromGridIndex(GridIndex index)
     {
-        if (index == null) throw new ArgumentNullException("index");
+        if (index == GridIndex.Zero) throw new ArgumentNullException("index");
 
         Vector3 vPos = new Vector3(index.X * Constants.GridElementWidth,
                                    index.Y * Constants.GridElementHeight,
@@ -103,12 +253,15 @@ public class GridManager : MonoBehaviour
         return (vPos);
     }
 
-    public GridIndex GetXYGridIndexFromWorldPosition(Vector3 worldPos)
+    public GridIndex GetXYGridIndexFromWorldPosition(Vector3 worldPos, bool overRide = false)
     {
-        if ((worldPos.x < 0.0f) || (worldPos.y < 0.0f)) return (new GridIndex()); // Return invalid index
-        if ((worldPos.x > (Constants.GridElementWidth * Constants.GridSizeX)) ||
-            (worldPos.y > (Constants.GridElementHeight * Constants.GridSizeY + (Constants.GridElementHeight / 2.0f))))
-            return (new GridIndex());
+        if (!overRide) //Make it so that characters can be sent anywhere if needed
+        {
+            if ((worldPos.x < 0.0f) || (worldPos.y < 0.0f)) return new GridIndex(); // Return invalid index
+            if ((worldPos.x > (Constants.GridElementWidth * Constants.GridSizeX)) ||
+                (worldPos.y > (Constants.GridElementHeight * Constants.GridSizeY + (Constants.GridElementHeight / 2.0f))))
+                return new GridIndex();
+        }
 
         int IndexX = (int) Math.Floor(worldPos.x / Constants.GridElementWidth);
 
@@ -117,7 +270,7 @@ public class GridManager : MonoBehaviour
 
         int IndexY = (int)Math.Floor(worldPos.y / Constants.GridElementHeight);
 
-        return (new GridIndex(IndexX, IndexY, 0));
+        return new GridIndex(IndexX, IndexY, 0);
     }
 
     public Vector3 GetWorldPositionFromGridIndexZOffset(GridIndex index, float zOffset)
@@ -129,14 +282,14 @@ public class GridManager : MonoBehaviour
     
     public Enums.RoomSizes GetGridTileRoomSize(GridIndex index)
     {
-        if (index == null) throw new ArgumentNullException("index");
+        if (index == GridIndex.Zero) throw new ArgumentNullException("index");
         Debug.Assert(index.IsValid() == true);
         return (_GridData[index.X, index.Y, index.Z].RoomSize);
     }
 
     public Guid GetGridTileRoomGuid(GridIndex index)
     {
-        if (index == null) throw new ArgumentNullException("index");
+        if (index == GridIndex.Zero) throw new ArgumentNullException("index");
         //Debug.Assert(index.IsValid() == true);
         if (!index.IsValid())
             return Guid.Empty;
@@ -306,7 +459,7 @@ public class GridManager : MonoBehaviour
 
     void CheckAboveBelowBuildingPositions(GridIndex index, ref List<BuildInfo> indexList)
     {
-        if (index == null) throw new ArgumentNullException("index");
+        if (index == GridIndex.Zero) throw new ArgumentNullException("index");
         if (indexList == null) throw new ArgumentNullException("indexList");
 
         // Only checking the front plane for this (Z = 0)

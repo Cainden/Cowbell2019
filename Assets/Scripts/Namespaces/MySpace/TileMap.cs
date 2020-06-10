@@ -85,7 +85,7 @@ namespace MySpace
 
         public bool GridTileHasDirection(GridIndex index, Enums.MoveDirections dir)
         {
-            if (index == null) return (false);
+            if (index == GridIndex.Zero) return (false);
             if ((_GridMovements[index.X, index.Y, index.Z] & (byte)dir) != 0) return (true);
             return (false);
         }

@@ -5,6 +5,7 @@ using MySpace.Stats;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class ManScript : MonoBehaviour
@@ -39,7 +40,9 @@ public abstract class ManScript : MonoBehaviour
 
     #region Private Variables
     // Avatar movement
-    protected List<ActionData> _ActionList = new List<ActionData>();
+    //protected List<ActionData> _ActionList = new List<ActionData>();
+    protected List<GridIndex> MovementPath = new List<GridIndex>();
+    protected Action NextAction;
 
     //protected Animator _Animator;
     [SerializeField] protected Animator animator;
@@ -80,7 +83,7 @@ public abstract class ManScript : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        StateUpdate();
+        //StateUpdate();
         //print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
@@ -220,19 +223,20 @@ public abstract class ManScript : MonoBehaviour
         foreach (Renderer r in _Renderers) r.material = _MaterialGhost;
     }
 
-    protected void StateUpdate()
-    {
-        switch (State)
-        {
-            case Enums.ManStates.Running: DoMovement(Constants.ManRunSpeed); break;
-            case Enums.ManStates.Idle:
-            case Enums.ManStates.None: ProcessActions(); break;
-        }
-    }
+    //protected void StateUpdate()
+    //{
+    //    switch (State)
+    //    {
+    //        case Enums.ManStates.Running: DoMovement(); break;
+    //        case Enums.ManStates.Idle:
+    //        case Enums.ManStates.None:
+    //            //ProcessActions();
+    //            break;
+    //    }
+    //}
 
-    private void SetFaceTowardsPlayer()
+    public void SetFaceTowardsPlayer()
     {
-        FaceTowardsPlayer();
         SetAnimation(State, 2);
     }
 
@@ -241,7 +245,7 @@ public abstract class ManScript : MonoBehaviour
     /// </summary>
     /// <param name="state"></param>
     /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
-    protected void SetAnimation(Enums.ManStates state, int dir)
+    public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = new Vector3())
     {
         switch (dir)
         {
@@ -299,38 +303,32 @@ public abstract class ManScript : MonoBehaviour
 
     
 
-    protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
-    {
-        State = state;
-        _TargetPos = position;
-        SetAnimation(State, -1);
-    }
+    
 
     #region State Functionality Methods
-
-    protected Vector3 _TargetPos;
-    private void DoMovement(float movementSpeed)
+    public bool DoMovement(Vector3 _TargetPos)
     {
-        float Travel = (movementSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+        string path = "MovementPath: ";
+        for (int i = 0; i < MovementPath.Count; i++)
+        {
+            path += MovementPath[i] + ", ";
+        }
+        print(path);
+
+        float Travel = (Constants.ManRunSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
         if (Travel > Vector3.Distance(transform.position, _TargetPos)) // Target reached
         {
             transform.position = _TargetPos;
-            State = Enums.ManStates.None; // Will trigger next action
-            return;
+            return true;
         }
         else // Regular movement
         {
             Vector3 dir = (_TargetPos - transform.position);
             dir.Normalize();
             transform.position += (dir * Travel);
-            //SetAnimation(Enums.ManStates.Running, -1);
+            return false;
         }
-    }
-
-    private void FaceTowardsPlayer()
-    {
-        SetAnimation(State, 2);
     }
 
     #endregion
@@ -406,13 +404,74 @@ public abstract class ManScript : MonoBehaviour
     #endregion
 
     #region Queue Methods
-    protected void ProcessActions()
+
+    protected void ProcessActions(GridIndex lastPos = new GridIndex())
     {
-        if (_ActionList.Count == 0) return;
-        _ActionList[0].ActionItem.Invoke();
-        _ActionList.RemoveAt(0);
+        //if (_ActionList.Count == 0) return;
+        //_ActionList[0].ActionItem.Invoke();
+        //_ActionList.RemoveAt(0);
+        if (MovementPath.Count > 0)
+        {
+            StartCoroutine(Movement(new IndexPair((lastPos == GridIndex.Zero) ? GridManager.Ref.GetXYGridIndexFromWorldPosition(transform.position, true) : lastPos, MovementPath[0])));
+            
+        }
+        else if (NextAction != null)
+        {
+            NextAction();
+            NextAction = null;
+        }
     }
 
+    private IEnumerator Movement(IndexPair pair)
+    {
+        State = Enums.ManStates.Waiting;
+
+        GridManager.CallPreWaitActionStart(this, pair);
+        if (!GridManager.WaitForPairStart(this, pair))
+        {
+            SetAnimation(Enums.ManStates.Waiting, 0);
+            yield return new WaitUntil(() => GridManager.WaitForPairStart(this, pair));
+        }
+        
+        GridManager.CallPairStartEvent(this, pair);
+
+        Vector3 target = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pair.end, Constants.GridPositionWalkZOffset);
+        if (GridManager.HasOverrideMovement(pair))
+        {
+            print("Has override update! Index: (" + pair.start + " + " + pair.end + ")");
+            while (!GridManager.DoUpdateOnIndexPair(this, pair, target))
+            {
+                yield return null;
+            }
+        }
+        else
+        {
+            State = Enums.ManStates.Running;
+            SetAnimation(Enums.ManStates.Running, -1, target);
+            while (!DoMovement(target))
+            {
+                yield return null;
+            }
+        }
+
+        GridManager.CallPreWaitActionEnd(this, pair);
+        if (!GridManager.WaitForPairEnd(this, pair))
+        {
+            SetAnimation(Enums.ManStates.Waiting, 0);
+            yield return new WaitUntil(() => GridManager.WaitForPairEnd(this, pair));
+        }
+        
+        GridManager.CallPairEndEvent(this, pair);
+
+        State = Enums.ManStates.None;
+        GridIndex last = MovementPath[0];
+        MovementPath.Remove(MovementPath[0]);
+        CheckMovementActions();
+        ProcessActions(last);
+    }
+
+    #region Old
+    /*
     public void Add_AccessAction_ToList(Guid roomId)
     {
         _ActionList.Add(new ActionData(() => StartCoroutine(WaitForRoomAccess(roomId)), ActionData.ActionType.Wait));
@@ -450,16 +509,16 @@ public abstract class ManScript : MonoBehaviour
 
     public void Add_DoorOpenAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => 
+        _ActionList.Add(new ActionData(() =>
         {
-            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor(/*true*/);
+            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor();
             StartCoroutine(WaitForDoor(RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator, false));
         }, ActionData.ActionType.Elevator));
     }
 
     public void Add_DoorCloseAction_ToList(Guid roomId)
     {
-        _ActionList.Add(new ActionData(() => 
+        _ActionList.Add(new ActionData(() =>
         {
             (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator));
             if (CheckElevatorActionQueue(ActionData.ActionType.Elevator))
@@ -488,61 +547,6 @@ public abstract class ManScript : MonoBehaviour
     {
         WaitCoroutine = WaitForSeconds(seconds);
         _ActionList.Add(new ActionData(() => StartCoroutine(WaitCoroutine), ActionData.ActionType.Wait));
-    }
-
-    private IEnumerator WaitForSeconds(float seconds)
-    {
-        State = Enums.ManStates.Waiting;
-        SetAnimation(State, 0);
-        yield return new WaitForSeconds(seconds);
-        State = Enums.ManStates.None; // Will trigger next action
-    }
-
-    private IEnumerator WaitForRoomAccess(Guid room)
-    {
-        var r = RoomManager.Ref.GetRoomData(room).RoomScript;
-        if (!r.GetAccessRequest(this))
-        {
-            State = Enums.ManStates.Waiting;
-            SetAnimation(State, 0);
-            yield return null;
-            yield return new WaitUntil(() => r.GetAccessRequest(this));
-        }
-        r.ManHasEntered(this); //Notify the room that there is now a man in the room
-        State = Enums.ManStates.None; // Will trigger next action
-    }
-
-    private IEnumerator WaitForRoomAccess(RoomScript room)
-    {
-        if (!room.GetAccessRequest(this))
-        {
-            State = Enums.ManStates.Waiting;
-            SetAnimation(State, 0);
-            yield return null;
-            yield return new WaitUntil(() => room.GetAccessRequest(this));
-        }
-        room.ManHasEntered(this); //Notify the room that there is now a man in the room
-        State = Enums.ManStates.None; // Will trigger next action
-    }
-
-    private IEnumerator WaitForDoor(Room_Elevator room, bool closed)
-    {
-        Enums.ManStates s = State;
-        State = Enums.ManStates.Waiting;
-        SetAnimation(State, 0);
-        yield return new WaitUntil(() => room.CheckDoor(closed) == false);
-        yield return new WaitUntil(() => room.CheckDoor(closed));
-
-        State = s;
-        SetAnimation(s, 0);
-    }
-
-    private IEnumerator WaitForElevatorMovement(Room_Elevator room)
-    {
-        State = Enums.ManStates.Waiting;
-        SetAnimation(State, 0);
-        yield return new WaitUntil(() => !room.BoxMoving); //Wait until the elevator box has reached it's destination
-        State = Enums.ManStates.None;
     }
 
     public void Add_Action_ToList(ActionData action)
@@ -575,6 +579,157 @@ public abstract class ManScript : MonoBehaviour
         }
         else return false;
     }
+
+    protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
+    {
+        State = state;
+        _TargetPos = position;
+        SetAnimation(State, -1);
+    }
+    */
+    #endregion
+
+    #region Movement List Helper Functions
+    public void InitializeMovement()
+    {
+        ProcessActions();
+    }
+
+    public void SetMovementPath(GridIndex[] path)
+    {
+        MovementPath = path.ToList();
+    }
+    public void SetMovementPath(List<GridIndex> path)
+    {
+        MovementPath = path;
+    }
+
+    public void AddMovementActions(GridIndex[] path)
+    {
+        for (int i = 0; i < path.Length; i++)
+        {
+            MovementPath.Add(path[i]);
+        }
+    }
+
+    public void AddMovementActions(List<GridIndex> path)
+    {
+        for (int i = 0; i < path.Count; i++)
+        {
+            MovementPath.Add(path[i]);
+        }
+    }
+
+    public void AddMovementAction(GridIndex position)
+    {
+        MovementPath.Add(position);
+    }
+
+    public void AddMovementPositionAtIndex(GridIndex position, int index)
+    {
+        MovementPath.Insert(index, position);
+    }
+
+    public void AddActionToEndOfMovement(Action action)
+    {
+        NextAction -= action;
+        NextAction += action;
+    }
+
+
+    protected List<Container<int, Action>> MovementActions = new List<Container<int, Action>>();
+    public void AddActionToMovement(Action action, int stepsUntilAction)
+    {
+        for (int i = 0; i < MovementActions.Count; i++)
+        {
+            if (MovementActions[i].object1 == stepsUntilAction)
+            {
+                MovementActions[i].object2.Add(action);
+                return;
+            }
+        }
+        MovementActions.Add(new Container<int, Action>() { object1 = stepsUntilAction, object2 = action });
+    }
+
+    protected void CheckMovementActions()
+    {
+        if (MovementActions.Count > 0)
+        {
+            for (int i = 0; i < MovementActions.Count; i++)
+            {
+                if (MovementActions[i].object1 == 0)
+                {
+                    MovementActions[i].object2?.Invoke();
+                    MovementActions.Remove(MovementActions[i]);
+                    i--;
+                }
+                else
+                {
+                    MovementActions[i] = new Container<int, Action>() { object1 = (MovementActions[i].object1 - 1), object2 = MovementActions[i].object2 };
+                }
+            }
+        }
+    }
+
+    #endregion
+
+    #region Old_2
+    //private IEnumerator WaitForSeconds(float seconds)
+    //{
+    //    State = Enums.ManStates.Waiting;
+    //    SetAnimation(State, 0);
+    //    yield return new WaitForSeconds(seconds);
+    //    State = Enums.ManStates.None; // Will trigger next action
+    //}
+
+    //private IEnumerator WaitForRoomAccess(Guid room)
+    //{
+    //    var r = RoomManager.Ref.GetRoomData(room).RoomScript;
+    //    if (!r.GetAccessRequest(this))
+    //    {
+    //        State = Enums.ManStates.Waiting;
+    //        SetAnimation(State, 0);
+    //        yield return null;
+    //        yield return new WaitUntil(() => r.GetAccessRequest(this));
+    //    }
+    //    r.ManHasEntered(this); //Notify the room that there is now a man in the room
+    //    State = Enums.ManStates.None; // Will trigger next action
+    //}
+
+    //private IEnumerator WaitForRoomAccess(RoomScript room)
+    //{
+    //    if (!room.GetAccessRequest(this))
+    //    {
+    //        State = Enums.ManStates.Waiting;
+    //        SetAnimation(State, 0);
+    //        yield return null;
+    //        yield return new WaitUntil(() => room.GetAccessRequest(this));
+    //    }
+    //    room.ManHasEntered(this); //Notify the room that there is now a man in the room
+    //    State = Enums.ManStates.None; // Will trigger next action
+    //}
+
+    //private IEnumerator WaitForDoor(Room_Elevator room, bool closed)
+    //{
+    //    Enums.ManStates s = State;
+    //    State = Enums.ManStates.Waiting;
+    //    SetAnimation(State, 0);
+    //    yield return new WaitUntil(() => room.CheckDoor(closed) == false);
+    //    yield return new WaitUntil(() => room.CheckDoor(closed));
+
+    //    State = s;
+    //    SetAnimation(s, 0);
+    //}
+
+    //private IEnumerator WaitForElevatorMovement(Room_Elevator room)
+    //{
+    //    State = Enums.ManStates.Waiting;
+    //    SetAnimation(State, 0);
+    //    yield return new WaitUntil(() => !room.BoxMoving); //Wait until the elevator box has reached it's destination
+    //    State = Enums.ManStates.None;
+    //}
+    #endregion
+
     #endregion
 
 }
