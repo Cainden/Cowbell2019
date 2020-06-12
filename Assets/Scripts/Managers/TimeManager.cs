@@ -174,6 +174,11 @@ public class TimeManager : MonoBehaviour
 			{
 				DebugToolsScript.Ref.SetTimerText(currentPhase.ToString() + " : " + jam + ":" + menit);
 			}
+
+            if (TimeOfDayTracker.Ref)
+			{
+				TimeOfDayTracker.Ref.SetTimerText(currentPhase.ToString() + " : " + jam + ":" + menit);
+			}
 		}
     }
 

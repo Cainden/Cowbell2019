@@ -117,7 +117,7 @@ public class Room_Bedroom : RoomScript
             if (bStank)
             {
                 Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime * mult;
-                print("dirty: " + RoomManager.Ref.CleanSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime);
+                //print("dirty: " + RoomManager.Ref.CleanSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime);
                 if (Cleanliness < 0)
                     Cleanliness = 0;
             }
@@ -222,7 +222,7 @@ public class Room_Bedroom : RoomScript
 
             if (CheckDoor(false))
             {
-                man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
+                man.AddActionToMovement(CloseDoor, 0);
                 waitingMan = Guid.Empty;
                 return true;
             }
@@ -238,7 +238,7 @@ public class Room_Bedroom : RoomScript
         
         if (CheckDoor(false))
         {
-            man.Add_Action_ToList(new ActionData(CloseDoor, ActionData.ActionType.Movement), 1);
+            man.AddActionToMovement(CloseDoor, 0);
             return true;
         }
         else

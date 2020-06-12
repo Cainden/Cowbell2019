@@ -80,7 +80,7 @@ public class ManManager : MonoBehaviour
         script.genStats = data.generalStats;
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
-        script.gameObject.transform.position = Constants.NewManIncomingPath[0];
+        script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
         AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
@@ -101,7 +101,7 @@ public class ManManager : MonoBehaviour
         script.genStats = data.generalStats;
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
-        script.gameObject.transform.position = Constants.NewManIncomingPath[0];
+        script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
         AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
@@ -115,27 +115,24 @@ public class ManManager : MonoBehaviour
         ManScript.ManData = manData;
 
         _ManList[manData.ManId] = new ManRef<ManScript>(ManObject, ManScript);
-        ManObject.transform.position = Constants.NewManIncomingPath[0];
+        ManObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
         AddIncomingPath(ManScript);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
 
     private void AddIncomingPath(ManScript manScript)
     {
-        foreach (Vector3 WayPoint in Constants.NewManIncomingPath)
+        foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
         {
-            manScript.Add_RunAction_ToList(WayPoint);
+            manScript.AddMovementAction(WayPoint);
         }
-        
-        manScript.Add_FacePlayerAction_ToList();
-        manScript.Add_IdleAction_ToList();
     }
 
     private void AddOutgoingPath(ManScript manScript)
     {
-        foreach (Vector3 WayPoint in Constants.NewManOutgoingPath)
+        foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
         {
-            manScript.Add_RunAction_ToList(WayPoint);
+            manScript.AddMovementAction(WayPoint);
         }
     }
 
@@ -149,20 +146,20 @@ public class ManManager : MonoBehaviour
 
     public void MakeManLeave(Guid manId)
     {
-        ManScript ManScript = _ManList[manId].ManScript;
+        ManScript manScript = _ManList[manId].ManScript;
 
         // Disable the raycast option
-        ManScript.SetGhostState();
+        manScript.SetGhostState();
 
         // Give path to entrance (if assigned to any room. Otherwise, it is the one waiting at the entrance)
-        if (ManScript.IsAssignedToAnyRoom())
+        if (manScript.IsAssignedToAnyRoom())
         {
             //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
-            RoomScript RoomScript = ManScript.ManData.AssignedRoom;
-            GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(RoomScript.RoomData.CoveredIndizes[ManScript.ManData.AssignedRoomSlot],
+            RoomScript RoomScript = manScript.ManData.AssignedRoom;
+            GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(RoomScript.RoomData.CoveredIndizes[manScript.ManData.AssignedRoomSlot],
                                                                    Constants.EntranceRoomIndex);
 
-            if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, ManScript);
+            if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, manScript);
         }
         else
         {
@@ -170,10 +167,10 @@ public class ManManager : MonoBehaviour
         }
 
         // Give path to outside
-        AddOutgoingPath(ManScript);
+        AddOutgoingPath(manScript);
 
         // Submit self-destruction of object
-        ManScript.Add_SelfDestruction_ToList();
+        manScript.AddActionToEndOfMovement(() => { Destroy(manScript.gameObject); });
         
     }
 
@@ -362,7 +359,7 @@ public class ManManager : MonoBehaviour
         ManScript ManScript = _ManList[manId].ManScript;
 
         Vector3 PathPosition = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.EntranceRoomIndex, Constants.GridPositionWalkZOffset);
-        ManScript.Add_RunAction_ToList(PathPosition);
+        ManScript.AddMovementAction(GridManager.Ref.GetXYGridIndexFromWorldPosition(PathPosition));
 
         Guid OldRoomGuid = GridManager.Ref.GetGridTileRoomGuid(Constants.EntranceRoomIndex);
         SetManPath(manId, OldRoomGuid, 0, newRoomGuid, newSlotIndex);
@@ -380,9 +377,9 @@ public class ManManager : MonoBehaviour
         if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, ManScript);
 
         
-        ManScript.Add_RunAction_ToList(NewRoomScript.RoomData.ManSlotsPositions[newSlotIndex]);
+        //ManScript.Add_RunAction_ToList(NewRoomScript.RoomData.ManSlotsPositions[newSlotIndex]);
         //ManScript.Add_RotateAction_ToList(NewRoomScript.RoomData.ManSlotsRotations[newSlotIndex]);
-        ManScript.Add_WorkingAction_ToList(NewRoomScript.RoomData.ManWorkingStates[newSlotIndex]);
+        //ManScript.Add_WorkingAction_ToList(NewRoomScript.RoomData.ManWorkingStates[newSlotIndex]);
     }
 
     public void AddIndexPathToManScript(GridIndex[] pathIndizes, ManScript manScript)
@@ -390,54 +387,56 @@ public class ManManager : MonoBehaviour
         if (pathIndizes == null) return;
         if (manScript == null) return;
 
-        Vector3 WorldPos;
-        Guid prevRoom = Guid.Empty;
+        manScript.AddMovementActions(pathIndizes);
+        manScript.InitializeMovement();
+        //Vector3 WorldPos;
+        //Guid prevRoom = Guid.Empty;
 
-        for (int i = 0; i < pathIndizes.Length; i++)
-        {
-            WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
-            Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
+        //for (int i = 0; i < pathIndizes.Length; i++)
+        //{
+        //    WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
+        //    Guid RoomID = GridManager.Ref.GetGridTileRoomGuid(pathIndizes[i]);
 
-            if (i > 0 && pathIndizes[i - 1].Y != pathIndizes[i].Y) // Going up an elevator
-            {
-                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
-                {
-                    manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, true);
+        //    if (i > 0 && pathIndizes[i - 1].Y != pathIndizes[i].Y) // Going up an elevator
+        //    {
+        //        if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+        //        {
+        //            manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, true);
 
-                    //Dont need the movement action since the elevator will move the character with the elevator box
-                    continue;
-                }
-            }
+        //            //Dont need the movement action since the elevator will move the character with the elevator box
+        //            continue;
+        //        }
+        //    }
 
-            if (i > 0 && pathIndizes[i - 1].Z != pathIndizes[i].Z && (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator || RoomManager.Ref.GetRoomData(prevRoom).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)) // Going to pass elevator door
-            {
-                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
-                {
-                    manScript.Add_AccessAction_ToList(RoomID);
-                    manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, false);
-                    manScript.Add_DoorOpenAction_ToList(RoomID);
-                }
-                else
-                    manScript.Add_AccessAction_ToList(RoomID);
+        //    if (i > 0 && pathIndizes[i - 1].Z != pathIndizes[i].Z && (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator || RoomManager.Ref.GetRoomData(prevRoom).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)) // Going to pass elevator door
+        //    {
+        //        if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+        //        {
+        //            manScript.Add_AccessAction_ToList(RoomID);
+        //            manScript.Add_ElevatorMovementAction_ToList(RoomManager.Ref.GetRoomData(RoomID).RoomScript as Room_Elevator, pathIndizes[i].Y, false);
+        //            manScript.Add_DoorOpenAction_ToList(RoomID);
+        //        }
+        //        else
+        //            manScript.Add_AccessAction_ToList(RoomID);
 
-                WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
-                manScript.Add_RunAction_ToList(WorldPos);
-                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
-                    manScript.Add_DoorCloseAction_ToList(RoomID);
-                if (prevRoom != RoomID)
-                {
-                    prevRoom = RoomID;
-                }
-                continue;
-            }
-            else if (prevRoom != RoomID)
-            {
-                prevRoom = RoomID;
-                if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType != Enums.RoomTypes.Elevator)
-                    manScript.Add_AccessAction_ToList(RoomID);
-            }
-            manScript.Add_RunAction_ToList(WorldPos);
-        }
+        //        WorldPos = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pathIndizes[i], Constants.GridPositionWalkZOffset);
+        //        manScript.Add_RunAction_ToList(WorldPos);
+        //        if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
+        //            manScript.Add_DoorCloseAction_ToList(RoomID);
+        //        if (prevRoom != RoomID)
+        //        {
+        //            prevRoom = RoomID;
+        //        }
+        //        continue;
+        //    }
+        //    else if (prevRoom != RoomID)
+        //    {
+        //        prevRoom = RoomID;
+        //        if (RoomManager.Ref.GetRoomData(RoomID).RoomScript.RoomData.RoomType != Enums.RoomTypes.Elevator)
+        //            manScript.Add_AccessAction_ToList(RoomID);
+        //    }
+        //    manScript.Add_RunAction_ToList(WorldPos);
+        //}
     }
 
     public void SetHighlightedMan(Guid manId)

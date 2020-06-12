@@ -29,17 +29,31 @@ namespace MySpace
         public static readonly float ManWalkLaneZOffset = 1.5f;
 
         // In/Out fixed movement paths. Overdoing it here a bit, trying to follow Microsoft's design rule for constant arrays
-        private static readonly Vector3[] _NewManIncomingPath = { new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
-                                                                  new Vector3(-5.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
-                                                                  new Vector3(-3.0f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 4.5f),
-                                                                  new Vector3(-3.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 1.5f) };
-        public static readonly ReadOnlyCollection<Vector3> NewManIncomingPath = new ReadOnlyCollection<Vector3>(_NewManIncomingPath);
+        private static readonly GridIndex[] _NewManIncomingPath = 
+        {
+            new GridIndex(-5, 8, 1),
+            new GridIndex(-2, 8, 1),
+            new GridIndex(-1, 8, 1),
+            new GridIndex(-1, 8, 0)
+            //new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
+            //new Vector3(-5.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
+            //new Vector3(-3.0f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 4.5f),
+            //new Vector3(-3.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 1.5f)
+        };
+        public static readonly ReadOnlyCollection<GridIndex> NewManIncomingPath = new ReadOnlyCollection<GridIndex>(_NewManIncomingPath);
 
-        private static readonly Vector3[] _NewManOutgoingPath = { new Vector3(-2.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 1.5f),
-                                                                  new Vector3(-3.0f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 4.5f),
-                                                                  new Vector3(-5.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
-                                                                  new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f) };
-        public static readonly ReadOnlyCollection<Vector3> NewManOutgoingPath = new ReadOnlyCollection<Vector3>(_NewManOutgoingPath);
+        private static readonly GridIndex[] _NewManOutgoingPath = 
+        {
+            new GridIndex(-1, 8, 0),
+            new GridIndex(-1, 8, 1),
+            new GridIndex(-2, 8, 1),
+            new GridIndex(-5, 8, 1)
+            //new Vector3(-2.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 1.5f),
+            //new Vector3(-3.0f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 4.5f),
+            //new Vector3(-5.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
+            //new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f)
+        };
+        public static readonly ReadOnlyCollection<GridIndex> NewManOutgoingPath = new ReadOnlyCollection<GridIndex>(_NewManOutgoingPath);
 
         // Selector definitions
         //public static readonly Dictionary<Enums.RoomSizes, string> RoomBuildSelectorModels = new Dictionary<Enums.RoomSizes, string>
