@@ -32,6 +32,18 @@ MonoBehaviour:
       m_Hash: 1846967765
       m_Sprite: {fileID: 2885375095229074346, guid: 44c9f85f952b7b7429de164f6361a3c7,
         type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: -6263077934618579208, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 2468336406513810600, guid: 48116bdb8ca62044c936c282352a711e,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: -7680365094556852035, guid: 3c817761711ad784aa4bb2eadad99aa7,
+        type: 3}
   - m_Name: body
     m_Hash: -609743950
     m_CategoryList:
@@ -50,6 +62,18 @@ MonoBehaviour:
     - m_Name: Template
       m_Hash: 1846967765
       m_Sprite: {fileID: 5696767484573426134, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: -8320174767094301824, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 3046684817230733802, guid: 48116bdb8ca62044c936c282352a711e,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: 3880584730850172759, guid: 3c817761711ad784aa4bb2eadad99aa7,
         type: 3}
   - m_Name: frontArm
     m_Hash: 1828590937
@@ -70,6 +94,18 @@ MonoBehaviour:
       m_Hash: 1846967765
       m_Sprite: {fileID: -1084110672345763552, guid: 44c9f85f952b7b7429de164f6361a3c7,
         type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: 1998410081868077232, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 5349672110828023728, guid: 48116bdb8ca62044c936c282352a711e,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: 7876319266252057623, guid: 3c817761711ad784aa4bb2eadad99aa7,
+        type: 3}
   - m_Name: backArm
     m_Hash: 789234356
     m_CategoryList:
@@ -88,6 +124,18 @@ MonoBehaviour:
     - m_Name: Template
       m_Hash: 1846967765
       m_Sprite: {fileID: 8197424766972076315, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: 8855266026393856600, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 8579760568515305295, guid: 48116bdb8ca62044c936c282352a711e,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: 8129260385287033473, guid: 3c817761711ad784aa4bb2eadad99aa7,
         type: 3}
   - m_Name: frontLeg
     m_Hash: -2123306110
@@ -108,6 +156,18 @@ MonoBehaviour:
       m_Hash: 1846967765
       m_Sprite: {fileID: -1428350836384374455, guid: 44c9f85f952b7b7429de164f6361a3c7,
         type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: 7354249483398655436, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 7859230144903035730, guid: 3c817761711ad784aa4bb2eadad99aa7,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: 7859230144903035730, guid: 3c817761711ad784aa4bb2eadad99aa7,
+        type: 3}
   - m_Name: BackLeg
     m_Hash: 221840883
     m_CategoryList:
@@ -126,4 +186,16 @@ MonoBehaviour:
     - m_Name: Template
       m_Hash: 1846967765
       m_Sprite: {fileID: -8562206161607514971, guid: 44c9f85f952b7b7429de164f6361a3c7,
+        type: 3}
+    - m_Name: MaleGeust
+      m_Hash: 651255392
+      m_Sprite: {fileID: 6294740667825286679, guid: b099db0300451074983bda108f7f5747,
+        type: 3}
+    - m_Name: FemaleGeust
+      m_Hash: 547185945
+      m_Sprite: {fileID: 3879426725781246066, guid: 48116bdb8ca62044c936c282352a711e,
+        type: 3}
+    - m_Name: Manager
+      m_Hash: 899226661
+      m_Sprite: {fileID: 863989993453750327, guid: 3c817761711ad784aa4bb2eadad99aa7,
         type: 3}
