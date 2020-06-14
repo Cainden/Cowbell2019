@@ -136,6 +136,7 @@ public class Room_Elevator : RoomScript
         GridIndex start = RoomData.CoveredIndizes[0].GetBack(), end = start.GetAbove();
         GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
+            sourceId = RoomData.RoomId,
             start = start,
             end = end,
             OnIndexStart = MoveBoxandManToUpperFloor,
@@ -147,6 +148,7 @@ public class Room_Elevator : RoomScript
         end = start.GetBelow();
         GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
+            sourceId = RoomData.RoomId,
             start = start,
             end = end,
             OnIndexStart = MoveBoxAndManToLowerFloor,
@@ -159,6 +161,7 @@ public class Room_Elevator : RoomScript
         
         GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
+            sourceId = RoomData.RoomId,
             start = start,
             end = end,
             OnIndexEnd = CloseDoorManLeaving,
@@ -171,6 +174,7 @@ public class Room_Elevator : RoomScript
         end = start.GetBack();
         GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
+            sourceId = RoomData.RoomId,
             start = start,
             end = end,
             PreStartWaitAction = MoveBoxToThisFloor,
@@ -226,14 +230,6 @@ public class Room_Elevator : RoomScript
         {
             r.BoxMoving = moving;
         }
-    }
-
-    public override bool GetAccessRequest(ManScript man)
-    {
-        if (manHere == null)
-            return !BoxMoving;
-        else
-            return man == manHere && !BoxMoving;
     }
 
     private void CloseDoorManLeaving(ManScript man)

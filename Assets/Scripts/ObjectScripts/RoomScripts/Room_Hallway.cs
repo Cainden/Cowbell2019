@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
+using System;
+using System.Linq;
 
 public class Room_Hallway : RoomScript
 {
@@ -15,29 +17,54 @@ public class Room_Hallway : RoomScript
     {
         base.OnInitialization();
         bedrooms = new Room_Bedroom[(int)RoomData.RoomSize / 2];
+        GameObject total;
+        switch ((int)RoomData.RoomSize)
+        {
+            case 2:
+                total = Instantiate(Resources.Load<GameObject>("Room_Prefabs/BedroomPrefabs/1UP_SINGLE_NOHALL_WithDoor_NAV"), BedroomPosition.position, BedroomPosition.rotation, transform);
+                break;
+            case 4:
+                total = Instantiate(Resources.Load<GameObject>("Room_Prefabs/BedroomPrefabs/2UP_2Door_NOHALL_WithDoor_NAV"), BedroomPosition.position, BedroomPosition.rotation, transform);
+                break;
+            case 6:
+                total = Instantiate(Resources.Load<GameObject>("Room_Prefabs/BedroomPrefabs/3up_3Door_NOHALL_WithDoor_NAV"), BedroomPosition.position, BedroomPosition.rotation, transform);
+                break;
+            default:
+                Debug.LogError("Hallway is not a size 2, 4, or 6 room!");
+                total = null;
+                break;
+        }
+
+        //sort the bedrooms ascending by transform.x position
+        bedrooms = (from Room_Bedroom room in total.GetComponentsInChildren<Room_Bedroom>() orderby room.transform.position.x ascending select room).ToArray();
+
         for (int i = 0; i < bedrooms.Length; i++)
         {
-            bedrooms[i] = Instantiate(Resources.Load<GameObject>(BedroomPrefabPath), BedroomPosition.position + (Vector3.right * i * 5), BedroomPosition.rotation, transform).GetComponent<Room_Bedroom>();
-            int g = Mathf.CeilToInt(i * 2);
-            bedrooms[i].SelfInitialize(RoomData.CoveredIndizes[Mathf.CeilToInt(i * 2) + 1].GetBack().GetLeft());
+            //old instantiation code
+            //bedrooms[i] = Instantiate(Resources.Load<GameObject>(BedroomPrefabPath), BedroomPosition.position + (Vector3.right * i * 5), BedroomPosition.rotation, transform).GetComponent<Room_Bedroom>();
+
+            bedrooms[i].SelfInitialize(RoomData.CoveredIndizes[Mathf.CeilToInt(i * 2) + 1].GetBack().GetLeft(), this);
 
         }
 
         #region Manual assignment of grid index movement directions
         for (int i = 0; i < RoomData.CoveredIndizes.Length; i++)
         {
-            if (i % 2 == 1)
-            {
-                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-                //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
-                //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
-            }
-            else
-            {
-                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-                //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
-                //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
-            }
+
+            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+
+            //if (i % 2 == 1)
+            //{
+            //    GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+            //    //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
+            //    //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
+            //}
+            //else
+            //{
+            //    GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
+            //    //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
+            //    //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
+            //}
             //GridManager.Ref.DebugIndexMovement(RoomData.CoveredIndizes[i], " : index " + i);
         }
         #endregion
@@ -62,16 +89,6 @@ public class Room_Hallway : RoomScript
     {
         Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, LayerMask.GetMask("Room"));
         return GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
-    }
-
-    public override bool GetAccessRequest(ManScript man)
-    {
-        if (CheckManPositionToBedrooms(man, out int index))
-        {
-            return bedrooms[index].GetAccessRequest(man);
-        }
-        else
-            return true;
     }
 
 

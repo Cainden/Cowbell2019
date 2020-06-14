@@ -11,6 +11,8 @@ public class Room_Bedroom : RoomScript
     #region Serialized Variables
     [SerializeField] Shader stankShade;
     [SerializeField] Material stankMatSet;
+    [SerializeField] private Animator doorAnim;
+    [SerializeField] Transform DoorPos;
 
     [Tooltip("The cost of this room to stay in for guests")]
     public int RentCost = 50;
@@ -74,18 +76,22 @@ public class Room_Bedroom : RoomScript
 
     public const float cleanlinessThreshhold = 0.4f;
 
-    private Animator doorAnim;
+    
+    Room_Hallway parent;
     #endregion
 
     protected override void Start()
     {
         //We are calling start in Self_Initialize, so there's no need to have it called again here.
         //base.Start();
+        Debug.Assert(DoorPos != null);
     }
 
     protected override void Update()
     {
         base.Update();
+        if (delay < 1)
+            delay += Time.deltaTime;
 
         fElapsedTime += Time.deltaTime;
         if (RoomIsActive && fElapsedTime > cleanTickTime)
@@ -126,8 +132,10 @@ public class Room_Bedroom : RoomScript
         }
     }
 
-    public void SelfInitialize(GridIndex leftMostIndex)
+    public void SelfInitialize(GridIndex leftMostIndex, Room_Hallway parent)
     {
+        this.parent = parent;
+
         //HAD TO DO ALL OF THE CREATEROOM INITIALIZATION HERE BECAUSE IT CANNOT BE INSTANTIATED IN THE WRONG POSITION THROUGH CREATEROOM
         RoomDefData RoomDefData = new RoomDefData("BedroomBase", gameObject, Enums.RoomSizes.Size2, Enums.RoomTypes.Bedroom, Enums.RoomCategories.Miscellaneous, 2, CreateNewArray(2), "The room in which all Hootel guests stay. These rooms become dirtied by guests over time and need to be cleaned by cleaners.", 0, Enums.RoomOverUnder.Over, false, null);
 
@@ -163,7 +171,7 @@ public class Room_Bedroom : RoomScript
         //enable right movement to the index inside the room
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Right);
         //disable front movement from the other index
-        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
         #endregion
 
         Cleanliness = 1;
@@ -176,7 +184,8 @@ public class Room_Bedroom : RoomScript
         //Call start now so that it happens before waiting for the next frame.
         base.Start();
         SetShaderValue();
-        doorAnim = MeshBothOpen.GetComponentInChildren<Animator>();
+        //doorAnim = MeshBothOpen.GetComponentInChildren<Animator>();
+        SetupGridEvents();
 
         Enums.ManStates[] CreateNewArray(int length)
         {
@@ -208,59 +217,177 @@ public class Room_Bedroom : RoomScript
         //print(stankMat.GetFloat("trans"));
     }
 
-    Guid waitingMan, secondMan;
-    public override bool GetAccessRequest(ManScript man)
+    public void CleanRoom(float cleanFactor)
     {
-        redo:
-        if (waitingMan != Guid.Empty)
-        {
-            if (man.ManData.ManId != waitingMan) //a second man is waiting as well
-            {
-                secondMan = man.ManData.ManId;
-                return false;
-            }
+        Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime * 0.01f;
+        if (Cleanliness > 1)
+            Cleanliness = 1;
+    }
 
-            if (CheckDoor(false))
-            {
-                man.AddActionToMovement(CloseDoor, 0);
-                waitingMan = Guid.Empty;
-                return true;
-            }
-            else
-                return false;
-        }
-        if (secondMan != Guid.Empty)
+    private void SetupGridEvents()
+    {
+        GridIndex start, end;
+        start = RoomData.CoveredIndizes[0].GetFront();
+        end = RoomData.CoveredIndizes[0];
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
-            secondMan = Guid.Empty;
-            waitingMan = secondMan;
-            goto redo;
-        }
-        
-        if (CheckDoor(false))
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            //OnIndexStart = OpenDoor,
+            OverrideMovementUpdate = OverRideUpdateForDoor,
+            //OnIndexEnd = CloseDoor
+        });
+
+
+        start = RoomData.CoveredIndizes[1].GetFront();
+        end = RoomData.CoveredIndizes[1];
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
-            man.AddActionToMovement(CloseDoor, 0);
-            return true;
-        }
-        else
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            //OnIndexStart = OpenDoor,
+            OverrideMovementUpdate = OverRideUpdateForDoor,
+            //OnIndexEnd = CloseDoor
+        });
+
+
+        start = RoomData.CoveredIndizes[0];
+        end = RoomData.CoveredIndizes[0].GetFront();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
         {
-            waitingMan = man.ManData.ManId;
-            if (!doorAnim.GetBool("SingleDoorOpen"))
-                doorAnim.SetBool("SingleDoorOpen", true);
-            return false;
-        }
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            //OnIndexStart = OpenDoor,
+            OverrideMovementUpdate = OverRideUpdateForDoor,
+            //OnIndexEnd = CloseDoor
+        });
+
+
+        start = RoomData.CoveredIndizes[1];
+        end = RoomData.CoveredIndizes[1].GetFront();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            //OnIndexStart = OpenDoor,
+            OverrideMovementUpdate = OverRideUpdateForDoor,
+            //OnIndexEnd = CloseDoor
+        });
+    }
+
+    
+    
+
+    float delay = 0;
+    public void OpenDoor(ManScript man)
+    {
+        OpenDoor();
+    }
+
+    public void OpenDoor()
+    {
+        doorAnim.SetBool("SingleDoorOpen", true);
+        delay = 0;
+    }
+
+    public void CloseDoor(ManScript man)
+    {
+        CloseDoor();
     }
 
     public void CloseDoor()
     {
-        if (secondMan == Guid.Empty)
+        if (waitingMan == Guid.Empty)
+        {
             doorAnim.SetBool("SingleDoorOpen", false);
+        }
     }
 
-    public void CleanRoom(float cleanFactor)
+    Guid manIn, waitingMan;
+    public bool OverRideUpdateForDoor(ManScript man, Vector3 target)
     {
-        Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime * 0.01f;
-        print("clean: " + RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime);
-        if (Cleanliness > 1)
-            Cleanliness = 1;
+        if (manIn != Guid.Empty && manIn != man.ManData.ManId)
+        {
+            if (waitingMan == Guid.Empty)
+                waitingMan = man.ManData.ManId;
+            //man.SetAnimation(Enums.ManStates.Idle, 0);
+            return false;
+        }
+        else if (delay < 0.2f && !CheckDoor(false))
+        {
+            //do nothing, wait for door to be open.
+            //man.SetAnimation(Enums.ManStates.Idle, 0);
+            return false;
+        }
+        else if (man.transform.position.z == target.z)
+        {
+            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+            if (Travel > Vector3.Distance(man.transform.position, target))
+            {
+                man.transform.position = target;
+                return true;
+            }
+            else
+            {
+                Vector3 dir = (target - man.transform.position);
+                dir.Normalize();
+                man.transform.position += (dir * Travel);
+                return false;
+            }
+        }
+        else if (man.transform.position.x == DoorPos.transform.position.x)
+        {
+            target = new Vector3(DoorPos.transform.position.x, target.y, target.z);
+            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+
+            if (Travel > Vector3.Distance(man.transform.position, target))
+            {
+                man.transform.position = target;
+                CloseDoor();
+                if (waitingMan != Guid.Empty)
+                {
+                    manIn = waitingMan;
+                    waitingMan = Guid.Empty;
+                }
+                else
+                    manIn = Guid.Empty;
+                return false;
+            }
+            else
+            {
+                Vector3 dir = (target - man.transform.position);
+                dir.Normalize();
+                man.transform.position += (dir * Travel);
+                return false;
+            }
+        }
+        else
+        {
+            target = new Vector3(DoorPos.transform.position.x, man.transform.position.y, man.transform.position.z);
+            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+
+            if (Travel > Vector3.Distance(man.transform.position, target))
+            {
+                man.transform.position = target;
+                OpenDoor();
+                manIn = man.ManData.ManId;
+                return false;
+            }
+            else
+            {
+                Vector3 dir = (target - man.transform.position);
+                dir.Normalize();
+                man.transform.position += (dir * Travel);
+                return false;
+            }
+        }
     }
+    
 }

@@ -247,6 +247,7 @@ public abstract class ManScript : MonoBehaviour
     /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
     public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = new Vector3())
     {
+
         switch (dir)
         {
             case 0:
@@ -269,6 +270,8 @@ public abstract class ManScript : MonoBehaviour
                 break;
         }
 
+        
+
         switch (state)
         {
             case Enums.ManStates.Idle:
@@ -276,28 +279,8 @@ public abstract class ManScript : MonoBehaviour
                 animator.SetTrigger("IdleTrigger");
                 break;
             case Enums.ManStates.Running:
-                CheckMovementDir((_TargetPos - transform.position).normalized);
+                animator.SetTrigger("RunningTrigger");
                 break;
-        }
-
-        void CheckMovementDir(Vector3 d)
-        {
-            if (d.y > 0)
-            {
-                if (d.x + d.z < d.y * 0.1f)
-                    //Might want a flying animation here eventually if we end up doing that, or a specific animation for being in an elevator?
-                    animator.SetTrigger("IdleTrigger");
-                else
-                    goto Run;
-            }
-            else
-            {
-                goto Run;
-            }
-            return;
-
-        Run:
-            animator.SetTrigger("RunningTrigger");
         }
     }
 
@@ -308,12 +291,13 @@ public abstract class ManScript : MonoBehaviour
     #region State Functionality Methods
     public bool DoMovement(Vector3 _TargetPos)
     {
-        string path = "MovementPath: ";
-        for (int i = 0; i < MovementPath.Count; i++)
-        {
-            path += MovementPath[i] + ", ";
-        }
-        print(path);
+        //debug stuff
+        //string path = "MovementPath: ";
+        //for (int i = 0; i < MovementPath.Count; i++)
+        //{
+        //    path += MovementPath[i] + ", ";
+        //}
+        //print(path);
 
         float Travel = (Constants.ManRunSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
@@ -420,6 +404,10 @@ public abstract class ManScript : MonoBehaviour
             NextAction();
             NextAction = null;
         }
+        else
+        {
+            SetAnimation(Enums.ManStates.Idle, 0);
+        }
     }
 
     private IEnumerator Movement(IndexPair pair)
@@ -438,7 +426,8 @@ public abstract class ManScript : MonoBehaviour
         Vector3 target = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(pair.end, Constants.GridPositionWalkZOffset);
         if (GridManager.HasOverrideMovement(pair))
         {
-            print("Has override update! Index: (" + pair.start + " + " + pair.end + ")");
+            //debug stuff
+            //print("Has override update! Index: (" + pair.start + " + " + pair.end + ")");
             while (!GridManager.DoUpdateOnIndexPair(this, pair, target))
             {
                 yield return null;
@@ -637,8 +626,8 @@ public abstract class ManScript : MonoBehaviour
     }
 
 
-    protected List<Container<int, Action>> MovementActions = new List<Container<int, Action>>();
-    public void AddActionToMovement(Action action, int stepsUntilAction)
+    protected List<Container<int, Action<ManScript>>> MovementActions = new List<Container<int, Action<ManScript>>>();
+    public void AddActionToMovement(Action<ManScript> action, int stepsUntilAction)
     {
         for (int i = 0; i < MovementActions.Count; i++)
         {
@@ -648,7 +637,7 @@ public abstract class ManScript : MonoBehaviour
                 return;
             }
         }
-        MovementActions.Add(new Container<int, Action>() { object1 = stepsUntilAction, object2 = action });
+        MovementActions.Add(new Container<int, Action<ManScript>>() { object1 = stepsUntilAction, object2 = action });
     }
 
     protected void CheckMovementActions()
@@ -659,13 +648,13 @@ public abstract class ManScript : MonoBehaviour
             {
                 if (MovementActions[i].object1 == 0)
                 {
-                    MovementActions[i].object2?.Invoke();
+                    MovementActions[i].object2?.Invoke(this);
                     MovementActions.Remove(MovementActions[i]);
                     i--;
                 }
                 else
                 {
-                    MovementActions[i] = new Container<int, Action>() { object1 = (MovementActions[i].object1 - 1), object2 = MovementActions[i].object2 };
+                    MovementActions[i] = new Container<int, Action<ManScript>>() { object1 = (MovementActions[i].object1 - 1), object2 = MovementActions[i].object2 };
                 }
             }
         }

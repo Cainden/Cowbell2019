@@ -266,7 +266,7 @@ namespace MySpace
 
     public class IndexEvent
     {
-        public Guid eventId = Guid.NewGuid();
+        public Guid sourceId;
 
         public GridIndex start, end;
 

@@ -301,6 +301,17 @@ namespace MySpace
         {
             action -= addition;
         }
+
+        public static void Add(this System.Action<ManScript> action, System.Action<ManScript> addition)
+        {
+            action -= addition;
+            action += addition;
+        }
+
+        public static void Remove(this System.Action<ManScript> action, System.Action<ManScript> addition)
+        {
+            action -= addition;
+        }
     }
 
     #region Containers
