@@ -60,7 +60,7 @@ public class DailySummaryScript : MonoBehaviour
     public void ProceedToNextDayClick()
     {
         gameObject.SetActive(false);
-        Time.timeScale = GameManager.GameSpeed;
+        GameManager.ResumeGameSpeed();
     }
 
     public void FinancesClick()

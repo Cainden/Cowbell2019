@@ -26,9 +26,11 @@ public class GameManager : MonoBehaviour
     #endregion
 
     public static event System.Action<float> OnGameSpeedChanged;
+
+    private static float gameSpeed;
     public static float GameSpeed
     {
-        get => Time.timeScale;
+        get => gameSpeed;
         set
         {
             if (value < 0)
@@ -37,8 +39,13 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 5;
             else
                 Time.timeScale = value;
-            OnGameSpeedChanged?.Invoke(Time.timeScale);
+            gameSpeed = Time.timeScale;
+            OnGameSpeedChanged?.Invoke(gameSpeed);
         }
+    }
+    public static void ResumeGameSpeed()
+    {
+        GameSpeed = gameSpeed;
     }
 
     //Might not want to do this for the gamemanager?
