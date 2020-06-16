@@ -174,6 +174,52 @@ public class ManManager : MonoBehaviour
         
     }
 
+    public ManRef<T>[] GetAllActiveMenOfType<T>() where T : ManScript
+    {
+        int c = 0;
+        foreach (ManRef<ManScript> man in _ManList.Values)
+        {
+            if (man.ManScript is T)
+            {
+                c++;
+            }
+        }
+        ManRef<T>[] ar = new ManRef<T>[c];
+        c = 0;
+        foreach (ManRef<ManScript> man in _ManList.Values)
+        {
+            if (man.ManScript is T)
+            {
+                ar[c] = new ManRef<T>(man.ManObject, man.ManScript as T);
+                c++;
+            }
+        }
+        return ar;
+    }
+
+    public ManRef<ManScript>[] GetAllActiveMenOfType(Enums.ManTypes type)
+    {
+        int c = 0;
+        foreach (ManRef<ManScript> man in _ManList.Values)
+        {
+            if (man.ManScript.ManType == type)
+            {
+                c++;
+            }
+        }
+        ManRef<ManScript>[] ar = new ManRef<ManScript>[c];
+        c = 0;
+        foreach (ManRef<ManScript> man in _ManList.Values)
+        {
+            if (man.ManScript.ManType == type)
+            {
+                ar[c] = man;
+                c++;
+            }
+        }
+        return ar;
+    }
+
     public ManRef<ManScript> GetManData(Guid manId)
     {
         Debug.Assert(IsManExisting(manId));
