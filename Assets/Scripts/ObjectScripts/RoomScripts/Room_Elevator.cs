@@ -177,15 +177,15 @@ public class Room_Elevator : RoomScript
             sourceId = RoomData.RoomId,
             start = start,
             end = end,
+            RequestMovementFunc = GetAccessRequest,
             PreStartWaitAction = MoveBoxToThisFloor,
-            WaitForStart = WaitFunc,
-            OnIndexStart = ManHasEntered,
+            WaitForStart = WaitForBoxFunc,
+            OnIndexStart = SetAnimation_OpenDoor,
             WaitForEnd = WaitForDoorCloseFunc,
             PreEndWaitAction = CloseDoorManInside
         });
-        GridManager.AddPreWaitActionToStart(SetAnimation_OpenDoor, new IndexPair(start, end));
-        GridManager.AddWaitActionToStartOfIndexPair(WaitForDoorOpenFunc, new IndexPair(start, end));
-        GridManager.AddWaitActionToStartOfIndexPair(WaitForBoxFunc, new IndexPair(start, end));
+        GridManager.AddPreWaitActionToStart(ManHasEntered, new IndexPair(start, end));
+        //GridManager.AddWaitActionToStartOfIndexPair(WaitForDoorOpenFunc, new IndexPair(start, end));
     }
 
     float delay = 0;
@@ -353,13 +353,20 @@ public class Room_Elevator : RoomScript
         }
     }
 
+    private bool GetAccessRequest(ManScript man)
+    {
+        return manHere == null;
+    }
+
     public bool BoxMoving { get; private set; }
     private IEnumerator BoxMove(Room_Elevator moveTo, ManScript manToMove = null)
     {
         if (!eTower.Contains(moveTo))
         {
+            Debug.LogError("An elevator is attempting to move a box to an elevator that is not contained within it's elevator tower!");
             yield break;
         }
+        
         SetTowerMoving(true);
         if (!(moveTo.eBox.position == moveTo.boxPos))
         {

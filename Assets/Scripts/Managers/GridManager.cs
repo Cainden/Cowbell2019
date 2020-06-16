@@ -36,6 +36,18 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public static void AddRequestFunctionToIndexPair(Func<ManScript, bool> func, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+        {
+            GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end, RequestMovementFunc = func });
+        }
+        else
+        {
+            GridEventsDic[pair].RequestMovementFunc = func;
+        }
+    }
+
     public static void AddWaitActionToStartOfIndexPair(WaitAction func, IndexPair pair)
     {
         if (!GridEventsDic.ContainsKey(pair))
@@ -90,6 +102,13 @@ public class GridManager : MonoBehaviour
             GridEventsDic.Add(pair, new IndexEvent() { start = pair.start, end = pair.end });
         GridEventsDic[pair].PreEndWaitAction -= action;
         GridEventsDic[pair].PreEndWaitAction += action;
+    }
+
+    public static bool GetIndexPairAccessRequest(ManScript man, IndexPair pair)
+    {
+        if (!GridEventsDic.ContainsKey(pair))
+            return true;
+        return GridEventsDic[pair]?.RequestMovementFunc?.Invoke(man) ?? true;
     }
 
     public static bool WaitForPairStart(ManScript man, IndexPair pair)

@@ -414,6 +414,12 @@ public abstract class ManScript : MonoBehaviour
     {
         State = Enums.ManStates.Waiting;
 
+        if (!GridManager.GetIndexPairAccessRequest(this, pair))
+        {
+            SetAnimation(Enums.ManStates.Waiting, 0);
+            yield return new WaitUntil(() => GridManager.GetIndexPairAccessRequest(this, pair));
+        }
+
         GridManager.CallPreWaitActionStart(this, pair);
         if (!GridManager.WaitForPairStart(this, pair))
         {

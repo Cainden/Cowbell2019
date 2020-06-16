@@ -270,6 +270,7 @@ namespace MySpace
 
         public GridIndex start, end;
 
+        public Func<ManScript, bool> RequestMovementFunc;
         public Action<ManScript> PreStartWaitAction;
         public WaitAction WaitForStart;
         public Action<ManScript> OnIndexStart;
