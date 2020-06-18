@@ -434,7 +434,6 @@ public class ManManager : MonoBehaviour
         if (manScript == null) return;
 
         manScript.AddMovementActions(pathIndizes);
-        manScript.InitializeMovement();
         //Vector3 WorldPos;
         //Guid prevRoom = Guid.Empty;
 

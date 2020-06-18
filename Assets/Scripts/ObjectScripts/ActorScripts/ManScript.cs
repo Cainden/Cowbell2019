@@ -24,7 +24,7 @@ public abstract class ManScript : MonoBehaviour
     [HideInInspector] public ManInstanceData ManData;
 
     public Enums.ManStates State { get => state; protected set => state = value; }
-    private Enums.ManStates state = Enums.ManStates.None;
+    private Enums.ManStates state = Enums.ManStates.None; //Here for debug purposes
 
     //Used by the manager to know what type of man it is before the man is instantiated.
     public virtual Enums.ManTypes ManType { get { return Enums.ManTypes.StandardMan; } }
@@ -83,7 +83,7 @@ public abstract class ManScript : MonoBehaviour
     /// </summary>
     protected virtual void Update()
     {
-        //StateUpdate();
+        StateUpdate();
         //print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
 
@@ -223,18 +223,6 @@ public abstract class ManScript : MonoBehaviour
         foreach (Renderer r in _Renderers) r.material = _MaterialGhost;
     }
 
-    //protected void StateUpdate()
-    //{
-    //    switch (State)
-    //    {
-    //        case Enums.ManStates.Running: DoMovement(); break;
-    //        case Enums.ManStates.Idle:
-    //        case Enums.ManStates.None:
-    //            //ProcessActions();
-    //            break;
-    //    }
-    //}
-
     public void SetFaceTowardsPlayer()
     {
         SetAnimation(State, 2);
@@ -270,10 +258,12 @@ public abstract class ManScript : MonoBehaviour
                 break;
         }
 
-        
 
+        if (state == State)
+            return;
         switch (state)
         {
+            case Enums.ManStates.None:
             case Enums.ManStates.Idle:
             case Enums.ManStates.Waiting:
                 animator.SetTrigger("IdleTrigger");
@@ -282,16 +272,24 @@ public abstract class ManScript : MonoBehaviour
                 animator.SetTrigger("RunningTrigger");
                 break;
         }
+
+        State = state;
     }
 
-    
+    protected void StateUpdate()
+    {
+        if (State == Enums.ManStates.None)
+        {
+            ProcessActions();
+        }
+    }
 
     
 
     #region State Functionality Methods
     public bool DoMovement(Vector3 _TargetPos)
     {
-        //debug stuff
+        ////debug stuff
         //string path = "MovementPath: ";
         //for (int i = 0; i < MovementPath.Count; i++)
         //{
@@ -300,8 +298,8 @@ public abstract class ManScript : MonoBehaviour
         //print(path);
 
         float Travel = (Constants.ManRunSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
-
-        if (Travel > Vector3.Distance(transform.position, _TargetPos)) // Target reached
+        //print("Travel: " + Travel);
+        if (Travel >= Vector3.Distance(transform.position, _TargetPos)) // Target reached
         {
             transform.position = _TargetPos;
             return true;
@@ -397,23 +395,21 @@ public abstract class ManScript : MonoBehaviour
         if (MovementPath.Count > 0)
         {
             StartCoroutine(Movement(new IndexPair((lastPos == GridIndex.Zero) ? GridManager.Ref.GetXYGridIndexFromWorldPosition(transform.position, true) : lastPos, MovementPath[0])));
-            
+            return;
         }
         else if (NextAction != null)
         {
             NextAction();
             NextAction = null;
         }
-        else
+        if (State != Enums.ManStates.None)
         {
-            SetAnimation(Enums.ManStates.Idle, 0);
+            SetAnimation(Enums.ManStates.None, 0);
         }
     }
 
     private IEnumerator Movement(IndexPair pair)
     {
-        State = Enums.ManStates.Waiting;
-
         if (!GridManager.GetIndexPairAccessRequest(this, pair))
         {
             SetAnimation(Enums.ManStates.Waiting, 0);
@@ -441,7 +437,6 @@ public abstract class ManScript : MonoBehaviour
         }
         else
         {
-            State = Enums.ManStates.Running;
             SetAnimation(Enums.ManStates.Running, -1, target);
             while (!DoMovement(target))
             {
@@ -458,7 +453,6 @@ public abstract class ManScript : MonoBehaviour
         
         GridManager.CallPairEndEvent(this, pair);
 
-        State = Enums.ManStates.None;
         GridIndex last = MovementPath[0];
         MovementPath.Remove(MovementPath[0]);
         CheckMovementActions();
@@ -584,12 +578,7 @@ public abstract class ManScript : MonoBehaviour
     */
     #endregion
 
-    #region Movement List Helper Functions
-    public void InitializeMovement()
-    {
-        ProcessActions();
-    }
-
+    #region Movement List Helper Function
     public void SetMovementPath(GridIndex[] path)
     {
         MovementPath = path.ToList();

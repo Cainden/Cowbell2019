@@ -197,6 +197,26 @@ namespace MySpace
             return (b);
         }
 
+        public GridIndex GetDiag_FrontLeft()
+        {
+            return this + new GridIndex(-1, 0, -1);
+        }
+
+        public GridIndex GetDiag_FrontRight()
+        {
+            return this + new GridIndex(1, 0, -1);
+        }
+
+        public GridIndex GetDiag_BackLeft()
+        {
+            return this + new GridIndex(-1, 0, 1);
+        }
+
+        public GridIndex GetDiag_BackRight()
+        {
+            return this + new GridIndex(1, 0, 1);
+        }
+
         public bool IsFrontPlane()
         {
             return (Z == 0);
@@ -227,6 +247,10 @@ namespace MySpace
                 case Enums.MoveDirections.Right: return (GetRight());
                 case Enums.MoveDirections.Front: return (GetFront());
                 case Enums.MoveDirections.Back: return (GetBack());
+                case Enums.MoveDirections.D_FrontLeft: return GetDiag_FrontLeft();
+                case Enums.MoveDirections.D_FrontRight: return GetDiag_FrontRight();
+                case Enums.MoveDirections.D_BackLeft: return GetDiag_BackLeft();
+                case Enums.MoveDirections.D_BackRight: return GetDiag_BackRight();
                 default: return (this);
             }
         }
@@ -266,7 +290,7 @@ namespace MySpace
 
     public class IndexEvent
     {
-        public Guid sourceId;
+        public Guid sourceId = Guid.NewGuid();
 
         public GridIndex start, end;
 
@@ -282,7 +306,52 @@ namespace MySpace
         /// Will return true once the update is finished with whatever it needs
         /// </summary>
         public Func<ManScript, UnityEngine.Vector3, bool> OverrideMovementUpdate;
-        
+
+        #region Operators
+        public static IndexEvent operator+(IndexEvent a, IndexEvent b)
+        {
+            if (a.start != b.start || a.end != b.end)
+                return a;
+            if (a.sourceId == b.sourceId)
+                return a;
+
+            a.RequestMovementFunc = a.RequestMovementFunc ?? b.RequestMovementFunc;
+            a.PreStartWaitAction -= b.PreStartWaitAction;
+            a.PreStartWaitAction += b.PreStartWaitAction;
+            a.WaitForStart -= b.WaitForStart;
+            a.WaitForStart += b.WaitForStart;
+            a.OnIndexStart -= b.OnIndexStart;
+            a.OnIndexStart += b.OnIndexStart;
+            a.PreEndWaitAction -= b.PreEndWaitAction;
+            a.PreEndWaitAction += b.PreEndWaitAction;
+            a.WaitForEnd -= b.WaitForEnd;
+            a.WaitForEnd += b.WaitForEnd;
+            a.OnIndexEnd -= b.OnIndexEnd;
+            a.OnIndexEnd += b.OnIndexEnd;
+            a.OverrideMovementUpdate = a.OverrideMovementUpdate ?? b.OverrideMovementUpdate;
+
+            return a;
+        }
+
+        public static IndexEvent operator -(IndexEvent a, IndexEvent b)
+        {
+            if (a.start != b.start || a.end != b.end)
+                return a;
+            if (a.sourceId == b.sourceId)
+                return a;
+
+            a.RequestMovementFunc -= b.RequestMovementFunc;
+            a.PreStartWaitAction -= b.PreStartWaitAction;
+            a.WaitForStart -= b.WaitForStart;
+            a.OnIndexStart -= b.OnIndexStart;
+            a.PreEndWaitAction -= b.PreEndWaitAction;
+            a.WaitForEnd -= b.WaitForEnd;
+            a.OnIndexEnd -= b.OnIndexEnd;
+            a.OverrideMovementUpdate -= b.OverrideMovementUpdate;
+
+            return a;
+        }
+        #endregion
     }
 
     public struct IndexPair

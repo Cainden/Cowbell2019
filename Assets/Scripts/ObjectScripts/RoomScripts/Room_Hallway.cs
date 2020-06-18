@@ -53,18 +53,14 @@ public class Room_Hallway : RoomScript
 
             GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
 
-            //if (i % 2 == 1)
-            //{
-            //    GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-            //    //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
-            //    //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
-            //}
-            //else
-            //{
-            //    GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Back);
-            //    //GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Right);
-            //    //GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.Left);
-            //}
+            if (i % 2 == 1)
+            {
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.D_BackLeft);
+            }
+            else
+            {
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[i], Enums.MoveDirections.D_BackRight);
+            }
             //GridManager.Ref.DebugIndexMovement(RoomData.CoveredIndizes[i], " : index " + i);
         }
         #endregion
