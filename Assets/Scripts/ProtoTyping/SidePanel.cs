@@ -91,18 +91,18 @@ public class SidePanel : MonoBehaviour
 
 		if (HirePanel)
 		{
-			workerHirePanel.SetActive(true);
+			workerParent.SetActive(true);
 		}
 		else
 		{
-			workerHirePanel.SetActive(false);
+			workerParent.SetActive(false);
 		}
 	}
 
 	public void OpenWorkerParent()
 	{
 		Debug.Log("workerParent");
-		WorkerParentPanel =! WorkerParentPanel;
+		WorkerParentPanel = !WorkerParentPanel;
 
 		if (WorkerParentPanel)
 		{
