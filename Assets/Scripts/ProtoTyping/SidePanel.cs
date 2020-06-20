@@ -23,10 +23,17 @@ public class SidePanel : MonoBehaviour
 	public Animator sidepanel;
 	
 	bool openPanel = false;
-	public PopulateRoomsToBuy roomPanel;
-	public GameObject collapseBTN;
+	bool WorkerParentPanel = false;
+	bool HirePanel = false;
 
-    private void OnEnable()
+	public PopulateRoomsToBuy roomPanel;
+	public WorkerScrollList workerToHire;
+	public GameObject collapseBTN;
+	public GameObject workerParent;
+	public GameObject workerHirePanel;
+
+
+	private void OnEnable()
     {
         sidepanel.speed = 2;
         PanelEvent -= SetPanelBool;
@@ -72,11 +79,42 @@ public class SidePanel : MonoBehaviour
             SetPanelOff();
     }
 
-    public void OpenHireList()
-    {
-        roomPanel.gameObject.SetActive(true);
-        roomPanel.DisplayWorkersToHire();
-    }
+	public void OpenHireList()
+	{
+		workerToHire.gameObject.SetActive(true);
+		workerToHire.DisplayWorkersToHire();
+	}
+
+	public void OpenHirePanel()
+	{
+		HirePanel = !HirePanel;
+
+		if (HirePanel)
+		{
+			workerHirePanel.SetActive(true);
+		}
+		else
+		{
+			workerHirePanel.SetActive(false);
+		}
+	}
+
+	public void OpenWorkerParent()
+	{
+		Debug.Log("workerParent");
+		WorkerParentPanel =! WorkerParentPanel;
+
+		if (WorkerParentPanel)
+		{
+			workerParent.SetActive(true);
+		}
+		else
+		{
+			workerParent.SetActive(false);
+		}
+
+
+	}
 
     public void MonsterMenu()
     {

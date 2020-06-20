@@ -28,16 +28,16 @@ public class OverheadTextManager : MonoBehaviour
         if (Ref == null) Ref = GetComponent<OverheadTextManager>();
     }
 
-    void Start()
-    {
+    //void Start()
+    //{
         
-    }
+    //}
 
-    // Update is called once per frame
-    void Update()
-    {
+    //// Update is called once per frame
+    //void Update()
+    //{
         
-    }
+    //}
 
     public void StartText(string txtStr, Color txtColor, Vector3 originPos, float txtKillTime, eMoveDirections moveDir = eMoveDirections.STATIC, float txtSpeed = 0, float txtMoveAmt = 0)
     {

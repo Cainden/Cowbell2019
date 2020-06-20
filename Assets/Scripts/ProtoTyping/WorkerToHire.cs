@@ -9,7 +9,7 @@ public class WorkerToHire : MonoBehaviour
 {
     public TextMeshProUGUI protoText1, protoText2;
     public Image workerImage;
-
+	public Button button;
 
     private WorkerConstructionData worker;
 

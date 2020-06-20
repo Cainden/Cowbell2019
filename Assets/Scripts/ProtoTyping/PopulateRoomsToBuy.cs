@@ -28,11 +28,11 @@ public class PopulateRoomsToBuy : MonoBehaviour
         //CameraScript.ZoomDisabled = true;
 	}
 
-    public void DisplayWorkersToHire()
-    {
-        RefreshList();
-        AddWorkerButtons();
-    }
+    //public void DisplayWorkersToHire()
+    //{
+    //    RefreshList();
+    //    AddWorkerButtons();
+    //}
 
 	private void AddRoomButtons()
 	{
@@ -48,18 +48,18 @@ public class PopulateRoomsToBuy : MonoBehaviour
 		}
 	}
 
-    private void AddWorkerButtons()
-    {
-        //Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-        foreach (WorkerConstructionData man in ManManager.Ref.hireList)
-        {
-            GameObject newButton = hireObjectPool.GetObject();
+    //private void AddWorkerButtons()
+    //{
+    //    //Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
+    //    foreach (WorkerConstructionData man in ManManager.Ref.hireList)
+    //    {
+    //        GameObject newButton = hireObjectPool.GetObject();
 
-            newButton.transform.SetParent(contentPanel, true);
+    //        newButton.transform.SetParent(contentPanel, true);
 
-            newButton.GetComponent<WorkerToHire>().Setup(man);
-        }
-    }
+    //        newButton.GetComponent<WorkerToHire>().Setup(man);
+    //    }
+    //}
 
     private void RefreshList()
     {
