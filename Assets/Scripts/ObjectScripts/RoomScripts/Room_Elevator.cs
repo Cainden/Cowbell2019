@@ -321,8 +321,7 @@ public class Room_Elevator : RoomScript
 
     private bool ManUpdateOverride(ManScript man, Vector3 target)
     {
-        if (man.State != Enums.ManStates.Idle)
-            man.SetAnimation(Enums.ManStates.Idle, 0);
+        man.SetAnimation(Enums.ManStates.Idle, 0);
         if (!BoxMoving)
             return true;
         else

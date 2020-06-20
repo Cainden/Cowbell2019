@@ -13,7 +13,19 @@ namespace MySpace
         public enum CursorStates { None, Normal, CamDrag, ManDrag, GuiBlocking };
 
         // Movement/Grid-Link directions, showing possible movement directions (bitfield). 
-        [Flags] public enum MoveDirections : int { Left = 1, Right = 2, Top = 4, Bottom = 8, Front = 16, Back = 32 };
+        [Flags] public enum MoveDirections : int
+        {
+            Left = 1,
+            Right = 2,
+            Top = 4,
+            Bottom = 8,
+            Front = 16,
+            Back = 32,
+            D_FrontLeft = 64,
+            D_FrontRight = 128,
+            D_BackLeft = 256,
+            D_BackRight = 512
+        };
 
         // Room related enums
         public enum RoomSizes

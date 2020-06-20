@@ -164,14 +164,12 @@ public class Room_Bedroom : RoomScript
         RoomManager.Ref.AddRoom(RoomData.RoomId, new RoomRef(gameObject, this));
 
         #region Manual assignment of grid index movement directions
-        //enable the  way to leave the room through the door
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Front);
-        //enable left movement to the door index
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Left);
-        //enable right movement to the index inside the room
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.D_FrontLeft);
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Right);
-        //disable front movement from the other index
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.D_FrontRight);
         #endregion
 
         Cleanliness = 1;
@@ -277,6 +275,28 @@ public class Room_Bedroom : RoomScript
             OverrideMovementUpdate = OverRideUpdateForDoor,
             //OnIndexEnd = CloseDoor
         });
+
+
+        //DIAGONALS
+        start = RoomData.CoveredIndizes[1];
+        end = RoomData.CoveredIndizes[1].GetDiag_FrontLeft();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            OverrideMovementUpdate = OverRideUpdateForDoor
+        });
+
+        start = RoomData.CoveredIndizes[0];
+        end = RoomData.CoveredIndizes[0].GetDiag_FrontRight();
+        GridManager.AddEventToGrid(new IndexPair(start, end), new IndexEvent()
+        {
+            sourceId = RoomData.RoomId,
+            start = start,
+            end = end,
+            OverrideMovementUpdate = OverRideUpdateForDoor
+        });
     }
 
     
@@ -314,18 +334,21 @@ public class Room_Bedroom : RoomScript
         {
             if (waitingMan == Guid.Empty)
                 waitingMan = man.ManData.ManId;
-            //man.SetAnimation(Enums.ManStates.Idle, 0);
+            //if (man.State != Enums.ManStates.Waiting)
+            man.SetAnimation(Enums.ManStates.Waiting, 0);
             return false;
         }
         else if (delay < 0.2f && !CheckDoor(false))
         {
             //do nothing, wait for door to be open.
-            //man.SetAnimation(Enums.ManStates.Idle, 0);
+            //if (man.State != Enums.ManStates.Waiting)
+            man.SetAnimation(Enums.ManStates.Waiting, 0);
             return false;
         }
         else if (man.transform.position.z == target.z)
         {
-            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            //if (man.State != Enums.ManStates.Running)
+            man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
@@ -343,7 +366,8 @@ public class Room_Bedroom : RoomScript
         else if (man.transform.position.x == DoorPos.transform.position.x)
         {
             target = new Vector3(DoorPos.transform.position.x, target.y, target.z);
-            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            //if (man.State != Enums.ManStates.Running)
+            man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
@@ -370,7 +394,8 @@ public class Room_Bedroom : RoomScript
         else
         {
             target = new Vector3(DoorPos.transform.position.x, man.transform.position.y, man.transform.position.z);
-            //man.SetAnimation(Enums.ManStates.Running, -1, target);
+            //if (man.State != Enums.ManStates.Running)
+            man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))

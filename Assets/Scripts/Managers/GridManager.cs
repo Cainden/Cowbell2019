@@ -32,7 +32,8 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Attempting to add an event to Index Pair (" + indices.start + " + " + indices.end + ") when it already contains eventData!");
+            GridEventsDic[indices] += eventData;
+            //Debug.LogError("Attempting to add an event to Index Pair (" + indices.start + " + " + indices.end + ") when it already contains eventData!");
         }
     }
 

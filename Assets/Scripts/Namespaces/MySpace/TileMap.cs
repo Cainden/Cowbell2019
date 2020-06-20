@@ -53,12 +53,17 @@ namespace MySpace
         {
             switch (dir)
             {
-                case Enums.MoveDirections.Top: return (Enums.MoveDirections.Bottom);
-                case Enums.MoveDirections.Bottom: return (Enums.MoveDirections.Top);
-                case Enums.MoveDirections.Left: return (Enums.MoveDirections.Right);
-                case Enums.MoveDirections.Right: return (Enums.MoveDirections.Left);
-                case Enums.MoveDirections.Front: return (Enums.MoveDirections.Back);
-                default: return (Enums.MoveDirections.Front); // Submitted 'Back', obviously
+                case Enums.MoveDirections.Top: return Enums.MoveDirections.Bottom;
+                case Enums.MoveDirections.Bottom: return Enums.MoveDirections.Top;
+                case Enums.MoveDirections.Left: return Enums.MoveDirections.Right;
+                case Enums.MoveDirections.Right: return Enums.MoveDirections.Left;
+                case Enums.MoveDirections.Front: return Enums.MoveDirections.Back;
+                case Enums.MoveDirections.Back: return Enums.MoveDirections.Front;
+                case Enums.MoveDirections.D_BackLeft: return Enums.MoveDirections.D_FrontRight;
+                case Enums.MoveDirections.D_BackRight: return Enums.MoveDirections.D_FrontLeft;
+                case Enums.MoveDirections.D_FrontLeft: return Enums.MoveDirections.D_BackRight;
+                case Enums.MoveDirections.D_FrontRight: return Enums.MoveDirections.D_BackLeft;
+                default: return Enums.MoveDirections.Left;
             }
         }
 
