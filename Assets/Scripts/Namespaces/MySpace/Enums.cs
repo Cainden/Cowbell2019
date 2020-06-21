@@ -122,7 +122,7 @@ namespace MySpace
             /// <summary>
             /// almost happy face
             /// </summary>
-            Neutral = 75,
+            Neutral = 70,
             /// <summary>
             /// happy face
             /// </summary>

@@ -47,7 +47,7 @@ public class DailySummaryScript : MonoBehaviour
         #endregion
 
         Title.text = "Daily Summary: " + hootelName;
-        HappinessText.text = Mathf.Round(guestHappiness * 100) + "%";
+        HappinessText.text = Mathf.Round(guestHappiness) + "%";
         BucksInText.text =fIn.ToString();
         BucksOutText.text = fOut.ToString();
         TotalText.text = (fOut + fIn).ToString();
@@ -85,7 +85,7 @@ public class DailySummaryScript : MonoBehaviour
         {
             HappyFace.SetActive(true);
         }
-        else if (v >= 75)
+        else if (v >= 70)
         {
             AlmostHappyFace.SetActive(true);
         }
