@@ -56,10 +56,10 @@ public class MoodBubbleScript : MonoBehaviour
     {
         if (inMood)
         {
-            moodChanges.Enqueue(Display(displayDuration ?? throw new System.Exception("this shouldn't be possible"), Mood));
+            moodChanges.Enqueue(Display(displayDuration, Mood));
         }
         else
-            StartCoroutine(Display(displayDuration ?? throw new System.Exception("this shouldn't be possible"), Mood));
+            StartCoroutine(Display(displayDuration, Mood));
     }
 
     /// <summary>
