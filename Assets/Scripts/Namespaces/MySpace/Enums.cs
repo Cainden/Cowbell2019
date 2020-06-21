@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace MySpace
 {
@@ -114,24 +115,26 @@ namespace MySpace
             Cleaner,
         }
 
-        public enum ManMood : byte
+        public enum ManMood : int
         {
+            None = -1,
+
             /// <summary>
             /// almost happy face
             /// </summary>
-            Neutral = 1,
+            Neutral = 75,
             /// <summary>
             /// happy face
             /// </summary>
-            Happy = 0,
+            Happy = 90,
             /// <summary>
             /// sad face
             /// </summary>
-            Sad = 4,
+            Sad = 30,
             /// <summary>
             /// both-eyes-down face
             /// </summary>
-            Angry = 3,
+            Angry = 50,
             /// <summary>
             /// no face selected yet
             /// </summary>
@@ -139,19 +142,33 @@ namespace MySpace
             /// <summary>
             /// not happy face
             /// </summary>
-            Bored = 2,
+            Bored = 60,
             /// <summary>
             /// sick face
             /// </summary>
-            Sick = 7,
+            Sick = -3,
             /// <summary>
             /// scared face
             /// </summary>
-            Scared = 5,
+            Scared = 0,
             /// <summary>
             /// monster face
             /// </summary>
-            MonsterAlert = 6
+            MonsterAlert = -2
+        }
+
+        public static ManMood GetManMood(float value)
+        {
+            foreach (ManMood mood in from ManMood m in Enum.GetValues(typeof(ManMood)) orderby (int)m ascending select m)
+            {
+                if ((int)mood == -1)
+                    continue;
+                if ((int)mood >= value)
+                {
+                    return mood;
+                }
+            }
+            return ManMood.None;
         }
     }
 }

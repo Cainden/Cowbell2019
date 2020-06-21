@@ -57,7 +57,7 @@ public abstract class ManScript : MonoBehaviour
     // Couroutines
     private IEnumerator WaitCoroutine;
 
-    private MoodBubbleScript moodScript;
+    protected MoodBubbleScript moodScript;
 
 
     #endregion
@@ -92,11 +92,14 @@ public abstract class ManScript : MonoBehaviour
     {
         GameManager.NetRevenueCalculationEvent -= RevenueCalc;
         GameManager.NetRevenueCalculationEvent += RevenueCalc;
+        GameManager.MoodCalcEvent -= MoodCalc;
+        GameManager.MoodCalcEvent += MoodCalc;
     }
 
     protected virtual void OnDisable()
     {
         GameManager.NetRevenueCalculationEvent -= RevenueCalc;
+        GameManager.MoodCalcEvent -= MoodCalc;
     }
 
     void RevenueCalc(List<RevenueInfo> list)
@@ -197,14 +200,25 @@ public abstract class ManScript : MonoBehaviour
         if (displayMoodChange)
             moodScript.DisplayMood(mood, displayDuration);
         else
-            moodScript.SetMood(mood);
+            moodScript.SetMoodValue(mood);
+    }
+
+    public void ResolveMood(Enums.ManMood mood)
+    {
+        moodScript?.ResolveMood(mood);
     }
 
     public Enums.ManMood GetMood()
     {
         if (!moodScript)
             return Enums.ManMood.Happy;
-        return moodScript.CurrentMood;
+        return moodScript.Mood;
+    }
+
+    void MoodCalc(ref float t, ref int n)
+    {
+        t += (moodScript.OverrideMood == Enums.ManMood.None ? moodScript.CurrentMood : (int)moodScript.OverrideMood);
+        n++;
     }
     #endregion
 
@@ -212,9 +226,16 @@ public abstract class ManScript : MonoBehaviour
     public void SetSelectedState(bool selected)
     {
         if (selected)
-            foreach (Renderer r in _Renderers) r.material = _MaterialHighlight;
+        {
+            print("Selecting man material " + ManData.GetManFullName() + ".");
+            //foreach (Renderer r in _Renderers) r.material = _MaterialHighlight;
+        }
         else
-            foreach (Renderer r in _Renderers) r.material = _MaterialNormal;
+        {
+            print("Resetting man material " + ManData.GetManFullName() + ".");
+            //foreach (Renderer r in _Renderers) r.material = _MaterialNormal;
+        }
+            
     }
 
     public void SetGhostState()

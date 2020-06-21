@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region
+    #region Randomness
     /// <summary>
     /// Returns a random number calculated with weight based on the standard deviation off of average given.
     /// </summary>
@@ -155,9 +155,19 @@ public class GameManager : MonoBehaviour
         //ClickManager.Ref.AddNewGuest();
     }
 
+
+    public static event MoodEventFunc MoodCalcEvent;
     public void InitiateEndOfDay()
     {
-        GuiManager.Ref.DailySummaryPanel.Enable("No Name", 0.95f);
+        float totalMood = 0;
+        int num = 0;
+        MoodCalcEvent?.Invoke(ref totalMood, ref num);
+        if (num == 0)
+        {
+            num = 1;
+            totalMood = MoodBubbleScript.DefaultMoodValue;
+        }
+        GuiManager.Ref.DailySummaryPanel.Enable("No Name", totalMood / num);
     }
 
     public static GuestConstructionData CreateDefaultGuest()
@@ -240,6 +250,8 @@ public class GameManager : MonoBehaviour
 
 namespace MySpace
 {
+    public delegate void MoodEventFunc(ref float value, ref int num);
+
     [System.Serializable]
     public struct RoleInfo
     {

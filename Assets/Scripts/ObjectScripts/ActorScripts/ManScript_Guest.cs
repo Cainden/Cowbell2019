@@ -108,8 +108,13 @@ public class ManScript_Guest : ManScript
             Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
             if (waiting)
             {
-                SetMood(Enums.ManMood.Neutral, true, 3);
+                ResolveMood(Enums.ManMood.Angry);
                 waiting = false;
+            }
+            else
+            {
+                //Make the guest happier if they didnt have to wait
+                moodScript.ModifyMood(15);
             }
         }
     }

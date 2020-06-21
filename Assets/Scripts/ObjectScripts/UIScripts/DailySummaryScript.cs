@@ -81,23 +81,23 @@ public class DailySummaryScript : MonoBehaviour
         SickFace.SetActive(false);
         MonsterFace.SetActive(false);
 
-        if (v >= 0.9f)
+        if (v >= 90)
         {
             HappyFace.SetActive(true);
         }
-        else if (v >= 0.75f)
+        else if (v >= 75)
         {
             AlmostHappyFace.SetActive(true);
         }
-        else if (v >= 0.60f)
+        else if (v >= 60)
         {
             NotHappyFace.SetActive(true);
         }
-        else if (v >= 0.5f)
+        else if (v >= 50)
         {
             BotheyesdownFace.SetActive(true);
         }
-        else if (v >= 0.3f)
+        else if (v >= 30)
         {
             SadFace.SetActive(true);
         }
