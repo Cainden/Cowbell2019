@@ -47,11 +47,16 @@ public class SidePanel : MonoBehaviour
 
     public void SetPanelOff()
     {
-        //openPanel = false;
-        sidepanel.SetBool("Panel_IN", false);
+		//openPanel = false;
+	
+		sidepanel.SetBool("Panel_IN", false);
         collapseBTN.SetActive(true);
         closeRoom();
-    }
+		CloseHireList();
+		closeWorkerParent();
+
+
+	}
 
     public void SetPanelOn()
     {
@@ -84,39 +89,58 @@ public class SidePanel : MonoBehaviour
 		workerToHire.gameObject.SetActive(true);
 		workerToHire.DisplayWorkersToHire();
 	}
+	public void CloseHireList()
+	{
+		workerToHire.gameObject.SetActive(false);
+		//workerToHire.DisplayWorkersToHire();
+		closeHirePanel();
+	}
 
 	public void OpenHirePanel()
 	{
+		Debug.Log(HirePanel);
 		HirePanel = !HirePanel;
-
 		if (HirePanel)
 		{
-			workerParent.SetActive(true);
+			closeHirePanel();
 		}
 		else
 		{
-			workerParent.SetActive(false);
+			workerHirePanel.SetActive(true);
+			OpenHireList();
 		}
+		
+		
+	}
+	public void closeHirePanel()
+	{
+		HirePanel = !HirePanel;
+		workerHirePanel.SetActive(false);	
+
 	}
 
 	public void OpenWorkerParent()
 	{
-		Debug.Log("workerParent");
-		WorkerParentPanel = !WorkerParentPanel;
 
 		if (WorkerParentPanel)
 		{
-			workerParent.SetActive(true);
+			workerParent.SetActive(false);
 		}
 		else
 		{
-			workerParent.SetActive(false);
+			workerParent.SetActive(true);
 		}
+	
 
+	}
+	public void closeWorkerParent()
+	{
+
+		workerParent.SetActive(false);
 
 	}
 
-    public void MonsterMenu()
+	public void MonsterMenu()
     {
 
     }

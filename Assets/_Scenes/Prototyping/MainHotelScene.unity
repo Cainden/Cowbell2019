@@ -49343,6 +49343,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3291485145425162249, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenWorkerParent
+      objectReference: {fileID: 0}
     - target: {fileID: 3876095524192570760, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_AnchorMin.y
@@ -49397,6 +49402,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4988116146300957040, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6851528480780740418, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
@@ -49517,6 +49527,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851528481224997960, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6851528481532630446, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenHirePanel
       objectReference: {fileID: 0}
     - target: {fileID: 7554430503553885970, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
