@@ -10,6 +10,7 @@ TagManager:
   - Ufo
   - FloatingText
   - NavBaker
+  - sidePanel
   layers:
   - Default
   - TransparentFX

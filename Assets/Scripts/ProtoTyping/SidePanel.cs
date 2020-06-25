@@ -31,7 +31,7 @@ public class SidePanel : MonoBehaviour
 	public GameObject collapseBTN;
 	public GameObject workerParent;
 	public GameObject workerHirePanel;
-
+	public List<GameObject> menWorking = new List<GameObject>();
 
 	private void OnEnable()
     {
@@ -67,6 +67,9 @@ public class SidePanel : MonoBehaviour
 
 	public void openRooms()
 	{
+		closeWorkerParent();
+		closeHirePanel();
+
 		roomPanel.gameObject.SetActive(true);
         roomPanel.DisplayRoomsToBuild();
 	}
@@ -93,20 +96,23 @@ public class SidePanel : MonoBehaviour
 	{
 		workerToHire.gameObject.SetActive(false);
 		//workerToHire.DisplayWorkersToHire();
+		HirePanel = !HirePanel;
 		closeHirePanel();
 	}
 
 	public void OpenHirePanel()
 	{
-		Debug.Log(HirePanel);
+		//Debug.Log(HirePanel);
 		HirePanel = !HirePanel;
-		if (HirePanel)
+		if (HirePanel == false)
 		{
-			closeHirePanel();
+			CloseHireList();
+
 		}
 		else
 		{
 			workerHirePanel.SetActive(true);
+			
 			OpenHireList();
 		}
 		
@@ -121,23 +127,40 @@ public class SidePanel : MonoBehaviour
 
 	public void OpenWorkerParent()
 	{
+		closeRoom();
+		WorkerParentPanel = !WorkerParentPanel;
 
 		if (WorkerParentPanel)
 		{
-			workerParent.SetActive(false);
+			workerParent.SetActive(true);
+			
 		}
 		else
 		{
-			workerParent.SetActive(true);
+			closeWorkerParent();
+			//workerParent.SetActive(false);
 		}
 	
 
 	}
 	public void closeWorkerParent()
 	{
-
+		WorkerParentPanel = false;
 		workerParent.SetActive(false);
 
+	}
+
+	public void hiredList()
+	{
+		var men =  ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>();
+
+		foreach (MySpace.ManRef<ManScript_Worker> worker in men)
+		{
+			Debug.Log(ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>().ToString());
+		}
+
+			
+		//Debug.Log(ManManager.Ref.GetAllActiveMenOfType<_ManList>());
 	}
 
 	public void MonsterMenu()
