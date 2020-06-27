@@ -149,7 +149,7 @@ public class ManManager : MonoBehaviour
         ManScript manScript = _ManList[manId].ManScript;
 
         // Disable the raycast option
-        manScript.SetGhostState();
+        //manScript.SetGhostState();
 
         // Give path to entrance (if assigned to any room. Otherwise, it is the one waiting at the entrance)
         if (manScript.IsAssignedToAnyRoom())

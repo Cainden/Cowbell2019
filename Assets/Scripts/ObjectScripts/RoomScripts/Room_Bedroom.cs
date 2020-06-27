@@ -170,6 +170,11 @@ public class Room_Bedroom : RoomScript
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Right);
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Front);
         GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.D_FrontRight);
+        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Top);
+        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[0], Enums.MoveDirections.Bottom);
+        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Top);
+        GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[1], Enums.MoveDirections.Bottom);
+
         #endregion
 
         Cleanliness = 1;
