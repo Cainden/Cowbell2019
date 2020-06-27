@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,13 +26,17 @@ public class SidePanel : MonoBehaviour
 	bool openPanel = false;
 	bool WorkerParentPanel = false;
 	bool HirePanel = false;
+	bool hiredPanle = false;
 
+	public GameObject HiredPanel;
 	public PopulateRoomsToBuy roomPanel;
 	public WorkerScrollList workerToHire;
 	public GameObject collapseBTN;
 	public GameObject workerParent;
 	public GameObject workerHirePanel;
 	public List<GameObject> menWorking = new List<GameObject>();
+	public HiredWokerScrollList hiredworkerScrollList;
+
 
 	private void OnEnable()
     {
@@ -54,9 +59,13 @@ public class SidePanel : MonoBehaviour
         closeRoom();
 		CloseHireList();
 		closeWorkerParent();
-
+		closeHiredPanel();
 
 	}
+
+
+	
+
 
     public void SetPanelOn()
     {
@@ -69,6 +78,8 @@ public class SidePanel : MonoBehaviour
 	{
 		closeWorkerParent();
 		closeHirePanel();
+		CloseHireList();
+		closeHiredPanel();
 
 		roomPanel.gameObject.SetActive(true);
         roomPanel.DisplayRoomsToBuild();
@@ -89,19 +100,23 @@ public class SidePanel : MonoBehaviour
 
 	public void OpenHireList()
 	{
+
+		closeRoom();
 		workerToHire.gameObject.SetActive(true);
 		workerToHire.DisplayWorkersToHire();
 	}
 	public void CloseHireList()
 	{
+		
 		workerToHire.gameObject.SetActive(false);
 		//workerToHire.DisplayWorkersToHire();
-		HirePanel = !HirePanel;
+		HirePanel = false;
 		closeHirePanel();
 	}
 
 	public void OpenHirePanel()
 	{
+		closeHiredPanel();
 		//Debug.Log(HirePanel);
 		HirePanel = !HirePanel;
 		if (HirePanel == false)
@@ -120,7 +135,7 @@ public class SidePanel : MonoBehaviour
 	}
 	public void closeHirePanel()
 	{
-		HirePanel = !HirePanel;
+		
 		workerHirePanel.SetActive(false);	
 
 	}
@@ -152,15 +167,31 @@ public class SidePanel : MonoBehaviour
 
 	public void hiredList()
 	{
-		var men =  ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>();
-
-		foreach (MySpace.ManRef<ManScript_Worker> worker in men)
+		CloseHireList();
+		closeRoom();
+		hiredPanle = !hiredPanle;
+		
+		
+		if(hiredPanle == true)
 		{
-			Debug.Log(ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>().ToString());
+			HiredPanel.SetActive(true);
+			hiredworkerScrollList.DisplayHiredWorkers();
+		}
+		else
+		{
+			hiredPanle = false;
+			closeHiredPanel();
 		}
 
-			
+
+
 		//Debug.Log(ManManager.Ref.GetAllActiveMenOfType<_ManList>());
+	}
+
+	private void closeHiredPanel()
+	{
+		HiredPanel.SetActive(false);
+		hiredPanle = false;
 	}
 
 	public void MonsterMenu()
