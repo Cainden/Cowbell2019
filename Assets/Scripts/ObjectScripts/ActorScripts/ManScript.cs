@@ -48,10 +48,10 @@ public abstract class ManScript : MonoBehaviour
     [SerializeField] protected Animator animator;
 
     #region Material Handling
-    private Renderer[] _Renderers;
-    private Material _MaterialNormal;
-    private Material _MaterialHighlight; // Selected
-    private Material _MaterialGhost;     // Leaving
+    //private Renderer[] _Renderers;
+    //private Material _MaterialNormal;
+    //private Material _MaterialHighlight; // Selected
+    //private Material _MaterialGhost;     // Leaving
     #endregion
 
     // Couroutines
@@ -70,7 +70,7 @@ public abstract class ManScript : MonoBehaviour
     protected virtual void Start()
     {
         //_Animator = GetComponentInChildren<Animator>();
-        _Renderers = GetComponentsInChildren<Renderer>();
+        //_Renderers = GetComponentsInChildren<Renderer>();
         SetMaterials();
         CheckReferences();
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
@@ -113,7 +113,7 @@ public abstract class ManScript : MonoBehaviour
     protected void CheckReferences()
     {
         Debug.Assert(ManData != null);
-        Debug.Assert(_Renderers != null);
+        //Debug.Assert(_Renderers != null);
         //Debug.Assert(_MaterialNormal != null);
         //Debug.Assert(_MaterialHighlight != null);
         //Debug.Assert(_MaterialGhost != null);
@@ -238,11 +238,11 @@ public abstract class ManScript : MonoBehaviour
             
     }
 
-    public void SetGhostState()
-    {
-        GetComponent<BoxCollider>().enabled = false; // Disable raycasting
-        foreach (Renderer r in _Renderers) r.material = _MaterialGhost;
-    }
+    //public void SetGhostState()
+    //{
+    //    GetComponent<BoxCollider>().enabled = false; // Disable raycasting
+    //    foreach (Renderer r in _Renderers) r.material = _MaterialGhost;
+    //}
 
     public void SetFaceTowardsPlayer()
     {

@@ -122,6 +122,7 @@ public class ManManager : MonoBehaviour
 
     private void AddIncomingPath(ManScript manScript)
     {
+        //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
         foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
         {
             manScript.AddMovementAction(WayPoint);
@@ -130,7 +131,8 @@ public class ManManager : MonoBehaviour
 
     private void AddOutgoingPath(ManScript manScript)
     {
-        foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
+        //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
+        foreach (GridIndex WayPoint in Constants.ManOutgoingPath)
         {
             manScript.AddMovementAction(WayPoint);
         }
@@ -149,13 +151,16 @@ public class ManManager : MonoBehaviour
         ManScript manScript = _ManList[manId].ManScript;
 
         // Disable the raycast option
-        manScript.SetGhostState();
+        //manScript.SetGhostState();
 
         // Give path to entrance (if assigned to any room. Otherwise, it is the one waiting at the entrance)
         if (manScript.IsAssignedToAnyRoom())
         {
+            Debug.Log("Guest had room and is being removed from it");
             //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
             RoomScript RoomScript = manScript.ManData.AssignedRoom;
+
+            //Find the path from their current location to the entrance point of the hootel.
             GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(RoomScript.RoomData.CoveredIndizes[manScript.ManData.AssignedRoomSlot],
                                                                    Constants.EntranceRoomIndex);
 
@@ -166,10 +171,10 @@ public class ManManager : MonoBehaviour
             StateManager.Ref.SetWaitingMan(Guid.Empty);
         }
 
-        // Give path to outside
+        //Give path to outside from the entrance index
         AddOutgoingPath(manScript);
 
-        // Submit self-destruction of object
+        //Submit self-destruction of object once the character reaches the end point of the path.
         manScript.AddActionToEndOfMovement(() => { Destroy(manScript.gameObject); });
         
     }

@@ -69,16 +69,40 @@ public class Room_Elevator : RoomScript
 
         boxPos = eBox.position;
 
+        //Since back planes no longer self connect, manually connect the rear part of the elevator to the front.
+        GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Front);
+
         Guid above = GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetAbove()), below = GridManager.Ref.GetGridTileRoomGuid(RoomData.CoveredIndizes[0].GetBelow());
 
-        if (eTower != null) return;
+        if (eTower != null)
+        {
+            bool top = false, bot = false;
+            foreach (Room_Elevator room in eTower)
+            {
+                if (room.RoomData.CoveredIndizes[0].Y > RoomData.CoveredIndizes[0].Y)
+                    top = true;
+                else if (room.RoomData.CoveredIndizes[0].Y < RoomData.CoveredIndizes[0].Y)
+                    bot = true;
+            }
+            if (!top)
+            {
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
+            }
+            if (!bot)
+            {
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
+            }
+            return;
+        }
 
+        //if elevator is below
         if (RoomManager.Ref.GetRoomData(below)?.RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
         {
             eTower = (RoomManager.Ref.GetRoomData(below).RoomScript as Room_Elevator).eTower;
             ResetBox((RoomManager.Ref.GetRoomData(below).RoomScript as Room_Elevator).eBox);
             if (!eTower.Contains(this))
                 eTower.Add(this);
+            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
 
             //if both above and below
             if (RoomManager.Ref.GetRoomData(above)?.RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
@@ -93,27 +117,42 @@ public class Room_Elevator : RoomScript
                     room.eTower = eTower;
                     room.ResetBox(eBox);
                 }
+                GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
+            }
+            else //if no elevator is above, remove the movement direction
+            {
+                GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
             }
         }
+        //if elevator is above and not below
         else if (RoomManager.Ref.GetRoomData(above)?.RoomScript.RoomData.RoomType == Enums.RoomTypes.Elevator)
         {
             eTower = (RoomManager.Ref.GetRoomData(above).RoomScript as Room_Elevator).eTower;
             if (!eTower.Contains(this))
                 eTower.Add(this);
             ResetBox((RoomManager.Ref.GetRoomData(above).RoomScript as Room_Elevator).eBox);
+            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
+            GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
         }
+        //if a solo elevator, need to make another one below this one.
         else if (RoomData.CoveredIndizes[0].Y > Constants.GridSurfaceY && below == Guid.Empty)
         {
             eTower = new List<Room_Elevator>() { this };
             Guid temp = Guid.NewGuid();
             RoomManager.Ref.CreateRoom(temp, Enums.RoomTypes.Elevator, RoomData.CoveredIndizes[0].GetBelow());
+            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
+            GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
             //eTower.Add(RoomManager.Ref.GetRoomData(temp).RoomScript as Room_Elevator);
         }
+        //if a solo elevator, and space below this elevator is not available, build elevator above.
         else if (above == Guid.Empty)
         {
             eTower = new List<Room_Elevator>() { this };
             Guid temp = Guid.NewGuid();
             RoomManager.Ref.CreateRoom(temp, Enums.RoomTypes.Elevator, RoomData.CoveredIndizes[0].GetAbove());
+            GridManager.Ref.AddMovementDirectionToGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Top);
+            GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
+
             //eTower.Add(RoomManager.Ref.GetRoomData(temp).RoomScript as Room_Elevator);
         }
 

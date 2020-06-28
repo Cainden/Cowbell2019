@@ -42,7 +42,7 @@ namespace MySpace
         };
         public static readonly ReadOnlyCollection<GridIndex> NewManIncomingPath = new ReadOnlyCollection<GridIndex>(_NewManIncomingPath);
 
-        private static readonly GridIndex[] _NewManOutgoingPath = 
+        private static readonly GridIndex[] _ManOutgoingPath = 
         {
             new GridIndex(-1, 8, 0),
             new GridIndex(-1, 8, 1),
@@ -53,7 +53,7 @@ namespace MySpace
             //new Vector3(-5.5f, (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f),
             //new Vector3(-18f,  (GridSurfaceY + 0.5f) * GridElementHeight - 0.2f, 6.0f)
         };
-        public static readonly ReadOnlyCollection<GridIndex> NewManOutgoingPath = new ReadOnlyCollection<GridIndex>(_NewManOutgoingPath);
+        public static readonly ReadOnlyCollection<GridIndex> ManOutgoingPath = new ReadOnlyCollection<GridIndex>(_ManOutgoingPath);
 
         // Selector definitions
         //public static readonly Dictionary<Enums.RoomSizes, string> RoomBuildSelectorModels = new Dictionary<Enums.RoomSizes, string>

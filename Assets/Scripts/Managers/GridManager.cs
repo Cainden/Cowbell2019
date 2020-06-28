@@ -638,7 +638,7 @@ public class GridManager : MonoBehaviour
         // On back plane, we can only link to above/below/front
 
         Enums.MoveDirections[] FrontPlaneDirections = { Enums.MoveDirections.Left, Enums.MoveDirections.Right, Enums.MoveDirections.Back };
-        Enums.MoveDirections[] BackPlaneDirections = { Enums.MoveDirections.Top, Enums.MoveDirections.Bottom, Enums.MoveDirections.Front };
+        //Enums.MoveDirections[] BackPlaneDirections = { Enums.MoveDirections.Top, Enums.MoveDirections.Bottom, Enums.MoveDirections.Front };
 
         for (int i = 0; i < occupiedIndizes.Length; i++)
         {
@@ -654,26 +654,27 @@ public class GridManager : MonoBehaviour
             }
             else // Is backplane
             {
-                foreach (Enums.MoveDirections Dir in BackPlaneDirections)
-                {
-                    GridIndex AdjIndex = occupiedIndizes[i].GetAdjacent(Dir);
-                    if (!AdjIndex.IsValid()) continue;
-                    if (!_GridData[AdjIndex.X, AdjIndex.Y, AdjIndex.Z].Occupied) continue;
+                ///Don't really need this anymore, back plane rooms are too unique. Movement directions will be set up by the rooms individually.
+                //foreach (Enums.MoveDirections Dir in BackPlaneDirections)
+                //{
+                //    GridIndex AdjIndex = occupiedIndizes[i].GetAdjacent(Dir);
+                //    if (!AdjIndex.IsValid()) continue;
+                //    if (!_GridData[AdjIndex.X, AdjIndex.Y, AdjIndex.Z].Occupied) continue;
 
 
 
-                    // Unless the rooms are entrance rooms...
-                    // If the current room is on the surface, don't link to a bottom room
-                    // If the current room is one below the surface, don't link to a top room
+                //    // Unless the rooms are entrance rooms...
+                //    // If the current room is on the surface, don't link to a bottom room
+                //    // If the current room is one below the surface, don't link to a top room
 
-                    if (((occupiedIndizes[i].Y == Constants.GridSurfaceY && Dir == Enums.MoveDirections.Bottom) ||
-                        (occupiedIndizes[i].Y == Constants.GridSurfaceY - 1 && Dir == Enums.MoveDirections.Top)))
-                    {
+                //    if (((occupiedIndizes[i].Y == Constants.GridSurfaceY && Dir == Enums.MoveDirections.Bottom) ||
+                //        (occupiedIndizes[i].Y == Constants.GridSurfaceY - 1 && Dir == Enums.MoveDirections.Top)))
+                //    {
 
-                        continue;
-                    }
-                    _GridMovements.LinkTiles(occupiedIndizes[i], AdjIndex, Dir);
-                }
+                //        continue;
+                //    }
+                //    _GridMovements.LinkTiles(occupiedIndizes[i], AdjIndex, Dir);
+                //}
             }
         }
     }
