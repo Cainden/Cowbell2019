@@ -99,7 +99,7 @@ public class Room_Bedroom : RoomScript
             int numMen = CountMen();
             fElapsedTime = 0.0f;
             bool bStank = false; // If true deteriorates room
-            float dirtyFactor = 0, mult = (cleanTickTime / .01667f) * 0.01f;
+            float dirtyFactor = 0, mult = (cleanTickTime / .01667f/*(= 1/60 )*/) * 0.01f;
             //Check to see if Room is occupied by Guest and decrease cleanliness. 
             //If room is occupied by Cleaners, increase cleanliness.
             //Make it so Cleaners cannot occupy the rooms at the same time as guests?
@@ -310,22 +310,24 @@ public class Room_Bedroom : RoomScript
     float delay = 0;
     public void OpenDoor(ManScript man)
     {
-        OpenDoor();
+        OpenDoor(man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed));
     }
 
-    public void OpenDoor()
+    public void OpenDoor(float speed = 1)
     {
+        doorAnim.speed = 1 + ((speed - 1) * .1f);
         doorAnim.SetBool("SingleDoorOpen", true);
         delay = 0;
     }
 
     public void CloseDoor(ManScript man)
     {
-        CloseDoor();
+        CloseDoor(man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed));
     }
 
-    public void CloseDoor()
+    public void CloseDoor(float speed = 1)
     {
+        doorAnim.speed = 1 + ((speed - 1) * .1f);
         if (waitingMan == Guid.Empty)
         {
             doorAnim.SetBool("SingleDoorOpen", false);
@@ -335,29 +337,15 @@ public class Room_Bedroom : RoomScript
     Guid manIn, waitingMan;
     public bool OverRideUpdateForDoor(ManScript man, Vector3 target)
     {
-        if (manIn != Guid.Empty && manIn != man.ManData.ManId)
+        if (man.transform.position.z == target.z)
         {
-            if (waitingMan == Guid.Empty)
-                waitingMan = man.ManData.ManId;
-            //if (man.State != Enums.ManStates.Waiting)
-            man.SetAnimation(Enums.ManStates.Waiting, 0);
-            return false;
-        }
-        else if (delay < 0.2f && !CheckDoor(false))
-        {
-            //do nothing, wait for door to be open.
-            //if (man.State != Enums.ManStates.Waiting)
-            man.SetAnimation(Enums.ManStates.Waiting, 0);
-            return false;
-        }
-        else if (man.transform.position.z == target.z)
-        {
-            //if (man.State != Enums.ManStates.Running)
             man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
                 man.transform.position = target;
+                if (GameManager.Debug)
+                    print("changing man destination to target location");
                 return true;
             }
             else
@@ -365,27 +353,52 @@ public class Room_Bedroom : RoomScript
                 Vector3 dir = (target - man.transform.position);
                 dir.Normalize();
                 man.transform.position += (dir * Travel);
+                if (GameManager.Debug)
+                    print("man is moving to target position");
                 return false;
             }
         }
         else if (man.transform.position.x == DoorPos.transform.position.x)
         {
+            if (manIn != Guid.Empty && manIn != man.ManData.ManId)
+            {
+                if (waitingMan == Guid.Empty)
+                    waitingMan = man.ManData.ManId;
+                man.SetAnimation(Enums.ManStates.Waiting, 0);
+                if (GameManager.Debug)
+                    print("man is waiting for other man");
+                return false;
+            }
+            else if (delay < 0.2f && !CheckDoor(false))
+            {
+                //do nothing, wait for door to be open.
+                man.SetAnimation(Enums.ManStates.Waiting, 0);
+                if (GameManager.Debug)
+                    print("man is waiting for door");
+                return false;
+            }
+
             target = new Vector3(DoorPos.transform.position.x, target.y, target.z);
-            //if (man.State != Enums.ManStates.Running)
             man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
                 man.transform.position = target;
-                CloseDoor();
+                CloseDoor(man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed));
                 if (waitingMan != Guid.Empty)
                 {
                     manIn = waitingMan;
                     waitingMan = Guid.Empty;
+                    if (GameManager.Debug)
+                        print("waiting man was not empty");
                 }
                 else
+                {
+                    if (GameManager.Debug)
+                        print("waiting man was empty");
                     manIn = Guid.Empty;
+                }
                 return false;
             }
             else
@@ -393,20 +406,23 @@ public class Room_Bedroom : RoomScript
                 Vector3 dir = (target - man.transform.position);
                 dir.Normalize();
                 man.transform.position += (dir * Travel);
+                if (GameManager.Debug)
+                    print("man is moving to target Z position");
                 return false;
             }
         }
         else
         {
             target = new Vector3(DoorPos.transform.position.x, man.transform.position.y, man.transform.position.z);
-            //if (man.State != Enums.ManStates.Running)
             man.SetAnimation(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
                 man.transform.position = target;
-                OpenDoor();
+                OpenDoor(man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed));
+                if (GameManager.Debug)
+                    print("opening door");
                 manIn = man.ManData.ManId;
                 return false;
             }
@@ -415,6 +431,8 @@ public class Room_Bedroom : RoomScript
                 Vector3 dir = (target - man.transform.position);
                 dir.Normalize();
                 man.transform.position += (dir * Travel);
+                if (GameManager.Debug)
+                    print("man is moving to door X position");
                 return false;
             }
         }

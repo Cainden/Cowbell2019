@@ -156,7 +156,8 @@ public class ManManager : MonoBehaviour
         // Give path to entrance (if assigned to any room. Otherwise, it is the one waiting at the entrance)
         if (manScript.IsAssignedToAnyRoom())
         {
-            Debug.Log("Guest had room and is being removed from it");
+            if (GameManager.Debug)
+                Debug.Log("Guest had room and is being removed from it");
             //RoomScript RoomScript = RoomManager.Ref.GetRoomData(ManScript.ManData.AssignedRoom).RoomScript;
             RoomScript RoomScript = manScript.ManData.AssignedRoom;
 

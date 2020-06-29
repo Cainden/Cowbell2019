@@ -179,7 +179,7 @@ public abstract class ManScript : MonoBehaviour
                 return s.value;
         }
         Debug.LogWarning("False Value returned. The type '" + type + "' was not found in the genStats Array.");
-        return -1;
+        return 1;
     }
 
     public GeneralStat GetGeneralStat(GeneralStat.StatType type)
@@ -227,12 +227,14 @@ public abstract class ManScript : MonoBehaviour
     {
         if (selected)
         {
-            print("Selecting man material " + ManData.GetManFullName() + ".");
+            if (GameManager.Debug)
+                print("Selecting man material " + ManData.GetManFullName() + ".");
             //foreach (Renderer r in _Renderers) r.material = _MaterialHighlight;
         }
         else
         {
-            print("Resetting man material " + ManData.GetManFullName() + ".");
+            if (GameManager.Debug)
+                print("Resetting man material " + ManData.GetManFullName() + ".");
             //foreach (Renderer r in _Renderers) r.material = _MaterialNormal;
         }
             

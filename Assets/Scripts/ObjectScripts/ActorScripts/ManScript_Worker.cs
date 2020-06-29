@@ -12,7 +12,7 @@ public class ManScript_Worker : ManScript
 
     #region Public Variables
 
-    public float tirednessThreshhold; //tiredness always increases by 1 per second, so a default of 1 minute seems decent.
+    public const float tirednessMax = 60; //tiredness always increases by 1 per second, so a default of 1 minute seems decent.
     public float currentTiredness = 0;
 
     #region Base Stats
@@ -65,7 +65,6 @@ public class ManScript_Worker : ManScript
             States.Add(Enums.ManRole.None, Idle);
         if (!States.ContainsKey(Enums.ManRole.Guest))
             States.Add(Enums.ManRole.Guest, Idle);
-        tirednessThreshhold = 60;
         currentTiredness = 60;
         delayTimer = 0;
     }
