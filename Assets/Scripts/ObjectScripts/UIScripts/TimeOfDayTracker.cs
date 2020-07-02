@@ -9,6 +9,7 @@ public class TimeOfDayTracker : MonoBehaviour
 
     [HideInInspector]
     public static TimeOfDayTracker Ref { get; private set; } // For external access of script
+	public Clock_display clockDisp;
 
     void Awake()
     {
@@ -31,6 +32,7 @@ public class TimeOfDayTracker : MonoBehaviour
     public void SetTimerText(string textToDisplay)
 	{
 		timerTextComponent.text = textToDisplay;
+		
 	}
 
     // Increase the speed of the game

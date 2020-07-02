@@ -17,8 +17,8 @@ public class TimeManager : MonoBehaviour
     
     public static TimeManager Ref { get; private set; } // For external access of script
 
-    /// number of seconds in a day  
-    public float dayCycleLength = 1440;
+	/// number of seconds in a day  86400
+	public float dayCycleLength = 1440; //minutes
 
     [Tooltip("The hour at which the time will start")]
     [SerializeField] float dayStartHour = 5;
@@ -391,6 +391,7 @@ namespace MySpace
             #region Event Helper Functions
             internal static void RePositionEvent(Event e)
             {
+				// send to clock
                 float r = TimeManager.RatioCycleTime;
                 float t = e.Ratio;
                 if (t <= r)
