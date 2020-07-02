@@ -27,8 +27,10 @@ public class LoadSaveManager : MonoBehaviour
         RoomManager.Ref.SaveRoomList(_SaveFileNameRoomList);
 
         GuiManager.Ref.Initiate_UserInfoSmall("Data saved to file!");
-        Debug.Log("Saved: " + _SaveFileNameManList);
-        Debug.Log("Saved: " + _SaveFileNameRoomList);
+        if (GameManager.Debug)
+            Debug.Log("Saved: " + _SaveFileNameManList);
+        if (GameManager.Debug)
+            Debug.Log("Saved: " + _SaveFileNameRoomList);
     }
 
     public IEnumerator LoadCurrentState()

@@ -12,7 +12,7 @@ public class ManScript_Guest : ManScript
     {
         get
         {
-            if (ManData.OwnedRoomRef.RoomType != Enums.RoomTypes.Bedroom)
+            if (ManData.OwnedRoomRef?.RoomType != Enums.RoomTypes.Bedroom)// ? is there so that if the man does not have an assigned room they return no rent change, instead of generating a NRE
                 return 0;
             return (ManData.OwnedRoomRef.RoomScript as Room_Bedroom).RentCost;
         }

@@ -20,6 +20,8 @@ public class WorkerInfoWindowScript : MonoBehaviour
 
     public TextMeshProUGUI genstat1Name;
     public Image genstat1FrontSlider, genstat1RearSlider;
+    public TextMeshProUGUI genstat2Name;
+    public Image genstat2FrontSlider, genstat2RearSlider;
 
     public Slider physicalityExpBar, intelligenceExpBar, professionalismExpBar;
 
@@ -37,6 +39,7 @@ public class WorkerInfoWindowScript : MonoBehaviour
         professionalismRearSlider.fillAmount = 0;
         intelligenceRearSlider.fillAmount = 0;
         genstat1RearSlider.fillAmount = 0;
+        genstat2RearSlider.fillAmount = 0;
     }
 
     public void Activate(System.Guid man)
@@ -78,8 +81,13 @@ public class WorkerInfoWindowScript : MonoBehaviour
         nameText.text = worker.ManName;
         roleText.text = worker.role.ToString();
 
+        genstat1Name.gameObject.SetActive(true);
         genstat1Name.text = "Speed";
         genstat1FrontSlider.fillAmount = worker.GetGeneralStatValue(GeneralStat.StatType.Speed) / Stat.StatMax;
+
+        genstat2Name.gameObject.SetActive(true);
+        genstat2Name.text = "Tiredness";
+        genstat2FrontSlider.fillAmount = worker.currentTiredness / ManScript_Worker.tirednessMax;
 
         //The base value won't change, so there's no need to have it call this multiple times.
         professionalismFrontSlider.fillAmount = worker.GetSpecialtyStat(SpecialtyStat.StatType.Professionalism).BaseValue / Stat.StatMax;
@@ -98,18 +106,21 @@ public class WorkerInfoWindowScript : MonoBehaviour
         active = true;
         nameText.text = guest.ManName;
 
+        genstat1Name.gameObject.SetActive(true);
         genstat1Name.text = "Dirtiness";
         genstat1FrontSlider.fillAmount = guest.GetGeneralStatValue(GeneralStat.StatType.Dirtiness) / Stat.StatMax;
+
+        genstat2Name.gameObject.SetActive(false);
     }
 
     private IEnumerator InfoUpdateWorker()
     {
-        while (active && worker)
+        while (active && worker != null)
         {
             physicalityRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
             intelligenceRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
             professionalismRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
-            
+            genstat2FrontSlider.fillAmount = worker.currentTiredness / ManScript_Worker.tirednessMax;
 
             physicalityExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Physicality).GetCurrentExp;
             intelligenceExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Intelligence).GetCurrentExp;

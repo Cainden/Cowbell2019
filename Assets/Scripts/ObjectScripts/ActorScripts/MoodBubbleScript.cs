@@ -102,7 +102,8 @@ public class MoodBubbleScript : MonoBehaviour
     bool inMood = false;
     IEnumerator Display(float? displayDuration, Enums.ManMood Mood)
     {
-        Debug.Log("Mood Set To " + Mood.ToString() + ".");
+        if (GameManager.Debug)
+            Debug.Log("Mood Set To " + Mood.ToString() + ".");
         this.bubble.sprite = GetSpriteFromMood(Mood);
         localCanvas.SetActive(true);
         inMood = true;
@@ -127,19 +128,22 @@ public class MoodBubbleScript : MonoBehaviour
                     
                     if (moodChanges.Count > 0)
                     {
-                        Debug.Log("Mood Changed! Dequeuing.");
+                        if (GameManager.Debug)
+                            Debug.Log("Mood Changed! Dequeuing.");
                         StartCoroutine(moodChanges.Dequeue());
                         yield break;
                     }
                     else
                     {
-                        Debug.Log("Mood Changed! Displaying this mood.");
+                        if (GameManager.Debug)
+                            Debug.Log("Mood Changed! Displaying this mood.");
                         StartCoroutine(Display(1, OverrideMood == Enums.ManMood.None ? this.Mood : OverrideMood));
                         yield break;
                     }
                 }
             }
-        Debug.Log("Mood Time Expired. Fading Out.");
+        if (GameManager.Debug)
+            Debug.Log("Mood Time Expired. Fading Out.");
         //fade the window now
         displayTime = 0;
         displayDuration = 1;

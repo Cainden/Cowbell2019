@@ -9,6 +9,9 @@ using MySpace.Stats;
 public class GameManager : MonoBehaviour
 {
     #region Serialized Variables
+    public static bool Debug { get { return Ref?.debug ?? false; } }
+    [SerializeField] bool debug = false;
+
     [Header("Guest Stay Time")]
     public int guestMaxStayTimeDays;
     public int guestMinStayTimeDays;
@@ -203,7 +206,7 @@ public class GameManager : MonoBehaviour
     {
         float sMin = roleDic[role].incomeMinimum, sMax = roleDic[role].incomeMaximum;
         if (sMin > sMax)
-            Debug.LogError("The role of '" + role + "' has a higher minimum income than maximum!");
+            UnityEngine.Debug.LogError("The role of '" + role + "' has a higher minimum income than maximum!");
         float t = (sMax - sMin) / 9;
 
         return Mathf.RoundToInt(sMin + (t * (loyalty - 1)));
