@@ -16,12 +16,12 @@ public class TimeManager : MonoBehaviour
     [SerializeField] bool showTimeUI = true;
     
     public static TimeManager Ref { get; private set; } // For external access of script
-
+	public Clock_display clockDisp;
 	/// number of seconds in a day  86400
 	public float dayCycleLength = 1440; //minutes
 
     [Tooltip("The hour at which the time will start")]
-    [SerializeField] float dayStartHour = 5;
+    [SerializeField] float dayStartHour = 0;
 
     /// current time in game time (0 - dayCycleLength).  
     internal static float currentCycleTime;
@@ -89,13 +89,20 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     public static float SecondsTime { get; private set; }
 
-    public static float RatioCycleTime
+
+	
+	public static float RatioCycleTime
     {
         get
-        {
-            return currentCycleTime / Ref.dayCycleLength;
+		{
+			
+
+			return currentCycleTime / Ref.dayCycleLength;
+			
         }
     }
+
+	
 
     /// The specified intensity of the directional light, if one exists. This value will be  
     /// faded to 0 during dusk, and faded from 0 back to this value during dawn.  
