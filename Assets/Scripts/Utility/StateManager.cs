@@ -173,7 +173,8 @@ public class StateManager : MonoBehaviour
             case Enums.GameStates.RoomSelected:
                 ResetSelectedMan();
                 if (RoomManager.IsRoomOfType<Room_Hallway>(_SelectedRoom))
-                    GuiManager.Ref.Show_RoomInfoWindow((RoomManager.Ref.GetRoomData(_SelectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck());
+                    (RoomManager.Ref.GetRoomData(_SelectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck().TogglePopUp();
+                //GuiManager.Ref.Show_RoomInfoWindow((RoomManager.Ref.GetRoomData(_SelectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck());
                 else
                     GuiManager.Ref.Show_RoomInfoWindow(_SelectedRoom);
                 break;

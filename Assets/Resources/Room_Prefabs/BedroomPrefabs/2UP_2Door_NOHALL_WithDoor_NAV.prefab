@@ -29,7 +29,7 @@ MonoBehaviour:
   stankShade: {fileID: -6465566751694194690, guid: 4a7781d2af7e2804d8a7fec399ab426f,
     type: 3}
   stankMatSet: {fileID: 2100000, guid: 5eb1ad3932c639748abbcf17556753ee, type: 2}
-  doorAnim: {fileID: 0}
+  doorAnim: {fileID: 3504601482909503212}
   DoorPos: {fileID: 1133005577828114364}
   RentCost: 50
 --- !u!1 &2068178112208453197
@@ -153,7 +153,7 @@ MonoBehaviour:
   stankShade: {fileID: -6465566751694194690, guid: 4a7781d2af7e2804d8a7fec399ab426f,
     type: 3}
   stankMatSet: {fileID: 2100000, guid: 5eb1ad3932c639748abbcf17556753ee, type: 2}
-  doorAnim: {fileID: 0}
+  doorAnim: {fileID: 2189625036384644688}
   DoorPos: {fileID: 3671165857576310118}
   RentCost: 50
 --- !u!1001 &2509259404515274170
@@ -163,6 +163,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 635806788564449025}
     m_Modifications:
+    - target: {fileID: 498477392414562387, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1334640810168918426, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
       propertyPath: m_RootOrder
@@ -172,6 +177,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7143309489231577242, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
@@ -249,6 +259,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 635806788564449025}
     m_Modifications:
+    - target: {fileID: 498477392414562387, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1334640810168918426, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
       propertyPath: m_RootOrder
@@ -258,6 +273,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7143309489231577242, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
@@ -422,6 +442,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2483696efa48c5a4189d101e142a3530, type: 3}
+--- !u!95 &2189625036384644688 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6069494060908081330, guid: 2483696efa48c5a4189d101e142a3530,
+    type: 3}
+  m_PrefabInstance: {fileID: 5357085556855987938}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7249094231684562526
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -516,3 +542,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2483696efa48c5a4189d101e142a3530, type: 3}
+--- !u!95 &3504601482909503212 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6069494060908081330, guid: 2483696efa48c5a4189d101e142a3530,
+    type: 3}
+  m_PrefabInstance: {fileID: 7249094231684562526}
+  m_PrefabAsset: {fileID: 0}

@@ -175,6 +175,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2804294628647461271}
     m_Modifications:
+    - target: {fileID: 498477392414562387, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1334640810168918426, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
       propertyPath: m_RootOrder
@@ -184,6 +189,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7143309489231577242, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
