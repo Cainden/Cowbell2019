@@ -78,6 +78,7 @@ public class Room_Bedroom : RoomScript
 
     
     Room_Hallway parent;
+    private RoomPopUpScript_Small popUp;
     #endregion
 
     protected override void Start()
@@ -183,6 +184,10 @@ public class Room_Bedroom : RoomScript
         stankParts.GetComponentInChildren<Renderer>().material = Instantiate(stankMatSet);
         stankMat = stankParts.GetComponentInChildren<Renderer>().material;
         stankMat.shader = Instantiate(stankShade);
+
+        popUp = GetComponentInChildren<RoomPopUpScript_Small>();
+        popUp.SetRoom(RoomData.RoomId);
+        popUp.Disable();
 
         //Call start now so that it happens before waiting for the next frame.
         base.Start();
@@ -304,7 +309,23 @@ public class Room_Bedroom : RoomScript
         });
     }
 
-    
+    public void TogglePopUp()
+    {
+        if (popUp.gameObject.activeInHierarchy)
+            popUp.Disable();
+        else
+            popUp.Enable();
+    }
+
+    public void ShowRoomInfo()
+    {
+        popUp?.Enable();
+    }
+
+    public void DisableRoomInfo()
+    {
+        popUp?.Disable();
+    }
     
 
     float delay = 0;
