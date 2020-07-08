@@ -68,7 +68,9 @@ public class RoomInfoWindowScript : MonoBehaviour
 
     public void Activate(RoomScript RoomScript)
     {
-        
+        if (gameObject.activeInHierarchy)
+            ResetInfo();
+
         RoomNameText.text = RoomScript.RoomData.RoomName;
         if (RoomScript is Room_Bedroom)
         {
@@ -105,10 +107,16 @@ public class RoomInfoWindowScript : MonoBehaviour
 
     public void Deactivate()
     {
+        ResetInfo();
+        gameObject.SetActive(false);
+        
+    }
+
+    public void ResetInfo()
+    {
         manPool.PoolAllObjects();
         statPool.PoolAllObjects();
         descPool.PoolAllObjects();
-        gameObject.SetActive(false);
         currRoom = null;
         currQuarters = null;
         tickCounter = 0;
