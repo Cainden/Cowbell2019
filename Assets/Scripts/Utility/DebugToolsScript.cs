@@ -17,8 +17,6 @@ public class DebugToolsScript : MonoBehaviour
     public InputField ifMonCoins = null;
 	[SerializeField] TMP_Text timerTextComponent;
 
-    [SerializeField] TMP_Text gameSpeedText;
-
 	[HideInInspector]
     public static DebugToolsScript Ref { get; private set; } // For external access of script
 
@@ -32,14 +30,11 @@ public class DebugToolsScript : MonoBehaviour
     {
         guestDraggableToggle.SetIsOnWithoutNotify(ClickManager.GuestsDraggable);
         guestDraggableToggle.onValueChanged.AddListener(SetGuestDraggable);
-        GameManager.OnGameSpeedChanged -= SpeedChanged;
-        GameManager.OnGameSpeedChanged += SpeedChanged;
     }
 
     private void OnDisable()
     {
         guestDraggableToggle.onValueChanged.RemoveListener(SetGuestDraggable);
-        GameManager.OnGameSpeedChanged -= SpeedChanged;
     }
 
     void Update()
@@ -97,24 +92,7 @@ public class DebugToolsScript : MonoBehaviour
         ClickManager.GuestsDraggable = enabled;
     }
 
-    void SpeedChanged(float timeScale)
-    {
-        gameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
-    }
 
-    public void IncreaseSpeed()
-    {
-        if (GameManager.GameSpeed >= 1)
-            GameManager.GameSpeed += 0.25f;
-        else
-            GameManager.GameSpeed += 0.1f;
-    }
 
-    public void DecreaseSpeed()
-    {
-        if (GameManager.GameSpeed > 1)
-            GameManager.GameSpeed -= 0.25f;
-        else
-            GameManager.GameSpeed -= 0.1f;
-    }
+
 }
