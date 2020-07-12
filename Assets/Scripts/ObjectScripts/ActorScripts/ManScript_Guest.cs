@@ -69,7 +69,8 @@ public class ManScript_Guest : ManScript
         //TransferOwnershipToNewRoom(RoomManager.lobbyId);
         //Add_Action_ToList(new ActionData(SendSignalToLobby));
         waiting = false;
-        SendSignalToLobby();
+        //SendSignalToLobby();
+        //StartCoroutine(MoveToLobby(GameManager.StartPath)); //This has been moved to the base.Start()
 
         //I don't want to make this a time-based event, because it should be able to be reduced depending on the guest's experience at the hootel.
         stayTime = GameManager.GetRandomizedGuestStayTime();
@@ -79,6 +80,12 @@ public class ManScript_Guest : ManScript
     {
         base.Update();
         CheckIfRentTime();
+    }
+
+    protected override IEnumerator MoveToLobby(Vector3[] path)
+    {
+        yield return base.MoveToLobby(path);
+        SendSignalToLobby();
     }
 
     bool waiting;
@@ -101,6 +108,7 @@ public class ManScript_Guest : ManScript
             TransferOwnershipToNewRoom(RoomManager.lobbyId);
             waiting = true;
             SetMood(Enums.ManMood.Angry, true);
+            SetAnimation(Enums.ManStates.Idle, 0);
         }
         else
         {

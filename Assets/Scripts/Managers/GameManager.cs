@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 using MySpace.Stats;
+using System.Linq;
 
 //A Manager of game-loop changing functionality between the tycoon-style daytime gameplay and the nighttime gameplay.
 
@@ -26,6 +27,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] int startingHoots = 1000;
 
     [SerializeField] WorkerConstructionData[] workersToMake;
+
+    public static Vector3[] StartPath;
     #endregion
 
     public static event System.Action<float> OnGameSpeedChanged;
@@ -100,7 +103,8 @@ public class GameManager : MonoBehaviour
         {
             ClickManager.Ref.AddNewCleaner(d);
         }
-        
+
+        StartPath = (from PathPosition p in FindObjectsOfType<PathPosition>() orderby p.number ascending select p.transform.position).ToArray();
     }
 
     private void Update()

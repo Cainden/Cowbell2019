@@ -76,6 +76,8 @@ public abstract class ManScript : MonoBehaviour
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
         animator.speed = (1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * 2;
         moodScript = GetComponentInChildren<MoodBubbleScript>();
+
+        StartCoroutine(MoveToLobby(GameManager.StartPath));
     }
 
     /// <summary>
@@ -237,7 +239,7 @@ public abstract class ManScript : MonoBehaviour
                 print("Resetting man material " + ManData.GetManFullName() + ".");
             //foreach (Renderer r in _Renderers) r.material = _MaterialNormal;
         }
-            
+        
     }
 
     //public void SetGhostState()
@@ -256,7 +258,7 @@ public abstract class ManScript : MonoBehaviour
     /// </summary>
     /// <param name="state"></param>
     /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
-    public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = new Vector3())
+    public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = default)
     {
 
         switch (dir)
@@ -307,9 +309,87 @@ public abstract class ManScript : MonoBehaviour
         }
     }
 
-    
+
 
     #region State Functionality Methods
+    public virtual void BeginAnnihilation()
+    {
+        StartCoroutine(LeaveLobby(GameManager.StartPath));
+    }
+
+    protected virtual IEnumerator MoveToLobby(Vector3[] path)
+    {
+        if (path.Length <= 2)
+        {
+            Debug.LogError("Entrance path is less than two nodes!!");
+            yield break;
+        }
+
+        for (int i = 0; i < path.Length; i++)
+        {
+            if (path[i].y != transform.position.y)
+                path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
+        }
+
+        transform.position = path[0];
+
+        for (int i = 1; i < path.Length; i++)
+        {
+            SetAnimation(Enums.ManStates.Running, -1, path[i]);
+
+            if (i == path.Length - 1)
+            {
+                (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorOutsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
+            }
+            
+            while (!DoMovement(path[i]))
+            {
+                yield return null;
+            }
+
+            if (i == path.Length - 1)
+            {
+                (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).CloseDoor();
+            }
+        }
+        SetAnimation(Enums.ManStates.None, 0);
+    }
+
+    protected virtual IEnumerator LeaveLobby(Vector3[] path)
+    {
+        if (path.Length <= 2)
+        {
+            Debug.LogError("Entrance path is less than two nodes!!");
+            yield break;
+        }
+
+        for (int i = 0; i < path.Length; i++)
+        {
+            if (path[i].y != transform.position.y)
+                path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
+        }
+
+        for (int i = path.Length - 1; i > 0; i--)
+        {
+            SetAnimation(Enums.ManStates.Running, -1, path[i]);
+            if (i == path.Length - 2)
+            {
+                (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorInsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
+            }
+            
+            while (!DoMovement(path[i]))
+            {
+                yield return null;
+            }
+
+            if (i == path.Length - 2)
+            {
+                (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).CloseDoor();
+            }
+        }
+        Destroy(gameObject);
+    }
+
     public bool DoMovement(Vector3 _TargetPos)
     {
         ////debug stuff

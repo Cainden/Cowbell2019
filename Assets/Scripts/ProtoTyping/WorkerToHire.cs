@@ -10,7 +10,6 @@ public class WorkerToHire : MonoBehaviour
     public TextMeshProUGUI protoText1, protoText2;
     public Image workerImage;
 	public Button button;
-	public GameObject Sidepanel;
 	SidePanel sidepanelscript;
 
     private WorkerConstructionData worker;
@@ -26,9 +25,7 @@ public class WorkerToHire : MonoBehaviour
     public void OnClick()
     {
         ClickManager.Ref.Button_Hire(worker);
-		Sidepanel = GameObject.FindGameObjectWithTag("sidePanel");
-		sidepanelscript = Sidepanel.GetComponent<SidePanel>();
-		sidepanelscript.CloseHireList();
+        SidePanel.SetPanel(false);
 
 	}
 }

@@ -5,10 +5,10 @@ namespace MySpace
     public static partial class Constants
     {
         // Room definitions
-        public static readonly GridIndex EntranceRoomIndex = new GridIndex(0, GridSurfaceY, 0);
+        //public static readonly GridIndex EntranceRoomIndex = new GridIndex(0, GridSurfaceY, 0);
         //public static readonly Enums.RoomSizes EntranceRoomSize = Enums.RoomSizes.Size4;
         //public static readonly Enums.RoomOverUnder EntranceRoomOverUnder = Enums.RoomOverUnder.Over;
-        public static readonly GridIndex UWEntranceRoomIndex = new GridIndex(0, GridSurfaceY - 1, 0);
+        public static GridIndex UWEntranceRoomIndex { get { return EntranceRoomIndex.GetBelow(); } }
         //public static readonly Enums.RoomSizes UWEntranceRoomSize = Enums.RoomSizes.Size4;
         //public static readonly Enums.RoomOverUnder UWEntranceRoomOverUnder = Enums.RoomOverUnder.Under;
 
