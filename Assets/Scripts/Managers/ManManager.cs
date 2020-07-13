@@ -80,8 +80,8 @@ public class ManManager : MonoBehaviour
         script.genStats = data.generalStats;
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
-        script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
-        AddIncomingPath(script);
+        //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
+        //AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
 
@@ -101,8 +101,8 @@ public class ManManager : MonoBehaviour
         script.genStats = data.generalStats;
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
-        script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
-        AddIncomingPath(script);
+        //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
+        //AddIncomingPath(script);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
 
@@ -115,28 +115,28 @@ public class ManManager : MonoBehaviour
         ManScript.ManData = manData;
 
         _ManList[manData.ManId] = new ManRef<ManScript>(ManObject, ManScript);
-        ManObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
-        AddIncomingPath(ManScript);
+        //ManObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
+        //AddIncomingPath(ManScript);
         GuiManager.Ref.UpdateManCount(_ManList.Count);
     }
 
-    private void AddIncomingPath(ManScript manScript)
-    {
-        //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
-        foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
-        {
-            manScript.AddMovementAction(WayPoint);
-        }
-    }
+    //private void AddIncomingPath(ManScript manScript)
+    //{
+    //    //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
+    //    foreach (GridIndex WayPoint in Constants.NewManIncomingPath)
+    //    {
+    //        manScript.AddMovementAction(WayPoint);
+    //    }
+    //}
 
-    private void AddOutgoingPath(ManScript manScript)
-    {
-        //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
-        foreach (GridIndex WayPoint in Constants.ManOutgoingPath)
-        {
-            manScript.AddMovementAction(WayPoint);
-        }
-    }
+    //private void AddOutgoingPath(ManScript manScript)
+    //{
+    //    //Need to loop through the list since it is readonly it cannot be fed into a reference variable function parameter.
+    //    foreach (GridIndex WayPoint in Constants.ManOutgoingPath)
+    //    {
+    //        manScript.AddMovementAction(WayPoint);
+    //    }
+    //}
 
     public void RemoveManFromList(Guid manId)
     {
@@ -173,10 +173,10 @@ public class ManManager : MonoBehaviour
         }
 
         //Give path to outside from the entrance index
-        AddOutgoingPath(manScript);
+        //AddOutgoingPath(manScript); //No longer needed, the beginannihilation function does the movement as well.
 
         //Submit self-destruction of object once the character reaches the end point of the path.
-        manScript.AddActionToEndOfMovement(() => { Destroy(manScript.gameObject); });
+        manScript.AddActionToEndOfMovement(manScript.BeginAnnihilation);
         
     }
 

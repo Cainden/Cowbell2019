@@ -222,6 +222,7 @@ public class GridManager : MonoBehaviour
 
         for (int i = 0; i < Occupiedindizes.Length; i++)
         {
+            //Add the constant grid size to the x of the index so that it alligns properly
             _GridData[Occupiedindizes[i].X, Occupiedindizes[i].Y, Occupiedindizes[i].Z] = new TileData(true, roomId, roomSize);
         }
 
@@ -265,16 +266,17 @@ public class GridManager : MonoBehaviour
 
         Vector3 vPos = new Vector3(index.X * Constants.GridElementWidth,
                                    index.Y * Constants.GridElementHeight,
-                                   index.Z * Constants.GridElementDepth);
+                                   index.Z * Constants.GridElementDepth) - Constants.GridCenterPos;
         
         // Applying the offset between underground and above
         if (index.Y >= Constants.GridSurfaceY) vPos.y += (Constants.GridElementHeight / 2.0f);
 
-        return (vPos);
+        return vPos;
     }
 
     public GridIndex GetXYGridIndexFromWorldPosition(Vector3 worldPos, bool overRide = false)
     {
+        worldPos += Constants.GridCenterPos;
         if (!overRide) //Make it so that characters can be sent anywhere if needed
         {
             if ((worldPos.x < 0.0f) || (worldPos.y < 0.0f)) return new GridIndex(); // Return invalid index
@@ -453,19 +455,20 @@ public class GridManager : MonoBehaviour
         // We can build room size 1 below and above existing size 1 rooms
         
         List<BuildInfo> indexList = new List<BuildInfo>();
-        CheckBuildingPositionsInRange(0, Constants.GridSizeY, roomSize, ref indexList);
+        CheckBuildingPositionsInRange(roomSize, ref indexList);
 
         return (indexList.ToArray()); // Can also be empty
     }
 
-    void CheckBuildingPositionsInRange(int y0, int y1, Enums.RoomSizes roomSize, ref List<BuildInfo> indexList)
+    void CheckBuildingPositionsInRange(Enums.RoomSizes roomSize, ref List<BuildInfo> indexList)
     {
         // Only checking the front plane for this (Z = 0)
-        for (int y = y0; y < y1; y++)
+        for (int y = 0; y < Constants.GridSizeY; y++)
             for (int x = 0; x < Constants.GridSizeX; x++)
             {
+                if (_GridData[x, y, 0].Occupied == false) continue; // Nothing there, so can not build next to it
+
                 GridIndex index = new GridIndex(x, y, 0); // Grid index we now look at
-                if (_GridData[index.X, index.Y, 0].Occupied == false) continue; // Nothing there, so can not build next to it            
 
                 // Special for size1 room: We can build above/below a size 1 because it is an elevator
                 if ((roomSize == _GridData[x, y, 0].RoomSize) && (roomSize == Enums.RoomSizes.Size1))

@@ -592,24 +592,24 @@ public class ClickManager : MonoBehaviour
 	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>
 	public void Button_Book(int _buttonNumber)
     {
-        if (StateManager.Ref.IsManWaiting()) return;
+        //if (StateManager.Ref.IsManWaiting()) return;
         GuestConstructionData newGuest = ManManager.Ref.bookingList[_buttonNumber];
 
         ManManager.Ref.CreateGuest(newGuest);
         ManManager.Ref.bookingList.RemoveAt(_buttonNumber);
 
-        StateManager.Ref.SetWaitingMan(newGuest.manId);
+        //StateManager.Ref.SetWaitingMan(newGuest.manId); guests should never be "waiting" where it blocks incoming characters.
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
     }
 
     public void Button_Book(GuestConstructionData guest)
     {
-        if (StateManager.Ref.IsManWaiting()) return;
+        //if (StateManager.Ref.IsManWaiting()) return;
 
         ManManager.Ref.CreateGuest(guest);
         ManManager.Ref.bookingList.Remove(guest);
 
-        StateManager.Ref.SetWaitingMan(guest.manId);
+        //StateManager.Ref.SetWaitingMan(guest.manId); guests should never be "waiting" where it blocks incoming characters.
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
     }
 
