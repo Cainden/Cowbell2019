@@ -43,4 +43,16 @@ public class TimeMenu : MonoBehaviour
         else
             GameManager.GameSpeed -= 0.1f;
     }
+
+    public void PauseSpeed()
+    {
+        if (GameManager.GameSpeed != 0) //if speed is not stoped
+            GameManager.GameSpeed = 0f; //set speed to stop.
+    }
+
+    public void PlaySpeed()
+    {
+        if (GameManager.GameSpeed != 1) //if speed is not normal game speed
+            GameManager.GameSpeed = 1f; //set speed to normal game speed
+    }
 }
