@@ -325,13 +325,13 @@ public abstract class ManScript : MonoBehaviour
             yield break;
         }
 
+        transform.position = path[0];
+
         for (int i = 0; i < path.Length; i++)
         {
             if (path[i].y != transform.position.y)
                 path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
         }
-
-        transform.position = path[0];
 
         for (int i = 1; i < path.Length; i++)
         {
