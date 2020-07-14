@@ -2415,8 +2415,8 @@ MonoBehaviour:
   CameraKeyMovementSpeed: 4
   CameraDragThreshold: 6
   CameraxZPositionLimits: {x: -180, y: -10}
-  CameraxXPositionLimitsLeft: {x: 18, y: -21}
-  CameraxXPositionLimitsRight: {x: 18, y: 58}
+  CameraxXPositionLimitsLeft: {x: 0, y: -21}
+  CameraxXPositionLimitsRight: {x: 0, y: 58}
   CameraxYPositionLimitsDown: {x: 18, y: -12}
   CameraxYPositionLimitsUp: {x: 48, y: 67}
 --- !u!1001 &95570350
@@ -49582,7 +49582,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1415160038, guid: 3fc230055b419d648a2dffec533bb376, type: 3}
       propertyPath: m_RootOrder
-      value: 17
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 275678103815757759, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
@@ -49657,7 +49657,7 @@ PrefabInstance:
     - target: {fileID: 3317170459314956730, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3584292707818051278, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
@@ -49732,7 +49732,7 @@ PrefabInstance:
     - target: {fileID: 5586955829858297177, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6851528480780740418, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
