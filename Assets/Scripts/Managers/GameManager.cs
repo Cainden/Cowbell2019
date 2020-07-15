@@ -109,10 +109,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
-        }
+
     }
 
     #region Randomness
