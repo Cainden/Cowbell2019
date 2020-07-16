@@ -107,7 +107,11 @@ public class RoomInfoWindowScript : MonoBehaviour
 
     public void Deactivate()
     {
+        if (!gameObject.activeInHierarchy)
+            return;
         ResetInfo();
+        if (GameManager.Debug)
+            print("Disabling object");
         gameObject.SetActive(false);
         
     }
