@@ -61,7 +61,7 @@ public class StateManager : MonoBehaviour
 
     private void ResetSelectedRoom()
     {
-        if (_SelectedRoom == Guid.Empty) return;
+        //if (_SelectedRoom == Guid.Empty) return;
         GuiManager.Ref.Hide_RoomInfoWindow();
         _SelectedRoom = Guid.Empty;
         RoomManager.Ref.DeselectRooms();
