@@ -279,10 +279,16 @@ public class GridManager : MonoBehaviour
         worldPos += Constants.GridCenterPos;
         if (!overRide) //Make it so that characters can be sent anywhere if needed
         {
-            if ((worldPos.x < 0.0f) || (worldPos.y < 0.0f)) return new GridIndex(); // Return invalid index
-            if ((worldPos.x > (Constants.GridElementWidth * Constants.GridSizeX)) ||
-                (worldPos.y > (Constants.GridElementHeight * Constants.GridSizeY + (Constants.GridElementHeight / 2.0f))))
+            if ((worldPos.x < 0.0f) || (worldPos.y < 0.0f))
+            {
+                Debug.LogError("INVALID WORLD POSITION FOR GRID INDEX CONVERSION - Pos: " + worldPos);
+                return new GridIndex(); // Return invalid index
+            } 
+            if ((worldPos.x > (Constants.GridElementWidth * Constants.GridSizeX)) || (worldPos.y > (Constants.GridElementHeight * Constants.GridSizeY + (Constants.GridElementHeight / 2.0f))))
+            {
+                Debug.LogError("WORLD POSITION OUTSIDE OF GRID BOUNDS FOR GRID INDEX CONVERSION - Pos: " + worldPos);
                 return new GridIndex();
+            }
         }
 
         int IndexX = (int) Math.Floor(worldPos.x / Constants.GridElementWidth);

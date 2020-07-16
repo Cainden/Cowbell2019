@@ -319,6 +319,7 @@ public abstract class ManScript : MonoBehaviour
 
     protected virtual IEnumerator MoveToLobby(Vector3[] path)
     {
+        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         if (path.Length <= 2)
         {
             Debug.LogError("Entrance path is less than two nodes!!");
@@ -369,7 +370,7 @@ public abstract class ManScript : MonoBehaviour
                 path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
         }
 
-        for (int i = path.Length - 1; i > 0; i--)
+        for (int i = path.Length - 1; i >= 0; i--)
         {
             SetAnimation(Enums.ManStates.Running, -1, path[i]);
             if (i == path.Length - 2)
@@ -513,6 +514,8 @@ public abstract class ManScript : MonoBehaviour
 
     private IEnumerator Movement(IndexPair pair)
     {
+        if (GameManager.Debug)
+            print("Pair Movement: " + pair.start.ToString() + ", " + pair.end);
         if (!GridManager.GetIndexPairAccessRequest(this, pair))
         {
             SetAnimation(Enums.ManStates.Waiting, 0);
@@ -556,7 +559,7 @@ public abstract class ManScript : MonoBehaviour
         
         GridManager.CallPairEndEvent(this, pair);
 
-        GridIndex last = MovementPath[0];
+        GridIndex last = MovementPath[0]; //Remember, this is needed because we need to remove this gridindex from the movement path before we call the next process actions 
         MovementPath.Remove(MovementPath[0]);
         CheckMovementActions();
         ProcessActions(last);
@@ -693,6 +696,16 @@ public abstract class ManScript : MonoBehaviour
 
     public void AddMovementActions(GridIndex[] path)
     {
+        if (GameManager.Debug)
+        {
+            string p = "Man Added Movement Path: ";
+            for (int i = 0; i < path.Length; i++)
+            {
+                p += "[" + i + "]" + path[i].ToString() + ", ";
+            }
+            print(p);
+        }
+        
         for (int i = 0; i < path.Length; i++)
         {
             MovementPath.Add(path[i]);
