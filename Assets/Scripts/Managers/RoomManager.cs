@@ -458,6 +458,11 @@ public class RoomManager : MonoBehaviour
         return rooms.ToArray();
     }
 
+    public Room_WorkQuarters[] GetAllActiveWorkQuartersOfCategory(Room_WorkQuarters.WorkQuartersType type)
+    {
+        return (from r in GetAllActiveRoomsofType<Room_WorkQuarters>() where r.WorkQuarterType == type select r).ToArray();
+    }
+
     public RoomRef[] GetAllActiveRoomsofType(params Enums.RoomTypes[] roomTypes)
     {
         return (from r in _RoomList where roomTypes.Contains(r.Value.RoomScript.RoomData.RoomType) select r.Value).ToArray();
@@ -466,6 +471,20 @@ public class RoomManager : MonoBehaviour
     public T[] GetAllActiveRoomsofType<T>() where T : RoomScript
     {
         return (from r in _RoomList where r.Value.RoomScript is T select r.Value.RoomScript as T).ToArray();
+    }
+
+    public T GetClosestRoom<T>(IEnumerable<T> rooms, GridIndex pos) where T : RoomScript
+    {
+        int shortest = int.MaxValue;
+        T ret = null;
+        foreach (T r in rooms)
+        {
+            int l = GridManager.Ref.GetIndexPath(r.RoomData.GetLeftMostIndex(), pos).Length;
+            if (l < shortest)
+                shortest = l;
+            ret = r;
+        }
+        return ret;
     }
 
     public static bool IsRoomOfType<T>(Guid id) where T : RoomScript

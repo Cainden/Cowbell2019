@@ -59,7 +59,10 @@ public abstract class ManScript : MonoBehaviour
 
     protected MoodBubbleScript moodScript;
 
-
+    /// <summary>
+    /// Used by whatever room the guest/worker is currently in to slow down function calls.
+    /// </summary>
+    public float delayTimer;
     #endregion
     #endregion
 
@@ -78,6 +81,7 @@ public abstract class ManScript : MonoBehaviour
         moodScript = GetComponentInChildren<MoodBubbleScript>();
 
         StartCoroutine(MoveToLobby(GameManager.StartPath));
+        delayTimer = 0;
     }
 
     /// <summary>
@@ -210,6 +214,11 @@ public abstract class ManScript : MonoBehaviour
         moodScript?.ResolveMood(mood);
     }
 
+    public void ChangeHappiness(float change)
+    {
+        moodScript.ModifyMood(change);
+    }
+
     public Enums.ManMood GetMood()
     {
         if (!moodScript)
@@ -250,15 +259,16 @@ public abstract class ManScript : MonoBehaviour
 
     public void SetFaceTowardsPlayer()
     {
-        SetAnimation(State, 2);
+        SetState(State, 2);
     }
 
     /// <summary>
-    /// 
+    /// Changes the character's animation and also rotation to match direction, as well as changes the character's state to match.
     /// </summary>
-    /// <param name="state"></param>
+    /// <param name="state">The state and animation to change to.</param>
     /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
-    public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = default)
+    /// <param name="_TargetPos">The position that the character is currently being moved to</param>
+    public void SetState(Enums.ManStates state, int dir, Vector3 _TargetPos = default)
     {
 
         switch (dir)
@@ -286,6 +296,41 @@ public abstract class ManScript : MonoBehaviour
 
         if (state == State)
             return;
+        SetAnimation(state, dir, _TargetPos);
+
+        State = state;
+    }
+
+    /// <summary>
+    /// Same Functionality as SetState, but doesn't change the character's state, only set's it's animations and facing direction
+    /// </summary>
+    /// <param name="state">The animation to set to</param>
+    /// <param name="dir">0 = noChange, 1 = forward, 2 = backward, 3 = left, 4 = right. Any other number automatically assigns the direction</param>
+    /// <param name="_TargetPos">The position that the character is currently being moved to</param>
+    public void SetAnimation(Enums.ManStates state, int dir, Vector3 _TargetPos = default)
+    {
+        switch (dir)
+        {
+            case 0:
+                SetAnimatorRotation(Vector3.zero);
+                break;
+            case 1:
+                SetAnimatorRotation(Vector3.forward);
+                break;
+            case 2:
+                SetAnimatorRotation(Vector3.back);
+                break;
+            case 3:
+                SetAnimatorRotation(Vector3.left);
+                break;
+            case 4:
+                SetAnimatorRotation(Vector3.right);
+                break;
+            default:
+                SetAnimatorRotation(_TargetPos - transform.position);
+                break;
+        }
+
         switch (state)
         {
             case Enums.ManStates.None:
@@ -296,9 +341,10 @@ public abstract class ManScript : MonoBehaviour
             case Enums.ManStates.Running:
                 animator.SetTrigger("RunningTrigger");
                 break;
+            case Enums.ManStates.Dancing:
+                animator.SetTrigger("IsDance");
+                break;
         }
-
-        State = state;
     }
 
     protected void StateUpdate()
@@ -336,7 +382,7 @@ public abstract class ManScript : MonoBehaviour
 
         for (int i = 1; i < path.Length; i++)
         {
-            SetAnimation(Enums.ManStates.Running, -1, path[i]);
+            SetState(Enums.ManStates.Running, -1, path[i]);
 
             if (i == path.Length - 1)
             {
@@ -353,7 +399,7 @@ public abstract class ManScript : MonoBehaviour
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).CloseDoor();
             }
         }
-        SetAnimation(Enums.ManStates.None, 0);
+        SetState(Enums.ManStates.None, 0);
     }
 
     protected virtual IEnumerator LeaveLobby(Vector3[] path)
@@ -372,7 +418,7 @@ public abstract class ManScript : MonoBehaviour
 
         for (int i = path.Length - 1; i >= 0; i--)
         {
-            SetAnimation(Enums.ManStates.Running, -1, path[i]);
+            SetState(Enums.ManStates.Running, -1, path[i]);
             if (i == path.Length - 2)
             {
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorInsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
@@ -508,7 +554,7 @@ public abstract class ManScript : MonoBehaviour
         }
         if (State != Enums.ManStates.None)
         {
-            SetAnimation(Enums.ManStates.None, 0);
+            SetState(Enums.ManStates.None, 0);
         }
     }
 
@@ -518,14 +564,14 @@ public abstract class ManScript : MonoBehaviour
             print("Pair Movement: " + pair.start.ToString() + ", " + pair.end);
         if (!GridManager.GetIndexPairAccessRequest(this, pair))
         {
-            SetAnimation(Enums.ManStates.Waiting, 0);
+            SetState(Enums.ManStates.Waiting, 0);
             yield return new WaitUntil(() => GridManager.GetIndexPairAccessRequest(this, pair));
         }
 
         GridManager.CallPreWaitActionStart(this, pair);
         if (!GridManager.WaitForPairStart(this, pair))
         {
-            SetAnimation(Enums.ManStates.Waiting, 0);
+            SetState(Enums.ManStates.Waiting, 0);
             yield return new WaitUntil(() => GridManager.WaitForPairStart(this, pair));
         }
         
@@ -543,7 +589,7 @@ public abstract class ManScript : MonoBehaviour
         }
         else
         {
-            SetAnimation(Enums.ManStates.Running, -1, target);
+            SetState(Enums.ManStates.Running, -1, target);
             while (!DoMovement(target))
             {
                 yield return null;
@@ -553,7 +599,7 @@ public abstract class ManScript : MonoBehaviour
         GridManager.CallPreWaitActionEnd(this, pair);
         if (!GridManager.WaitForPairEnd(this, pair))
         {
-            SetAnimation(Enums.ManStates.Waiting, 0);
+            SetState(Enums.ManStates.Waiting, 0);
             yield return new WaitUntil(() => GridManager.WaitForPairEnd(this, pair));
         }
         

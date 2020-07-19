@@ -21,6 +21,8 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
     public override Action<ManScript_Worker> GetRoleFunction => Cleaner;
 
+    public override WorkQuartersType WorkQuarterType => WorkQuartersType.Utilities;
+
     public override SpecialtyStat.StatType[] specialStatsUsed => new SpecialtyStat.StatType[1] { SpecialtyStat.StatType.Physicality };
 
     public override void RemoveManFromRoomSlot(Guid manId)
@@ -102,7 +104,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
             goto skip;
 
         dirtiest = Room_Bedroom.cleanlinessThreshhold;
-        ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(Enums.RoomTypes.Bedroom) where (r.RoomScript is Room_Bedroom && /*for now, this will let cleaners and guests be in bedrooms at the same time. Might want to change this later.*/r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
+        ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(Enums.RoomTypes.Bedroom) where (r.RoomScript is Room_Bedroom && /*for now, this will let cleaners and guests be in bedrooms at the same time. Might want to change this later.*/r.RoomScript.RoomHasFreeManSlots(man)) select r.RoomScript);
         foreach (Room_Bedroom room in ar)
         {
             if (room.Cleanliness < dirtiest)

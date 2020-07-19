@@ -133,6 +133,26 @@ public class Room_Bedroom : RoomScript
         }
     }
 
+    public override void GuestBehavior(ManScript_Guest guest)
+    {
+        if (Cleanliness < cleanlinessThreshhold * 0.5f)
+            guest.ChangeHappiness(-5 * Time.deltaTime);
+        if ((int)guest.GetMood() < 50)
+        {
+            guest.delayTimer += Time.deltaTime;
+            if (guest.delayTimer >= 1)
+            {
+                guest.delayTimer = 0;
+            }
+            if (UnityEngine.Random.Range(0, 100) >= 80/*Here we want a guest general stat for laziness. Less lazy people will have a higher chance to go do something, but also get sad faster.*/)
+            {
+                guest.FindEntertainment();
+            }
+        }
+        else
+            guest.delayTimer = 0;
+    }
+
     public void SelfInitialize(GridIndex leftMostIndex, Room_Hallway parent)
     {
         this.parent = parent;
@@ -360,7 +380,7 @@ public class Room_Bedroom : RoomScript
     {
         if (man.transform.position.z == target.z)
         {
-            man.SetAnimation(Enums.ManStates.Running, -1, target);
+            man.SetState(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
@@ -385,7 +405,7 @@ public class Room_Bedroom : RoomScript
             {
                 if (waitingMan == Guid.Empty)
                     waitingMan = man.ManData.ManId;
-                man.SetAnimation(Enums.ManStates.Waiting, 0);
+                man.SetState(Enums.ManStates.Waiting, 0);
                 if (GameManager.Debug)
                     print("man is waiting for other man");
                 return false;
@@ -393,14 +413,14 @@ public class Room_Bedroom : RoomScript
             else if (delay < 0.2f && !CheckDoor(false))
             {
                 //do nothing, wait for door to be open.
-                man.SetAnimation(Enums.ManStates.Waiting, 0);
+                man.SetState(Enums.ManStates.Waiting, 0);
                 if (GameManager.Debug)
                     print("man is waiting for door");
                 return false;
             }
 
             target = new Vector3(DoorPos.transform.position.x, target.y, target.z);
-            man.SetAnimation(Enums.ManStates.Running, -1, target);
+            man.SetState(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
@@ -435,7 +455,7 @@ public class Room_Bedroom : RoomScript
         else
         {
             target = new Vector3(DoorPos.transform.position.x, man.transform.position.y, man.transform.position.z);
-            man.SetAnimation(Enums.ManStates.Running, -1, target);
+            man.SetState(Enums.ManStates.Running, -1, target);
             float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))

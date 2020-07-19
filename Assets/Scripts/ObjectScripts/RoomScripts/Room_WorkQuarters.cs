@@ -5,9 +5,13 @@ using MySpace;
 
 public abstract class Room_WorkQuarters : RoomScript
 {
+    public enum WorkQuartersType { Utilities, Hunger, Entertainment }
+
     public abstract System.Action<ManScript_Worker> GetRoleFunction { get; }
 
     public abstract MySpace.Stats.SpecialtyStat.StatType[] specialStatsUsed { get; }
+
+    public abstract WorkQuartersType WorkQuarterType { get; }
 
     public override void AssignManToRoomSlot(System.Guid manId, int slotIndex, bool assignedByPlayer)
     {
