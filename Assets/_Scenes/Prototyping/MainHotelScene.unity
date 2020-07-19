@@ -25431,6 +25431,9 @@ MonoBehaviour:
   - role: 2
     incomeMinimum: 50
     incomeMaximum: 100
+  - role: 3
+    incomeMinimum: 60
+    incomeMaximum: 120
   startingHoots: 1000
   workersToMake:
   - manType: 2
@@ -49745,6 +49748,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 846985761, guid: 3fc230055b419d648a2dffec533bb376, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 1415160038, guid: 3fc230055b419d648a2dffec533bb376, type: 3}
       propertyPath: m_RootOrder
       value: 13
@@ -49789,6 +49796,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2318211825310974171, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2956175787238241572, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -49822,7 +49834,7 @@ PrefabInstance:
     - target: {fileID: 3317170459314956730, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 3584292707818051278, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
@@ -50143,6 +50155,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 432
+      objectReference: {fileID: 0}
+    - target: {fileID: 7476862698741178212, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 7542046740296193777, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}

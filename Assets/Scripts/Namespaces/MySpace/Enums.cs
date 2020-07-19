@@ -64,7 +64,7 @@ namespace MySpace
             Common_Size4,
             Common_Size6,
             CleanerCloset,
-
+            Ballroom,
         };
 
         /// <summary>
@@ -106,13 +106,14 @@ namespace MySpace
         { Max=-2, Monster, None, StandardMan, Worker, Guest, MC, }
 
         public enum ManStates
-        { None, Idle, Running, Waiting };
+        { None, Idle, Running, Waiting, Dancing };
 
         public enum ManRole
         {
             None,
             Guest,
             Cleaner,
+            DanceDirector,
         }
 
         public enum ManMood : int

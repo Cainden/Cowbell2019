@@ -38,15 +38,12 @@ public class ManScript_Worker : ManScript
     public override RevenueInfo.RevenueType RevenueType => RevenueInfo.RevenueType.Worker;
 
     #endregion
-    /// <summary>
-    /// Affects the salary of the worker for their given role. Also makes them more likely to stay if they are unhappy.
-    /// </summary>
     //public float loyalty = 1;
 
     //public float speed = 1;
 
     //public GeneralStat[] genStats; //This was moved to the base ManScript class.
-    public float delayTimer;
+    //public float delayTimer;
 
     #endregion
 
@@ -66,7 +63,6 @@ public class ManScript_Worker : ManScript
         if (!States.ContainsKey(Enums.ManRole.Guest))
             States.Add(Enums.ManRole.Guest, Idle);
         currentTiredness = 60;
-        delayTimer = 0;
     }
 
     protected override void Update()

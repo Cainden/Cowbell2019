@@ -166,6 +166,8 @@ public class ManManager : MonoBehaviour
                                                                    Constants.EntranceRoomIndex);
 
             if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, manScript);
+
+            RoomScript.RemoveManFromRoomSlot(manId);
         }
         else
         {
@@ -309,7 +311,7 @@ public class ManManager : MonoBehaviour
             return;
         }
 
-        if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots() == false))
+        if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots(manId) == false))
         {
             goto CannotAssign;
         }
@@ -319,9 +321,9 @@ public class ManManager : MonoBehaviour
             goto CannotAssign;
         }
 
-        if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots() == true))
+        if ((ManScript.IsAssignedToAnyRoom() == false) && (NewRoomScript.RoomHasFreeManSlots(manId) == true))
         {
-            int ManSlotIndex = NewRoomScript.GetFreeManSlotIndex();
+            int ManSlotIndex = NewRoomScript.GetFreeManSlotIndex(ManScript);
             SetManPathFromEntrance(manId, newRoomId, ManSlotIndex);
             ManScript.AssignToRoom(newRoomId, ManSlotIndex);
             NewRoomScript.AssignManToRoomSlot(manId, ManSlotIndex, fromPlayer);
@@ -334,9 +336,9 @@ public class ManManager : MonoBehaviour
         Guid OldRoomGuid = ManScript.ManData.AssignedRoom.RoomData.RoomId;
         RoomScript OldRoomScript = RoomManager.Ref.GetRoomData(OldRoomGuid).RoomScript;
 
-        if (NewRoomScript.RoomHasFreeManSlots() == true)
+        if (NewRoomScript.RoomHasFreeManSlots(manId) == true)
         {            
-            int NewManSlotIndex = NewRoomScript.GetFreeManSlotIndex();
+            int NewManSlotIndex = NewRoomScript.GetFreeManSlotIndex(ManScript);
             int OldManSlotIndex = ManScript.ManData.AssignedRoomSlot;
             SetManPath(manId, OldRoomGuid, OldManSlotIndex, newRoomId, NewManSlotIndex);
             ManScript.AssignToRoom(newRoomId, NewManSlotIndex);
@@ -351,14 +353,14 @@ public class ManManager : MonoBehaviour
             OldRoomScript.RemoveManFromRoomSlot(manId);
             NewRoomScript.RemoveManFromRoomSlot(OtherManGuid);
 
-            int NewManSlotIndex1 = NewRoomScript.GetFreeManSlotIndex();
+            int NewManSlotIndex1 = NewRoomScript.GetFreeManSlotIndex(ManScript);
             int OldManSlotIndex1 = ManScript.ManData.AssignedRoomSlot;
             SetManPath(manId, OldRoomGuid, OldManSlotIndex1, newRoomId, NewManSlotIndex1);
             ManScript.AssignToRoom(newRoomId, NewManSlotIndex1);
             NewRoomScript.AssignManToRoomSlot(manId, NewManSlotIndex1, fromPlayer);
             
 
-            int NewManSlotIndex2 = OldRoomScript.GetFreeManSlotIndex();
+            int NewManSlotIndex2 = OldRoomScript.GetFreeManSlotIndex(OtherManScript);
             int OldManSlotIndex2 = OtherManScript.ManData.AssignedRoomSlot;
             SetManPath(OtherManGuid, newRoomId, OldManSlotIndex2, OldRoomGuid, NewManSlotIndex2);
             OtherManScript.AssignToRoom(OldRoomGuid, NewManSlotIndex2);

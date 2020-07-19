@@ -80,6 +80,10 @@ public class ManScript_Guest : ManScript
     {
         base.Update();
         CheckIfRentTime();
+        if (State == Enums.ManStates.None)
+        {
+            ManData.AssignedRoom?.GuestBehavior(this);
+        }
     }
 
     protected override IEnumerator MoveToLobby(Vector3[] path)
@@ -108,7 +112,7 @@ public class ManScript_Guest : ManScript
             TransferOwnershipToNewRoom(RoomManager.lobbyId);
             waiting = true;
             SetMood(Enums.ManMood.Angry, true);
-            SetAnimation(Enums.ManStates.Idle, 0);
+            SetState(Enums.ManStates.Idle, 0);
         }
         else
         {
@@ -125,6 +129,11 @@ public class ManScript_Guest : ManScript
                 moodScript.ModifyMood(15);
             }
         }
+    }
+
+    public void FindEntertainment()
+    {
+        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(RoomManager.Ref.GetAllActiveWorkQuartersOfCategory(Room_WorkQuarters.WorkQuartersType.Entertainment), ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
     }
 
     #region Rent Methods

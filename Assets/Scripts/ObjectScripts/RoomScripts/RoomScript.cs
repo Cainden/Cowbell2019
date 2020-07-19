@@ -67,6 +67,12 @@ public class RoomScript : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Use this if you want guests to behave in certain ways while inside of the room.
+    /// </summary>
+    /// <param name="guest"></param>
+    public virtual void GuestBehavior(ManScript_Guest guest) { }
+
     #region Helper Functions
 
     public virtual void OnInitialization()
@@ -87,7 +93,16 @@ public class RoomScript : MonoBehaviour
         return false;
     }
 
-    public bool RoomHasFreeManSlots()
+    public virtual bool RoomHasFreeManSlots(Guid manId)
+    {
+        foreach (Guid g in RoomData.ManSlotsAssignments)
+        {
+            if (g == Guid.Empty) return (true);
+        }
+        return (false);
+    }
+
+    public virtual bool RoomHasFreeManSlots(ManScript man)
     {
         foreach (Guid g in RoomData.ManSlotsAssignments)
         {
@@ -106,7 +121,7 @@ public class RoomScript : MonoBehaviour
         return (true);
     }
 
-    public int GetFreeManSlotIndex()
+    public virtual int GetFreeManSlotIndex(ManScript man)
     {
         for (int i = 0; i < RoomData.ManSlotCount; i++)
         {
@@ -116,6 +131,11 @@ public class RoomScript : MonoBehaviour
             }
         }
         return (-1);
+    }
+
+    public int GetFreeManSlotIndex(Guid ManId)
+    {
+        return GetFreeManSlotIndex(ManManager.Ref.GetManData(ManId).ManScript);
     }
 
     public bool RoomContainsMan(Guid manId)
@@ -154,7 +174,7 @@ public class RoomScript : MonoBehaviour
     }
 
     // ROOM OWNER CODE /////////////
-    public bool RoomHasFreeOwnerSlots()
+    public virtual bool RoomHasFreeOwnerSlots()
     {
         foreach (Guid g in RoomData.OwnerSlotsAssignments)
         {
