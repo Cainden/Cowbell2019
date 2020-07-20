@@ -216,7 +216,8 @@ public class Room_Ballroom : Room_WorkQuarters
         for (int i = 0; i < RoomData.CoveredIndizes.Length; i++)
         {
             if (RoomData.CoveredIndizes[i] == index)
-                return ManManager.Ref.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Worker;
+                if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
+                    return ManManager.Ref.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Worker;
         }
         return null;
     }
