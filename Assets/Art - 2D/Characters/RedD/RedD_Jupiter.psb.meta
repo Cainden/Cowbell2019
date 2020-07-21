@@ -1,0 +1,291 @@
+fileFormatVersion: 2
+guid: 3a4f35196fbb54a419abef26b295c665
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 1
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    isReadable: 0
+    streamingMipmaps: 1
+    streamingMipmapsPriority: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 0, y: 0}
+  mosaicSpriteImportData: []
+  rigSpriteImportData:
+  - name: RedD_Head_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 438
+      width: 326
+      height: 343
+    spriteID: 84e34c777d3bb99458a10225bb1eee62
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -343, y: -190}
+  - name: RedD_ArmF_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 378
+      y: 340
+      width: 105
+      height: 312
+    spriteID: ba5eb404ad2109a4ba3de826fc2a5ba0
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 37, y: 22}
+  - name: RedD_Bod_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 366
+      height: 426
+    spriteID: e08bf20ede5c0b34e870fc35b79fd7bc
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -317, y: -222}
+  - name: RedD_ArmB_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 378
+      y: 4
+      width: 125
+      height: 328
+    spriteID: e78783fd5a008054a8be42a4a792433d
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -179, y: -308}
+  - name: RedD_LegF_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 511
+      y: 4
+      width: 137
+      height: 239
+    spriteID: 765ac9a9d67f4a7419e1a34a597a17b5
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 108, y: -42}
+  - name: RedD_LegB_Jupiter
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 511
+      y: 251
+      width: 137
+      height: 239
+    spriteID: 242f6c5d2795f594bacf1ed264537d61
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -14, y: 205}
+  platformSettings: []
+  mosaicLayers: 1
+  documentPivot: {x: 0, y: 0}
+  documentAlignment: 7
+  importHiddenLayers: 0
+  importedTextureWidth: 1024
+  importedTextureHeight: 1024
+  documentSize: {x: 1024, y: 1024}
+  paperDollMode: 0
+  keepDupilcateSpriteName: 0
+  spriteCategoryList:
+    categories: []
+  textureActualWidth: 1024
+  textureActualHeight: 1024
+  spritePackingTag: 
+  resliceFromLayer: 0
+  characterMode: 1
+  mosaicPSDLayers: []
+  rigPSDLayers:
+  - name: RedD_Head_Jupiter
+    spriteName: RedD_Head_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 84e34c777d3bb99458a10225bb1eee62
+    layerID: 86
+    mosaicPosition: {x: 4, y: 438}
+  - name: RedD_ArmF_Jupiter
+    spriteName: RedD_ArmF_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ba5eb404ad2109a4ba3de826fc2a5ba0
+    layerID: 34
+    mosaicPosition: {x: 378, y: 340}
+  - name: RedD_Bod_Jupiter
+    spriteName: RedD_Bod_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e08bf20ede5c0b34e870fc35b79fd7bc
+    layerID: 29
+    mosaicPosition: {x: 4, y: 4}
+  - name: RedD_ArmB_Jupiter
+    spriteName: RedD_ArmB_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: e78783fd5a008054a8be42a4a792433d
+    layerID: 24
+    mosaicPosition: {x: 378, y: 4}
+  - name: RedD_LegF_Jupiter
+    spriteName: RedD_LegF_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 765ac9a9d67f4a7419e1a34a597a17b5
+    layerID: 132
+    mosaicPosition: {x: 511, y: 4}
+  - name: RedD_LegB_Jupiter
+    spriteName: RedD_LegB_Jupiter
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 242f6c5d2795f594bacf1ed264537d61
+    layerID: 128
+    mosaicPosition: {x: 511, y: 251}
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+  generateGOHierarchy: 0
+  textureAssetName: RedD_Jupiter Texture
+  prefabAssetName: RedD_Jupiter Prefab
+  spriteLibAssetName: RedD_Jupiter Sprite Lib
+  secondarySpriteTextures: []
