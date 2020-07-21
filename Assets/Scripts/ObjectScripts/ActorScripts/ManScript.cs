@@ -270,6 +270,7 @@ public abstract class ManScript : MonoBehaviour
     /// <param name="_TargetPos">The position that the character is currently being moved to</param>
     public void SetState(Enums.ManStates state, int dir, Vector3 _TargetPos = default)
     {
+        
 
         switch (dir)
         {
@@ -299,6 +300,8 @@ public abstract class ManScript : MonoBehaviour
         SetAnimation(state, dir, _TargetPos);
 
         State = state;
+        if (GameManager.Debug)
+            Debug.Log("Setting man '" + gameObject.name + " (" + ManData.GetManFullName() + ")' state to " + State.ToString() + ". Guid: " + ManData.ManId);
     }
 
     /// <summary>
@@ -365,7 +368,7 @@ public abstract class ManScript : MonoBehaviour
 
     protected virtual IEnumerator MoveToLobby(Vector3[] path)
     {
-        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
+        
         if (path.Length <= 2)
         {
             Debug.LogError("Entrance path is less than two nodes!!");
@@ -399,7 +402,9 @@ public abstract class ManScript : MonoBehaviour
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).CloseDoor();
             }
         }
+        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         SetState(Enums.ManStates.None, 0);
+
     }
 
     protected virtual IEnumerator LeaveLobby(Vector3[] path)

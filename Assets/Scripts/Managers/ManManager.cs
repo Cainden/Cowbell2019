@@ -412,11 +412,19 @@ public class ManManager : MonoBehaviour
     {
         ManScript ManScript = _ManList[manId].ManScript;
 
-        Vector3 PathPosition = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.EntranceRoomIndex, Constants.GridPositionWalkZOffset);
-        ManScript.AddMovementAction(GridManager.Ref.GetXYGridIndexFromWorldPosition(PathPosition));
+        //Vector3 PathPosition = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.EntranceRoomIndex, Constants.GridPositionWalkZOffset);
+        //Use the man's object position instead of the "start index" position
+        GridIndex index = GridManager.Ref.GetXYGridIndexFromWorldPosition(GetManData(manId).ManObject.transform.position);
+        ManScript.AddMovementAction(index);
 
         Guid OldRoomGuid = GridManager.Ref.GetGridTileRoomGuid(Constants.EntranceRoomIndex);
-        SetManPath(manId, OldRoomGuid, 0, newRoomGuid, newSlotIndex);
+        if (OldRoomGuid == newRoomGuid)
+        {
+            GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(index, RoomManager.Ref.GetRoomData(newRoomGuid).RoomScript.RoomData.CoveredIndizes[newSlotIndex]);
+            if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, ManScript);
+        }
+        else
+            SetManPath(manId, OldRoomGuid, 0, newRoomGuid, newSlotIndex);
     }
 
     private void SetManPath(Guid manId, Guid oldRoomGuid, int oldSlotIndex, Guid newRoomGuid, int newSlotIndex)
@@ -425,7 +433,7 @@ public class ManManager : MonoBehaviour
         RoomScript OldRoomScript = RoomManager.Ref.GetRoomData(oldRoomGuid).RoomScript;
         RoomScript NewRoomScript = RoomManager.Ref.GetRoomData(newRoomGuid).RoomScript;
 
-        GridIndex[] Pathindizes  = GridManager.Ref.GetIndexPath(OldRoomScript.RoomData.CoveredIndizes[oldSlotIndex],
+        GridIndex[] Pathindizes = GridManager.Ref.GetIndexPath(OldRoomScript.RoomData.CoveredIndizes[oldSlotIndex],
                                                                 NewRoomScript.RoomData.CoveredIndizes[newSlotIndex]);
 
         if (Pathindizes.Length > 1) AddIndexPathToManScript(Pathindizes, ManScript);

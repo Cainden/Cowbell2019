@@ -108,11 +108,11 @@ public class ManScript_Guest : ManScript
             BuildManager.BuildFinishedEvent += SendSignalToLobby;
             Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
             Room_CleanerCloset.RoomFinishedCleaningEvent += SendSignalToLobby;
-            ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
-            TransferOwnershipToNewRoom(RoomManager.lobbyId);
+            //ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
+            //TransferOwnershipToNewRoom(RoomManager.lobbyId);
             waiting = true;
             SetMood(Enums.ManMood.Angry, true);
-            SetState(Enums.ManStates.Idle, 0);
+            //SetState(Enums.ManStates.Idle, 0);
         }
         else
         {
