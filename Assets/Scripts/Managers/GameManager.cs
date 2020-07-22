@@ -13,6 +13,14 @@ public class GameManager : MonoBehaviour
     public static bool Debug { get { return Ref?.debug ?? false; } }
     [SerializeField] bool debug = false;
 
+    [Header("Guest Arival Time")]
+    public int maxGuests = 4;
+    public int hourMinArival = 7;
+    public int hourMaxArival = 20;
+    public int minuteMaxArival = 60;
+    private int hourRandom;
+    private int minuteRandom;
+
     [Header("Guest Stay Time")]
     public int guestMaxStayTimeDays;
     public int guestMinStayTimeDays;
@@ -81,14 +89,15 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
-        MySpace.Events.EventManager.AddEventTriggerToGameTime(9, 0, 0, CreateBasicGuest, true);
+        RandomGuestArival();
+
         MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
         DebugMenu.SetPanelActive(false);
         GameSpeed = 1;
 
         foreach (RoleInfo r in roles)
         {
-            roleDic.Add(r.role, 
+            roleDic.Add(r.role,
                 new RoleInfo()
                 {
                     incomeMinimum = Mathf.Round(r.incomeMinimum),
@@ -106,12 +115,27 @@ public class GameManager : MonoBehaviour
 
         StartPath = (from PathPosition p in FindObjectsOfType<PathPosition>() orderby p.number ascending select p.transform.position).ToArray();
     }
-
     private void Update()
     {
 
     }
 
+    private void RandomGuestArival()
+    {
+        for (int increaseTime = 0; increaseTime < maxGuests; increaseTime++)
+        {
+            if (hourMinArival <= hourMaxArival)
+            {
+                hourRandom = Random.Range(hourMinArival, hourMaxArival);
+                hourMinArival = (hourRandom + increaseTime);
+
+                minuteRandom = Random.Range(0, minuteMaxArival);
+                print("Arival " + hourRandom + ":" + minuteRandom);
+                MySpace.Events.EventManager.AddEventTriggerToGameTime(hourRandom, minuteRandom, 0, CreateBasicGuest, true);
+            }
+        }
+        hourMinArival = 7;
+    }
     #region Randomness
     /// <summary>
     /// Returns a random number calculated with weight based on the standard deviation off of average given.
@@ -150,7 +174,6 @@ public class GameManager : MonoBehaviour
         //if for some reason it fails, just return the average
         return avg;
     }
-
     #endregion
 
     private void CreateBasicGuest()
