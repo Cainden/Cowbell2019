@@ -4,6 +4,7 @@ using UnityEngine;
 using MySpace;
 using MySpace.Stats;
 using System.Linq;
+using System;
 
 //A Manager of game-loop changing functionality between the tycoon-style daytime gameplay and the nighttime gameplay.
 
@@ -14,11 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] bool debug = false;
 
     [Header("Guest Arival Time")]
-    public int maxGuests = 4;
-    public int hourMinArival = 7;
-    public int hourMaxArival = 20;
+    public int maxGuests = 5; // set up for debug or test, change later.
     public int minuteMaxArival = 60;
-    private int hourRandom;
+    public int hourMinArival = 7;
+    private int hourRandomArival;
+    private int guestsRandom;
     private int minuteRandom;
 
     [Header("Guest Stay Time")]
@@ -88,9 +89,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        //TimeManager.AddEventTriggerInSeconds(20, GiveGuest);
-        RandomGuestArival();
-
+        //set when guests start ariving
+        MySpace.Events.EventManager.AddEventTriggerToGameTime((hourMinArival - 1), 0, 0, RandomGuestArival, true);
         MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
         DebugMenu.SetPanelActive(false);
         GameSpeed = 1;
@@ -115,27 +115,23 @@ public class GameManager : MonoBehaviour
 
         StartPath = (from PathPosition p in FindObjectsOfType<PathPosition>() orderby p.number ascending select p.transform.position).ToArray();
     }
-    private void Update()
+
+    public static int GetRandomizedGuestArival()
     {
-
+        return Mathf.RoundToInt(GetApproximatedRandomValue(10, 2, 0));
     }
-
     private void RandomGuestArival()
     {
-        for (int increaseTime = 0; increaseTime < maxGuests; increaseTime++)
+        guestsRandom = UnityEngine.Random.Range(1, maxGuests); //Randomize amount of guests
+        for (int increaseTime = 0; increaseTime < guestsRandom; increaseTime++) //Run following code for each desired guest daily
         {
-            if (hourMinArival <= hourMaxArival)
-            {
-                hourRandom = Random.Range(hourMinArival, hourMaxArival);
-                hourMinArival = (hourRandom + increaseTime);
-
-                minuteRandom = Random.Range(0, minuteMaxArival);
-                print("Arival " + hourRandom + ":" + minuteRandom);
-                MySpace.Events.EventManager.AddEventTriggerToGameTime(hourRandom, minuteRandom, 0, CreateBasicGuest, true);
-            }
+            hourRandomArival = GetRandomizedGuestArival(); //Set hour max arival to bell curve random
+            minuteRandom = UnityEngine.Random.Range(0, minuteMaxArival); //Randomize minute arival
+            MySpace.Events.EventManager.AddEventTriggerToGameTime(hourRandomArival, minuteRandom, 0, CreateBasicGuest);//make guests arive at random time.
+            UnityEngine.Debug.Log("New arival " + hourRandomArival + ":" + minuteRandom);
         }
-        hourMinArival = 7;
     }
+
     #region Randomness
     /// <summary>
     /// Returns a random number calculated with weight based on the standard deviation off of average given.
@@ -238,7 +234,7 @@ public class GameManager : MonoBehaviour
 
     public static int GetRandomizedGuestStayTime(/*input a guest stay multiplier of some kind here maybe?*/)
     {
-        return Mathf.Clamp((int)GetApproximatedRandomValue(3, 2), Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
+        return Mathf.Clamp(Mathf.RoundToInt(GetApproximatedRandomValue(3, 2)), Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
     }
 
     #region Net Revenue Stuff
