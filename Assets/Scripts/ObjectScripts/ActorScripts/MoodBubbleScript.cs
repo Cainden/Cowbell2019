@@ -8,7 +8,7 @@ public class MoodBubbleScript : MonoBehaviour
 {
     public const float DefaultMoodValue = 65;
 
-    [Tooltip("0 = Happy, 1 = Almost Happy, 2 = Not Happy, 3 = both eyes down, 4 = sad, 5 = scared, 6 = monster, 7 = sick")]
+    [Tooltip("0 = Happy, 1 = Almost Happy, 2 = Not Happy, 3 = sad1, 4 = sad2, 5 = scared, 6 = monster, 7 = sick, 8 = angry, 9 = confused")]
     [SerializeField] Sprite[] faces;
 
     [SerializeField] Image bubble, panel;
@@ -179,9 +179,9 @@ public class MoodBubbleScript : MonoBehaviour
                 return faces[1];
             case Enums.ManMood.Happy:
                 return faces[0];
-            case Enums.ManMood.Sad:
+            case Enums.ManMood.Sad2:
                 return faces[4];
-            case Enums.ManMood.Angry:
+            case Enums.ManMood.Sad1:
                 return faces[3];
             case Enums.ManMood.Sleepy:
                 Debug.LogError("Sleepy mood does not have a correspondant sprite yet!!!");
@@ -194,9 +194,19 @@ public class MoodBubbleScript : MonoBehaviour
                 return faces[5];
             case Enums.ManMood.MonsterAlert:
                 return faces[6];
+            case Enums.ManMood.Angry:
+                return faces[8];
+            case Enums.ManMood.Confused:
+                return faces[9];
             default:
-                return null;
+                Debug.LogError("The given Mood of '" + mood + "' does not have a sprite oriented with it on the MoodBubbleScript!");
+                return faces[0];
         }
+    }
+
+    public Sprite GetSpriteFromMood()
+    {
+        return GetSpriteFromMood(Mood);
     }
 
     private void Awake()

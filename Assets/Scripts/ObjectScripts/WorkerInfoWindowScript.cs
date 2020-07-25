@@ -14,6 +14,8 @@ public class WorkerInfoWindowScript : MonoBehaviour
     public TextMeshProUGUI nameText, roleText;
     public Image workerImage;
 
+    public Image happinessImage;
+
     public Image physicalityFrontSlider, physicalityRearSlider;
     public Image professionalismFrontSlider, professionalismRearSlider;
     public Image intelligenceFrontSlider, intelligenceRearSlider;
@@ -96,7 +98,11 @@ public class WorkerInfoWindowScript : MonoBehaviour
 
         //workerImage.sprite = worker.
 
-        StartCoroutine(InfoUpdateWorker());
+        happinessImage.gameObject.SetActive(false);
+        //happinessImage.gameObject.SetActive(true);
+        //happinessImage.sprite = worker.GetSpriteFromMood();
+
+        StartCoroutine(InfoUpdate());
     }
 
     private void SetupGuest()
@@ -110,24 +116,49 @@ public class WorkerInfoWindowScript : MonoBehaviour
         genstat1Name.text = "Dirtiness";
         genstat1FrontSlider.fillAmount = guest.GetGeneralStatValue(GeneralStat.StatType.Dirtiness) / Stat.StatMax;
 
-        genstat2Name.gameObject.SetActive(false);
+        genstat2Name.gameObject.SetActive(true);
+        genstat2Name.text = "Hapiness";
+        genstat2FrontSlider.fillAmount = guest.GetHappiness() * 0.01f;//multiply by 0.01 here because mood is from 0 to 100, fill amount goes from 0 to 1.
+
+        //happinessImage.gameObject.SetActive(false);
+        happinessImage.gameObject.SetActive(true);
+        happinessImage.sprite = guest.GetSpriteFromMood();
+
+
+
+
+        //genstat2Name.gameObject.SetActive(false);
     }
 
-    private IEnumerator InfoUpdateWorker()
+    private IEnumerator InfoUpdate()
     {
-        while (active && worker != null)
+        while (active)
         {
-            physicalityRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
-            intelligenceRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
-            professionalismRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
-            genstat2FrontSlider.fillAmount = worker.currentTiredness / ManScript_Worker.tirednessMax;
+            if (worker != null)
+            {
+                physicalityRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality) / Stat.StatMax;
+                intelligenceRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Intelligence) / Stat.StatMax;
+                professionalismRearSlider.fillAmount = worker.GetSpecialtyStatValue(SpecialtyStat.StatType.Professionalism) / Stat.StatMax;
+                genstat2FrontSlider.fillAmount = worker.currentTiredness / ManScript_Worker.tirednessMax;
 
-            physicalityExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Physicality).GetCurrentExp;
-            intelligenceExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Intelligence).GetCurrentExp;
-            professionalismExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Professionalism).GetCurrentExp;
+                physicalityExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Physicality).GetCurrentExp;
+                intelligenceExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Intelligence).GetCurrentExp;
+                professionalismExpBar.value = worker.GetSpecialtyStat(SpecialtyStat.StatType.Professionalism).GetCurrentExp;
+
+                //Workers currently contain a happiness value, but it is not currently used, so the code is commented out.
+                //if (happinessImage.gameObject.activeInHierarchy) happinessImage.fillAmount = worker.GetHappiness() * 0.01f;//multiply by 0.01 here because mood is from 0 to 100, fill amount goes from 0 to 1.
+                //happinessImage.sprite = worker.GetSpriteFromMood();
+            }
+
+            if (guest != null)
+            {
+                happinessImage.fillAmount = guest.GetHappiness() * 0.01f;//multiply by 0.01 here because mood is from 0 to 100, fill amount goes from 0 to 1.
+                happinessImage.sprite = guest.GetSpriteFromMood();
+            }
 
 
-            yield return null;
+
+            yield return new WaitForSecondsRealtime(0.5f);
         }
     }
 }

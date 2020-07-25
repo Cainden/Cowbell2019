@@ -226,6 +226,18 @@ public abstract class ManScript : MonoBehaviour
         return moodScript.Mood;
     }
 
+    public float GetHappiness()
+    {
+        if (!moodScript)
+            return 100;
+        return moodScript.CurrentMood;
+    }
+
+    public Sprite GetSpriteFromMood()
+    {
+        return moodScript.GetSpriteFromMood();
+    }
+
     void MoodCalc(ref float t, ref int n)
     {
         t += (moodScript.OverrideMood == Enums.ManMood.None ? moodScript.CurrentMood : (int)moodScript.OverrideMood);
@@ -391,11 +403,16 @@ public abstract class ManScript : MonoBehaviour
             {
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorOutsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
             }
-            
-            while (!DoMovement(path[i]))
-            {
-                yield return null;
-            }
+
+            //while (!DoMovement(path[i]))
+            //{
+            //    yield return null;
+            //}
+
+            Loop:
+            yield return null;
+            if (!DoMovement(path[i]))
+                goto Loop;
 
             if (i == path.Length - 1)
             {
