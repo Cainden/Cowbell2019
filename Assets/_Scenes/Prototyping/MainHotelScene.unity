@@ -25424,6 +25424,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debug: 0
+  maxGuests: 5
+  minuteMaxArival: 60
+  hourMinArival: 7
   guestMaxStayTimeDays: 10
   guestMinStayTimeDays: 1
   DebugMenu: {fileID: 1331259067}
@@ -49677,12 +49680,12 @@ PrefabInstance:
     - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
         type: 3}
       propertyPath: cleanSpeedRatio
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5912726998982544876, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
         type: 3}
       propertyPath: dirtinessSpeedRatio
-      value: 1
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5912726998982544877, guid: 4335b96a0b3f88044bbfe9bc5a531dd1,
         type: 3}

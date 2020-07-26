@@ -32,6 +32,7 @@ public class Room_Ballroom : Room_WorkQuarters
                 if (workerAssignments[g] == null)
                 {
                     workerAssignments[g] = ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker;
+                    break;
                 }
             }
         }
@@ -45,7 +46,10 @@ public class Room_Ballroom : Room_WorkQuarters
                 if (ManManager.Ref.GetManData(g).ManScript.ManType == Enums.ManTypes.Guest)
                     continue;
                 if (!workerAssignments.ContainsValue(ManManager.Ref.GetManData(g).ManScript as ManScript_Worker))
+                {
                     workerAssignments[ManManager.Ref.GetManData(manId).ManScript as ManScript_Guest] = ManManager.Ref.GetManData(g).ManScript as ManScript_Worker;
+                    break;
+                }
             }
         }
 
@@ -159,7 +163,7 @@ public class Room_Ballroom : Room_WorkQuarters
                 man.SetAnimation(Enums.ManStates.None, 4);
             return;
         }
-
+        //else
         target = GridManager.Ref.GetWorldPositionFromGridIndex(RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot]);
         if (man.transform.position != target)
         {

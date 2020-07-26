@@ -36,6 +36,8 @@ public abstract class ManScript : MonoBehaviour
 
     public abstract float GetNetRevenueCalculation { get; }
     public abstract RevenueInfo.RevenueType RevenueType { get; }
+
+    public bool isClickable = false;
     #endregion
 
     #region Private Variables
@@ -82,6 +84,7 @@ public abstract class ManScript : MonoBehaviour
 
         StartCoroutine(MoveToLobby(GameManager.StartPath));
         delayTimer = 0;
+        isClickable = false;
     }
 
     /// <summary>
@@ -421,6 +424,7 @@ public abstract class ManScript : MonoBehaviour
         }
         ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         SetState(Enums.ManStates.None, 0);
+        isClickable = true;
 
     }
 
@@ -431,6 +435,8 @@ public abstract class ManScript : MonoBehaviour
             Debug.LogError("Entrance path is less than two nodes!!");
             yield break;
         }
+
+        isClickable = false;
 
         for (int i = 0; i < path.Length; i++)
         {
