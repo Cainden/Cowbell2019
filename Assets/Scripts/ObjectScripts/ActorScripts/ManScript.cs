@@ -36,6 +36,8 @@ public abstract class ManScript : MonoBehaviour
 
     public abstract float GetNetRevenueCalculation { get; }
     public abstract RevenueInfo.RevenueType RevenueType { get; }
+
+    public bool isClickable = false;
     #endregion
 
     #region Private Variables
@@ -82,6 +84,7 @@ public abstract class ManScript : MonoBehaviour
 
         StartCoroutine(MoveToLobby(GameManager.StartPath));
         delayTimer = 0;
+        isClickable = false;
     }
 
     /// <summary>
@@ -224,6 +227,18 @@ public abstract class ManScript : MonoBehaviour
         if (!moodScript)
             return Enums.ManMood.Happy;
         return moodScript.Mood;
+    }
+
+    public float GetHappiness()
+    {
+        if (!moodScript)
+            return 100;
+        return moodScript.CurrentMood;
+    }
+
+    public Sprite GetSpriteFromMood()
+    {
+        return moodScript.GetSpriteFromMood();
     }
 
     void MoodCalc(ref float t, ref int n)
@@ -391,11 +406,16 @@ public abstract class ManScript : MonoBehaviour
             {
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorOutsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
             }
-            
-            while (!DoMovement(path[i]))
-            {
-                yield return null;
-            }
+
+            //while (!DoMovement(path[i]))
+            //{
+            //    yield return null;
+            //}
+
+            Loop:
+            yield return null;
+            if (!DoMovement(path[i]))
+                goto Loop;
 
             if (i == path.Length - 1)
             {
@@ -404,6 +424,7 @@ public abstract class ManScript : MonoBehaviour
         }
         ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         SetState(Enums.ManStates.None, 0);
+        isClickable = true;
 
     }
 
@@ -414,6 +435,8 @@ public abstract class ManScript : MonoBehaviour
             Debug.LogError("Entrance path is less than two nodes!!");
             yield break;
         }
+
+        isClickable = false;
 
         for (int i = 0; i < path.Length; i++)
         {

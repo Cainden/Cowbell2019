@@ -195,8 +195,11 @@ public class ClickManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskMan))
             {
+                if (!hitInfo.transform.GetComponent<ManScript>().isClickable)
+                    return false;
                 _MouseOnManDownTime = Time.time;
                 Guid ManId = hitInfo.transform.GetComponent<ManScript>().ManData.ManId;
+                
                 if (!guestsDraggable && ManManager.Ref.GetManData(ManId).ManScript.ManType == Enums.ManTypes.Guest)
                     StateManager.Ref.SetGameState(Enums.GameStates.ManSelected, ManId);
                 else

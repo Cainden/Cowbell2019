@@ -111,7 +111,7 @@ public class ManScript_Guest : ManScript
             //ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
             //TransferOwnershipToNewRoom(RoomManager.lobbyId);
             waiting = true;
-            SetMood(Enums.ManMood.Angry, true);
+            SetMood(Enums.ManMood.Sad1, true);
             //SetState(Enums.ManStates.Idle, 0);
         }
         else
@@ -120,7 +120,7 @@ public class ManScript_Guest : ManScript
             Room_CleanerCloset.RoomFinishedCleaningEvent -= SendSignalToLobby;
             if (waiting)
             {
-                ResolveMood(Enums.ManMood.Angry);
+                ResolveMood(Enums.ManMood.Sad1);
                 waiting = false;
             }
             else

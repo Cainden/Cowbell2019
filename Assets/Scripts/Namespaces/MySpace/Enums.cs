@@ -131,15 +131,15 @@ namespace MySpace
             /// <summary>
             /// sad face
             /// </summary>
-            Sad = 30,
+            Sad2 = 30,
             /// <summary>
             /// both-eyes-down face
             /// </summary>
-            Angry = 50,
+            Sad1 = 50,
             /// <summary>
             /// no face selected yet
             /// </summary>
-            Sleepy = 100, //??
+            Sleepy = -4, //??
             /// <summary>
             /// not happy face
             /// </summary>
@@ -155,7 +155,9 @@ namespace MySpace
             /// <summary>
             /// monster face
             /// </summary>
-            MonsterAlert = -2
+            MonsterAlert = -2,
+            Confused = -5,
+            Angry = -6
         }
 
         public static ManMood GetManMood(float value)
