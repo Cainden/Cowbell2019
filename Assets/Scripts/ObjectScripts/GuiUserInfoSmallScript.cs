@@ -6,13 +6,12 @@ public class GuiUserInfoSmallScript : MonoBehaviour
 {
     public TextMeshProUGUI TitleText;
     public TextMeshProUGUI InfoText = null; // To be set by editor
-    private bool _IsMoving = false;
-    private float _PosY1;
-    private float _PosX1;
-    private float _PosX2 = 1500.0f;
+    
+    Animator anim;
+    bool popUp;
 
-    private readonly float TravelSpeed = 7000.0f;
-    private readonly float PausingTime = 3.0f;
+    private readonly float PausingAnimTime = 3.5f;//may need to be adjusted based on idle animation
+    private readonly float PausingObjOffTime = 3.0f;//if animation gets cut off by object vanishing make this higher number
 
     void Start ()
     {
@@ -20,45 +19,42 @@ public class GuiUserInfoSmallScript : MonoBehaviour
         Debug.Assert(InfoText != null);
         Debug.Assert(TitleText != null);
         TitleText.text = "";
-
-        //Start slightly above the screen
-        _PosY1 = Screen.height * 0.30f;
-        _PosX1 = transform.position.x;
-        //Make sure no matter the screen dimensions that the text becomes visible
+        //Get Animator and set up popUp to turn Paramater on/off
+        anim = gameObject.GetComponent<Animator>();
+        popUp = false;
     }
 
     void Update()
     {
-        if (!_IsMoving) return;
-
-        float distance = transform.position.x - _PosX2;
-        float travel = TravelSpeed * Time.deltaTime;
-
-        if (travel > distance) // Snap
-        {
-            transform.position = new Vector3(_PosX2, transform.position.y);
-            _IsMoving = false;
-            StartCoroutine(updateCoroutine());
-        }
-        else
-        {
-            transform.position = new Vector3(transform.position.x - travel, transform.position.y);
-        }
+        //set animation bool Activation to true or false based on popUp. 
+        if (popUp == false)
+            anim.SetBool("Activation", false);
+        else if (popUp == true)
+            anim.SetBool("Activation", true);
     }
 
-    public void StartInfoText(string sInfoText, string sTitleText = "")
+    public void StartInfoText(string sInfoText, string sTitleText = "") //called and filled from GuiManager script
     {
         TitleText.text = sTitleText;
         InfoText.text = sInfoText;
-        transform.position = new Vector3(_PosX1, _PosY1);
+        //When info called by another script also play anim and stop anim.
+        ActivateAnim();
+        StartCoroutine(DeactivateAnimCoroutine());
+    }
+
+    private void ActivateAnim()
+    {
         StopAllCoroutines();
         gameObject.SetActive(true);
-        _IsMoving = true;
+        popUp = true;
     }
-    
-    private IEnumerator updateCoroutine()
+
+    private IEnumerator DeactivateAnimCoroutine()
     {
-        yield return new WaitForSeconds(PausingTime);
+        yield return new WaitForSeconds(PausingAnimTime);//Pause time for popup to be legible
+        popUp = false;
+
+        yield return new WaitForSeconds(PausingObjOffTime); //Pause before turning off popup
         gameObject.SetActive(false);
     }
 }
