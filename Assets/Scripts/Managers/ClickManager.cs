@@ -571,7 +571,7 @@ public class ClickManager : MonoBehaviour
 	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>
 	public void Button_Hire(int _buttonNumber)
     {
-        if (StateManager.Ref.IsManWaiting()) return;
+        //if (StateManager.Ref.IsManWaiting()) return;
         WorkerConstructionData newHire = ManManager.Ref.hireList[_buttonNumber];
 
         ManManager.Ref.CreateWorker(newHire);
@@ -583,7 +583,7 @@ public class ClickManager : MonoBehaviour
 
     public void Button_Hire(WorkerConstructionData worker)
     {
-        if (StateManager.Ref.IsManWaiting()) return;
+        //if (StateManager.Ref.IsManWaiting()) return;
 
         ManManager.Ref.CreateWorker(worker);
         ManManager.Ref.hireList.Remove(worker);
