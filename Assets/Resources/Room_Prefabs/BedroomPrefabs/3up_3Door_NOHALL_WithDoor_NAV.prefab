@@ -241,6 +241,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor
       objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.44
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 3.539
+      objectReference: {fileID: 0}
     - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
       propertyPath: m_RootOrder
@@ -337,6 +352,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 3.539
       objectReference: {fileID: 0}
     - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
@@ -658,6 +688,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: NAVRoomSIngle_NOHALL_WithDoor (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.38
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 6214244359826865366, guid: d397fce98ee1dc5429b848fa0f62f4f2,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 3.539
       objectReference: {fileID: 0}
     - target: {fileID: 6507432574147718368, guid: d397fce98ee1dc5429b848fa0f62f4f2,
         type: 3}
