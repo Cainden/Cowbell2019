@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 3691131223033968654}
   - component: {fileID: 3691131223033968655}
   - component: {fileID: 7544469575358175771}
+  - component: {fileID: 4010966254594235730}
   m_Layer: 5
   m_Name: CenterScreen PUPup
   m_TagString: Untagged
@@ -246,6 +247,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TitleText: {fileID: 3691131222526958713}
   InfoText: {fileID: 149132713570694406}
+--- !u!95 &4010966254594235730
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3691131223033968649}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3bf4f6f751250624989e7af56ba96e98, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8579732425477677700
 GameObject:
   m_ObjectHideFlags: 0
