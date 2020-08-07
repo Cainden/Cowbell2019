@@ -13,10 +13,9 @@ public class CharacterSwaper : MonoBehaviour
 	
 	static int counter = 0;
 
-	// Start is called before the first frame update
 
 
-    public void getCharacter( int j)
+	public void getCharacter( int j)
 	{
 		for (int i = 0; i < setChar.Length; i++)
 		{

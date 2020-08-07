@@ -25425,9 +25425,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: 0
   maxGuests: 4
-  hourMinArival: 7
-  hourMaxArival: 20
   minuteMaxArival: 60
+  hourMinArival: 7
   guestMaxStayTimeDays: 10
   guestMinStayTimeDays: 1
   DebugMenu: {fileID: 1331259067}

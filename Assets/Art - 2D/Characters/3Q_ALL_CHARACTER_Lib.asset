@@ -355,7 +355,7 @@ MonoBehaviour:
         type: 3}
     - m_Name: Jupiter_Bell
       m_Hash: -686994059
-      m_Sprite: {fileID: -1241437301660972074, guid: eb6da4e8ef0e05f4699f04ab9b354473,
+      m_Sprite: {fileID: 2866085434420317054, guid: eb6da4e8ef0e05f4699f04ab9b354473,
         type: 3}
     - m_Name: Jupiter_Red
       m_Hash: 487112937
@@ -534,7 +534,7 @@ MonoBehaviour:
         type: 3}
     - m_Name: Saturn_Tank
       m_Hash: 573528195
-      m_Sprite: {fileID: -2306197340543436185, guid: 44922e8600f673d4e8e729f1411492f9,
+      m_Sprite: {fileID: 1113178775712094356, guid: 44922e8600f673d4e8e729f1411492f9,
         type: 3}
     - m_Name: Saturn_Red
       m_Hash: -1576002989
@@ -566,7 +566,7 @@ MonoBehaviour:
         type: 3}
     - m_Name: Neptune_Handy
       m_Hash: 594892828
-      m_Sprite: {fileID: -4050042574023365583, guid: 43373a3b202d6be4ab185335fff9b852,
+      m_Sprite: {fileID: -6684189854537890769, guid: 43373a3b202d6be4ab185335fff9b852,
         type: 3}
   - m_Name: LegBack
     m_Hash: -2125183790
@@ -593,7 +593,7 @@ MonoBehaviour:
         type: 3}
     - m_Name: Jupiter_Handy
       m_Hash: -705921157
-      m_Sprite: {fileID: -6127261084420718783, guid: b345be31b8ae1464c8c7b2ae1f697b13,
+      m_Sprite: {fileID: -6473211950822717214, guid: b345be31b8ae1464c8c7b2ae1f697b13,
         type: 3}
     - m_Name: Mars_Tank
       m_Hash: -1242336841
@@ -645,7 +645,7 @@ MonoBehaviour:
         type: 3}
     - m_Name: Saturn_Tank
       m_Hash: 573528195
-      m_Sprite: {fileID: 1113178775712094356, guid: 44922e8600f673d4e8e729f1411492f9,
+      m_Sprite: {fileID: -2306197340543436185, guid: 44922e8600f673d4e8e729f1411492f9,
         type: 3}
     - m_Name: Saturn_Red
       m_Hash: -1576002989
