@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MySpace
 {
@@ -11,33 +12,99 @@ namespace MySpace
         {
             if (gridMovements == null) return (new List<GridIndex>());
 
+            Enums.MoveDirections[] moveDirs = (from Enums.MoveDirections m in Enum.GetValues(typeof(Enums.MoveDirections)) select m).ToArray();
             List<List<GridIndex>> allPaths = new List<List<GridIndex>>();
             List<GridIndex> firstPath = new List<GridIndex>();
+            List<GridIndex> reachedIndexes = new List<GridIndex>();
             firstPath.Add(startIndex);
+            reachedIndexes.Add(startIndex);
             allPaths.Add(firstPath);
 
             bool Working = true;
             int CycleCounter = 0;
 
-            while (Working)
+            while (Working && CycleCounter < 1000)
             {
                 Working = false;
                 CycleCounter++;
 
-                List<List<GridIndex>> allPathsTmp = new List<List<GridIndex>>();
+                #region oldPathfinding
+                //List<List<GridIndex>> allPathsTmp = new List<List<GridIndex>>();
+                //foreach (List<GridIndex> onePath in allPaths)
+                //{
+                //    GridIndex lastIndex = onePath[onePath.Count - 1];
 
-                foreach (List<GridIndex> onePath in allPaths)
+                //    foreach (Enums.MoveDirections Dir in Enum.GetValues(typeof(Enums.MoveDirections)))
+                //    {
+                //        if (gridMovements.GridTileHasDirection(lastIndex, Dir))
+                //        {
+                //            GridIndex nextIndex = lastIndex.GetAdjacent(Dir);
+                //            if (onePath.Contains(nextIndex) == false)
+                //            {
+                //                List<GridIndex> newPath = new List<GridIndex>(onePath);
+                //                newPath.Add(nextIndex);
+                //                if (nextIndex == endIndex)
+                //                {
+                //                    //CleanUpPath(ref newPath);
+                //                    return (newPath);
+                //                }
+                //                Working = true;
+                //                allPathsTmp.Add(newPath);
+                //            }
+                //        }
+                //    }
+                //}
+                #endregion
+
+                int CycleCounter2 = 0;
+                int length = allPaths.Count;
+                for (int i = 0; i < length; i++)
                 {
-                    GridIndex lastIndex = onePath[onePath.Count - 1];
+                    CycleCounter2++;
+                    
 
-                    foreach (Enums.MoveDirections Dir in Enum.GetValues(typeof(Enums.MoveDirections)))
+                    GridIndex lastIndex = allPaths[i][allPaths[i].Count - 1];
+                    if (CycleCounter2 > 1000)
+                    {
+                        UnityEngine.Debug.LogError("Large cycle count! allPaths.Count = " + allPaths.Count + ", i = " + i + ", cycleCounter2 = " + CycleCounter2 + ", length = " + length + ", lastIndex = " + lastIndex.ToString() + ", allPaths[i].count = " + allPaths[i].Count);
+                    }
+
+                    int movements = 0;
+                    foreach (Enums.MoveDirections Dir in moveDirs)
                     {
                         if (gridMovements.GridTileHasDirection(lastIndex, Dir))
                         {
                             GridIndex nextIndex = lastIndex.GetAdjacent(Dir);
-                            if (onePath.Contains(nextIndex) == false)
+                            //only add the available movements if the list doesnt contain the index that is to this direction already.
+                            if (!(allPaths[i].Contains(nextIndex)) && !(reachedIndexes.Contains(nextIndex)))
+                                movements |= (byte)Dir;
+                        }
+                    }
+
+                    //If the path is a dead end, remove it from the list of paths that will continue to be checked.
+                    if (movements <= 0)
+                    {
+                        allPaths.Remove(allPaths[i]);
+                        i--;
+                        length--;
+                        continue;
+                    }
+
+                    for(int ii = 0; ii < moveDirs.Length; ii++)
+                    {
+                        if ((movements & (byte)moveDirs[ii]) != 0)
+                        {
+                            GridIndex nextIndex = lastIndex.GetAdjacent(moveDirs[ii]);
+                            if (allPaths[i].Contains(nextIndex))
+                                UnityEngine.Debug.LogError("Path already contains this index!!");
+                            if (reachedIndexes.Contains(nextIndex))
+                                UnityEngine.Debug.LogError("Somehow going over the same index again");
+                            //make sure there's no index out     
+                            //of range exception on the next
+                            //part of this if statement          Check to see if this is the last movement direction that is valid.
+                            if (((ii - 1) < moveDirs.Length) && (movements - (int)moveDirs[ii + 1] > 0))
                             {
-                                List<GridIndex> newPath = new List<GridIndex>(onePath);
+                                List<GridIndex> newPath = new List<GridIndex>(allPaths[i]);
                                 newPath.Add(nextIndex);
                                 if (nextIndex == endIndex)
                                 {
@@ -45,15 +112,25 @@ namespace MySpace
                                     return (newPath);
                                 }
                                 Working = true;
-                                allPathsTmp.Add(newPath);
+                                allPaths.Add(newPath);
+                                reachedIndexes.Add(nextIndex);
+                            }
+                            else
+                            {
+                                allPaths[i].Add(nextIndex);
+                                reachedIndexes.Add(nextIndex);
+                                if (nextIndex == endIndex)
+                                    return allPaths[i];
+                                Working = true;
                             }
                         }
                     }
                 }
 
-                allPaths = allPathsTmp;
+                //allPaths = allPathsTmp;
             }
 
+            UnityEngine.Debug.LogError("Pathfinding failed! Cycle Counter = " + CycleCounter);
             return (new List<GridIndex>());
         }
 

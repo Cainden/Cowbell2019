@@ -109,6 +109,10 @@ public class Room_Ballroom : Room_WorkQuarters
         {
             guest.SetAnimation(Enums.ManStates.Dancing, 0);
             guest.ChangeHappiness((3 + workerAssignments[guest].GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality)));
+            if ((int)guest.GetMood() >= 100)
+            {
+                ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
+            }
             if ((int)guest.GetMood() >= 80)
             {
                 if (UnityEngine.Random.Range(0, 100) >= 70 /*Want to use a stat from the guest here once we get something for it, rather than a hard coded number*/)

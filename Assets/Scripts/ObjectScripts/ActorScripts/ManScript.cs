@@ -381,7 +381,7 @@ public abstract class ManScript : MonoBehaviour
         StartCoroutine(LeaveLobby(GameManager.StartPath));
     }
 
-    protected virtual IEnumerator MoveToLobby(Vector3[] path)
+    protected IEnumerator MoveToLobby(Vector3[] path)
     {
         
         if (path.Length <= 2)
@@ -392,11 +392,11 @@ public abstract class ManScript : MonoBehaviour
 
         transform.position = path[0];
 
-        for (int i = 0; i < path.Length; i++)
-        {
-            if (path[i].y != transform.position.y)
-                path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
-        }
+        //for (int i = 0; i < path.Length; i++)
+        //{
+        //    if (path[i].y != transform.position.y)
+        //        path[i] = new Vector3(path[i].x, transform.position.y, path[i].z);
+        //}
 
         for (int i = 1; i < path.Length; i++)
         {
@@ -407,26 +407,29 @@ public abstract class ManScript : MonoBehaviour
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).OpenDoorOutsideEnter(1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f));
             }
 
-            //while (!DoMovement(path[i]))
-            //{
-            //    yield return null;
-            //}
+            while (!DoMovement(path[i]))
+            {
+                yield return null;
+            }
 
-            Loop:
-            yield return null;
-            if (!DoMovement(path[i]))
-                goto Loop;
+            //Loop:
+            //yield return null;
+            //if (!DoMovement(path[i]))
+            //    goto Loop;
 
             if (i == path.Length - 1)
             {
                 (RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript as Room_Lobby).CloseDoor();
             }
         }
+
         ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
         SetState(Enums.ManStates.None, 0);
         isClickable = true;
-
+        LobbyMoveFinished();
     }
+
+    protected virtual void LobbyMoveFinished() { }
 
     protected virtual IEnumerator LeaveLobby(Vector3[] path)
     {
@@ -484,9 +487,8 @@ public abstract class ManScript : MonoBehaviour
         }
         else // Regular movement
         {
-            Vector3 dir = (_TargetPos - transform.position);
-            dir.Normalize();
-            transform.position += (dir * Travel);
+            //                              direction
+            transform.position += (_TargetPos - transform.position).normalized * Travel;
             return false;
         }
     }
