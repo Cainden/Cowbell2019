@@ -49631,11 +49631,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6851528480780740418, guid: 3fc230055b419d648a2dffec533bb376,
-        type: 3}
-      propertyPath: MyEventSystem
-      value: 
-      objectReference: {fileID: 845738878}
     - target: {fileID: 6851528480780740420, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -49830,6 +49825,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8447724585300808801, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_Name
+      value: PopupBackground
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fc230055b419d648a2dffec533bb376, type: 3}
