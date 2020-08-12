@@ -26,6 +26,8 @@ public class TimeManager : MonoBehaviour
     /// current time in game time (0 - dayCycleLength).  
     internal static float currentCycleTime;
 
+    public static int numberOfDays = 0;
+
     /// number of hours per day.  
     private float hoursPerDay = 24;
 
@@ -220,18 +222,24 @@ public class TimeManager : MonoBehaviour
         if (currentCycleTime > dayCycleLength)
             currentCycleTime = currentCycleTime % dayCycleLength;
         else if (currentCycleTime == dayCycleLength)
+        {
             currentCycleTime = 0;
-        currentCycleTime += Time.deltaTime;
+            numberOfDays++; //Each time a days goes by increase numberOfDays by one.
+        }
+            currentCycleTime += Time.deltaTime;
         if (currentCycleTime > dayCycleLength)
             currentCycleTime = dayCycleLength;
-
+        
+        if (currentCycleTime == 0)//Reset numberOfDays to match currentCycle
+        {
+            numberOfDays = 0;
+        }
         //Using the above method instead of the below one for triggering events based on end of day. 
         //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
 
         //currentCycleTime = currentCycleTime % dayCycleLength;
         EventManager.CheckCurrentEvents(currentCycleTime);
     }
-
     #endregion
 
     #region Day State Change Functions

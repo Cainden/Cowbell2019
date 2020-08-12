@@ -18,6 +18,7 @@ public class TimeMenu : MonoBehaviour
         GameManager.OnGameSpeedChanged += SpeedChanged;
     }
 
+
     private void OnDisable()
     {
         GameManager.OnGameSpeedChanged -= SpeedChanged;
