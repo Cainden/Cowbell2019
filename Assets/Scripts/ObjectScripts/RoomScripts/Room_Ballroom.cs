@@ -140,6 +140,7 @@ public class Room_Ballroom : Room_WorkQuarters
                 if (workerAssignments[g] == ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker)
                 {
                     workerAssignments[g] = null;
+                    break;
                 }
             }
         }
