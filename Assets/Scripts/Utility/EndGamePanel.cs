@@ -16,12 +16,12 @@ public class EndGamePanel : MonoBehaviour
     private void TimeTillEndGame()
     {
         numberOfDays = TimeManager.numberOfDays;
-        if (numberOfDays >= maxDays)
+        if (numberOfDays >= maxDays || Input.GetKeyDown(KeyCode.E))
         {
             OpenEndGameMenu();
         }
     }
-    private void OpenEndGameMenu()
+    public void OpenEndGameMenu()
     {
         EndPanel.gameObject.SetActive(true);
         PauseSpeed();

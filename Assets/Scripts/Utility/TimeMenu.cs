@@ -11,6 +11,7 @@ public class TimeMenu : MonoBehaviour
     //[SerializeField] TMP_Text timerTextComponent;
 
     [SerializeField] TMP_Text gameSpeedText;
+    [SerializeField] TMP_Text debugGameSpeedText;
 
     private void OnEnable()
     {
@@ -27,6 +28,7 @@ public class TimeMenu : MonoBehaviour
     void SpeedChanged(float timeScale)
     {
         gameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
+        debugGameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
     }
 
     public void IncreaseSpeed()
