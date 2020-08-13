@@ -111,18 +111,36 @@ public class Room_Ballroom : Room_WorkQuarters
             guest.ChangeHappiness((3 + workerAssignments[guest].GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality)));
             if ((int)guest.GetMood() >= 100)
             {
-                ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
+                GuestFinished();
             }
             if ((int)guest.GetMood() >= 80)
             {
                 if (UnityEngine.Random.Range(0, 100) >= 70 /*Want to use a stat from the guest here once we get something for it, rather than a hard coded number*/)
-                    ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
+                {
+                    GuestFinished();
+                }
+                    
             }
+        }
+        else if ((int)guest.GetMood() >= 100)
+        {
+            GuestFinished();
         }
         else
         {
             guest.SetMood(Enums.ManMood.Sad1, true);
             guest.ChangeHappiness(-1 /*Could maybe add in a general stat here for guests that makes them get angrier faster?*/);
+        }
+
+        void GuestFinished()
+        {
+            if (CheckGuestWaiting(out Guid id))
+            {
+                workerAssignments[ManManager.Ref.GetManData(id).ManScript as ManScript_Guest] = workerAssignments[guest];
+            }
+            ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
+            workerAssignments.Remove(guest);
+            
         }
     }
 
@@ -157,7 +175,7 @@ public class Room_Ballroom : Room_WorkQuarters
     {
         Vector3 target;
         if (workerAssignments.ContainsValue(man))
-        {                                                                                                                              //Have them a bit to the left of the guest.
+        {                                                                                                        //Have them a bit to the left of the guest.
             target = GridManager.Ref.GetWorldPositionFromGridIndex(GetGridIndexFromGuestAssignedToWorker(man)) + (Vector3.left * 0.5f);
             if (man.transform.position != target)
             {
@@ -166,17 +184,23 @@ public class Room_Ballroom : Room_WorkQuarters
             }
             else
                 man.SetAnimation(Enums.ManStates.None, 4);
-            return;
         }
-        //else
-        target = GridManager.Ref.GetWorldPositionFromGridIndex(RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot]);
-        if (man.transform.position != target)
-        {
-            man.SetAnimation(Enums.ManStates.Running, 2, target);
-            man.DoMovement(target);
-        }
+        //else if (CheckGuestWaiting(out Guid id))
+        //{
+        //    workerAssignments[ManManager.Ref.GetManData(id).ManScript as ManScript_Guest] = man;
+        //}
         else
-            man.SetAnimation(Enums.ManStates.None, 0);
+        {
+            target = GridManager.Ref.GetWorldPositionFromGridIndex(RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot]);
+            if (man.transform.position != target)
+            {
+                man.SetAnimation(Enums.ManStates.Running, 2, target);
+                man.DoMovement(target);
+            }
+            else
+                man.SetAnimation(Enums.ManStates.None, 0);
+        }
+        
     }
 
     private void AddRearIndizes()
@@ -213,6 +237,7 @@ public class Room_Ballroom : Room_WorkQuarters
             }
         }
         RoomData.CoveredIndizes = newIndizes;
+        RoomData.ManSlotsAssignments = newSlots;
     }
 
     private bool CheckFreeGuestSlot()
@@ -246,7 +271,22 @@ public class Room_Ballroom : Room_WorkQuarters
             if (workerAssignments[g] == man)
                 return RoomData.CoveredIndizes[g.ManData.AssignedRoomSlot];
         }
+        Debug.LogError("given worker is not in the worker listings of this ballroom!");
         return GridIndex.Zero;
+    }
+
+    private bool CheckGuestWaiting(out Guid guestID)
+    {
+        foreach (ManScript_Guest g in workerAssignments.Keys)
+        {
+            if (workerAssignments[g] == null)
+            {
+                guestID = g.ManData.ManId;
+                return true;
+            }
+                
+        }
+        return false;
     }
 
     //private ManScript_Guest GetGuestFromWorkerSlot(int s)

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using UnityEngine;
-//using System.Linq;
+using System.Linq;
 
 public class ManManager : MonoBehaviour
 {
@@ -252,8 +252,8 @@ public class ManManager : MonoBehaviour
     {
         Guid chosen = Guid.Empty;
         int shortest = int.MaxValue;
-        //var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
-        foreach (T room in RoomManager.Ref.GetAllActiveRoomsofType<T>())
+
+        foreach (T room in (from T r in RoomManager.Ref.GetAllActiveRoomsofType<T>() where r.RoomHasFreeManSlots(man.ManData.ManId) select r))
         {
             var path = GridManager.Ref.GetIndexPath(man.ManData.AssignedRoom.RoomData.CoveredIndizes[man.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
             if (path.Length < shortest)
@@ -270,8 +270,8 @@ public class ManManager : MonoBehaviour
     {
         Guid chosen = Guid.Empty;
         int shortest = int.MaxValue;
-        //var ar = (from r in RoomManager.Ref.GetAllActiveRoomsofType(types) where (r.RoomScript is Room_CleanerCloset && r.RoomScript.RoomHasFreeManSlots()) select r.RoomScript);
-        foreach (T room in RoomManager.Ref.GetAllActiveRoomsofType<T>())
+
+        foreach (T room in (from T r in RoomManager.Ref.GetAllActiveRoomsofType<T>() where r.RoomHasFreeManSlots(manId) select r))
         {
             var path = GridManager.Ref.GetIndexPath(GetManData(manId).ManScript.ManData.AssignedRoom.RoomData.CoveredIndizes[GetManData(manId).ManScript.ManData.AssignedRoomSlot], room.RoomData.CoveredIndizes[room.CountMen()]);
             if (path.Length < shortest)
