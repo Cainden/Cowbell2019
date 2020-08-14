@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using MySpace;
+using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +10,7 @@ public class EndGamePanel : MonoBehaviour
     public GameObject EndPanel;
     [SerializeField] int maxDays = 3;
     public static int numberOfDays;
+    [SerializeField] int MScene;
 
     private void Update()
     {
@@ -33,7 +36,7 @@ public class EndGamePanel : MonoBehaviour
         
         EndPanel.gameObject.SetActive(false);
         PlaySpeed();
-        LoadCurrentScene();
+        LoadMainScene();
     }
     #region pause & play
     public void PauseSpeed()
@@ -47,9 +50,8 @@ public class EndGamePanel : MonoBehaviour
             GameManager.GameSpeed = 1f; //set speed to normal game speed
     }
     #endregion
-    private static void LoadCurrentScene()
+    private static void LoadMainScene()
     {
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex - 1);
+        AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
     }
 }
