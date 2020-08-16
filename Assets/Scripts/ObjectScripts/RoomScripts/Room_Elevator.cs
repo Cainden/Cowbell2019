@@ -141,7 +141,7 @@ public class Room_Elevator : RoomScript
             GridManager.Ref.RemoveMovementDirectionFromGridIndex(RoomData.CoveredIndizes[RoomData.CoveredIndizes[0].IsBackPlane() ? 0 : 1], Enums.MoveDirections.Bottom);
 
             //Give the elevator below a movement direction connecting to this one.
-            GridManager.Ref.AddMovementDirectionToGridIndex(RoomManager.Ref.GetRoomData(below).RoomScript.RoomData.CoveredIndizes[1], Enums.MoveDirections.Top);
+            //GridManager.Ref.AddMovementDirectionToGridIndex(RoomManager.Ref.GetRoomData(below).RoomScript.RoomData.CoveredIndizes[1], Enums.MoveDirections.Top);
         }
         //if a solo elevator, need to make another one below this one.
         else if (RoomData.CoveredIndizes[0].Y > Constants.GridSurfaceY && below == Guid.Empty)

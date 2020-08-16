@@ -11,12 +11,14 @@ public class TimeMenu : MonoBehaviour
     //[SerializeField] TMP_Text timerTextComponent;
 
     [SerializeField] TMP_Text gameSpeedText;
+    [SerializeField] TMP_Text debugGameSpeedText;
 
     private void OnEnable()
     {
         GameManager.OnGameSpeedChanged -= SpeedChanged;
         GameManager.OnGameSpeedChanged += SpeedChanged;
     }
+
 
     private void OnDisable()
     {
@@ -25,7 +27,12 @@ public class TimeMenu : MonoBehaviour
 
     void SpeedChanged(float timeScale)
     {
+<<<<<<< HEAD
         gameSpeedText.text = "x" + Mathf.Round(Mathf.Round(timeScale * 100) * 0.01f);
+=======
+        gameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
+        debugGameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
+>>>>>>> 26516f2b6b9b0caab962875b6042dc5f9dd875d3
     }
 
     public void IncreaseSpeed()

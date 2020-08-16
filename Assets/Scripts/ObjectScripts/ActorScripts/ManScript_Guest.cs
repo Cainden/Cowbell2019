@@ -86,9 +86,8 @@ public class ManScript_Guest : ManScript
         }
     }
 
-    protected override IEnumerator MoveToLobby(Vector3[] path)
+    protected override void LobbyMoveFinished()
     {
-        yield return base.MoveToLobby(path);
         SendSignalToLobby();
     }
 

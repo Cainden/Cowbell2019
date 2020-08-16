@@ -24,6 +24,8 @@ public class RoomScript : MonoBehaviour
 
     public Guid adjacentRight, adjacentLeft;
 
+    public GridIndex leftMost;
+
     protected virtual void Start()
     {
         AssignManSlotPositions();
@@ -31,6 +33,7 @@ public class RoomScript : MonoBehaviour
         SetRoomText();
         
         manManRef = ManManager.Ref;
+        leftMost = RoomData.GetLeftMostIndex();
     }
 
 

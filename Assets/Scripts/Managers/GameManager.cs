@@ -128,7 +128,8 @@ public class GameManager : MonoBehaviour
             hourRandomArival = GetRandomizedGuestArival(); //Set hour max arival to bell curve random
             minuteRandom = UnityEngine.Random.Range(0, minuteMaxArival); //Randomize minute arival
             MySpace.Events.EventManager.AddEventTriggerToGameTime(hourRandomArival, minuteRandom, 0, CreateBasicGuest);//make guests arive at random time.
-            UnityEngine.Debug.Log("New arival " + hourRandomArival + ":" + minuteRandom);
+            if (Debug)
+                UnityEngine.Debug.Log("New arival " + hourRandomArival + ":" + minuteRandom);
         }
     }
 

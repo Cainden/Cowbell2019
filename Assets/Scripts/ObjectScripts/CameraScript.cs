@@ -47,7 +47,7 @@ public class CameraScript : MonoBehaviour
 			return;
 		}
 		Ref = this;
-		DontDestroyOnLoad(this);
+		//DontDestroyOnLoad(this);
 		#endregion
 
 		cam = GetComponent<Camera>();

@@ -44,7 +44,7 @@ public class ClickManager : MonoBehaviour
 			return;
 		}
 		Ref = this;
-		DontDestroyOnLoad(this);
+		//DontDestroyOnLoad(this);
 		#endregion
 	}
 

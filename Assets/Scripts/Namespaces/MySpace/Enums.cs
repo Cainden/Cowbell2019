@@ -162,15 +162,16 @@ namespace MySpace
 
         public static ManMood GetManMood(float value)
         {
-            foreach (ManMood mood in from ManMood m in Enum.GetValues(typeof(ManMood)) orderby (int)m ascending select m)
+            foreach (ManMood mood in (from ManMood m in Enum.GetValues(typeof(ManMood)) orderby (int)m descending select m))
             {
                 if ((int)mood == -1)
                     continue;
-                if ((int)mood >= value)
+                if (value >= (int)mood)
                 {
                     return mood;
                 }
             }
+            UnityEngine.Debug.LogError("MOOD VALUE FAILED TO BECOEM ENUM!! Mood = " + value);
             return ManMood.None;
         }
     }
