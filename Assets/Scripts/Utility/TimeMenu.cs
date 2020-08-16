@@ -27,8 +27,7 @@ public class TimeMenu : MonoBehaviour
 
     void SpeedChanged(float timeScale)
     {
-<<<<<<< HEAD
-        gameSpeedText.text = "x" + Mathf.Round(Mathf.Round(timeScale * 100) * 0.01f);
+        gameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
 =======
         gameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";
         debugGameSpeedText.text = (Mathf.Round(timeScale * 100) * 0.01f) + "x";

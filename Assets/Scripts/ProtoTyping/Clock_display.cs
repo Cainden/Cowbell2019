@@ -8,8 +8,8 @@ public class Clock_display : MonoBehaviour
 	public string displaytime;
 	public GameObject dial;
 	public float dialRot;
-	public GameObject hourTurner;
-	public GameObject minutTurner;
+	
+
 
 	private void Start()
 	{
@@ -27,8 +27,8 @@ public class Clock_display : MonoBehaviour
 
 		//Set clock angle
 		dial.transform.rotation = Quaternion.Euler(v.x, v.y,v.z);
-		hourTurner.transform.rotation = Quaternion.Euler(v.x, v.y, v.z*-1);
-		minutTurner.transform.rotation = Quaternion.Euler(v.x, v.y, (v.z * -1)*12);
+
+
 	}
 
 	

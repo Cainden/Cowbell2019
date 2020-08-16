@@ -10,7 +10,7 @@ public class DailySummaryScript : MonoBehaviour
     public TextMeshProUGUI Title, HappinessText, BucksInText, BucksOutText, TotalText;
 
     public GameObject HappyFace, AlmostHappyFace, NotHappyFace, LyeydownFace, BotheyesdownFace, SadFace, ScaredFace, SickFace, MonsterFace;
-	public TimeManager nextday;
+
 
     private void Start()
     {
@@ -61,8 +61,6 @@ public class DailySummaryScript : MonoBehaviour
     {
         gameObject.SetActive(false);
         GameManager.ResumeGameSpeed();
-		nextday.nextDay();
-
     }
 
     public void FinancesClick()
