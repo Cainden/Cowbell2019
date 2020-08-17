@@ -26,8 +26,6 @@ public class TimeManager : MonoBehaviour
     /// current time in game time (0 - dayCycleLength).  
     internal static float currentCycleTime;
 
-    public static int numberOfDays = 0;
-
     /// number of hours per day.  
     private float hoursPerDay = 24;
 
@@ -37,6 +35,8 @@ public class TimeManager : MonoBehaviour
     /// current day phase  
     public DayPhase currentPhase;
 
+	//day counter
+	public int dayCounter;
     /// Dawn occurs at currentCycleTime = 0.0f, so this offsets the WorldHour time to make  
     /// dawn occur at a specified hour. A value of 3 results in a 5am dawn for a 24 hour world clock.  
     public float dawnTimeOffset;
@@ -78,6 +78,9 @@ public class TimeManager : MonoBehaviour
     private float quarterDay;
     private float halfquarterDay;
 
+	//time of day tracker
+	public TimeOfDayTracker dayTrack;
+
     /// <summary>
     /// Real world time that in-game hours take in seconds
     /// </summary>
@@ -105,7 +108,6 @@ public class TimeManager : MonoBehaviour
     }
 
 	
-
     /// The specified intensity of the directional light, if one exists. This value will be  
     /// faded to 0 during dusk, and faded from 0 back to this value during dawn.  
     private float lightIntensity;
@@ -126,7 +128,7 @@ public class TimeManager : MonoBehaviour
     {
         quarterDay = dayCycleLength * 0.25f;
         halfquarterDay = dayCycleLength * 0.125f;
-
+		dayCounter = 1;
         dawnTime = 0.0f;
         dayTime = dawnTime + halfquarterDay; //dayCycleLength * 0.125f
         duskTime = dayTime + quarterDay + halfquarterDay; //dayCycleLength * 0.5f
@@ -135,15 +137,22 @@ public class TimeManager : MonoBehaviour
         HourTime = dayCycleLength / hoursPerDay;
         MinuteTime = HourTime / 60;
         SecondsTime = MinuteTime / 60;
-
-        currentCycleTime = dayStartHour * HourTime;
+		dayTrack.setDay(dayCounter.ToString());
+		currentCycleTime = dayStartHour * HourTime;
 
         if (sun != null)
         { lightIntensity = sun.intensity; }
     }
+	// track the day
+	public void nextDay()
+	{
+		dayCounter++;
+		dayTrack.setDay(dayCounter.ToString());
+	}
 
-    /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
-    void Reset()
+
+	/// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
+	void Reset()
     {
         dayCycleLength = 120.0f;
         hoursPerDay = 24.0f;
@@ -222,24 +231,18 @@ public class TimeManager : MonoBehaviour
         if (currentCycleTime > dayCycleLength)
             currentCycleTime = currentCycleTime % dayCycleLength;
         else if (currentCycleTime == dayCycleLength)
-        {
             currentCycleTime = 0;
-            numberOfDays++; //Each time a days goes by increase numberOfDays by one.
-        }
-            currentCycleTime += Time.deltaTime;
+        currentCycleTime += Time.deltaTime;
         if (currentCycleTime > dayCycleLength)
             currentCycleTime = dayCycleLength;
-        
-        if (currentCycleTime == 0)//Reset numberOfDays to match currentCycle
-        {
-            numberOfDays = 0;
-        }
+
         //Using the above method instead of the below one for triggering events based on end of day. 
         //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
 
         //currentCycleTime = currentCycleTime % dayCycleLength;
         EventManager.CheckCurrentEvents(currentCycleTime);
     }
+
     #endregion
 
     #region Day State Change Functions
@@ -361,6 +364,8 @@ public class TimeManager : MonoBehaviour
         worldTimeHour = (int)(currentCycleTime / HourTime);
         //minutes = (int)(Mathf.Ceil((currentCycleTime * (60 / HourTime)) % 60));
         minutes = (int)((currentCycleTime - (worldTimeHour * HourTime)) / MinuteTime);
+
+
     }
     #endregion
 
