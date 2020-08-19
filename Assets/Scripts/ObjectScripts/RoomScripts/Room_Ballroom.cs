@@ -82,7 +82,7 @@ public class Room_Ballroom : Room_WorkQuarters
             {
                 if (RoomData.CoveredIndizes[i].Z != 0)
                     continue;
-                if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+                if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty || RoomData.ReservedSlots[i].object1 == man.ManData.ManId))
                     return i;
             }
         }
@@ -92,7 +92,7 @@ public class Room_Ballroom : Room_WorkQuarters
             {
                 if (RoomData.CoveredIndizes[i].Z == 0)
                     continue;
-                if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+                if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty || RoomData.ReservedSlots[i].object1 == man.ManData.ManId))
                     return i;
             }
         }
@@ -107,13 +107,14 @@ public class Room_Ballroom : Room_WorkQuarters
         guest.delayTimer = 0;
         if (workerAssignments[guest] != null)
         {
+            guest.ResolveMood(Enums.ManMood.Sad1);
             guest.SetAnimation(Enums.ManStates.Dancing, 0);
             guest.ChangeHappiness((3 + workerAssignments[guest].GetSpecialtyStatValue(SpecialtyStat.StatType.Physicality)));
-            if ((int)guest.GetMood() >= 100)
+            if (guest.GetHappiness() >= 100)
             {
                 GuestFinished();
             }
-            if ((int)guest.GetMood() >= 80)
+            if (guest.GetHappiness() >= 80)
             {
                 if (UnityEngine.Random.Range(0, 100) >= 70 /*Want to use a stat from the guest here once we get something for it, rather than a hard coded number*/)
                 {
@@ -122,7 +123,7 @@ public class Room_Ballroom : Room_WorkQuarters
                     
             }
         }
-        else if ((int)guest.GetMood() >= 100)
+        else if (guest.GetHappiness() >= 100)
         {
             GuestFinished();
         }
@@ -140,7 +141,7 @@ public class Room_Ballroom : Room_WorkQuarters
             }
             ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
             workerAssignments.Remove(guest);
-            
+            guest.ResolveMood(Enums.ManMood.Sad1);
         }
     }
 
@@ -205,12 +206,16 @@ public class Room_Ballroom : Room_WorkQuarters
 
     private void AddRearIndizes()
     {
-        GridIndex[] newIndizes = new GridIndex[RoomData.CoveredIndizes.Length * 2];
-        Guid[] newSlots = new Guid[newIndizes.Length];
+        RoomData.ManSlotCount = RoomData.CoveredIndizes.Length * 2;
+        GridIndex[] newIndizes = new GridIndex[RoomData.ManSlotCount];
+        Guid[] newSlots = new Guid[RoomData.ManSlotCount];
+        Container<Guid, bool>[] newSlots2 = new Container<Guid, bool>[RoomData.ManSlotCount];
         for (int i = 0; i < RoomData.CoveredIndizes.Length; i++)
         {
             newSlots[i * 2] = Guid.Empty;
             newSlots[(i * 2) + 1] = Guid.Empty;
+            newSlots2[i * 2] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
+            newSlots2[(i * 2) + 1] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
             newIndizes[i * 2] = RoomData.CoveredIndizes[i];
             newIndizes[(i * 2) + 1] = RoomData.CoveredIndizes[i].GetBack();
             GridManager.Ref.AddMovementDirectionToGridIndex(newIndizes[i * 2], Enums.MoveDirections.Back);
@@ -235,9 +240,12 @@ public class Room_Ballroom : Room_WorkQuarters
                 }
 
             }
+            GridManager.Ref.RegisterGridIndexToRoom(RoomData.RoomId, newIndizes[(i * 2) + 1], RoomData.RoomSize);
         }
+
         RoomData.CoveredIndizes = newIndizes;
         RoomData.ManSlotsAssignments = newSlots;
+        RoomData.ReservedSlots = newSlots2;
     }
 
     private bool CheckFreeGuestSlot()
@@ -246,7 +254,7 @@ public class Room_Ballroom : Room_WorkQuarters
         {
             if (RoomData.CoveredIndizes[i].Z != 0)
                 continue;
-            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty))
                 return true;
         }
         return false;
@@ -258,7 +266,7 @@ public class Room_Ballroom : Room_WorkQuarters
         {
             if (RoomData.CoveredIndizes[i].Z == 0)
                 continue;
-            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty))
                 return true;
         }
         return false;

@@ -107,7 +107,7 @@ public class MoodBubbleScript : MonoBehaviour
         this.bubble.sprite = GetSpriteFromMood(Mood);
         localCanvas.SetActive(true);
         inMood = true;
-        Vector3 canvasOrigin = localCanvas.transform.position;
+        Vector3 canvasOrigin = localCanvas.transform.localPosition;
         CanvasRenderer panel = this.panel.GetComponent<CanvasRenderer>(), bubble = this.bubble.GetComponent<CanvasRenderer>();
         //Get thier original alpha values
         float pA = panel.GetAlpha(), bA = bubble.GetAlpha();
@@ -155,7 +155,7 @@ public class MoodBubbleScript : MonoBehaviour
             localCanvas.transform.Translate(Vector3.up * Time.deltaTime);
             yield return null;
         }
-        localCanvas.transform.position = canvasOrigin;
+        localCanvas.transform.localPosition = canvasOrigin;
         panel.SetAlpha(pA);
         bubble.SetAlpha(bA);
         localCanvas.SetActive(false);

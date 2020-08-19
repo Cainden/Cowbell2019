@@ -563,6 +563,28 @@ public abstract class ManScript : MonoBehaviour
     {
         return (ManData.OwnedRoomRef != null);
     }
+
+    ///// <summary>
+    ///// For Debugging purposes
+    ///// </summary>
+    //public RoomScript rum;
+    public void AssignToCurrentRoomReservation()
+    {
+        var room = RoomManager.Ref.GetRoomData(GridManager.Ref.GetGridTileRoomGuid(ManData.CurrIndex)).RoomScript;
+        //if (rum != room && rum != null)
+        //{
+        //    Debug.LogError("current room is not the same as the room being moved to!!! WTF?; OldRoomType: " + rum.RoomData.RoomType + "; OldRoomName: " + rum.RoomData.RoomName
+        //         + "; NewRoomType: " + room.RoomData.RoomType + "; NewRoomName: " + room.RoomData.RoomName + "; CorrectIndex: " + rum.RoomData.CoveredIndizes[rum.GetReservedSlotIndex(ManData.ManId)] + "; curIndex: " + ManData.CurrIndex);
+        //}
+        int r = room.GetReservedSlotIndex(ManData.ManId);
+        if (r < 0)
+        {
+            Debug.LogError("Failed to get reserved slot index!; ManType: " + ManData.ManType + "; RoomType: " + room.RoomData.RoomType + "; index: " + ManData.CurrIndex);
+            return;
+        }
+        AssignToRoom(room.RoomData.RoomId, r);
+        room.AssignManToRoomSlot(ManData.ManId, r, room.GetReservedSlotAssignedByPlayer(ManData.ManId));
+    }
     #endregion
 
     #region Queue Methods
@@ -574,7 +596,15 @@ public abstract class ManScript : MonoBehaviour
         //_ActionList.RemoveAt(0);
         if (MovementPath.Count > 0)
         {
-            StartCoroutine(Movement(new IndexPair((lastPos == GridIndex.Zero) ? GridManager.Ref.GetXYGridIndexFromWorldPosition(transform.position, true) : lastPos, MovementPath[0])));
+            if (lastPos == GridIndex.Zero)
+            {
+                lastPos = ManData.CurrIndex;
+                if (lastPos == GridIndex.Zero)
+                {
+                    lastPos = GridManager.Ref.GetXYGridIndexFromWorldPosition(transform.position, true);
+                }
+            }
+            StartCoroutine(Movement(new IndexPair(lastPos, MovementPath[0])));
             return;
         }
         else if (NextAction != null)
@@ -636,129 +666,12 @@ public abstract class ManScript : MonoBehaviour
         GridManager.CallPairEndEvent(this, pair);
 
         GridIndex last = MovementPath[0]; //Remember, this is needed because we need to remove this gridindex from the movement path before we call the next process actions 
+        ManData.CurrIndex = last;
         MovementPath.Remove(MovementPath[0]);
         CheckMovementActions();
         ProcessActions(last);
+        
     }
-
-    #region Old
-    /*
-    public void Add_AccessAction_ToList(Guid roomId)
-    {
-        _ActionList.Add(new ActionData(() => StartCoroutine(WaitForRoomAccess(roomId)), ActionData.ActionType.Wait));
-    }
-
-    public void Add_RunAction_ToList(Vector3 position)
-    {
-        if (position == Vector3.zero)
-        {
-            Debug.LogError("WTF!");
-        }
-        _ActionList.Add(new ActionData(() => SetMoveToPosition(Enums.ManStates.Running, position), ActionData.ActionType.Movement));
-    }
-
-    public void Add_FacePlayerAction_ToList()
-    {
-        _ActionList.Add(new ActionData(() => SetFaceTowardsPlayer(), ActionData.ActionType.Movement));
-    }
-
-    //public void Add_RotateAction_ToList(Quaternion rotation)
-    //{
-    //    _ActionList.Add(new ActionData(() => SetRotateToOrientation(Enums.ManStates.Rotating, rotation), ActionData.ActionType.Movement));
-    //}
-
-    public void Add_IdleAction_ToList()
-    {
-        _ActionList.Add(new ActionData(() => SetAnimation(Enums.ManStates.Idle, 2), ActionData.ActionType.Animation));
-    }
-
-    // The working state can be of different animations, dependent on room (idle, working, ...)
-    public void Add_WorkingAction_ToList(Enums.ManStates manState)
-    {
-        _ActionList.Add(new ActionData(() => SetAnimation(manState, 0), ActionData.ActionType.Animation));
-    }
-
-    public void Add_DoorOpenAction_ToList(Guid roomId)
-    {
-        _ActionList.Add(new ActionData(() =>
-        {
-            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_OpenDoor();
-            StartCoroutine(WaitForDoor(RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator, false));
-        }, ActionData.ActionType.Elevator));
-    }
-
-    public void Add_DoorCloseAction_ToList(Guid roomId)
-    {
-        _ActionList.Add(new ActionData(() =>
-        {
-            (RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator).SetAnimation_CloseDoor(!CheckElevatorActionQueue(ActionData.ActionType.Elevator));
-            if (CheckElevatorActionQueue(ActionData.ActionType.Elevator))
-                StartCoroutine(WaitForDoor(RoomManager.Ref.GetRoomData(roomId).RoomScript as Room_Elevator, true));
-        }, ActionData.ActionType.Elevator));
-    }
-
-    public void Add_ElevatorMovementAction_ToList(Room_Elevator room, int YIndex, bool moveMan)
-    {
-        _ActionList.Add(new ActionData(() =>
-        {
-            if (moveMan)
-                room.MoveBoxToFloor(YIndex, this);
-            else
-                room.MoveBoxToFloor(YIndex);
-            StartCoroutine(WaitForRoomAccess(room));
-        }, ActionData.ActionType.Elevator));
-    }
-
-    public void Add_SelfDestruction_ToList()
-    {
-        _ActionList.Add(new ActionData(() => Destroy(gameObject), ActionData.ActionType.Die));
-    }
-
-    public void Add_WaitTime_ToList(float seconds)
-    {
-        WaitCoroutine = WaitForSeconds(seconds);
-        _ActionList.Add(new ActionData(() => StartCoroutine(WaitCoroutine), ActionData.ActionType.Wait));
-    }
-
-    public void Add_Action_ToList(ActionData action)
-    {
-        _ActionList.Add(action);
-    }
-
-    public void Add_Action_ToList(ActionData action, int index)
-    {
-        _ActionList.Insert(index, action);
-    }
-
-    /// <summary>
-    /// Checks if the given action type is in the action queue up to the given number
-    /// </summary>
-    /// <param name="typeCheck"></param>
-    /// <param name="actionsToCheck"></param>
-    /// <returns>true if there is an action of type <c>typeCheck</c> within the next <c>actionsToCheck</c> actions</returns>
-    private bool CheckElevatorActionQueue(ActionData.ActionType typeCheck, int actionsToCheck = 4)
-    {
-        //Make sure there is another action after the current one
-        if (_ActionList.Count > actionsToCheck)
-        {
-            for (int i = 1; i < actionsToCheck; i++)
-            {
-                if (_ActionList[i].ActionMethod == typeCheck)
-                    return true;
-            }
-            return false;
-        }
-        else return false;
-    }
-
-    protected void SetMoveToPosition(Enums.ManStates state, Vector3 position)
-    {
-        State = state;
-        _TargetPos = position;
-        SetAnimation(State, -1);
-    }
-    */
-    #endregion
 
     #region Movement List Helper Function
     public void SetMovementPath(GridIndex[] path)
@@ -847,63 +760,6 @@ public abstract class ManScript : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Old_2
-    //private IEnumerator WaitForSeconds(float seconds)
-    //{
-    //    State = Enums.ManStates.Waiting;
-    //    SetAnimation(State, 0);
-    //    yield return new WaitForSeconds(seconds);
-    //    State = Enums.ManStates.None; // Will trigger next action
-    //}
-
-    //private IEnumerator WaitForRoomAccess(Guid room)
-    //{
-    //    var r = RoomManager.Ref.GetRoomData(room).RoomScript;
-    //    if (!r.GetAccessRequest(this))
-    //    {
-    //        State = Enums.ManStates.Waiting;
-    //        SetAnimation(State, 0);
-    //        yield return null;
-    //        yield return new WaitUntil(() => r.GetAccessRequest(this));
-    //    }
-    //    r.ManHasEntered(this); //Notify the room that there is now a man in the room
-    //    State = Enums.ManStates.None; // Will trigger next action
-    //}
-
-    //private IEnumerator WaitForRoomAccess(RoomScript room)
-    //{
-    //    if (!room.GetAccessRequest(this))
-    //    {
-    //        State = Enums.ManStates.Waiting;
-    //        SetAnimation(State, 0);
-    //        yield return null;
-    //        yield return new WaitUntil(() => room.GetAccessRequest(this));
-    //    }
-    //    room.ManHasEntered(this); //Notify the room that there is now a man in the room
-    //    State = Enums.ManStates.None; // Will trigger next action
-    //}
-
-    //private IEnumerator WaitForDoor(Room_Elevator room, bool closed)
-    //{
-    //    Enums.ManStates s = State;
-    //    State = Enums.ManStates.Waiting;
-    //    SetAnimation(State, 0);
-    //    yield return new WaitUntil(() => room.CheckDoor(closed) == false);
-    //    yield return new WaitUntil(() => room.CheckDoor(closed));
-
-    //    State = s;
-    //    SetAnimation(s, 0);
-    //}
-
-    //private IEnumerator WaitForElevatorMovement(Room_Elevator room)
-    //{
-    //    State = Enums.ManStates.Waiting;
-    //    SetAnimation(State, 0);
-    //    yield return new WaitUntil(() => !room.BoxMoving); //Wait until the elevator box has reached it's destination
-    //    State = Enums.ManStates.None;
-    //}
     #endregion
 
     #endregion

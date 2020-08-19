@@ -137,16 +137,16 @@ public class Room_Bedroom : RoomScript
     {
         if (Cleanliness < cleanlinessThreshhold * 0.5f)
             guest.ChangeHappiness(-5 * Time.deltaTime);
-        if ((int)guest.GetMood() < 50)
+        if (guest.GetHappiness() < 50)
         {
             guest.delayTimer += Time.deltaTime;
             if (guest.delayTimer >= 1)
             {
                 guest.delayTimer = 0;
-            }
-            if (UnityEngine.Random.Range(0, 100) >= 80/*Here we want a guest general stat for laziness. Less lazy people will have a higher chance to go do something, but also get sad faster.*/)
-            {
-                guest.FindEntertainment();
+                if (UnityEngine.Random.Range(0, 100) >= 80/*Here we want a guest general stat for laziness. Less lazy people will have a higher chance to go do something, but also get sad faster.*/)
+                {
+                    guest.FindEntertainment();
+                }
             }
         }
         else
@@ -172,10 +172,12 @@ public class Room_Bedroom : RoomScript
         RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
         RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+        RoomData.ReservedSlots = new Container<Guid, bool>[RoomDefData.ManSlotCount];
         RoomData.RoomScript = this;
         RoomData.RoomDescription = RoomDefData.RoomDescription;
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
+        for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ReservedSlots[i] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
         RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(RoomDefData.RoomSize, leftMostIndex);
 

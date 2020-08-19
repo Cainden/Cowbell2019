@@ -20,7 +20,8 @@ public abstract class Room_WorkQuarters : RoomScript
             return;
         if (ManManager.Ref.IsManTypeOf<ManScript_Worker>(manId))
         {
-            ManManager.Ref.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
+            //ManManager.Ref.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
+            (ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole();
             (ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AddToDic(RoomRole, GetRoleFunction);
         }
     }

@@ -98,18 +98,20 @@ public class RoomScript : MonoBehaviour
 
     public virtual bool RoomHasFreeManSlots(Guid manId)
     {
-        foreach (Guid g in RoomData.ManSlotsAssignments)
+        for(int i = 0; i < RoomData.ManSlotCount; i++)
         {
-            if (g == Guid.Empty) return (true);
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty || RoomData.ReservedSlots[i].object1 == manId))
+                return true;
         }
         return (false);
     }
 
     public virtual bool RoomHasFreeManSlots(ManScript man)
     {
-        foreach (Guid g in RoomData.ManSlotsAssignments)
+        for (int i = 0; i < RoomData.ManSlotCount; i++)
         {
-            if (g == Guid.Empty) return (true);
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty || RoomData.ReservedSlots[i].object1 == man.ManData.ManId))
+                return true;
         }
         return (false);
     }
@@ -117,9 +119,10 @@ public class RoomScript : MonoBehaviour
 
     public bool AllManSlotsAreEmpty()
     {
-        foreach (Guid g in RoomData.ManSlotsAssignments)
+        for (int i = 0; i < RoomData.ManSlotCount; i++)
         {
-            if (g != Guid.Empty) return (false);
+            if (RoomData.ManSlotsAssignments[i] != Guid.Empty || (RoomData.ReservedSlots[i].object1 != Guid.Empty))
+                return false;
         }
         return (true);
     }
@@ -128,7 +131,7 @@ public class RoomScript : MonoBehaviour
     {
         for (int i = 0; i < RoomData.ManSlotCount; i++)
         {
-            if (RoomData.ManSlotsAssignments[i] == Guid.Empty)
+            if (RoomData.ManSlotsAssignments[i] == Guid.Empty && (RoomData.ReservedSlots[i].object1 == Guid.Empty))
             {
                 return (i);
             }
@@ -139,6 +142,26 @@ public class RoomScript : MonoBehaviour
     public int GetFreeManSlotIndex(Guid ManId)
     {
         return GetFreeManSlotIndex(ManManager.Ref.GetManData(ManId).ManScript);
+    }
+
+    public int GetReservedSlotIndex(Guid manId)
+    {
+        for(int i = 0; i < RoomData.ManSlotCount; i++)
+        {
+            if (RoomData.ReservedSlots[i].object1 == manId)
+                return i;
+        }
+        return -1;
+    }
+
+    public bool GetReservedSlotAssignedByPlayer(Guid manId)
+    {
+        for (int i = 0; i < RoomData.ManSlotCount; i++)
+        {
+            if (RoomData.ReservedSlots[i].object1 == manId)
+                return RoomData.ReservedSlots[i].object2;
+        }
+        return false;
     }
 
     public bool RoomContainsMan(Guid manId)
@@ -162,8 +185,23 @@ public class RoomScript : MonoBehaviour
 
     public virtual void AssignManToRoomSlot(Guid manId, int slotIndex, bool assignedByPlayer)
     {
+        if (RoomData.ReservedSlots[slotIndex].object1 != Guid.Empty && RoomData.ReservedSlots[slotIndex].object1 != manId)
+            Debug.LogError("Room Slot Assignment Attempted in a reserved slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
         RoomData.ManSlotsAssignments[slotIndex] = manId;
+        RoomData.ReservedSlots[slotIndex] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
+
         RoomIsActive = true; // General sign that there is a worker
+    }
+
+    public virtual void ReserveSlotForMan(Guid manId, int slotIndex, bool assignedByPlayer)
+    {
+        if (RoomData.ManSlotsAssignments[slotIndex] != Guid.Empty)
+            Debug.LogError("Attempted to reserve an already occupied slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
+        if (RoomData.ReservedSlots[slotIndex].object1 != Guid.Empty && RoomData.ReservedSlots[slotIndex].object1 != manId)
+            Debug.LogError("Room Slot Reservation Attempted in an already reserved slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
+        RoomData.ReservedSlots[slotIndex].object1 = manId;
+        RoomData.ReservedSlots[slotIndex].object2 = assignedByPlayer;
+
     }
 
     public virtual void RemoveManFromRoomSlot(Guid manId)

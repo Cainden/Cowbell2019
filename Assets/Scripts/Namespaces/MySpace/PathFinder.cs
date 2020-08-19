@@ -17,6 +17,8 @@ namespace MySpace
             List<GridIndex> firstPath = new List<GridIndex>();
             List<GridIndex> reachedIndexes = new List<GridIndex>();
             firstPath.Add(startIndex);
+            if (startIndex == endIndex)
+                return firstPath;
             reachedIndexes.Add(startIndex);
             allPaths.Add(firstPath);
 

@@ -229,6 +229,11 @@ public class GridManager : MonoBehaviour
         if (linkRoom)
             LinkRoom(Occupiedindizes); // Calculate and store movements to other grid elements
     }    
+
+    public void RegisterGridIndexToRoom(Guid roomId, GridIndex index, Enums.RoomSizes roomSize)
+    {
+        _GridData[index.X, index.Y, index.Z] = new TileData(true, roomId, roomSize);
+    }
     
     public bool IsGridAreaFree(GridIndex leftMostIndex, Enums.RoomSizes roomSize)
     {
