@@ -9,7 +9,7 @@ public class TimeOfDayTracker : MonoBehaviour
 
 	[HideInInspector]
 	public static TimeOfDayTracker Ref { get; private set; } // For external access of script
-	public Clock_display clockDisp;
+	//public Clock_display clockDisp;
 	[SerializeField] TMP_Text dayText;
 
 	void Awake()

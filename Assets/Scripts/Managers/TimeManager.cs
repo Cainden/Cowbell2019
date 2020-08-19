@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
     [SerializeField] bool showTimeUI = true;
     
     public static TimeManager Ref { get; private set; } // For external access of script
-	public Clock_display clockDisp;
+	//public Clock_display clockDisp;
 	/// number of seconds in a day  86400
 	public float dayCycleLength = 1440; //minutes
 
@@ -25,6 +25,8 @@ public class TimeManager : MonoBehaviour
 
     /// current time in game time (0 - dayCycleLength).  
     internal static float currentCycleTime;
+
+    public static int numberOfDays = 0;
 
     /// number of hours per day.  
     private float hoursPerDay = 24;
@@ -137,7 +139,7 @@ public class TimeManager : MonoBehaviour
         HourTime = dayCycleLength / hoursPerDay;
         MinuteTime = HourTime / 60;
         SecondsTime = MinuteTime / 60;
-		dayTrack.setDay(dayCounter.ToString());
+		//dayTrack.setDay(dayCounter.ToString());
 		currentCycleTime = dayStartHour * HourTime;
 
         if (sun != null)
