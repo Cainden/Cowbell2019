@@ -10,7 +10,6 @@ public class EndGamePanel : MonoBehaviour
     public GameObject EndPanel;
     [SerializeField] int maxDays = 3;
     public static int numberOfDays;
-    [SerializeField] int MScene;
 
     private void Update()
     {
@@ -33,7 +32,6 @@ public class EndGamePanel : MonoBehaviour
 
     public void ToMainMenu()
     {
-        
         EndPanel.gameObject.SetActive(false);
         PlaySpeed();
         LoadMainScene();
