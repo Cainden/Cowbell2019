@@ -78,6 +78,8 @@ public class ManManager : MonoBehaviour
         //Set Stats
         script.specialStats = data.specialtyStats;
         script.genStats = data.generalStats;
+        script.SetCharacterSprites(CharacterSwaper.CharLabel.Neptune_Bell);
+
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
@@ -99,6 +101,7 @@ public class ManManager : MonoBehaviour
 
         //Set Stats
         script.genStats = data.generalStats;
+        script.SetCharacterSprites(CharacterSwaper.CharLabel.Neptune_Hawaiin);
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
@@ -238,7 +241,11 @@ public class ManManager : MonoBehaviour
     {
         Debug.Assert(IsManExisting(manId));
         if (!(_ManList[manId].ManScript is T))
-            Debug.LogError("Given manId " + manId + ", was not the given type: " + typeof(T) + "!");
+        {
+            Debug.LogWarning("Given manId " + manId + ", was not the given type: " + typeof(T) + "!");
+            return new ManRef<T>();
+        }
+            
         return new ManRef<T>(_ManList[manId].ManObject, (T)_ManList[manId].ManScript);
     }
 

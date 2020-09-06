@@ -25,6 +25,9 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
     public override SpecialtyStat.StatType[] specialStatsUsed => new SpecialtyStat.StatType[1] { SpecialtyStat.StatType.Physicality };
 
+    public override CharacterSwaper.CharLabel Outfit => CharacterSwaper.CharLabel.Jupiter_Maid;
+
+
     public override void RemoveManFromRoomSlot(Guid manId)
     {
         base.RemoveManFromRoomSlot(manId);

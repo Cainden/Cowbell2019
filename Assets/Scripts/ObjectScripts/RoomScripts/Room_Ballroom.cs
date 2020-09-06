@@ -18,6 +18,8 @@ public class Room_Ballroom : Room_WorkQuarters
 
     public override SpecialtyStat.StatType[] specialStatsUsed => new SpecialtyStat.StatType[1] { SpecialtyStat.StatType.Physicality };
 
+    public override CharacterSwaper.CharLabel Outfit => CharacterSwaper.CharLabel.Saturn_Hawiian;
+
     public override void AssignManToRoomSlot(Guid manId, int slotIndex, bool assignedByPlayer)
     {
         base.AssignManToRoomSlot(manId, slotIndex, assignedByPlayer);

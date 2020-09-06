@@ -16,6 +16,7 @@ public abstract class ManScript : MonoBehaviour
     public string ManName;
 
     [SerializeField] GameObject MeshParent;
+    [SerializeField] protected CharacterSwaper CharSwapper;
 
     #endregion
 
@@ -81,6 +82,7 @@ public abstract class ManScript : MonoBehaviour
         ManName = NameFactory.GetNewFirstName() + " " + NameFactory.GetNewLastName();
         animator.speed = (1 + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * 2;
         moodScript = GetComponentInChildren<MoodBubbleScript>();
+        CharSwapper = GetComponentInChildren<CharacterSwaper>();
 
         StartCoroutine(MoveToLobby(GameManager.StartPath));
         delayTimer = 0;
@@ -126,6 +128,11 @@ public abstract class ManScript : MonoBehaviour
         //Debug.Assert(_MaterialNormal != null);
         //Debug.Assert(_MaterialHighlight != null);
         //Debug.Assert(_MaterialGhost != null);
+    }
+
+    public virtual void SetCharacterSprites(CharacterSwaper.CharLabel charLabel)
+    {
+        CharSwapper.SetCharacter(charLabel);
     }
 
     private void SetMaterials()
