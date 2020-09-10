@@ -229,6 +229,11 @@ public class GridManager : MonoBehaviour
         if (linkRoom)
             LinkRoom(Occupiedindizes); // Calculate and store movements to other grid elements
     }    
+
+    public void RegisterGridIndexToRoom(Guid roomId, GridIndex index, Enums.RoomSizes roomSize)
+    {
+        _GridData[index.X, index.Y, index.Z] = new TileData(true, roomId, roomSize);
+    }
     
     public bool IsGridAreaFree(GridIndex leftMostIndex, Enums.RoomSizes roomSize)
     {
@@ -267,9 +272,14 @@ public class GridManager : MonoBehaviour
         Vector3 vPos = new Vector3(index.X * Constants.GridElementWidth,
                                    index.Y * Constants.GridElementHeight,
                                    index.Z * Constants.GridElementDepth) - Constants.GridCenterPos;
-        
+
         // Applying the offset between underground and above
-        if (index.Y >= Constants.GridSurfaceY) vPos.y += (Constants.GridElementHeight / 2.0f);
+        if (index.Y >= Constants.GridSurfaceY) 
+            vPos.y += (Constants.GridElementHeight / 2.0f);
+        else
+        {
+            vPos.y -= (Constants.UnderWorldOffset);
+        }
 
         return vPos;
     }

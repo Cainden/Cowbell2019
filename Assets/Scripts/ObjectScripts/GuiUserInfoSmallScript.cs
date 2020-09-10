@@ -11,7 +11,7 @@ public class GuiUserInfoSmallScript : MonoBehaviour
     bool popUp;
 
     private readonly float PausingAnimTime = 3.5f;//may need to be adjusted based on idle animation
-    private readonly float PausingObjOffTime = 3.0f;//if animation gets cut off by object vanishing make this higher number
+    private readonly float PausingObjOffTime = 5.0f;//if animation gets cut off by object vanishing make this higher number
 
     void Start ()
     {

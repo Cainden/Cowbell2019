@@ -13,15 +13,20 @@ public abstract class Room_WorkQuarters : RoomScript
 
     public abstract WorkQuartersType WorkQuarterType { get; }
 
+    public abstract CharacterSwaper.CharLabel Outfit { get; }
+
     public override void AssignManToRoomSlot(System.Guid manId, int slotIndex, bool assignedByPlayer)
     {
         base.AssignManToRoomSlot(manId, slotIndex, assignedByPlayer);
         if (!assignedByPlayer)
             return;
-        if (ManManager.Ref.IsManTypeOf<ManScript_Worker>(manId))
+        ManScript_Worker worker = ManManager.Ref.GetManData<ManScript_Worker>(manId).ManScript;
+        if (worker != null)
         {
-            ManManager.Ref.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
-            (ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AddToDic(RoomRole, GetRoleFunction);
+            //ManManager.Ref.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
+            worker.AssignRole();
+            worker.AddToDic(RoomRole, GetRoleFunction);
+            worker.SetCharacterSprites(Outfit);
         }
     }
 }

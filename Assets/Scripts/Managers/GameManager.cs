@@ -276,13 +276,14 @@ namespace MySpace
 {
     public delegate void MoodEventFunc(ref float value, ref int num);
 
-    [System.Serializable]
+    [Serializable]
     public struct RoleInfo
     {
         public Enums.ManRole role;
 
         [Tooltip("Paid Daily")]
         public float incomeMinimum, incomeMaximum;
+        public CharacterSwaper.CharLabel roleModel;
     }
 
     public struct RevenueInfo
@@ -294,14 +295,14 @@ namespace MySpace
         /// </summary>
         public float effect;
         public RevenueType revenueType;
-        public System.Guid objectId;
+        public Guid objectId;
 
         /// <summary>
         /// If the revenue is estimated or simply a hard known value. Estimated values will come from non-daily sources, like a bar or casino that relies on guest usage.
         /// </summary>
         public bool estimated;
 
-        public RevenueInfo(float value, RevenueType type, System.Guid id, bool estimated = false)
+        public RevenueInfo(float value, RevenueType type, Guid id, bool estimated = false)
         {
             effect = value;
             revenueType = type;

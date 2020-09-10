@@ -31,6 +31,7 @@ namespace MySpace
 
         public Vector3[] ManSlotsPositions { get; set; } // World positions of the avatar slots
         public Quaternion[] ManSlotsRotations { get; set; } // World rotations of the avatar slots
+        public Container<Guid, bool>[] ReservedSlots { get; set; }
         public Guid[] ManSlotsAssignments { get; set; } // Guids of avatars currently assigned to be in this room
         public Guid[] OwnerSlotsAssignments { get; set; } // Guids of avatars assigned as owners to this room
         public Enums.ManStates[] ManWorkingStates { get; set; }

@@ -132,7 +132,24 @@ public class ManScript_Guest : ManScript
 
     public void FindEntertainment()
     {
-        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(RoomManager.Ref.GetAllActiveWorkQuartersOfCategory(Room_WorkQuarters.WorkQuartersType.Entertainment), ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
+        var rooms = RoomManager.Ref.GetAllActiveWorkQuartersOfCategory(Room_WorkQuarters.WorkQuartersType.Entertainment);
+        if (rooms == null)
+        {
+            print("returned null array");
+            if (moodScript.OverrideMood != Enums.ManMood.Bored)
+                moodScript.DisplayMood(Enums.ManMood.Bored);
+            return;
+        }
+        else if (rooms.Length == 0)
+        {
+            print("return array length of 0");
+            if (moodScript.OverrideMood != Enums.ManMood.Bored)
+                moodScript.DisplayMood(Enums.ManMood.Bored);
+            return;
+        }
+        if (moodScript.OverrideMood == Enums.ManMood.Bored)
+            moodScript.ResolveMood(Enums.ManMood.Bored);
+        ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(rooms, ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
     }
 
     #region Rent Methods

@@ -152,7 +152,7 @@ public class WorkerInfoWindowScript : MonoBehaviour
 
             if (guest != null)
             {
-                happinessImage.fillAmount = guest.GetHappiness() * 0.01f;//multiply by 0.01 here because mood is from 0 to 100, fill amount goes from 0 to 1.
+                genstat2FrontSlider.fillAmount = guest.GetHappiness() * 0.01f;//multiply by 0.01 here because mood is from 0 to 100, fill amount goes from 0 to 1.
                 happinessImage.sprite = guest.GetSpriteFromMood();
             }
 

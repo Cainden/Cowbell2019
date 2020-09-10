@@ -13,6 +13,7 @@ namespace MySpace
         public Enums.ManTypes ManType { get; set; }
         public string ManFirstName { get; set; }
         public string ManLastName { get; set; }
+        public GridIndex CurrIndex { get; set; }
 
         public RoomInstanceData OwnedRoomRef { get; set; } = null;
 
@@ -38,6 +39,7 @@ namespace MySpace
         public Enums.ManTypes manType;
         public string manFirstName;
         public string manLastName;
+        //public GridIndex currIndex; //Will probably need this later once we implement a save system.
 
         //For stats display on the hire list
         //public float physicality, professionalism, intelligence; //base stats
@@ -53,7 +55,8 @@ namespace MySpace
         public Enums.ManTypes manType;
         public string manFirstName;
         public string manLastName;
-
+        //public GridIndex currIndex; //Will probably need this later once we implement a save system.
+        
         //public float dirtiness;
         public GeneralStat[] generalStats;
     }

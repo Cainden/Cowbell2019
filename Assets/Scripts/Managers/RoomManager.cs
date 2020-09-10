@@ -133,9 +133,11 @@ public class RoomManager : MonoBehaviour
         RoomData.ManSlotsRotations = new Quaternion[RoomDefData.ManSlotCount]; // Data will be set by object script on Start()
         RoomData.ManSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
         RoomData.OwnerSlotsAssignments = new Guid[RoomDefData.ManSlotCount];
+        RoomData.ReservedSlots = new Container<Guid, bool>[RoomDefData.ManSlotCount];
         RoomData.RoomDescription = RoomDefData.RoomDescription;
 
         for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ManSlotsAssignments[i] = Guid.Empty;
+        for (int i = 0; i < RoomData.ManSlotCount; i++) RoomData.ReservedSlots[i] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
         RoomData.ManWorkingStates = RoomDefData.ManWorkingStates;
         RoomData.CoveredIndizes = GridManager.Ref.GetOccupiedindizes(RoomDefData.RoomSize, leftMostIndex);
 
