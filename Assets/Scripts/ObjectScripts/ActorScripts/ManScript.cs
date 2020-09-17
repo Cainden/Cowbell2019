@@ -135,6 +135,8 @@ public abstract class ManScript : MonoBehaviour
         CharSwapper.SetCharacter(charLabel);
     }
 
+    public abstract void AssignRandomCharacterSpriteByCharacterType();
+
     private void SetMaterials()
     {
         //HAVE THIS DISABLED FOR NOW
