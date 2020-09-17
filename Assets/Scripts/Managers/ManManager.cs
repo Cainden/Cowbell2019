@@ -78,7 +78,7 @@ public class ManManager : MonoBehaviour
         //Set Stats
         script.specialStats = data.specialtyStats;
         script.genStats = data.generalStats;
-        script.SetCharacterSprites(CharacterSwaper.CharLabel.Neptune_Bell);
+        script.AssignRandomCharacterSpriteByCharacterType();
 
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
@@ -101,7 +101,7 @@ public class ManManager : MonoBehaviour
 
         //Set Stats
         script.genStats = data.generalStats;
-        script.SetCharacterSprites(CharacterSwaper.CharLabel.Neptune_Hawaiin);
+        script.AssignRandomCharacterSpriteByCharacterType();
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
