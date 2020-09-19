@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 using System;
+using System.Linq;
 
 public class ManScript_Guest : ManScript
 {
@@ -150,6 +151,28 @@ public class ManScript_Guest : ManScript
         if (moodScript.OverrideMood == Enums.ManMood.Bored)
             moodScript.ResolveMood(Enums.ManMood.Bored);
         ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(rooms, ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
+    }
+
+    public override void AssignRandomCharacterSpriteByCharacterType()
+    {
+        int max = 0;
+        var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();
+
+        int rand = UnityEngine.Random.Range(0, max); //number from 0-(the number of possible sprites)
+        SetCharacterSprites(types[rand]);
+
+        bool CheckLabelName(CharacterSwaper.CharLabel c)
+        {
+            string[] split = c.ToString().Split('_');
+
+            //These are the three strings that guests will use
+            if (split[0] == "Mars" || split[0] == "Venus" || split[0] == "Saturn")
+            {
+                max++;
+                return true;
+            }
+            return false;
+        }
     }
 
     #region Rent Methods

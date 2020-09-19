@@ -57,6 +57,7 @@ Material:
     - Vector1_43059FF8: -0.4
     - Vector1_473F5A16: 0
     - Vector1_B759A2B7: 2.41
+    - Vector1_CC2C1CD7: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -79,9 +80,9 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_50700C13: {r: 0, g: 0.8067973, b: 1, a: 0}
-    - Color_53EC1A12: {r: 0, g: 0.9495223, b: 1, a: 0}
-    - Color_6C95A7FD: {r: 0, g: 0.027451038, b: 1, a: 0}
+    - Color_50700C13: {r: 0, g: 0.8067973, b: 1, a: 1}
+    - Color_53EC1A12: {r: 0, g: 0.9495223, b: 1, a: 1}
+    - Color_6C95A7FD: {r: 0, g: 0.027451038, b: 1, a: 1}
     - Color_BECD285B: {r: 0, g: 3.497382, b: 4, a: 0}
     - Vector3_5FE29FEE: {r: 0, g: 0, b: 0, a: 0}
     - Vector3_FBB51567: {r: 0, g: 0, b: 0, a: 0}
