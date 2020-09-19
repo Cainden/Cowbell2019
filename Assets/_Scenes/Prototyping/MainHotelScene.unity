@@ -24605,9 +24605,11 @@ MonoBehaviour:
   - role: 2
     incomeMinimum: 50
     incomeMaximum: 100
+    roleModel: 0
   - role: 3
     incomeMinimum: 60
     incomeMaximum: 120
+    roleModel: 0
   startingHoots: 1000
   workersToMake:
   - manType: 2
@@ -49059,12 +49061,12 @@ PrefabInstance:
     - target: {fileID: 3317170459314956730, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -126.700195
+      value: -126.75
       objectReference: {fileID: 0}
     - target: {fileID: 3317170459314956730, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -126.69995
+      value: -126.75
       objectReference: {fileID: 0}
     - target: {fileID: 3876095524192570760, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
