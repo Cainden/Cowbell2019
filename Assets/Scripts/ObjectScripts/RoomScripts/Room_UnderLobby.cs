@@ -11,7 +11,7 @@ public class Room_UnderLobby : RoomScript
     public void BeginNightMode()
     {
         //Display Tarot Card UI/Hit selection menu
-        NightModeManager.Ref.EnableNightMode();
+        //NightModeManager.Ref.EnableNightMode();
     }
 
     protected override void Start()
