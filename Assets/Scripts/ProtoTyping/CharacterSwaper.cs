@@ -145,10 +145,9 @@ public class CharacterSwaper : MonoBehaviour
         
     }
 
-    public Sprite GetCharSwapperSprite()
+    public Sprite GetCharSwapperSprite(int index)
     {
-        //element 2 is the body
-        return setChar[2].spriteLibrary.GetSprite(setChar[2].name, setChar[2].GetLabel());
+        return setChar[index].spriteLibrary.GetSprite(setChar[index].name, setChar[index].GetLabel());
     }
 
 }

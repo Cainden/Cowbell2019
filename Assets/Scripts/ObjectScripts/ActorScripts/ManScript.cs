@@ -140,9 +140,21 @@ public abstract class ManScript : MonoBehaviour
         return CharSwapper.GetCurrentSprite();
     }
 
-    public Sprite GetCharSwapperSprite()
+    public Sprite GetCharSwapperSprite(int index)
     {
-        return CharSwapper.GetCharSwapperSprite();
+        return CharSwapper.GetCharSwapperSprite(index);
+    }
+
+    public Sprite GetCharSwapperBodySprite()
+    {
+        //element 2 is the body
+        return CharSwapper.GetCharSwapperSprite(2);
+    }
+
+    public Sprite GetCharSwapperHeadSprite()
+    {
+        //element 3 is the head
+        return CharSwapper.GetCharSwapperSprite(3);
     }
 
     public abstract void AssignRandomCharacterSpriteByCharacterType();
