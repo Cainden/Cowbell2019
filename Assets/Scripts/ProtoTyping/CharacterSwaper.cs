@@ -113,7 +113,8 @@ public class CharacterSwaper : MonoBehaviour
 
     public CharLabel GetCurrentSprite()
     {
-        string cat = setChar[0].GetCategory();
+        //element 2 is the body
+        string cat = setChar[2].GetLabel();
         
         if (System.Enum.TryParse(cat, out CharLabel sprite))
         {
@@ -142,6 +143,12 @@ public class CharacterSwaper : MonoBehaviour
             }
         }
         
+    }
+
+    public Sprite GetCharSwapperSprite()
+    {
+        //element 2 is the body
+        return setChar[2].spriteLibrary.GetSprite(setChar[2].name, setChar[2].GetLabel());
     }
 
 }
