@@ -111,4 +111,37 @@ public class CharacterSwaper : MonoBehaviour
 
 	}
 
+    public CharLabel GetCurrentSprite()
+    {
+        string cat = setChar[0].GetCategory();
+        
+        if (System.Enum.TryParse(cat, out CharLabel sprite))
+        {
+            return sprite;
+        }
+        else
+        {
+            bool c = false;
+            for (int i = 0; i < charLabel.Length; i++)
+            {
+                if (charLabel[i] == cat)
+                {
+                    c = true;
+                    break;
+                }
+            }
+            if (c)
+            {
+                Debug.LogError("Current Category of Sprite resolver is not present in the CharLabel Enums List!");
+                return 0;
+            }
+            else
+            {
+                Debug.LogError("Current Category of the Sprite resolver is not present in the charLabel strings field in the CharacterSwapper class!");
+                return 0;
+            }
+        }
+        
+    }
+
 }
