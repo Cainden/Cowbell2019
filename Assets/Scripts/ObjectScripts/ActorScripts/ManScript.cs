@@ -135,6 +135,11 @@ public abstract class ManScript : MonoBehaviour
         CharSwapper.SetCharacter(charLabel);
     }
 
+    public CharacterSwaper.CharLabel GetCharacterSprite()
+    {
+        return CharSwapper.GetCurrentSprite();
+    }
+
     public abstract void AssignRandomCharacterSpriteByCharacterType();
 
     private void SetMaterials()
