@@ -187,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2bba84e5df2a9646ad0c8777f03ecae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeshBothOpen: {fileID: 0}
+  MeshBothOpen: {fileID: 5674607683120381880}
   MeshROpen: {fileID: 0}
   MeshLOpen: {fileID: 0}
   RoomStats:
@@ -541,6 +541,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EffectCone
       objectReference: {fileID: 0}
+    - target: {fileID: 8180704146336208093, guid: d879990557e2f27448a851086f7309ba,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d879990557e2f27448a851086f7309ba, type: 3}
 --- !u!4 &8977356118825791040 stripped
@@ -618,6 +623,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9f50c0a11d00ed4eb47d968e8728ea5, type: 3}
+--- !u!1 &5674607683120381880 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 814863538594717785, guid: e9f50c0a11d00ed4eb47d968e8728ea5,
+    type: 3}
+  m_PrefabInstance: {fileID: 5012149651559456737}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8690566602241953195 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4401604302054740554, guid: e9f50c0a11d00ed4eb47d968e8728ea5,
