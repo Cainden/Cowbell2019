@@ -5,19 +5,23 @@ using TMPro;
 
 public class TarotCardInfoScript: MonoBehaviour
 {
+    #region Inspector Variables
+    public GameObject NameInfo;
+    private TextMeshProUGUI NameText;
     public GameObject CharacterHead;
     private SpriteRenderer HeadSprite;
     public GameObject CharacterBody;
     private SpriteRenderer BodySprite;
 
     public GameObject BountyInfo;
-    public GameObject LocationInfo;
     private TextMeshProUGUI BountyText;
+    public GameObject LocationInfo;
     private TextMeshProUGUI LocationText;
-
+    #endregion
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        NameText = NameInfo.GetComponent<TextMeshProUGUI>();
         //Character Art set up
         HeadSprite = CharacterHead.GetComponent<SpriteRenderer>();
         BodySprite = CharacterBody.GetComponent<SpriteRenderer>();
@@ -26,8 +30,9 @@ public class TarotCardInfoScript: MonoBehaviour
         LocationText = LocationInfo.GetComponent<TextMeshProUGUI>();
     }
 
-    void TerotCardInfo(Sprite FillHeadSprite, Sprite FillBodySprite, string FillBountyText, string FillLocationText)
+    public void TarotCardInfo(string FillNameText, Sprite FillHeadSprite, Sprite FillBodySprite, string FillBountyText, string FillLocationText)
     {
+        NameText.text = FillNameText;
         HeadSprite.sprite = FillHeadSprite;
         BodySprite.sprite = FillBodySprite;
         BountyText.text = FillBountyText;
