@@ -255,7 +255,7 @@ GameObject:
   - component: {fileID: 2123613554305932963}
   - component: {fileID: 5639665816096465498}
   m_Layer: 0
-  m_Name: dinning
+  m_Name: dinning2Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
