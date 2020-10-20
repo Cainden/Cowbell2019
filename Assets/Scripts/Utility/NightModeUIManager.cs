@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NightModeManager : MonoBehaviour
+public class NightModeUIManager : MonoBehaviour
 {
     public GameObject NightModeStartButton;
     public GameObject NightModeUI;
