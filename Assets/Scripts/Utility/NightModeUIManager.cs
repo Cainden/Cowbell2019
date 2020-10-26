@@ -6,17 +6,34 @@ public class NightModeUIManager : MonoBehaviour
 {
     public GameObject NightModeStartButton;
     public GameObject NightModeUI;
+    public GameObject TarotPrefab;
+    public GameObject[] AvailableTarotCards;
+    public GameObject TarotCardParent;
+    public int TarotCardNumber = 5;
 
     // Start is called before the first frame update
     void Start()
     {
 
     }
-
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    private void CreateTarotCards()
+    {
+        AvailableTarotCards = new GameObject[TarotCardNumber];
+        for (int i = 0; i < TarotCardNumber; i++)
+        {
+            GameObject TarotCardCopy = Instantiate(TarotPrefab);
+            TarotCardCopy.transform.parent = TarotCardParent.transform;
+            TarotCardCopy.transform.localPosition = Vector3.zero;
+            TarotCardCopy.transform.localScale = Vector3.one;
+            AvailableTarotCards[i] = TarotCardCopy;
+        }
+        //ManManager.Ref.GetAllActiveMenOfType<ManScript_Guest>();
     }
 
     #region ButtonFuntions
@@ -28,6 +45,7 @@ public class NightModeUIManager : MonoBehaviour
     }
     public void TarotCardOpen()
     {
+        CreateTarotCards();
         //Tarot Card Open here
     }
     public void TarotCardClose()
