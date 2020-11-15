@@ -23560,7 +23560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   strtTntesity: 0
   maxIntensity: 1
-  smoothing: 0
+  smoothing: 1
   candles:
   - {fileID: 2129394868}
   - {fileID: 567152732}
