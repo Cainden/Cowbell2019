@@ -8,7 +8,7 @@ public class LightFlicker : MonoBehaviour
 	public float strtTntesity;
 	[Range(0.0f, 10f)]
 	public float maxIntensity;
-	public int smoothing = 5;
+	public int smoothing = 32;
 
 	[SerializeField]
 	List<Light> candles = new List<Light>();
@@ -22,8 +22,10 @@ public class LightFlicker : MonoBehaviour
 
 	// Start is called before the first frame update
 	void Start()
-    {
-		smoothQueue = new Queue<float>(smoothing);
+	{
+		
+
+		   smoothQueue = new Queue<float>(smoothing);
 
 		for (int i = 0; i < candles.Count; i++)
 		{
