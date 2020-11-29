@@ -48,7 +48,7 @@ public class LightFlicker : MonoBehaviour
 			smoothQueue.Enqueue(newVal);
 			lastSum += newVal;
 			candles[i].intensity = lastSum / (float)smoothQueue.Count; ;
-			Debug.Log("candle:" + candles[i].intensity);
+			//Debug.Log("candle:" + candles[i].intensity);
 		}
 
 	}
