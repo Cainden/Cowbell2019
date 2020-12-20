@@ -99,7 +99,7 @@ public class ManScript_Worker : ManScript
             States.Add(role, function);
     }
 
-    public override void AssignRandomCharacterSpriteByCharacterType()
+    public override void AssignCharacterSpriteByCharacterType()
     {
         int max = 0;
         var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();

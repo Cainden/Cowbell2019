@@ -1,6 +1,7 @@
 ﻿// Container class for avatar/man data, stored in the man object script
 using System;
 using System.Xml;
+using System.Linq;
 
 namespace MySpace
 {
@@ -20,6 +21,8 @@ namespace MySpace
         // Location
         public RoomScript AssignedRoom { get; set; }//Made this a reference variable since it will be being called much more often in order to have the men communicate with the rooms better
         public int AssignedRoomSlot { get; set; }
+
+        public CharacterSwaper.CharLabel CharSprite { get; set; }
 
         public ManInstanceData()
         {
@@ -46,6 +49,35 @@ namespace MySpace
         //public float speed, loyalty; //specialty stats
         public SpecialtyStat[] specialtyStats;
         public GeneralStat[] generalStats;
+
+        public CharacterSwaper.CharLabel sprite;
+
+        public CharacterSwaper.CharLabel GetRandomizedSprite()
+        {
+            //Left this here instead of making it stat if we ever want to use information from the character that is going to be created
+            int max = 0;
+            var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();
+
+            int rand = UnityEngine.Random.Range(0, max); //number from 0-(the number of possible sprites)
+            return types[rand];
+
+            bool CheckLabelName(CharacterSwaper.CharLabel c)
+            {
+                string[] split = c.ToString().Split('_');
+
+                //These are the three strings that workers will use
+                if (split[0] == "Jupiter" || split[0] == "Mercury" || split[0] == "Neptune")
+                {
+                    //Need another check here since workers will have additional sprites for jobs. Need to make sure it's casual clothing.
+                    if (split[1] == "Tank" || split[1] == "Red" || split[1] == "Hawiian" || split[1] == "Hawaiin" /*check for a spelling error as well*/)
+                    {
+                        max++;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 
     [Serializable]
@@ -59,5 +91,34 @@ namespace MySpace
         
         //public float dirtiness;
         public GeneralStat[] generalStats;
+
+        public CharacterSwaper.CharLabel sprite;
+
+        public CharacterSwaper.CharLabel GetRandomizedSprite()
+        {
+            //Left this here instead of making it stat if we ever want to use information from the character that is going to be created
+            int max = 0;
+            var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();
+
+            int rand = UnityEngine.Random.Range(0, max); //number from 0-(the number of possible sprites)
+            return types[rand];
+
+            bool CheckLabelName(CharacterSwaper.CharLabel c)
+            {
+                string[] split = c.ToString().Split('_');
+
+                //These are the three strings that workers will use
+                if (split[0] == "Jupiter" || split[0] == "Mercury" || split[0] == "Neptune")
+                {
+                    //Need another check here since workers will have additional sprites for jobs. Need to make sure it's casual clothing.
+                    if (split[1] == "Tank" || split[1] == "Red" || split[1] == "Hawiian" || split[1] == "Hawaiin" /*check for a spelling error as well*/)
+                    {
+                        max++;
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
 }

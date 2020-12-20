@@ -72,13 +72,14 @@ public class ManManager : MonoBehaviour
             ManId = data.manId,
             ManType = data.manType,
             ManFirstName = data.manFirstName,
-            ManLastName = data.manLastName
+            ManLastName = data.manLastName,
+            CharSprite = data.sprite
         };
 
         //Set Stats
         script.specialStats = data.specialtyStats;
         script.genStats = data.generalStats;
-        script.AssignRandomCharacterSpriteByCharacterType();
+        script.AssignCharacterSpriteByCharacterType();
 
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
@@ -96,12 +97,13 @@ public class ManManager : MonoBehaviour
             ManId = data.manId,
             ManType = data.manType,
             ManFirstName = data.manFirstName,
-            ManLastName = data.manLastName
+            ManLastName = data.manLastName,
+            CharSprite = data.sprite
         };
 
         //Set Stats
         script.genStats = data.generalStats;
-        script.AssignRandomCharacterSpriteByCharacterType();
+        script.AssignCharacterSpriteByCharacterType();
 
         _ManList[data.manId] = new ManRef<ManScript>(script.gameObject, script);
         //script.gameObject.transform.position = GridManager.Ref.GetWorldPositionFromGridIndexZOffset(Constants.NewManIncomingPath[0], Constants.GridPositionWalkZOffset);
@@ -394,7 +396,10 @@ public class ManManager : MonoBehaviour
         return;
 
         CannotAssign:
-        GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
+        if (fromPlayer)
+            GuiManager.Ref.Initiate_UserInfoSmall("Sorry, can't assign to this room!");
+        else
+            Debug.LogWarning("Attempting to move a man to a room that does not have space, or the man cannot otherwise be assigned to the room.");
     }
 
     public void RemoveManFromRoom(Guid manId)

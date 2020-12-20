@@ -106,7 +106,7 @@ namespace MySpace
         { Max=-2, Monster, None, StandardMan, Worker, Guest, MC, }
 
         public enum ManStates
-        { None, Idle, Running, Waiting, Dancing };
+        { None, Idle, Running, Waiting, Dancing, NightMode };
 
         public enum ManRole
         {

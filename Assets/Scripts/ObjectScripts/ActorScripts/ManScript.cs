@@ -97,22 +97,24 @@ public abstract class ManScript : MonoBehaviour
         StateUpdate();
         //print(GetCurrAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
     }
-
-    #region Net Revenue Calculation
+    
     protected virtual void OnEnable()
     {
         GameManager.NetRevenueCalculationEvent -= RevenueCalc;
         GameManager.NetRevenueCalculationEvent += RevenueCalc;
         GameManager.MoodCalcEvent -= MoodCalc;
         GameManager.MoodCalcEvent += MoodCalc;
+        NightModeManager.NightModeStartEvent -= NightModeStart;
+        NightModeManager.NightModeStartEvent += NightModeStart;
     }
 
     protected virtual void OnDisable()
     {
         GameManager.NetRevenueCalculationEvent -= RevenueCalc;
         GameManager.MoodCalcEvent -= MoodCalc;
+        NightModeManager.NightModeStartEvent -= NightModeStart;
     }
-
+    #region Net Revenue Calculation
     void RevenueCalc(List<RevenueInfo> list)
     {
         list.Add(new RevenueInfo(GetNetRevenueCalculation, RevenueType, ManData.ManId));
@@ -157,7 +159,7 @@ public abstract class ManScript : MonoBehaviour
         return CharSwapper.GetCharSwapperSprite(3);
     }
 
-    public abstract void AssignRandomCharacterSpriteByCharacterType();
+    public abstract void AssignCharacterSpriteByCharacterType();
 
     private void SetMaterials()
     {
@@ -193,8 +195,9 @@ public abstract class ManScript : MonoBehaviour
 
     public virtual Sprite GetSprite()
     {
-        Debug.LogWarning("GetSprite() is still returning null! Men do not have sprites yet!");
-        return null;
+        return GetCharSwapperHeadSprite();
+        //Debug.LogWarning("GetSprite() is still returning null! Men do not have sprites yet!");
+        //return null;
     }
 
     private void SetAnimatorRotation(Vector3 currDirection)
@@ -272,11 +275,28 @@ public abstract class ManScript : MonoBehaviour
         return moodScript.GetSpriteFromMood();
     }
 
+    #region Event subscriptions
+
     void MoodCalc(ref float t, ref int n)
     {
         t += (moodScript.OverrideMood == Enums.ManMood.None ? moodScript.CurrentMood : (int)moodScript.OverrideMood);
         n++;
     }
+
+    /// <summary>
+    /// This function will be called when night mode begins. Make sure to call base!
+    /// </summary>
+    protected virtual void NightModeStart()
+    {
+        SetState(Enums.ManStates.NightMode, 0);
+
+        moodScript.ResolveMood(moodScript.OverrideMood);
+
+        //Want to make all guests go to their owned rooms here, as well as all workers that are not in their quarters to go to their quarters.
+    }
+
+    #endregion
+
     #endregion
 
     #region State Methods

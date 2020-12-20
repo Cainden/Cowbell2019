@@ -153,8 +153,10 @@ public class ManScript_Guest : ManScript
         ManManager.Ref.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(rooms, ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
     }
 
-    public override void AssignRandomCharacterSpriteByCharacterType()
+    public override void AssignCharacterSpriteByCharacterType()
     {
+        SetCharacterSprites(ManData.CharSprite);
+        /*
         int max = 0;
         var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();
 
@@ -173,6 +175,21 @@ public class ManScript_Guest : ManScript
             }
             return false;
         }
+        */
+    }
+
+    protected override void NightModeStart()
+    {
+        base.NightModeStart();
+        if (!isClickable)
+            return;
+        transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(ManData.OwnedRoomRef.RoomScript.RoomData.CoveredIndizes[ManData.OwnedRoomRef.RoomScript.GetFreeManSlotIndex(this)]);
+
+        //Somehow need to make sure that the room that they are about to be assigned to has available slots
+        ManManager.Ref.MoveManToNewRoom(ManData.ManId, ManData.OwnedRoomRef.RoomId);
+        
+        MovementPath.Clear();
+        NextAction = null;
     }
 
     #region Rent Methods
