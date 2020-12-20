@@ -426,8 +426,10 @@ public class ClickManager : MonoBehaviour
 
     public void AddNewGuest(GuestConstructionData guest)
     {
-        guest.sprite = guest.GetRandomizedSprite();
-
+        var sprite = guest.GetRandomizedSprite();
+        Debug.Log("Before: " + sprite);
+        guest.sprite = sprite;
+        Debug.Log("After: " + guest.sprite);
         ManManager.Ref.bookingList.Add(guest);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest waiting!");

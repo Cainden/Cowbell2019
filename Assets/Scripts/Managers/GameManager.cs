@@ -175,7 +175,11 @@ public class GameManager : MonoBehaviour
 
     private void CreateBasicGuest()
     {
-        ClickManager.Ref.Button_Book(CreateDefaultGuest());
+        GuestConstructionData guest = CreateDefaultGuest();
+        var sprite = guest.GetRandomizedSprite();
+        guest.sprite = sprite;
+        guest.sprite = sprite;
+        ClickManager.Ref.Button_Book(guest);
         //ClickManager.Ref.AddNewGuest();
     }
 

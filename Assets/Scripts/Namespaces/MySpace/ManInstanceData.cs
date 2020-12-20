@@ -107,15 +107,11 @@ namespace MySpace
             {
                 string[] split = c.ToString().Split('_');
 
-                //These are the three strings that workers will use
-                if (split[0] == "Jupiter" || split[0] == "Mercury" || split[0] == "Neptune")
+                //These are the three strings that guests will use
+                if (split[0] == "Mars" || split[0] == "Venus" || split[0] == "Saturn")
                 {
-                    //Need another check here since workers will have additional sprites for jobs. Need to make sure it's casual clothing.
-                    if (split[1] == "Tank" || split[1] == "Red" || split[1] == "Hawiian" || split[1] == "Hawaiin" /*check for a spelling error as well*/)
-                    {
-                        max++;
-                        return true;
-                    }
+                    max++;
+                    return true;
                 }
                 return false;
             }
