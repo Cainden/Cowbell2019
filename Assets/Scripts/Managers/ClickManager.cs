@@ -407,6 +407,9 @@ public class ClickManager : MonoBehaviour
     {
         if (man.manId == Guid.Empty)
             man.manId = Guid.NewGuid();
+
+        man.sprite = man.GetRandomizedSprite();
+
         ManManager.Ref.hireList.Add(man);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Cleaner application received!");
@@ -423,6 +426,10 @@ public class ClickManager : MonoBehaviour
 
     public void AddNewGuest(GuestConstructionData guest)
     {
+        var sprite = guest.GetRandomizedSprite();
+        Debug.Log("Before: " + sprite);
+        guest.sprite = sprite;
+        Debug.Log("After: " + guest.sprite);
         ManManager.Ref.bookingList.Add(guest);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest waiting!");

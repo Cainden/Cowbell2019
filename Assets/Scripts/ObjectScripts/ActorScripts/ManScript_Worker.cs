@@ -99,8 +99,10 @@ public class ManScript_Worker : ManScript
             States.Add(role, function);
     }
 
-    public override void AssignRandomCharacterSpriteByCharacterType()
+    public override void AssignCharacterSpriteByCharacterType()
     {
+        SetCharacterSprites(ManData.CharSprite);
+        /*
         int max = 0;
         var types = (from CharacterSwaper.CharLabel c in Enum.GetValues(typeof(CharacterSwaper.CharLabel)) where CheckLabelName(c) select c).ToArray();
 
@@ -115,7 +117,7 @@ public class ManScript_Worker : ManScript
             if (split[0] == "Jupiter" || split[0] == "Mercury" || split[0] == "Neptune")
             {
                 //Need another check here since workers will have additional sprites for jobs. Need to make sure it's casual clothing.
-                if (split[1] == "Tank" || split[1] == "Red" || split[1] == "Hawiian" || split[1] == "Hawaiin" /*check for a spelling error as well*/)
+                if (split[1] == "Tank" || split[1] == "Red" || split[1] == "Hawiian" || split[1] == "Hawaiin" check for a spelling error as well)
                 {
                     max++;
                     return true;
@@ -123,6 +125,7 @@ public class ManScript_Worker : ManScript
             }
             return false;
         }
+        */
     }
 
     #endregion
