@@ -24871,6 +24871,7 @@ MonoBehaviour:
       statType: 0
     - value: 1
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 2 Stat
     manLastName: Guy
@@ -24892,6 +24893,7 @@ MonoBehaviour:
       statType: 0
     - value: 2
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 3 stat
     manLastName: Guy
@@ -24913,6 +24915,7 @@ MonoBehaviour:
       statType: 0
     - value: 3
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 4 stat
     manLastName: Guy
@@ -24934,6 +24937,7 @@ MonoBehaviour:
       statType: 0
     - value: 4
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 5 stat
     manLastName: Guy
@@ -24955,6 +24959,7 @@ MonoBehaviour:
       statType: 0
     - value: 5
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 6 stat
     manLastName: Guy
@@ -24976,6 +24981,7 @@ MonoBehaviour:
       statType: 0
     - value: 6
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 7 stat
     manLastName: Guy
@@ -24997,6 +25003,7 @@ MonoBehaviour:
       statType: 0
     - value: 7
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 8 stat
     manLastName: Guy
@@ -25018,6 +25025,7 @@ MonoBehaviour:
       statType: 0
     - value: 8
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 9 stat
     manLastName: Guy
@@ -25039,6 +25047,7 @@ MonoBehaviour:
       statType: 0
     - value: 9
       statType: 1
+    sprite: 0
   - manType: 2
     manFirstName: 10 stat
     manLastName: Guy
@@ -25060,6 +25069,7 @@ MonoBehaviour:
       statType: 0
     - value: 10
       statType: 1
+    sprite: 0
 --- !u!4 &1050968216
 Transform:
   m_ObjectHideFlags: 0

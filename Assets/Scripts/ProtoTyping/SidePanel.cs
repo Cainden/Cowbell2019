@@ -193,6 +193,7 @@ public class SidePanel : MonoBehaviour
 
 	public void MonsterMenu()
     {
+		closeRoom();
 		closeWorkerParent();
 		closeHirePanel();
 		CloseHireList();
