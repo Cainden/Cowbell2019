@@ -24,13 +24,15 @@ public class WorkerScrollList : MonoBehaviour
 			//	Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
 			foreach (WorkerConstructionData man in ManManager.Ref.hireList)
 		{
-
+			
 
 			GameObject newButton = hireObjectPool.GetObject();
 
 			newButton.transform.SetParent(contentPanel, true);
 
 			newButton.GetComponent<WorkerToHire>().Setup(man);
+
+
 		}
 	}
 

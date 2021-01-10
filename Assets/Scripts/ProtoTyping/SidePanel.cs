@@ -64,9 +64,6 @@ public class SidePanel : MonoBehaviour
 	}
 
 
-	
-
-
     public void SetPanelOn()
     {
         openPanel = true;
@@ -196,8 +193,11 @@ public class SidePanel : MonoBehaviour
 
 	public void MonsterMenu()
     {
-
-    }
+		closeWorkerParent();
+		closeHirePanel();
+		CloseHireList();
+		closeHiredPanel();
+	}
 
     public void BellMenu()
     {
