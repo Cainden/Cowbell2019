@@ -22,6 +22,25 @@ public class ManManager : MonoBehaviour
 
     private Dictionary<Guid, ManRef<ManScript>> _ManList = new Dictionary<Guid, ManRef<ManScript>>();
 
+    #region Helper with dictionaries
+    //Here for reference on foreach loops through dictionaries
+    void Test()
+    {
+        int i = 0;
+        int random1 = 0, random2 = 0, random3 = 0;
+        int length = _ManList.Keys.Count;
+        foreach (Guid key in _ManList.Keys)
+        {
+            if (i == random1)
+            {
+                //Index the dictionary using the key
+                //_ManList[key].ManScript
+            }
+            i++;
+        }
+    }
+    #endregion
+
     [HideInInspector]
     public List<WorkerConstructionData> hireList = new List<WorkerConstructionData>();
     [HideInInspector]
@@ -41,6 +60,8 @@ public class ManManager : MonoBehaviour
     }
 
     #endregion
+
+    
 
     void Awake()
     {
