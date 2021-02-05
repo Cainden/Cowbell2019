@@ -19,7 +19,7 @@ public class CharacterSwaper : MonoBehaviour
         Mars_Red,
         Mars_Hawiian,
         Mercury_Tank,
-        Mercury_Tank2,
+        
         Mercury_Bell,
         Mercury_Red,
         Mercury_Maid,
@@ -51,7 +51,7 @@ public class CharacterSwaper : MonoBehaviour
             "Mars_Red",
             "Mars_Hawaiin",
             "Mercury_Tank",
-            "Mercury_Tank",
+           
             "Mercury_Bell",
             "Mercury_Red",
             "Mercury_Maid",
