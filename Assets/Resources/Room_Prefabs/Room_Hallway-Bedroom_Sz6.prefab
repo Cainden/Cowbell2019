@@ -257,7 +257,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225431207448887128}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 6.243, y: 1.798, z: 2.6035}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4290223459029248}
@@ -551,6 +551,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Hallway3UP_3Doors_NO_DOORS
+      objectReference: {fileID: 0}
+    - target: {fileID: 8131782194069995734, guid: 82fd705bc68cff74e858d19e2317cfac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82fd705bc68cff74e858d19e2317cfac, type: 3}
