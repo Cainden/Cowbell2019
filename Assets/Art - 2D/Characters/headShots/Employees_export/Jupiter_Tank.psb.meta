@@ -61,6 +61,7 @@ ScriptedImporter:
     maxTextureSizeSet: 0
     compressionQualitySet: 0
     textureFormatSet: 0
+    applyGammaDecoding: 0
   spriteImportData:
   - name: 
     originalName: 
@@ -171,13 +172,6 @@ ScriptedImporter:
   characterMode: 1
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: Head
-    spriteName: Head
-    isGroup: 0
-    parentIndex: -1
-    spriteID: ec0abea571d013740848c1c328d653d9
-    layerID: 4
-    mosaicPosition: {x: 4, y: 4}
   - name: Hat
     spriteName: Hat
     isGroup: 0
@@ -185,6 +179,13 @@ ScriptedImporter:
     spriteID: 31fcb041c09bd5d4399b6672f9693278
     layerID: 2
     mosaicPosition: {x: 386, y: 396}
+  - name: Head
+    spriteName: Head
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ec0abea571d013740848c1c328d653d9
+    layerID: 4
+    mosaicPosition: {x: 4, y: 4}
   - name: body
     spriteName: body
     isGroup: 0

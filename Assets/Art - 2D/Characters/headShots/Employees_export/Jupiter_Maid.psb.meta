@@ -61,6 +61,7 @@ ScriptedImporter:
     maxTextureSizeSet: 0
     compressionQualitySet: 0
     textureFormatSet: 0
+    applyGammaDecoding: 0
   spriteImportData:
   - name: 
     originalName: 
@@ -129,7 +130,7 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     parentGroupIndex: -1
-    uvTransform: {x: -146, y: 134}
+    uvTransform: {x: -144, y: 134}
   - name: body
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -171,13 +172,6 @@ ScriptedImporter:
   characterMode: 1
   mosaicPSDLayers: []
   rigPSDLayers:
-  - name: Head
-    spriteName: Head
-    isGroup: 0
-    parentIndex: -1
-    spriteID: d55c8a62597c25246936bd8ea28d67fc
-    layerID: 4
-    mosaicPosition: {x: 4, y: 4}
   - name: Hat
     spriteName: Hat
     isGroup: 0
@@ -185,6 +179,13 @@ ScriptedImporter:
     spriteID: a0374ad8b562e0340bc6ebf9e48f1e2a
     layerID: 2
     mosaicPosition: {x: 4, y: 396}
+  - name: Head
+    spriteName: Head
+    isGroup: 0
+    parentIndex: -1
+    spriteID: d55c8a62597c25246936bd8ea28d67fc
+    layerID: 4
+    mosaicPosition: {x: 4, y: 4}
   - name: body
     spriteName: body
     isGroup: 0
