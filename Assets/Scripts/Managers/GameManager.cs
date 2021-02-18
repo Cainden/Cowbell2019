@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define hootelDevMode
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
@@ -92,7 +94,10 @@ public class GameManager : MonoBehaviour
         //set when guests start ariving
         MySpace.Events.EventManager.AddEventTriggerToGameTime((hourMinArival - 1), 0, 0, RandomGuestArival, true);
         MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
+
+#if (!hootelDevMode)
         DebugMenu.SetPanelActive(false);
+#endif
         GameSpeed = 1;
 
         foreach (RoleInfo r in roles)
@@ -106,7 +111,7 @@ public class GameManager : MonoBehaviour
                 });
         }
 
-        //Might need to change this if loading a save
+        //TODO:Might need to change this if loading a save
         WalletManager.SetHoots(1000);
         foreach (WorkerConstructionData d in workersToMake)
         {
@@ -120,6 +125,7 @@ public class GameManager : MonoBehaviour
     {
         return Mathf.RoundToInt(GetApproximatedRandomValue(10, 2, 0));
     }
+
     private void RandomGuestArival()
     {
         guestsRandom = UnityEngine.Random.Range(1, maxGuests); //Randomize amount of guests
@@ -133,7 +139,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region Randomness
+#region Randomness
     /// <summary>
     /// Returns a random number calculated with weight based on the standard deviation off of average given.
     /// </summary>
@@ -171,7 +177,7 @@ public class GameManager : MonoBehaviour
         //if for some reason it fails, just return the average
         return avg;
     }
-    #endregion
+#endregion
 
     private void CreateBasicGuest()
     {
@@ -242,7 +248,7 @@ public class GameManager : MonoBehaviour
         return Mathf.Clamp(Mathf.RoundToInt(GetApproximatedRandomValue(3, 2)), Ref.guestMinStayTimeDays, Ref.guestMaxStayTimeDays);
     }
 
-    #region Net Revenue Stuff
+#region Net Revenue Stuff
     //Can do more stuff with this later to access where the revenue came from or went to using the revenueinfo.
 
     //Can just use the average profit per day as the return value for any rooms that pay based on guest actions outside of a regular time interval, like casino's or gift shops, etc.
@@ -273,7 +279,7 @@ public class GameManager : MonoBehaviour
         NetRevenueCalculationEvent?.Invoke(list);
         return list;
     }
-    #endregion
+#endregion
 }
 
 namespace MySpace
@@ -362,7 +368,7 @@ namespace MySpace
         }
     }
 
-    #region Containers
+#region Containers
     public struct Container<T1, T2>
     {
         public T1 object1;
@@ -383,6 +389,6 @@ namespace MySpace
         public T3 object3;
         public T4 object4;
     }
-    #endregion
+#endregion
 }
 
