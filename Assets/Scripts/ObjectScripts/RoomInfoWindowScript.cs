@@ -22,7 +22,7 @@ public class RoomInfoWindowScript : MonoBehaviour
     private ObjectPool<StatPopUpScript> statPool;
     private ObjectPool descPool;
 
-    void Start ()
+    void Awake ()
     {
         manPool = new ObjectPool<ManPopUpScript>(Grid, poolParent, ManUIPrefab);
         statPool = new ObjectPool<StatPopUpScript>(Grid, poolParent, StatUIPrefab);
