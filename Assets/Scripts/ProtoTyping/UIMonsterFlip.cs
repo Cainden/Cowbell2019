@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 
 public class UIMonsterFlip : MonoBehaviour
 {
@@ -13,11 +13,19 @@ public class UIMonsterFlip : MonoBehaviour
 	public Image sidePanelColor;
 	public Color daycolor;
 	public Color nightColor;
+	public TextMeshProUGUI money;
+	public TextMeshProUGUI monsterMoney;
+	public TextMeshProUGUI symbols;
+	public Color textDay;
+	public Color textNight;
+	
 
 	// Start is called before the first frame update
 	void Start()
     {
-		
+		textNight = new Color32(255, 255, 255, 255);
+		textDay = money.color;
+		monsterMoney.color = textDay;
 		
     }
 
@@ -36,6 +44,9 @@ public class UIMonsterFlip : MonoBehaviour
 				i.gameObject.SetActive(true);
 			}
 			sidePanelColor.color = nightColor;
+			monsterMoney.color = textNight;
+			money.color = textNight;
+			symbols.color = textNight;
 		}
 		else
 		{
@@ -49,6 +60,9 @@ public class UIMonsterFlip : MonoBehaviour
 				i.gameObject.SetActive(false);
 			}
 			sidePanelColor.color = daycolor;
+			money.color = textDay;
+			monsterMoney.color = textDay;
+			symbols.color = textDay;
 		}
         
     }
