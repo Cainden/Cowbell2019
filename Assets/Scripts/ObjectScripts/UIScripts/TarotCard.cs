@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TarotCardInfoScript: MonoBehaviour
+[RequireComponent(typeof(Animator))]
+public class TarotCard : MonoBehaviour
 {
     #region Inspector Variables
     public GameObject NameInfo;
@@ -17,8 +18,23 @@ public class TarotCardInfoScript: MonoBehaviour
     private TextMeshProUGUI BountyText;
     public GameObject LocationInfo;
     private TextMeshProUGUI LocationText;
+
+    private Animator CardAnimator;
+    private bool flipping;
     #endregion
+
+    private void Update()
+    {
+		
+    }
+
     // Start is called before the first frame update
+    void Start()
+    {
+        CardAnimator = GetComponent<Animator>();
+        flipping = false;
+    }
+
     void Awake()
     {
         NameText = NameInfo.GetComponent<TextMeshProUGUI>();
@@ -37,5 +53,16 @@ public class TarotCardInfoScript: MonoBehaviour
         BodySprite.sprite = FillBodySprite;
         BountyText.text = FillBountyText;
         LocationText.text = FillLocationText;
+    }
+
+    public void Flip()
+    {
+        if (CardAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
+        {
+            flipping = true;
+            CardAnimator.SetBool("CardRevealed", !CardAnimator.GetBool("CardRevealed"));
+            CardAnimator.SetTrigger("FlipCard");
+            Debug.Log("Flipping a card!");
+        }
     }
 }

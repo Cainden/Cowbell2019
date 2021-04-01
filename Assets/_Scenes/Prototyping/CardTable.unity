@@ -591,6 +591,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &408547407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8312020811092421605, guid: 905e8fb3332c1e544bebc23fcb1857d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1741588037}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408547404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94049cee39487b342a1dcf4a4abeb764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &408547408
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -670,7 +682,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beffdb74028b1d5489672a2cbf12e965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardflip: 0
+  TarotCards:
+  - {fileID: 1277571444}
+  - {fileID: 1710760806}
+  - {fileID: 408547407}
 --- !u!1001 &770188375
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1000,25 +1015,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 154706173}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &1277571443
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+--- !u!114 &1277571444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8312020811092421605, guid: 905e8fb3332c1e544bebc23fcb1857d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 154706173}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277571441}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7b8f70052f3dc834686923e78d6f3f08, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94049cee39487b342a1dcf4a4abeb764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1277571445
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1063,6 +1071,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1710760806 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8312020811092421605, guid: 905e8fb3332c1e544bebc23fcb1857d7,
+    type: 3}
+  m_PrefabInstance: {fileID: 770188375}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1710760803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94049cee39487b342a1dcf4a4abeb764, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &1710760807
 BoxCollider:
   m_ObjectHideFlags: 0

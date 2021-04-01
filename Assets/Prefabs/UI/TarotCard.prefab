@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 3722648625684817980}
   - component: {fileID: 1986946107490427108}
   - component: {fileID: 8312020811092421605}
+  - component: {fileID: 2631449548862037327}
   m_Layer: 5
   m_Name: TarotCard
   m_TagString: Untagged
@@ -489,6 +490,27 @@ MonoBehaviour:
   CharacterBody: {fileID: 876749390550124258}
   BountyInfo: {fileID: 1063229436269116046}
   LocationInfo: {fileID: 3339634843043880420}
+  CardAnimator: {fileID: 0}
+  CardFlipped: 0
+--- !u!95 &2631449548862037327
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3284066018613694212}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7b8f70052f3dc834686923e78d6f3f08, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3339634843043880420
 GameObject:
   m_ObjectHideFlags: 0
