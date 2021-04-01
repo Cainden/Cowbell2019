@@ -18,8 +18,7 @@ public class CharacterSwaper : MonoBehaviour
         Mars_Tank,
         Mars_Red,
         Mars_Hawiian,
-        Mercury_Tank,
-        
+        Mercury_Tank,      
         Mercury_Bell,
         Mercury_Red,
         Mercury_Maid,
@@ -37,7 +36,18 @@ public class CharacterSwaper : MonoBehaviour
         Neptune_Maid,
         Neptune_Hawiian,
         Neptune_Handy,
-    }
+		Exercise_Jupiter,
+		Exercise_Mercury,
+		Exercise_Neptune,
+		Exercise_Pluto,
+		Bellhop_Pluto,
+		Handy_Pluto,
+		Hawaiin_Pluto,
+		Maid_Pluto,
+		RedD_Pluto,
+		Tank_Pluto,
+
+	}
 
 	static string[] charLabel = 
         {
@@ -50,8 +60,7 @@ public class CharacterSwaper : MonoBehaviour
             "Mars_Tank",
             "Mars_Red",
             "Mars_Hawaiin",
-            "Mercury_Tank",
-           
+            "Mercury_Tank",          
             "Mercury_Bell",
             "Mercury_Red",
             "Mercury_Maid",
@@ -68,8 +77,17 @@ public class CharacterSwaper : MonoBehaviour
             "Neptune_Red",
             "Neptune_Maid",
             "Neptune_Hawaiin",
-            "Neptune_Handy"
-        } ;
+            "Neptune_Handy",
+			"Exercise_Jupiter",
+			"Exercise_Mercury",
+			"Exercise_Neptune",
+			"Exercise_Pluto",
+			"Handy_Pluto",
+			"Hawaiin_Pluto",
+			"Maid_Pluto",
+			"RedD_Pluto",
+			"Tank_Pluto",
+		} ;
 	public SpriteResolver[] setChar = { };
 	
 	static int counter = 0;
@@ -80,8 +98,9 @@ public class CharacterSwaper : MonoBehaviour
         {
             setChar[i].SetCategoryAndLabel(setChar[i].name, charLabel[(int)j]);
             setChar[i].ResolveSpriteToSpriteRenderer();
-            if (GameManager.Debug) Debug.Log(setChar[i].GetLabel().ToString());
-        }
+			if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
+			Debug.Log(setChar[i].GetLabel().ToString());
+		}
     }
 
 	public void getCharacter( int j)
@@ -90,14 +109,15 @@ public class CharacterSwaper : MonoBehaviour
 		{
 			setChar[i].SetCategoryAndLabel(setChar[i].name, charLabel[j]);
 			setChar[i].ResolveSpriteToSpriteRenderer();
-			if (GameManager.Debug) Debug.Log(setChar[i].GetLabel().ToString());
+			if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
+			Debug.Log(setChar[i].GetLabel().ToString());
 		}
 
 	} 
 
 	public void buttonPush()
 	{
-		if(counter == 27)
+		if(counter == 35)
 		{
 			counter = 0;
 			getCharacter(counter);

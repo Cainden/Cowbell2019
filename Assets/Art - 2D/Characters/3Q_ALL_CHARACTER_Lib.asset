@@ -124,6 +124,46 @@ MonoBehaviour:
       m_Hash: 594892828
       m_Sprite: {fileID: 3950769617504604983, guid: 43373a3b202d6be4ab185335fff9b852,
         type: 3}
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: 6164672731156575628, guid: e93f69acf4a6b9840bae2d2ca2bec6e3,
+        type: 3}
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: 2309195666596149595, guid: 889a309c1984d974782b8537f5bbd779,
+        type: 3}
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: 3165968080892396071, guid: 5cf4d35670e28764596a1833a5bc879e,
+        type: 3}
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: -8741559499144758303, guid: da50a82b1e413ac478cbb77d652cc47c,
+        type: 3}
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: 1156070219519123444, guid: e17d0f49179b8b244813aae3ff6b8519,
+        type: 3}
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: -8149563506080150973, guid: df62d1da226c62b4f91c9330450f8384,
+        type: 3}
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: 4780516294434527796, guid: ad47e2b71c33be5429dde06a2fa85a27,
+        type: 3}
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: -6183472118614520285, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: -3543246501133315709, guid: e1ac73707a99cd44399b25f3d3679e3e,
+        type: 3}
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: 2830575660876627379, guid: ade0f63f7e92abe4295d535016c554e3,
+        type: 3}
   - m_Name: ArmFront
     m_Hash: -1232045453
     m_CategoryList:
@@ -234,6 +274,46 @@ MonoBehaviour:
     - m_Name: Neptune_Handy
       m_Hash: 594892828
       m_Sprite: {fileID: -4050042574023365583, guid: 43373a3b202d6be4ab185335fff9b852,
+        type: 3}
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: -4722444003754543624, guid: e93f69acf4a6b9840bae2d2ca2bec6e3,
+        type: 3}
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: -418751899863390348, guid: 889a309c1984d974782b8537f5bbd779,
+        type: 3}
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: 209825970938877173, guid: 5cf4d35670e28764596a1833a5bc879e,
+        type: 3}
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: 6037012771823110678, guid: da50a82b1e413ac478cbb77d652cc47c,
+        type: 3}
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: -1513242335290368727, guid: e17d0f49179b8b244813aae3ff6b8519,
+        type: 3}
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: -6802401801418622300, guid: df62d1da226c62b4f91c9330450f8384,
+        type: 3}
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: 440233773165251485, guid: ad47e2b71c33be5429dde06a2fa85a27,
+        type: 3}
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: -1466583238793351263, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: -3731227306574376811, guid: e1ac73707a99cd44399b25f3d3679e3e,
+        type: 3}
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: -3591182141862318366, guid: ade0f63f7e92abe4295d535016c554e3,
         type: 3}
   - m_Name: Body
     m_Hash: 2073732236
@@ -346,6 +426,46 @@ MonoBehaviour:
       m_Hash: 594892828
       m_Sprite: {fileID: 6830567920225955492, guid: 43373a3b202d6be4ab185335fff9b852,
         type: 3}
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: -7862329847369744472, guid: e93f69acf4a6b9840bae2d2ca2bec6e3,
+        type: 3}
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: -9126690311749182235, guid: 889a309c1984d974782b8537f5bbd779,
+        type: 3}
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: -1307378535581310639, guid: 5cf4d35670e28764596a1833a5bc879e,
+        type: 3}
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: 3942947191395095549, guid: da50a82b1e413ac478cbb77d652cc47c,
+        type: 3}
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: -2982563059936650766, guid: e17d0f49179b8b244813aae3ff6b8519,
+        type: 3}
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: -1998035036275147471, guid: df62d1da226c62b4f91c9330450f8384,
+        type: 3}
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: -763958998915345935, guid: ad47e2b71c33be5429dde06a2fa85a27,
+        type: 3}
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: -8017565778242431645, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: 7937040775186981874, guid: e1ac73707a99cd44399b25f3d3679e3e,
+        type: 3}
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: 6527034137981397060, guid: ade0f63f7e92abe4295d535016c554e3,
+        type: 3}
   - m_Name: ArmBack
     m_Hash: -1260384368
     m_CategoryList:
@@ -456,6 +576,197 @@ MonoBehaviour:
     - m_Name: Neptune_Handy
       m_Hash: 594892828
       m_Sprite: {fileID: -3202152811112648496, guid: 43373a3b202d6be4ab185335fff9b852,
+        type: 3}
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: 7329450491103928647, guid: e93f69acf4a6b9840bae2d2ca2bec6e3,
+        type: 3}
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: -1447357449828929636, guid: 889a309c1984d974782b8537f5bbd779,
+        type: 3}
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: 2146408710813840148, guid: 5cf4d35670e28764596a1833a5bc879e,
+        type: 3}
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: 8039482267912958844, guid: da50a82b1e413ac478cbb77d652cc47c,
+        type: 3}
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: -5707784952121832262, guid: e17d0f49179b8b244813aae3ff6b8519,
+        type: 3}
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: -2047600411729425583, guid: df62d1da226c62b4f91c9330450f8384,
+        type: 3}
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: -6618776512796989058, guid: ad47e2b71c33be5429dde06a2fa85a27,
+        type: 3}
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: 7398438474398894686, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: 5642582589348334353, guid: e1ac73707a99cd44399b25f3d3679e3e,
+        type: 3}
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: -8563701177525891554, guid: ade0f63f7e92abe4295d535016c554e3,
+        type: 3}
+  - m_Name: LegBack
+    m_Hash: -2125183790
+    m_CategoryList:
+    - m_Name: Jupiter_Tank
+      m_Hash: 153361099
+      m_Sprite: {fileID: 7254893611193038306, guid: aff776069ee2fc34b854d39376542296,
+        type: 3}
+    - m_Name: Jupiter_Bell
+      m_Hash: -686994059
+      m_Sprite: {fileID: -1241437301660972074, guid: eb6da4e8ef0e05f4699f04ab9b354473,
+        type: 3}
+    - m_Name: Jupiter_Red
+      m_Hash: 487112937
+      m_Sprite: {fileID: -5669038812041087446, guid: 3a4f35196fbb54a419abef26b295c665,
+        type: 3}
+    - m_Name: Jupiter_Maid
+      m_Hash: -70547064
+      m_Sprite: {fileID: 9176627814038369666, guid: e1c8c4fcbd95ec746bf7f14bceb0e545,
+        type: 3}
+    - m_Name: Jupiter_Hawiian
+      m_Hash: 418943844
+      m_Sprite: {fileID: 4787773386482187108, guid: 7834901a5a11bf14f8f8f5e1c7e4deb3,
+        type: 3}
+    - m_Name: Jupiter_Handy
+      m_Hash: -705921157
+      m_Sprite: {fileID: -6473211950822717214, guid: b345be31b8ae1464c8c7b2ae1f697b13,
+        type: 3}
+    - m_Name: Mars_Tank
+      m_Hash: -1242336841
+      m_Sprite: {fileID: -1230105029801597265, guid: 24104f6c913b4c04dbdf3065d2b59158,
+        type: 3}
+    - m_Name: Mars_Red
+      m_Hash: -1394563496
+      m_Sprite: {fileID: 4157733614010226614, guid: 7ffccd405b5ea074db20c37d8494a1f8,
+        type: 3}
+    - m_Name: Mars_Hawaiin
+      m_Hash: -692038384
+      m_Sprite: {fileID: 7962363564476217451, guid: 73e6e06df12983247a24c3d33d550de3,
+        type: 3}
+    - m_Name: Mercury_Tank
+      m_Hash: 1183137585
+      m_Sprite: {fileID: 8164810502220911795, guid: 3aecdafed37168f4eaacb0c8f9eaafb5,
+        type: 3}
+    - m_Name: Mercury_Bell
+      m_Hash: -1733531505
+      m_Sprite: {fileID: -5448934864182977609, guid: 2093c936174c8cd48bc32ff644072240,
+        type: 3}
+    - m_Name: Mercury_Red
+      m_Hash: 1675585610
+      m_Sprite: {fileID: -9112501654440722318, guid: 0941b34928abe6f40a3a8452549a8e6f,
+        type: 3}
+    - m_Name: Mercury_Maid
+      m_Hash: -1268077454
+      m_Sprite: {fileID: 150148299750443373, guid: f62471a94dd7bae4398e507b0e67333c,
+        type: 3}
+    - m_Name: Mercury_Hawaiin
+      m_Hash: -454785965
+      m_Sprite: {fileID: 8209226899451013330, guid: 9e84b12d0b67ec04d81717775a300a9e,
+        type: 3}
+    - m_Name: Mercury_Handy
+      m_Hash: -1999911588
+      m_Sprite: {fileID: 8905616994192715430, guid: cc330d6a62e05314ea050d96c8605fcb,
+        type: 3}
+    - m_Name: Venus_Tank
+      m_Hash: 567605241
+      m_Sprite: {fileID: 1367314033728569505, guid: edbf8f412ed06bd4d804b4a32f552909,
+        type: 3}
+    - m_Name: Venus_Red
+      m_Hash: -279089967
+      m_Sprite: {fileID: 8977154795098913827, guid: 64e88a5c6050fc44cae3b399c9bde553,
+        type: 3}
+    - m_Name: Venus_Hawaiin
+      m_Hash: 1679261672
+      m_Sprite: {fileID: 1092298351876606316, guid: e4c5feac8ed456241abc6b7d594ee78f,
+        type: 3}
+    - m_Name: Saturn_Tank
+      m_Hash: 573528195
+      m_Sprite: {fileID: -2306197340543436185, guid: 44922e8600f673d4e8e729f1411492f9,
+        type: 3}
+    - m_Name: Saturn_Red
+      m_Hash: -1576002989
+      m_Sprite: {fileID: 2296666497228641663, guid: ab5a30a1f4313d1499625d71b24fb9ff,
+        type: 3}
+    - m_Name: Saturn_Hawiian
+      m_Hash: 871152440
+      m_Sprite: {fileID: -7913371702761148360, guid: a401e8bcfd9ff824784fdd0392cca91e,
+        type: 3}
+    - m_Name: Neptune_Tank
+      m_Hash: 690300446
+      m_Sprite: {fileID: 4727241712379562238, guid: cf60c12e365a4c340812c9cc32906b26,
+        type: 3}
+    - m_Name: Neptune_Bell
+      m_Hash: -150179424
+      m_Sprite: {fileID: -1314365667843905850, guid: a5b4449cc772d71448fb0b52f2abef15,
+        type: 3}
+    - m_Name: Neptune_Red
+      m_Hash: 1941022364
+      m_Sprite: {fileID: 7823750380137434381, guid: f057a9964a70bbc458bb6c8f2bc68e91,
+        type: 3}
+    - m_Name: Neptune_Maid
+      m_Hash: -607472291
+      m_Sprite: {fileID: 8492487517344997379, guid: d797b0722e425114cb77bae1a7d0d549,
+        type: 3}
+    - m_Name: Neptune_Hawaiin
+      m_Hash: -1708945647
+      m_Sprite: {fileID: -7065923211663226805, guid: 9827047e3f8c3ce43b0b9746acdc6427,
+        type: 3}
+    - m_Name: Neptune_Handy
+      m_Hash: 594892828
+      m_Sprite: {fileID: 2753124516772053703, guid: 43373a3b202d6be4ab185335fff9b852,
+        type: 3}
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: 2753124516772053703, guid: 43373a3b202d6be4ab185335fff9b852,
+        type: 3}
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: -1692865773344429760, guid: 889a309c1984d974782b8537f5bbd779,
+        type: 3}
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: -3817872941058479103, guid: 5cf4d35670e28764596a1833a5bc879e,
+        type: 3}
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: 5602785054843401076, guid: da50a82b1e413ac478cbb77d652cc47c,
+        type: 3}
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: 6726036571419004170, guid: e17d0f49179b8b244813aae3ff6b8519,
+        type: 3}
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: 4352910192280267389, guid: df62d1da226c62b4f91c9330450f8384,
+        type: 3}
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: -5447990429963415486, guid: ad47e2b71c33be5429dde06a2fa85a27,
+        type: 3}
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: 1619522736307772464, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: 1619522736307772464, guid: 62652d42c361db045b29d80714389372,
+        type: 3}
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: 3863325485619040139, guid: ade0f63f7e92abe4295d535016c554e3,
         type: 3}
   - m_Name: LegFront
     m_Hash: 779611780
@@ -568,114 +879,43 @@ MonoBehaviour:
       m_Hash: 594892828
       m_Sprite: {fileID: -6684189854537890769, guid: 43373a3b202d6be4ab185335fff9b852,
         type: 3}
-  - m_Name: LegBack
-    m_Hash: -2125183790
-    m_CategoryList:
-    - m_Name: Jupiter_Tank
-      m_Hash: 153361099
-      m_Sprite: {fileID: 7254893611193038306, guid: aff776069ee2fc34b854d39376542296,
+    - m_Name: Exercise_Jupiter
+      m_Hash: -1588071877
+      m_Sprite: {fileID: -4367227126311441453, guid: e93f69acf4a6b9840bae2d2ca2bec6e3,
         type: 3}
-    - m_Name: Jupiter_Bell
-      m_Hash: -686994059
-      m_Sprite: {fileID: -1241437301660972074, guid: eb6da4e8ef0e05f4699f04ab9b354473,
+    - m_Name: Exercise_Mercury
+      m_Hash: -506967549
+      m_Sprite: {fileID: -7659192917961814990, guid: 889a309c1984d974782b8537f5bbd779,
         type: 3}
-    - m_Name: Jupiter_Red
-      m_Hash: 487112937
-      m_Sprite: {fileID: -5669038812041087446, guid: 3a4f35196fbb54a419abef26b295c665,
+    - m_Name: Exercise_Neptune
+      m_Hash: -1789366838
+      m_Sprite: {fileID: 7237099534570362334, guid: 5cf4d35670e28764596a1833a5bc879e,
         type: 3}
-    - m_Name: Jupiter_Maid
-      m_Hash: -70547064
-      m_Sprite: {fileID: 9176627814038369666, guid: e1c8c4fcbd95ec746bf7f14bceb0e545,
+    - m_Name: Exercise_Pluto
+      m_Hash: -1544055305
+      m_Sprite: {fileID: 6532817516183776581, guid: da50a82b1e413ac478cbb77d652cc47c,
         type: 3}
-    - m_Name: Jupiter_Hawiian
-      m_Hash: 418943844
-      m_Sprite: {fileID: 4787773386482187108, guid: 7834901a5a11bf14f8f8f5e1c7e4deb3,
+    - m_Name: Bellhop_Pluto
+      m_Hash: -2130276567
+      m_Sprite: {fileID: -6159436571395608141, guid: e17d0f49179b8b244813aae3ff6b8519,
         type: 3}
-    - m_Name: Jupiter_Handy
-      m_Hash: -705921157
-      m_Sprite: {fileID: -6473211950822717214, guid: b345be31b8ae1464c8c7b2ae1f697b13,
+    - m_Name: Handy_Pluto
+      m_Hash: -259649451
+      m_Sprite: {fileID: 6278325861188469030, guid: df62d1da226c62b4f91c9330450f8384,
         type: 3}
-    - m_Name: Mars_Tank
-      m_Hash: -1242336841
-      m_Sprite: {fileID: -1230105029801597265, guid: 24104f6c913b4c04dbdf3065d2b59158,
+    - m_Name: Hawaiin_Pluto
+      m_Hash: 646176792
+      m_Sprite: {fileID: -2468885995860793950, guid: ad47e2b71c33be5429dde06a2fa85a27,
         type: 3}
-    - m_Name: Mars_Red
-      m_Hash: -1394563496
-      m_Sprite: {fileID: 4157733614010226614, guid: 7ffccd405b5ea074db20c37d8494a1f8,
+    - m_Name: Maid_Pluto
+      m_Hash: 64288053
+      m_Sprite: {fileID: 6032160450347114025, guid: 62652d42c361db045b29d80714389372,
         type: 3}
-    - m_Name: Mars_Hawaiin
-      m_Hash: -692038384
-      m_Sprite: {fileID: 7962363564476217451, guid: 73e6e06df12983247a24c3d33d550de3,
+    - m_Name: RedD_Pluto
+      m_Hash: -601533935
+      m_Sprite: {fileID: -6911727792326999141, guid: e1ac73707a99cd44399b25f3d3679e3e,
         type: 3}
-    - m_Name: Mercury_Tank
-      m_Hash: 1183137585
-      m_Sprite: {fileID: 8164810502220911795, guid: 3aecdafed37168f4eaacb0c8f9eaafb5,
-        type: 3}
-    - m_Name: Mercury_Bell
-      m_Hash: -1733531505
-      m_Sprite: {fileID: -5448934864182977609, guid: 2093c936174c8cd48bc32ff644072240,
-        type: 3}
-    - m_Name: Mercury_Red
-      m_Hash: 1675585610
-      m_Sprite: {fileID: -9112501654440722318, guid: 0941b34928abe6f40a3a8452549a8e6f,
-        type: 3}
-    - m_Name: Mercury_Maid
-      m_Hash: -1268077454
-      m_Sprite: {fileID: 150148299750443373, guid: f62471a94dd7bae4398e507b0e67333c,
-        type: 3}
-    - m_Name: Mercury_Hawaiin
-      m_Hash: -454785965
-      m_Sprite: {fileID: 8209226899451013330, guid: 9e84b12d0b67ec04d81717775a300a9e,
-        type: 3}
-    - m_Name: Mercury_Handy
-      m_Hash: -1999911588
-      m_Sprite: {fileID: 8905616994192715430, guid: cc330d6a62e05314ea050d96c8605fcb,
-        type: 3}
-    - m_Name: Venus_Tank
-      m_Hash: 567605241
-      m_Sprite: {fileID: 1367314033728569505, guid: edbf8f412ed06bd4d804b4a32f552909,
-        type: 3}
-    - m_Name: Venus_Red
-      m_Hash: -279089967
-      m_Sprite: {fileID: 8977154795098913827, guid: 64e88a5c6050fc44cae3b399c9bde553,
-        type: 3}
-    - m_Name: Venus_Hawaiin
-      m_Hash: 1679261672
-      m_Sprite: {fileID: 1092298351876606316, guid: e4c5feac8ed456241abc6b7d594ee78f,
-        type: 3}
-    - m_Name: Saturn_Tank
-      m_Hash: 573528195
-      m_Sprite: {fileID: -2306197340543436185, guid: 44922e8600f673d4e8e729f1411492f9,
-        type: 3}
-    - m_Name: Saturn_Red
-      m_Hash: -1576002989
-      m_Sprite: {fileID: 2296666497228641663, guid: ab5a30a1f4313d1499625d71b24fb9ff,
-        type: 3}
-    - m_Name: Saturn_Hawiian
-      m_Hash: 871152440
-      m_Sprite: {fileID: -7913371702761148360, guid: a401e8bcfd9ff824784fdd0392cca91e,
-        type: 3}
-    - m_Name: Neptune_Tank
-      m_Hash: 690300446
-      m_Sprite: {fileID: 4727241712379562238, guid: cf60c12e365a4c340812c9cc32906b26,
-        type: 3}
-    - m_Name: Neptune_Bell
-      m_Hash: -150179424
-      m_Sprite: {fileID: -1314365667843905850, guid: a5b4449cc772d71448fb0b52f2abef15,
-        type: 3}
-    - m_Name: Neptune_Red
-      m_Hash: 1941022364
-      m_Sprite: {fileID: 7823750380137434381, guid: f057a9964a70bbc458bb6c8f2bc68e91,
-        type: 3}
-    - m_Name: Neptune_Maid
-      m_Hash: -607472291
-      m_Sprite: {fileID: 8492487517344997379, guid: d797b0722e425114cb77bae1a7d0d549,
-        type: 3}
-    - m_Name: Neptune_Hawaiin
-      m_Hash: -1708945647
-      m_Sprite: {fileID: -7065923211663226805, guid: 9827047e3f8c3ce43b0b9746acdc6427,
-        type: 3}
-    - m_Name: Neptune_Handy
-      m_Hash: 594892828
-      m_Sprite: {fileID: 2753124516772053703, guid: 43373a3b202d6be4ab185335fff9b852,
+    - m_Name: Tank_Pluto
+      m_Hash: 618800871
+      m_Sprite: {fileID: 2577540341910616605, guid: ade0f63f7e92abe4295d535016c554e3,
         type: 3}

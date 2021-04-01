@@ -1211,7 +1211,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1066314367}
+      - m_Target: {fileID: 1066314368}
         m_MethodName: buttonPush
         m_Mode: 1
         m_Arguments:
@@ -1635,6 +1635,18 @@ MonoBehaviour:
   - {fileID: 1511661263}
   - {fileID: 553322014}
   - {fileID: 1376882154}
+--- !u!114 &1066314368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7952776126616714990, guid: 91e0b33b5f215674fa317acd57cbf302,
+    type: 3}
+  m_PrefabInstance: {fileID: 5126115825189777181}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066314365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c197124cb7230a743a28e4f3965eae93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1070204663 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1027987956813031132, guid: a6287d51b7124004cbbe7974ee556fc8,
@@ -2655,8 +2667,7 @@ VFXRenderer:
   m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3718,6 +3729,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0.9882817
+      objectReference: {fileID: 0}
+    - target: {fileID: 9217868432935099698, guid: 91e0b33b5f215674fa317acd57cbf302,
+        type: 3}
+      propertyPath: m_labelHash
+      value: -4.370746e-26
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 91e0b33b5f215674fa317acd57cbf302, type: 3}

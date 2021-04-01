@@ -27,7 +27,7 @@ public class HeadShotSwapper : MonoBehaviour
 
 	private void Update()
 	{
-		Debug.Log(hat.transform.position);
+		//Debug.Log(hat.transform.position);
 
 	}
 
