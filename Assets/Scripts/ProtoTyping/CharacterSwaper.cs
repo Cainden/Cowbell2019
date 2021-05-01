@@ -13,7 +13,7 @@ public class CharacterSwaper : MonoBehaviour
         Jupiter_Bell,
         Jupiter_Red,
         Jupiter_Maid,
-        Jupiter_Hawiian,
+        Jupiter_Hawaiin,
         Jupiter_Handy,
         Mars_Tank,
         Mars_Red,
@@ -22,7 +22,7 @@ public class CharacterSwaper : MonoBehaviour
         Mercury_Bell,
         Mercury_Red,
         Mercury_Maid,
-        Mercury_Hawiian,
+        Mercury_Hawaiin,
         Mercury_Handy,
         Venus_Tank,
         Venus_Red,
@@ -34,7 +34,7 @@ public class CharacterSwaper : MonoBehaviour
         Neptune_Bell,
         Neptune_Red,
         Neptune_Maid,
-        Neptune_Hawiian,
+        Neptune_Hawaiin,
         Neptune_Handy,
 		Exercise_Jupiter,
 		Exercise_Mercury,
@@ -169,5 +169,4 @@ public class CharacterSwaper : MonoBehaviour
     {
         return setChar[index].spriteLibrary.GetSprite(setChar[index].name, setChar[index].GetLabel());
     }
-
 }

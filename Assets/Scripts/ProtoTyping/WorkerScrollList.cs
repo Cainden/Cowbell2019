@@ -1,16 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MySpace;
 using UnityEngine;
-using UnityEngine.UI;
-using MySpace;
-using System;
 
 public class WorkerScrollList : MonoBehaviour
 {
 	public Transform contentPanel;
 	public WorkerToHireObjectPool hireObjectPool;
-
-
 
 	public void DisplayWorkersToHire()
 	{
@@ -20,19 +14,25 @@ public class WorkerScrollList : MonoBehaviour
 
 	private void AddWorkerButtons()
 	{
-
-			//	Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-			foreach (WorkerConstructionData man in ManManager.Ref.hireList)
+		//	Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
+		foreach (WorkerConstructionData man in ManManager.Ref.hireList)
 		{
-			
-
 			GameObject newButton = hireObjectPool.GetObject();
 
 			newButton.transform.SetParent(contentPanel, true);
 
-			newButton.GetComponent<WorkerToHire>().Setup(man);
+			WorkerToHire workerToHire = newButton.GetComponent<WorkerToHire>();
 
+			if (workerToHire != null)
+			{
+				workerToHire.Setup(man);
 
+				GenerateHeadshot headshot = newButton.GetComponent<GenerateHeadshot>();
+				if (headshot != null)
+				{
+                    headshot.CreateHeadshot(man.sprite);
+				}
+			}
 		}
 	}
 
