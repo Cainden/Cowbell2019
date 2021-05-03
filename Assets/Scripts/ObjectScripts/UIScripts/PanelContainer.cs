@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PanelContainer : UnityEngine.UI.Image
 {
+    [SerializeField]
+    private float m_animationSpeed = 2.0f;
 
     private Animator m_animator;
     private List<PanelButton> m_panelButtons;
@@ -37,13 +39,14 @@ public class PanelContainer : UnityEngine.UI.Image
         Init();
         ShowButtons();
 
-        // TODO : play any universal transition on here
+        // play any universal transition on here
+        SetAnimationBool("Panel_IN", true, m_animationSpeed);
     }
 
     protected virtual void Hide()
     {
         // TODO : play any universal transition on here
-
+        SetAnimationBool("Panel_IN", false, m_animationSpeed);
 
         gameObject.SetActive(false);
     }
@@ -105,6 +108,32 @@ public class PanelContainer : UnityEngine.UI.Image
 
             Debug.Log(m_panelButtons.Count + " buttons added to PanelContainer");
         }
+    }
+
+    protected void SetAnimationBool(string label, bool boolValue, float speed)
+    {
+        // TODO : Move this somewhere else!!
+        if (m_animator == null)
+        {
+            m_animator = GetComponent<Animator>();
+        }
+
+        if (m_animator != null)
+        {
+            m_animator.speed = speed;
+            m_animator.SetBool(label, boolValue);
+        }
+    }
+
+    public bool IsPanelAnimating(string animationLabel)
+    {
+        // TODO : optimize this
+        if (m_animator != null)
+        {
+            return m_animator.GetCurrentAnimatorStateInfo(0).IsName(animationLabel);
+        }
+
+        return false;
     }
 
     public void OnButtonClicked(PanelButton clickedPanelButton)

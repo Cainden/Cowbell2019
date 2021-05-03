@@ -25,9 +25,10 @@ public class PanelButton : UnityEngine.UI.Button
 
         foreach (Transform child in transform)
         {
-            // HACK : Clean this up to improve performance and prevent
-            // bugs related to object naming
-            if (child.gameObject.name == "Text")
+            // HACK : Clean this up to improve performance
+            UnityEngine.UI.Text textTest = child.gameObject.GetComponent<UnityEngine.UI.Text>();
+            UnityEngine.UI.Image imageTest = child.gameObject.GetComponent<UnityEngine.UI.Image>();
+            if (textTest != null || imageTest != null)
             {
                 child.gameObject.SetActive(activeState);
             }
