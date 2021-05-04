@@ -21,18 +21,41 @@ public class PopulateRoomsToBuy : MonoBehaviour
 	public Transform contentPanel;
 	public RoomsToBuyObjectPool buttonObjectPool, hireObjectPool;
 
-	public void DisplayRoomsToBuild()
-	{
-        RefreshList();
-		AddRoomButtons();
-        //CameraScript.ZoomDisabled = true;
+	private PanelContainer m_panelContainer;
+
+    private void Awake()
+    {
+		m_panelContainer = GetComponent<PanelContainer>();
+		m_panelContainer?.RegisterOnPanelPreOpen(OnPanelPreOpen);
+		m_panelContainer?.RegisterOnPanelPreClose(OnPanelPreClose);
 	}
 
-    //public void DisplayWorkersToHire()
-    //{
-    //    RefreshList();
-    //    AddWorkerButtons();
-    //}
+    public void DisplayRoomsToBuild()
+	{
+		RefreshList();
+		AddRoomButtons();
+		//CameraScript.ZoomDisabled = true;
+	}
+
+	public void OnPanelPreOpen()
+	{
+		SetAllChildrenActiveRecursively(true, gameObject);
+		DisplayRoomsToBuild();
+	}
+
+	public void OnPanelPreClose()
+	{
+		SetAllChildrenActiveRecursively(false, gameObject);
+	}
+
+	protected void SetAllChildrenActiveRecursively(bool activeState, GameObject currentObject)
+	{
+		currentObject.SetActive(activeState);
+		foreach (Transform child in currentObject.transform)
+		{
+			SetAllChildrenActiveRecursively(activeState, child.gameObject);
+		}
+	}
 
 	private void AddRoomButtons()
 	{
@@ -47,19 +70,6 @@ public class PopulateRoomsToBuy : MonoBehaviour
             newButton.GetComponent<RoomsToBuy>().Setup(itemList[i]);
 		}
 	}
-
-    //private void AddWorkerButtons()
-    //{
-    //    //Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-    //    foreach (WorkerConstructionData man in ManManager.Ref.hireList)
-    //    {
-    //        GameObject newButton = hireObjectPool.GetObject();
-
-    //        newButton.transform.SetParent(contentPanel, true);
-
-    //        newButton.GetComponent<WorkerToHire>().Setup(man);
-    //    }
-    //}
 
     private void RefreshList()
     {

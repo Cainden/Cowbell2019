@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void OnPanelPreOpen();
+public delegate void OnPanelPreClose();
+
 public class PanelContainer : UnityEngine.UI.Image
 {
     [SerializeField]
@@ -10,6 +13,11 @@ public class PanelContainer : UnityEngine.UI.Image
     private Animator m_animator;
     private List<PanelButton> m_panelButtons;
 
+    private event OnPanelPreOpen m_onPanelPreOpen;
+    private event OnPanelPreClose m_onPanelPreClose;
+
+    public PanelContainer Parent { get; private set; }
+
     public bool PanelIsOpen { get; private set; }
 
     public virtual void Open()
@@ -17,6 +25,12 @@ public class PanelContainer : UnityEngine.UI.Image
         gameObject.SetActive(true);
 
         PanelIsOpen = true;
+
+        // Call pre-open event
+        if(m_onPanelPreOpen != null)
+        {
+            m_onPanelPreOpen();
+        }
 
         // Show the panel
         Show();
@@ -29,9 +43,39 @@ public class PanelContainer : UnityEngine.UI.Image
     {
         HideButtons();
 
+        if (m_onPanelPreClose != null)
+        {
+            m_onPanelPreClose();
+        }
+
         Hide();
 
         PanelIsOpen = false;
+    }
+
+
+    public virtual void CloseParents(int parentPanelsToClose)
+    {
+        if(parentPanelsToClose == 0 || parentPanelsToClose < -1)
+        {
+            return;
+        }
+
+        PanelContainer target = Parent;
+        int parentCounter = 1;
+
+        while (target.Parent != null && ((parentCounter < parentPanelsToClose) ||
+                                         (parentPanelsToClose == -1)))
+        {
+            target = target.Parent;
+        }
+
+        target?.Close();
+    }
+
+    public void SetParentContainer(PanelContainer panel)
+    {
+        Parent = panel; 
     }
 
     protected virtual void Show()
@@ -47,6 +91,19 @@ public class PanelContainer : UnityEngine.UI.Image
     {
         // TODO : play any universal transition on here
         SetAnimationBool("Panel_IN", false, m_animationSpeed);
+
+        if (gameObject.activeInHierarchy)
+        {
+            StartCoroutine(PerformClose());
+        }
+    }
+
+    IEnumerator PerformClose()
+    {
+        while (IsPanelAnimating("Panel_IN"))
+        {
+            yield return null;
+        }
 
         gameObject.SetActive(false);
     }
@@ -98,11 +155,16 @@ public class PanelContainer : UnityEngine.UI.Image
             foreach (Transform child in transform)
             {
                 PanelButton panelButton = child.GetComponent<PanelButton>();
-                panelButton.onClick.AddListener(() => OnButtonClicked(panelButton));
 
                 if (panelButton != null)
                 {
-                    m_panelButtons.Add(panelButton);
+                    panelButton.onClick.AddListener(() => OnButtonClicked(panelButton));
+                    panelButton.SetPanel(this);
+
+                    if (panelButton != null)
+                    {
+                        m_panelButtons.Add(panelButton);
+                    }
                 }
             }
 
@@ -159,5 +221,37 @@ public class PanelContainer : UnityEngine.UI.Image
         }
 
         Debug.Log("Clicked button was already active = " + clickedButtonWasLastActive);
+    }
+
+    public void RegisterOnPanelPreOpen(OnPanelPreOpen handler)
+    {
+        if(handler != null)
+        {
+            m_onPanelPreOpen += handler;
+        }
+    }
+
+    public void UnregisterOnPanelPreOpen(OnPanelPreOpen handler)
+    {
+        if(handler != null)
+        {
+            m_onPanelPreOpen -= handler;
+        }
+    }
+
+    public void RegisterOnPanelPreClose(OnPanelPreClose handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreClose += handler;
+        }
+    }
+
+    public void UnregisterOnPanelPreClose(OnPanelPreClose handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreClose -= handler;
+        }
     }
 }

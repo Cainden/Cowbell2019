@@ -5,11 +5,13 @@ using UnityEngine;
 public class PanelButton : UnityEngine.UI.Button
 {
     private PanelContainer m_panelContainer;
+    private PanelContainer m_parentContainer;
 
     public virtual void Show()
     {
         EnableButton(true);
         GetChildContainer();
+        SetPanelParent();
         HideSubPanelContainer();
     }
 
@@ -17,6 +19,16 @@ public class PanelButton : UnityEngine.UI.Button
     {
         HideSubPanelContainer();
         EnableButton(false);
+    }
+
+    public void SetPanel(PanelContainer panel)
+    {
+        m_parentContainer = panel;
+    }
+
+    protected void SetPanelParent()
+    {
+        m_panelContainer?.SetParentContainer(m_parentContainer);
     }
 
     protected virtual void EnableButton(bool activeState)
@@ -41,6 +53,8 @@ public class PanelButton : UnityEngine.UI.Button
         {
             // This early return allows us to avoid having
             // duplicate null checks before the foreach loop
+            // since this is called each time the button is
+            // to be shown
             if (m_panelContainer != null)
             {
                 return;
