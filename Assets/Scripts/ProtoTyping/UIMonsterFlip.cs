@@ -18,6 +18,7 @@ public class UIMonsterFlip : MonoBehaviour
 	public TextMeshProUGUI symbols;
 	public Color textDay;
 	public Color textNight;
+	public SidePanelButton m_sidePanelButton;
 	
 
 	// Start is called before the first frame update
@@ -30,36 +31,38 @@ public class UIMonsterFlip : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void PerformFlip()
     {
 		if( flipNight == true)
 		{
-			foreach(Button i in dayIcons)
-			{
-				i.gameObject.SetActive(false);
-			}
+			//foreach(Button i in dayIcons)
+			//{
+			//	i.gameObject.SetActive(false);
+			//}
 
-			foreach (Button i in nightIcons)
-			{
-				i.gameObject.SetActive(true);
-			}
-			sidePanelColor.color = nightColor;
+			//foreach (Button i in nightIcons)
+			//{
+			//	i.gameObject.SetActive(true);
+			//}
+			//sidePanelColor.color = nightColor;
+			m_sidePanelButton.SetPanelMode(SidePanelButton.PanelMode.NIGHT);
 			monsterMoney.color = textNight;
 			money.color = textNight;
 			symbols.color = textNight;
 		}
 		else
 		{
-			foreach (Button i in dayIcons)
-			{
-				i.gameObject.SetActive(true);
-			}
+			//foreach (Button i in dayIcons)
+			//{
+			//	i.gameObject.SetActive(true);
+			//}
 
-			foreach (Button i in nightIcons)
-			{
-				i.gameObject.SetActive(false);
-			}
-			sidePanelColor.color = daycolor;
+			//foreach (Button i in nightIcons)
+			//{
+			//	i.gameObject.SetActive(false);
+			//}
+			//sidePanelColor.color = daycolor;
+			m_sidePanelButton.SetPanelMode(SidePanelButton.PanelMode.DAY);
 			money.color = textDay;
 			monsterMoney.color = textDay;
 			symbols.color = textDay;
@@ -70,5 +73,6 @@ public class UIMonsterFlip : MonoBehaviour
 	public void flipToNight()
 	{
 		flipNight = !flipNight;
+		PerformFlip();
 	}
 }

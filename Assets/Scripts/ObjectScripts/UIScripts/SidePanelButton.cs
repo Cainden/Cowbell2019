@@ -1,10 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(UnityEngine.UI.Button))]
 public class SidePanelButton : MonoBehaviour
 {
+    /// <summary>
+    /// Used to set the target panel mode.
+    /// </summary>
     public enum PanelMode
     {
         UNSET,
@@ -12,8 +13,11 @@ public class SidePanelButton : MonoBehaviour
         NIGHT
     }
 
-    public PanelContainer m_topLevelDayPanel;
-    public PanelContainer m_topLevelNightPanel;
+    [SerializeField]
+    private PanelContainer m_topLevelDayPanel;
+
+    [SerializeField]
+    private PanelContainer m_topLevelNightPanel;
 
     private PanelMode m_panelMode = PanelMode.UNSET;
     private PanelContainer m_currentTopLevelPanel;
@@ -22,21 +26,32 @@ public class SidePanelButton : MonoBehaviour
     void Start()
     {
         m_button = GetComponent<UnityEngine.UI.Button>();
+        m_button.onClick.AddListener(OnButtonClick);
+
         SetPanelMode(PanelMode.DAY); // HACK : This should be set externally
     }
 
+    /// <summary>
+    /// Closes all day and night panels.
+    /// </summary>
     public void CloseAllOpenPanels()
     {
-        m_currentTopLevelPanel?.Close();
+        m_topLevelDayPanel.Close();
+        m_topLevelNightPanel.Close();
     }
 
+    /// <summary>
+    /// Sets the target panel mode.
+    /// </summary>
+    /// <param name="mode">Enumeration defining the target panel mode.
+    /// Referenced by SidePanelButton.PanelMode.</param>
     public void SetPanelMode(PanelMode mode)
     {
         if (m_panelMode != mode)
         {
             CloseAllOpenPanels();
 
-            m_currentTopLevelPanel?.UnregisterOnPanelPreClose(OnSidePanelClose);
+            m_currentTopLevelPanel?.UnregisterOnPanelPreClose(OnSidePanelPreClose);
 
             switch (mode)
             {
@@ -51,11 +66,17 @@ public class SidePanelButton : MonoBehaviour
             if (m_currentTopLevelPanel != null)
             {
                 SetAllPanelsActiveRecursively(false, m_currentTopLevelPanel.gameObject);
-                m_currentTopLevelPanel.RegisterOnPanelPreClose(OnSidePanelClose);
+                m_currentTopLevelPanel.RegisterOnPanelPreClose(OnSidePanelPreClose);
             }
         }
     }
 
+    /// <summary>
+    /// Sets the active state of all children of a given gameobject.
+    /// </summary>
+    /// <param name="activeState">True for active. Otherwise, false.</param>
+    /// <param name="currentObject">Root object to set false, as well as all children
+    /// in the hierarchy.</param>
     protected void SetAllPanelsActiveRecursively(bool activeState, GameObject currentObject)
     {
         currentObject.SetActive(activeState);
@@ -65,13 +86,19 @@ public class SidePanelButton : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Event hander for registered OnClick event.
+    /// </summary>
     public void OnButtonClick()
     {
-        m_button.enabled = false;
+        m_currentTopLevelPanel?.Open();
     }
 
-    public void OnSidePanelClose()
+    /// <summary>
+    /// Event handler for OnPanelPreClose event.
+    /// </summary>
+    public void OnSidePanelPreClose()
     {
-        m_button.enabled = true;
+        // TODO : Whatever may be needed in the future.
     }
 }

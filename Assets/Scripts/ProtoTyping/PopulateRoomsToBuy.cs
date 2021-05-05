@@ -68,14 +68,23 @@ public class PopulateRoomsToBuy : MonoBehaviour
 			GameObject newButton = buttonObjectPool.GetObject(); // get object from the pool
 			newButton.transform.SetParent(contentPanel, true); // parent the button to the content pool
             newButton.GetComponent<RoomsToBuy>().Setup(itemList[i]);
+			UnityEngine.UI.Button buttonComponent = newButton.GetComponent<UnityEngine.UI.Button>();
+			buttonComponent?.onClick.AddListener(CloseAllPanels);
 		}
 	}
 
     private void RefreshList()
     {
         foreach (PooledObject button in contentPanel.GetComponentsInChildren<PooledObject>())
-        {
-            button.pool.ReturnObject(button.gameObject);
+		{
+			UnityEngine.UI.Button buttonComponent = button.GetComponent<UnityEngine.UI.Button>();
+			buttonComponent?.onClick.RemoveListener(CloseAllPanels);
+			button.pool.ReturnObject(button.gameObject);
         }
+    }
+
+	public void CloseAllPanels()
+    {
+		m_panelContainer?.CloseParents(-1);
     }
 }

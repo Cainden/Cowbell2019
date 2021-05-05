@@ -10,6 +10,8 @@ public class PanelContainer : UnityEngine.UI.Image
     [SerializeField]
     private float m_animationSpeed = 2.0f;
 
+    private static readonly string TRANSITION_IN_ANIMATION = "Panel_IN";
+
     private Animator m_animator;
     private List<PanelButton> m_panelButtons;
 
@@ -20,25 +22,27 @@ public class PanelContainer : UnityEngine.UI.Image
 
     public bool PanelIsOpen { get; private set; }
 
+    /// <summary>
+    /// Open the PanelContainer.
+    /// </summary>
     public virtual void Open()
     {
         gameObject.SetActive(true);
 
         PanelIsOpen = true;
 
-        // Call pre-open event
         if(m_onPanelPreOpen != null)
         {
             m_onPanelPreOpen();
         }
 
-        // Show the panel
         Show();
-
-        // Close any sub planels
         HideAllSubPanels();
     }
 
+    /// <summary>
+    /// Close the PanelContainer.
+    /// </summary>
     public virtual void Close()
     {
         HideButtons();
@@ -53,7 +57,12 @@ public class PanelContainer : UnityEngine.UI.Image
         PanelIsOpen = false;
     }
 
-
+    /// <summary>
+    /// Close this panel, as well as a given number of parent
+    /// panels.
+    /// </summary>
+    /// <param name="parentPanelsToClose">Number of parents in the hierarchy
+    /// to close.</param>
     public virtual void CloseParents(int parentPanelsToClose)
     {
         if(parentPanelsToClose == 0 || parentPanelsToClose < -1)
@@ -73,24 +82,108 @@ public class PanelContainer : UnityEngine.UI.Image
         target?.Close();
     }
 
+    /// <summary>
+    /// Set the parent PanelContainer reference for this object.
+    /// </summary>
+    /// <param name="panel">PanelContainer reference.</param>
     public void SetParentContainer(PanelContainer panel)
     {
-        Parent = panel; 
+        Parent = panel;
     }
 
+    /// <summary>
+    /// Event handler for all PanelButtons owned by this
+    /// PanelContainer.
+    /// </summary>
+    /// <param name="clickedPanelButton">PanelButton reference of
+    /// clicked button.</param>
+    public void OnButtonClicked(PanelButton clickedPanelButton)
+    {
+        bool clickedButtonWasLastActive = false;
+
+        // Hide all subpanels
+        foreach (PanelButton panelButton in m_panelButtons)
+        {
+            if (panelButton.HideSubPanelContainer())
+            {
+                if (panelButton == clickedPanelButton)
+                {
+                    clickedButtonWasLastActive = true;
+                }
+            }
+        }
+
+        // Attempt to open the subpanel for the clicked button
+        if (clickedButtonWasLastActive == false)
+        {
+            clickedPanelButton.ShowSubPanelContainer();
+        }
+    }
+
+    /// <summary>
+    /// Register handler for OnPanelPreOpen events.
+    /// </summary>
+    /// <param name="handler">OnPanelPreOpen event handler.</param>
+    public void RegisterOnPanelPreOpen(OnPanelPreOpen handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreOpen += handler;
+        }
+    }
+
+    /// <summary>
+    /// Unregister handler for OnPanelPreOpen events.
+    /// </summary>
+    /// <param name="handler">OnPanelPreOpen event handler.</param>
+    public void UnregisterOnPanelPreOpen(OnPanelPreOpen handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreOpen -= handler;
+        }
+    }
+
+    /// <summary>
+    /// Register handler for OnPanelPreClose events.
+    /// </summary>
+    /// <param name="handler">OnPanelPreClose event handler.</param>
+    public void RegisterOnPanelPreClose(OnPanelPreClose handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreClose += handler;
+        }
+    }
+
+    /// <summary>
+    /// Unregister handler for OnPanelPreClose events.
+    /// </summary>
+    /// <param name="handler">OnPanelPreClose event handler.</param>
+    public void UnregisterOnPanelPreClose(OnPanelPreClose handler)
+    {
+        if (handler != null)
+        {
+            m_onPanelPreClose -= handler;
+        }
+    }
+
+    /// <summary>
+    /// Show the PanelContainer.
+    /// </summary>
     protected virtual void Show()
     {
         Init();
         ShowButtons();
-
-        // play any universal transition on here
-        SetAnimationBool("Panel_IN", true, m_animationSpeed);
+        SetAnimationBool(TRANSITION_IN_ANIMATION, true, m_animationSpeed);
     }
 
+    /// <summary>
+    /// Hide the PanelContainer.
+    /// </summary>
     protected virtual void Hide()
     {
-        // TODO : play any universal transition on here
-        SetAnimationBool("Panel_IN", false, m_animationSpeed);
+        SetAnimationBool(TRANSITION_IN_ANIMATION, false, m_animationSpeed);
 
         if (gameObject.activeInHierarchy)
         {
@@ -98,9 +191,14 @@ public class PanelContainer : UnityEngine.UI.Image
         }
     }
 
+    /// <summary>
+    /// Delayed disable of the PanelContainer object to allow for
+    /// animated transitions.
+    /// </summary>
+    /// <returns>IEnumerator</returns>
     IEnumerator PerformClose()
     {
-        while (IsPanelAnimating("Panel_IN"))
+        while (IsPanelAnimating(TRANSITION_IN_ANIMATION))
         {
             yield return null;
         }
@@ -108,6 +206,9 @@ public class PanelContainer : UnityEngine.UI.Image
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Show all PanelButtons owned by this container.
+    /// </summary>
     protected void ShowButtons()
     {
         foreach (PanelButton panelButton in m_panelButtons)
@@ -116,6 +217,9 @@ public class PanelContainer : UnityEngine.UI.Image
         }
     }
 
+    /// <summary>
+    /// Hide all PanelButtons owned by this container.
+    /// </summary>
     protected void HideButtons()
     {
         if (m_panelButtons != null)
@@ -127,6 +231,9 @@ public class PanelContainer : UnityEngine.UI.Image
         }
     }
 
+    /// <summary>
+    /// Hide all sub PanelContainer objects.
+    /// </summary>
     protected void HideAllSubPanels()
     {
         if (m_panelButtons != null)
@@ -138,11 +245,18 @@ public class PanelContainer : UnityEngine.UI.Image
         }
     }
 
+    /// <summary>
+    /// Initialize this object.
+    /// </summary>
     protected void Init()
     {
         GetButtonReferences();
     }
 
+    /// <summary>
+    /// Get references to all PanelButton objects owned by this
+    /// PanelContainer.
+    /// </summary>
     protected void GetButtonReferences()
     {
         if(m_panelButtons == null)
@@ -167,14 +281,17 @@ public class PanelContainer : UnityEngine.UI.Image
                     }
                 }
             }
-
-            Debug.Log(m_panelButtons.Count + " buttons added to PanelContainer");
         }
     }
 
+    /// <summary>
+    /// Set a bool and animation speed for a given animation.
+    /// </summary>
+    /// <param name="label">Name of the animation.</param>
+    /// <param name="boolValue">Value to set.</param>
+    /// <param name="speed">Sets animation speed.</param>
     protected void SetAnimationBool(string label, bool boolValue, float speed)
     {
-        // TODO : Move this somewhere else!!
         if (m_animator == null)
         {
             m_animator = GetComponent<Animator>();
@@ -187,71 +304,18 @@ public class PanelContainer : UnityEngine.UI.Image
         }
     }
 
+    /// <summary>
+    /// Returns true if animation is still playing.
+    /// </summary>
+    /// <param name="animationLabel">Name of animation.</param>
+    /// <returns>True if playing. Otherwise, false.</returns>
     public bool IsPanelAnimating(string animationLabel)
     {
-        // TODO : optimize this
         if (m_animator != null)
         {
             return m_animator.GetCurrentAnimatorStateInfo(0).IsName(animationLabel);
         }
 
         return false;
-    }
-
-    public void OnButtonClicked(PanelButton clickedPanelButton)
-    {
-        bool clickedButtonWasLastActive = false;
-
-        // Hide all subpanels
-        foreach (PanelButton panelButton in m_panelButtons)
-        {
-            if (panelButton.HideSubPanelContainer())
-            {
-                if (panelButton == clickedPanelButton)
-                {
-                    clickedButtonWasLastActive = true;
-                }
-            }
-        }
-
-        // Attempt to open the subpanel for the clicked button
-        if(clickedButtonWasLastActive == false)
-        {
-            clickedPanelButton.ShowSubPanelContainer();
-        }
-
-        Debug.Log("Clicked button was already active = " + clickedButtonWasLastActive);
-    }
-
-    public void RegisterOnPanelPreOpen(OnPanelPreOpen handler)
-    {
-        if(handler != null)
-        {
-            m_onPanelPreOpen += handler;
-        }
-    }
-
-    public void UnregisterOnPanelPreOpen(OnPanelPreOpen handler)
-    {
-        if(handler != null)
-        {
-            m_onPanelPreOpen -= handler;
-        }
-    }
-
-    public void RegisterOnPanelPreClose(OnPanelPreClose handler)
-    {
-        if (handler != null)
-        {
-            m_onPanelPreClose += handler;
-        }
-    }
-
-    public void UnregisterOnPanelPreClose(OnPanelPreClose handler)
-    {
-        if (handler != null)
-        {
-            m_onPanelPreClose -= handler;
-        }
     }
 }

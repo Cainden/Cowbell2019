@@ -57,7 +57,7 @@ public class WorkerScrollList : MonoBehaviour
 				workerToHire.Setup(man);
 
 				UnityEngine.UI.Button currentButton = newButton.GetComponent<UnityEngine.UI.Button>();
-				currentButton?.onClick.AddListener(() => m_panelContainer.CloseParents(-1));
+				currentButton?.onClick.AddListener(CloseAllPanels);
 
 				GenerateHeadshot headshot = newButton.GetComponent<GenerateHeadshot>();
 				if (headshot != null)
@@ -72,7 +72,14 @@ public class WorkerScrollList : MonoBehaviour
 	{
 		foreach (WorkerPooledObject button in contentPanel.GetComponentsInChildren<WorkerPooledObject>())
 		{
+			UnityEngine.UI.Button currentButton = button.GetComponent<UnityEngine.UI.Button>();
+			currentButton?.onClick.RemoveListener(CloseAllPanels);
 			button.pool.ReturnObject(button.gameObject);
 		}
+	}
+
+	public void CloseAllPanels()
+	{
+		m_panelContainer?.CloseParents(-1);
 	}
 }
