@@ -5672,11 +5672,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8266410539763240308, guid: bdcfa3625a4fba44aa8ac9f9c0624f8a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8266410539879904806, guid: bdcfa3625a4fba44aa8ac9f9c0624f8a,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName

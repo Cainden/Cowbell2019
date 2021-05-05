@@ -6,10 +6,39 @@ public class WorkerScrollList : MonoBehaviour
 	public Transform contentPanel;
 	public WorkerToHireObjectPool hireObjectPool;
 
+	private PanelContainer m_panelContainer;
+
+    public void Awake()
+    {
+		m_panelContainer = GetComponent<PanelContainer>();
+		m_panelContainer?.RegisterOnPanelPreOpen(OnPanelPreOpen);
+		m_panelContainer?.RegisterOnPanelPreClose(OnPanelPreClose);
+    }
+
+	public void OnPanelPreOpen()
+    {
+		SetAllChildrenActiveRecursively(true, gameObject);
+		DisplayWorkersToHire();
+    }
+
+	public void OnPanelPreClose()
+	{
+		SetAllChildrenActiveRecursively(false, gameObject);
+	}
+
 	public void DisplayWorkersToHire()
 	{
 		RefreshList();
 		AddWorkerButtons();
+	}
+
+	protected void SetAllChildrenActiveRecursively(bool activeState, GameObject currentObject)
+	{
+		currentObject.SetActive(activeState);
+		foreach (Transform child in currentObject.transform)
+		{
+			SetAllChildrenActiveRecursively(activeState, child.gameObject);
+		}
 	}
 
 	private void AddWorkerButtons()
@@ -27,6 +56,9 @@ public class WorkerScrollList : MonoBehaviour
 			{
 				workerToHire.Setup(man);
 
+				UnityEngine.UI.Button currentButton = newButton.GetComponent<UnityEngine.UI.Button>();
+				currentButton?.onClick.AddListener(CloseAllPanels);
+
 				GenerateHeadshot headshot = newButton.GetComponent<GenerateHeadshot>();
 				if (headshot != null)
 				{
@@ -40,7 +72,14 @@ public class WorkerScrollList : MonoBehaviour
 	{
 		foreach (WorkerPooledObject button in contentPanel.GetComponentsInChildren<WorkerPooledObject>())
 		{
+			UnityEngine.UI.Button currentButton = button.GetComponent<UnityEngine.UI.Button>();
+			currentButton?.onClick.RemoveListener(CloseAllPanels);
 			button.pool.ReturnObject(button.gameObject);
 		}
+	}
+
+	public void CloseAllPanels()
+	{
+		m_panelContainer?.CloseParents(-1);
 	}
 }

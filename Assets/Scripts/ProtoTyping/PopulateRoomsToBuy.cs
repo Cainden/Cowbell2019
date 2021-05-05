@@ -21,18 +21,41 @@ public class PopulateRoomsToBuy : MonoBehaviour
 	public Transform contentPanel;
 	public RoomsToBuyObjectPool buttonObjectPool, hireObjectPool;
 
-	public void DisplayRoomsToBuild()
-	{
-        RefreshList();
-		AddRoomButtons();
-        //CameraScript.ZoomDisabled = true;
+	private PanelContainer m_panelContainer;
+
+    private void Awake()
+    {
+		m_panelContainer = GetComponent<PanelContainer>();
+		m_panelContainer?.RegisterOnPanelPreOpen(OnPanelPreOpen);
+		m_panelContainer?.RegisterOnPanelPreClose(OnPanelPreClose);
 	}
 
-    //public void DisplayWorkersToHire()
-    //{
-    //    RefreshList();
-    //    AddWorkerButtons();
-    //}
+    public void DisplayRoomsToBuild()
+	{
+		RefreshList();
+		AddRoomButtons();
+		//CameraScript.ZoomDisabled = true;
+	}
+
+	public void OnPanelPreOpen()
+	{
+		SetAllChildrenActiveRecursively(true, gameObject);
+		DisplayRoomsToBuild();
+	}
+
+	public void OnPanelPreClose()
+	{
+		SetAllChildrenActiveRecursively(false, gameObject);
+	}
+
+	protected void SetAllChildrenActiveRecursively(bool activeState, GameObject currentObject)
+	{
+		currentObject.SetActive(activeState);
+		foreach (Transform child in currentObject.transform)
+		{
+			SetAllChildrenActiveRecursively(activeState, child.gameObject);
+		}
+	}
 
 	private void AddRoomButtons()
 	{
@@ -45,27 +68,23 @@ public class PopulateRoomsToBuy : MonoBehaviour
 			GameObject newButton = buttonObjectPool.GetObject(); // get object from the pool
 			newButton.transform.SetParent(contentPanel, true); // parent the button to the content pool
             newButton.GetComponent<RoomsToBuy>().Setup(itemList[i]);
+			UnityEngine.UI.Button buttonComponent = newButton.GetComponent<UnityEngine.UI.Button>();
+			buttonComponent?.onClick.AddListener(CloseAllPanels);
 		}
 	}
-
-    //private void AddWorkerButtons()
-    //{
-    //    //Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-    //    foreach (WorkerConstructionData man in ManManager.Ref.hireList)
-    //    {
-    //        GameObject newButton = hireObjectPool.GetObject();
-
-    //        newButton.transform.SetParent(contentPanel, true);
-
-    //        newButton.GetComponent<WorkerToHire>().Setup(man);
-    //    }
-    //}
 
     private void RefreshList()
     {
         foreach (PooledObject button in contentPanel.GetComponentsInChildren<PooledObject>())
-        {
-            button.pool.ReturnObject(button.gameObject);
+		{
+			UnityEngine.UI.Button buttonComponent = button.GetComponent<UnityEngine.UI.Button>();
+			buttonComponent?.onClick.RemoveListener(CloseAllPanels);
+			button.pool.ReturnObject(button.gameObject);
         }
+    }
+
+	public void CloseAllPanels()
+    {
+		m_panelContainer?.CloseParents(-1);
     }
 }

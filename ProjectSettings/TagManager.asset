@@ -12,6 +12,8 @@ TagManager:
   - NavBaker
   - sidePanel
   - tarrot
+  - DayPanel
+  - NightPanel
   layers:
   - Default
   - TransparentFX
