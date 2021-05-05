@@ -23,6 +23,10 @@ public class GenerateHeadshot : MonoBehaviour
     private SpriteLibrary m_spriteLibrary;
     private bool m_initializedSusscessfully;
 
+    private static readonly string HAT = "hat";
+    private static readonly string HEAD = "Head";
+    private static readonly string BODY = "Body";
+
     private void Awake()
     {
         // Cache sprite library
@@ -34,7 +38,7 @@ public class GenerateHeadshot : MonoBehaviour
         // Make sure prefab is set up correctly
         if (m_hat == null || m_head == null || m_body == null)
         {
-            Debug.LogError("GenerateHeadshot.Awake : At least one of the headshot GameObjects are null!");
+            Debug.LogWarning("GenerateHeadshot.Awake : At least one of the headshot GameObjects are null!");
         }
         else
         {
@@ -44,13 +48,15 @@ public class GenerateHeadshot : MonoBehaviour
 
             if (m_hatImage == null || m_headImage == null || m_bodyImage == null)
             {
-                Debug.LogError("GenerateHeadshot.Awake : At least one of the headshot UI.Image objects are null!");
+                Debug.LogWarning("GenerateHeadshot.Awake : At least one of the headshot UI.Image objects are null!");
             }
             else
             {
                 m_initializedSusscessfully = true;
             }
         }
+
+        PerformCleanup(); // HACK       
     }
 
     /// <summary>
@@ -65,17 +71,14 @@ public class GenerateHeadshot : MonoBehaviour
     {
         if (m_initializedSusscessfully == false)
         {
-            Debug.LogError("GenerateHeadshot.CreateHeadshot : bad initialization!");
             return;
         }
 
         string labelToString = label.ToString();
 
-        SetImage(m_hatImage, "hat", labelToString);
-        SetImage(m_headImage, "Head", labelToString);
-        SetImage(m_bodyImage, "Body", labelToString);
-
-        PerformCleanup(); // HACK
+        SetImage(m_hatImage, HAT, labelToString);
+        SetImage(m_headImage, HEAD, labelToString);
+        SetImage(m_bodyImage, BODY, labelToString);
     }
 
     /// <summary>
