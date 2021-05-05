@@ -51,6 +51,8 @@ public class GenerateHeadshot : MonoBehaviour
                 m_initializedSusscessfully = true;
             }
         }
+
+        PerformCleanup(); // HACK
     }
 
     /// <summary>
@@ -74,8 +76,6 @@ public class GenerateHeadshot : MonoBehaviour
         SetImage(m_hatImage, "hat", labelToString);
         SetImage(m_headImage, "Head", labelToString);
         SetImage(m_bodyImage, "Body", labelToString);
-
-        PerformCleanup(); // HACK
     }
 
     /// <summary>
