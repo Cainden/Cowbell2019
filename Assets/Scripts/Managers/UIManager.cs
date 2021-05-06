@@ -16,6 +16,10 @@ public class UIManager : MonoBehaviour
 
     private bool m_wasInitialized = false;
 
+    private static readonly string CLASS_NAME = "UIManager";
+    private static readonly string UI_CHANGE_COLOR_TAG = "UIChangeColorWithDayCycle";
+    private static readonly string CLOCK_DISPLAY_TAG = "ClockDisplay";
+
     /// <summary>
     /// Gets an instance of the UIManager. If one does not exist,
     /// it will create it's own instance and GameObject.
@@ -26,7 +30,7 @@ public class UIManager : MonoBehaviour
         {
             if(m_instance == null)
             {
-                GameObject uiManagerObject = new GameObject("UIManager");
+                GameObject uiManagerObject = new GameObject(CLASS_NAME);
                 m_instance = uiManagerObject.AddComponent<UIManager>();
             }
 
@@ -46,7 +50,7 @@ public class UIManager : MonoBehaviour
         m_sidePanelButton = FindObjectOfType<SidePanelButton>();
 
         m_colorChangingObjects = new List<TextMeshProUGUI>();
-        foreach (GameObject gameObjectReference in GameObject.FindGameObjectsWithTag("UIChangeColorWithDayCycle"))
+        foreach (GameObject gameObjectReference in GameObject.FindGameObjectsWithTag(UI_CHANGE_COLOR_TAG))
         {
             TextMeshProUGUI temp = gameObjectReference.GetComponent<TextMeshProUGUI>();
 
@@ -56,7 +60,7 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        GameObject clockObject = GameObject.FindGameObjectWithTag("ClockDisplay");
+        GameObject clockObject = GameObject.FindGameObjectWithTag(CLOCK_DISPLAY_TAG);
         if (clockObject != null)
         {
             m_clockDisplay = clockObject.GetComponent<Clock_display>();

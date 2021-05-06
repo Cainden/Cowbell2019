@@ -126,6 +126,10 @@ public class GameManager : MonoBehaviour
         return Mathf.RoundToInt(GetApproximatedRandomValue(10, 2, 0));
     }
 
+    /// <summary>
+    /// Event handler for OnTimeOfDayChange events.
+    /// </summary>
+    /// <param name="dayPhase">Time of day.</param>
     public void OnTimeOfDayChange(TimeManager.DayPhase dayPhase)
     {
         switch(dayPhase)
@@ -145,12 +149,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Swap the UI to day mode
+    /// </summary>
     private void SwapToDayMode()
     {
         // Update UI
         UIManager.Instance.SwitchUIMode(TimeManager.DayPhase.Day);
     }
 
+    /// <summary>
+    /// Swap the UI to night mode.
+    /// </summary>
     private void SwapToNightMode()
     {
         // TODO : Show Tarot cards
