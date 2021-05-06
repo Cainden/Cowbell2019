@@ -6,8 +6,10 @@ using Unity.Mathematics;
 using UnityEngine.UI;
 using MySpace.Events;
 
+public delegate void OnTimeOfDayChange(TimeManager.DayPhase dayPhase);
+
 //Need Start on the Time Manager to happen before the GameManager
-[DefaultExecutionOrder(-10)]
+[DefaultExecutionOrder(-10)] // HACK : This can be resolved by having GameManager call Init on this object ref
 public class TimeManager : MonoBehaviour
 {
     #region Variables
@@ -96,7 +98,7 @@ public class TimeManager : MonoBehaviour
     /// </summary>
     public static float SecondsTime { get; private set; }
 
-
+    private event OnTimeOfDayChange m_onTimeOfDayChange;
 	
 	public static float RatioCycleTime
     {
@@ -152,9 +154,32 @@ public class TimeManager : MonoBehaviour
 		dayTrack.setDay(dayCounter.ToString());
 	}
 
+    /// <summary>
+    /// Register for time of day change events.
+    /// </summary>
+    /// <param name="handler">OnTimeOfDayChange handler</param>
+    public void RegisterOnTimeOfDayChange(OnTimeOfDayChange handler)
+    {
+        if(handler != null)
+        {
+            m_onTimeOfDayChange += handler;
+        }
+    }
 
-	/// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
-	void Reset()
+    /// <summary>
+    /// Unregister for time of day change events.
+    /// </summary>
+    /// <param name="handler">OnTimeOfDayChange handler</param>
+    public void UnregisterOnTimeOfDayChange(OnTimeOfDayChange handler)
+    {
+        if (handler != null)
+        {
+            m_onTimeOfDayChange -= handler;
+        }
+    }
+
+    /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
+    void Reset()
     {
         dayCycleLength = 120.0f;
         hoursPerDay = 24.0f;
@@ -205,6 +230,8 @@ public class TimeManager : MonoBehaviour
     // Update is called once per frame  
     void Update()
     {
+        DayPhase tempPhase = currentPhase;
+
         // Rudementary phase-check algorithm:  
         if (currentCycleTime > nightTime && currentPhase == DayPhase.Dusk)
         {
@@ -243,6 +270,12 @@ public class TimeManager : MonoBehaviour
 
         //currentCycleTime = currentCycleTime % dayCycleLength;
         EventManager.CheckCurrentEvents(currentCycleTime);
+
+        // If the phase changed, let's let all registered handlers know!!
+        if (tempPhase != currentPhase)
+        {
+            m_onTimeOfDayChange?.Invoke(currentPhase);
+        }
     }
 
     #endregion
