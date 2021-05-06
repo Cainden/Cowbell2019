@@ -89,6 +89,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Initialize manager objects
+        UIManager.Instance.Initialize();
+
         //set when guests start ariving
         MySpace.Events.EventManager.AddEventTriggerToGameTime((hourMinArival - 1), 0, 0, RandomGuestArival, true);
         MySpace.Events.EventManager.AddEventTriggerToGameTime(23, 59, 0, InitiateEndOfDay, true);
@@ -114,12 +117,48 @@ public class GameManager : MonoBehaviour
         }
 
         StartPath = (from PathPosition p in FindObjectsOfType<PathPosition>() orderby p.number ascending select p.transform.position).ToArray();
+
+        TimeManager.Ref.RegisterOnTimeOfDayChange(OnTimeOfDayChange);
     }
 
     public static int GetRandomizedGuestArival()
     {
         return Mathf.RoundToInt(GetApproximatedRandomValue(10, 2, 0));
     }
+
+    public void OnTimeOfDayChange(TimeManager.DayPhase dayPhase)
+    {
+        switch(dayPhase)
+        {
+            case TimeManager.DayPhase.Dawn:
+                // TODO
+                break;
+            case TimeManager.DayPhase.Day:
+                SwapToDayMode();
+                break;
+            case TimeManager.DayPhase.Dusk:
+                // TODO
+                break;
+            case TimeManager.DayPhase.Night:
+                SwapToNightMode();
+                break;
+        }
+    }
+
+    private void SwapToDayMode()
+    {
+        // Update UI
+        UIManager.Instance.SwitchUIMode(TimeManager.DayPhase.Day);
+    }
+
+    private void SwapToNightMode()
+    {
+        // TODO : Show Tarot cards
+
+        // Update UI
+        UIManager.Instance.SwitchUIMode(TimeManager.DayPhase.Night);
+    }
+
     private void RandomGuestArival()
     {
         guestsRandom = UnityEngine.Random.Range(1, maxGuests); //Randomize amount of guests

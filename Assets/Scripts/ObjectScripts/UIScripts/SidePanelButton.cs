@@ -68,6 +68,8 @@ public class SidePanelButton : MonoBehaviour
                 SetAllPanelsActiveRecursively(false, m_currentTopLevelPanel.gameObject);
                 m_currentTopLevelPanel.RegisterOnPanelPreClose(OnSidePanelPreClose);
             }
+
+            m_panelMode = mode;
         }
     }
 

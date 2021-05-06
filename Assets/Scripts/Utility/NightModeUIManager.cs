@@ -14,7 +14,7 @@ public class NightModeUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        // TODO : Register for night-mode trigger event
     }
     // Update is called once per frame
     void Update()
