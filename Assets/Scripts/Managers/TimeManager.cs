@@ -51,8 +51,6 @@ public class TimeManager : MonoBehaviour
     /// calculated minutes of the day, based on the hoursPerDay setting.  
     [HideInInspector] public int minutes;
 
-    /// The scene ambient color used for full daylight.  
-    public Color fullLight = new Color(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
 
     /// The scene ambient color used for full night.  
     public Color fullDark = new Color(32.0f / 255.0f, 28.0f / 255.0f, 46.0f / 255.0f);
@@ -143,10 +141,8 @@ public class TimeManager : MonoBehaviour
         SecondsTime = MinuteTime / 60;
 		//dayTrack.setDay(dayCounter.ToString());
 		currentCycleTime = dayStartHour * HourTime;
-
-        if (sun != null)
-        { lightIntensity = sun.intensity; }
     }
+
 	// track the day
 	public void nextDay()
 	{
@@ -178,17 +174,71 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Return the time remaining between the current phase and the
+    /// DayPhase provided in minutes.
+    /// </summary>
+    /// <param name="dayPhase">DayPhase to get remaining time until.</param>
+    /// <returns>Remaining time in minutes.</returns>
+    public float TimeRemainingUntil(DayPhase dayPhase)
+    {
+        float timeRemaining = 0.0f;
+
+        if (dayPhase < currentPhase || dayPhase == DayPhase.Night)
+        {
+            switch (dayPhase)
+            {
+                case DayPhase.Dawn:
+                    timeRemaining = dayCycleLength - currentCycleTime;
+                    break;
+                case DayPhase.Day:
+                    timeRemaining = dayTime - currentCycleTime;
+                    break;
+                case DayPhase.Dusk:
+                    timeRemaining = duskTime - currentCycleTime;
+                    break;
+                case DayPhase.Night:
+                    timeRemaining = nightTime - currentCycleTime;
+                    break;
+            }
+        }
+
+        return timeRemaining;
+    }
+
+    /// <summary>
+    /// Length of current DayPhase in minutes.
+    /// </summary>
+    /// <returns>Length of current DayPhase in minutes.</returns>
+    public float LengthOfCurrentPhase()
+    {
+        float phaseLength = 0.0f;
+
+        switch (currentPhase)
+        {
+            case DayPhase.Dawn:
+                phaseLength = dayTime - dawnTime;
+                break;
+            case DayPhase.Day:
+                phaseLength = duskTime - dayTime;
+                break;
+            case DayPhase.Dusk:
+                phaseLength = nightTime - duskTime;
+                break;
+            case DayPhase.Night:
+                phaseLength = dayCycleLength - nightTime;
+                break;
+        }
+
+        return phaseLength;
+    }
+
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
     void Reset()
     {
         dayCycleLength = 120.0f;
         hoursPerDay = 24.0f;
         dawnTimeOffset = 3.0f;
-        fullDark = new Color(32.0f / 255.0f, 28.0f / 255.0f, 46.0f / 255.0f);
-        fullLight = new Color(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
-        dawnDuskFog = new Color(133.0f / 255.0f, 124.0f / 255.0f, 102.0f / 255.0f);
-        dayFog = new Color(180.0f / 255.0f, 208.0f / 255.0f, 209.0f / 255.0f);
-        nightFog = new Color(12.0f / 255.0f, 15.0f / 255.0f, 91.0f / 255.0f);
     }
 
     // Use this for initialization  
@@ -235,26 +285,23 @@ public class TimeManager : MonoBehaviour
         // Rudementary phase-check algorithm:  
         if (currentCycleTime > nightTime && currentPhase == DayPhase.Dusk)
         {
-            SetNight();
+            currentPhase = DayPhase.Night;
         }
         else if (currentCycleTime > duskTime && currentPhase == DayPhase.Day)
         {
-            SetDusk();
+            currentPhase = DayPhase.Dusk;
         }
         else if (currentCycleTime > dayTime && currentPhase == DayPhase.Dawn)
         {
-            SetDay();
+            currentPhase = DayPhase.Day;
         }
         else if (currentCycleTime > dawnTime && currentCycleTime < dayTime && currentPhase == DayPhase.Night)
         {
-            SetDawn();
+            currentPhase = DayPhase.Dawn;
         }
 
         // Perform standard updates:  
         UpdateWorldTime();
-        UpdateDaylight();
-        UpdateFog();
-        UpdateSkyboxBlendFactor();
 
         // Update the current cycle time:  
         if (currentCycleTime > dayCycleLength)
@@ -280,118 +327,7 @@ public class TimeManager : MonoBehaviour
 
     #endregion
 
-    #region Day State Change Functions
-    /// Sets the currentPhase to Dawn, turning on the directional light, if any.  
-    public void SetDawn()
-    {
-        if (sun != null)
-        { sun.enabled = true; }
-        currentPhase = DayPhase.Dawn;
-    }
-
-    /// Sets the currentPhase to Day, ensuring full day color ambient light, and full  
-    /// directional light intensity, if any.  
-    public void SetDay()
-    {
-        RenderSettings.ambientLight = fullLight;
-        if (sun != null)
-        { sun.intensity = lightIntensity; }
-        currentPhase = DayPhase.Day;
-    }
-
-    /// Sets the currentPhase to Dusk.  
-    public void SetDusk()
-    {
-        currentPhase = DayPhase.Dusk;
-    }
-
-    /// Sets the currentPhase to Night, ensuring full night color ambient light, and  
-    /// turning off the directional light, if any.  
-    public void SetNight()
-    {
-        RenderSettings.ambientLight = fullDark;
-        if (sun != null)
-        { sun.enabled = false; }
-        currentPhase = DayPhase.Night;
-    }
-
-    #endregion
-
     #region Update Helper Functions
-    /// If the currentPhase is dawn or dusk, this method adjusts the ambient light color and direcitonal  
-    /// light intensity (if any) to a percentage of full dark or full light as appropriate. Regardless  
-    /// of currentPhase, the method also rotates the transform of this component, thereby rotating the  
-    /// directional light, if any.  
-    private void UpdateDaylight()
-    {
-        if (currentPhase == DayPhase.Dawn)
-        {
-            float relativeTime = currentCycleTime - dawnTime;
-            RenderSettings.ambientLight = Color.Lerp(fullDark, fullLight, relativeTime / halfquarterDay);
-            if (sun != null)
-            { sun.intensity = lightIntensity * (relativeTime / halfquarterDay); }
-        }
-        else if (currentPhase == DayPhase.Dusk)
-        {
-            float relativeTime = currentCycleTime - duskTime;
-            RenderSettings.ambientLight = Color.Lerp(fullLight, fullDark, relativeTime / halfquarterDay);
-            if (sun != null)
-            { sun.intensity = lightIntensity * ((halfquarterDay - relativeTime) / halfquarterDay); }
-        }
- 
-        //transform.RotateAround(rotation.position, Vector3.forward, ((Time.deltaTime / dayCycleLength) * 360.0f));
-    }
-
-    private void UpdateSkyboxBlendFactor()
-    {
-        if (currentPhase == DayPhase.Dawn)
-        {
-            float relativeTime = currentCycleTime - dawnTime;
-            SkyboxBlendFactor = 1 - (relativeTime / halfquarterDay);
-        }
-        else if (currentPhase == DayPhase.Day)
-        {
-            SkyboxBlendFactor = 0.0f;
-        }
-        else if (currentPhase == DayPhase.Dusk)
-        {
-            float relativeTime = currentCycleTime - duskTime;
-            SkyboxBlendFactor = relativeTime / halfquarterDay;
-        }
-        else if (currentPhase == DayPhase.Night)
-        {
-            SkyboxBlendFactor = 1.0f;
-        }
-
-        RenderSettings.skybox.SetFloat("_Blend", 0);
-    }
-
-    /// Interpolates the fog color between the specified phase colors during each phase's transition.  
-    /// eg. From DawnDusk to Day, Day to DawnDusk, DawnDusk to Night, and Night to DawnDusk  
-    private void UpdateFog()
-    {
-        if (currentPhase == DayPhase.Dawn)
-        {
-            float relativeTime = currentCycleTime - dawnTime;
-            RenderSettings.fogColor = Color.Lerp(dawnDuskFog, dayFog, relativeTime / halfquarterDay);
-        }
-        else if (currentPhase == DayPhase.Day)
-        {
-            float relativeTime = currentCycleTime - dayTime;
-            RenderSettings.fogColor = Color.Lerp(dayFog, dawnDuskFog, relativeTime / (quarterDay + halfquarterDay));
-        }
-        else if (currentPhase == DayPhase.Dusk)
-        {
-            float relativeTime = currentCycleTime - duskTime;
-            RenderSettings.fogColor = Color.Lerp(dawnDuskFog, nightFog, relativeTime / halfquarterDay);
-        }
-        else if (currentPhase == DayPhase.Night)
-        {
-            float relativeTime = currentCycleTime - nightTime;
-            RenderSettings.fogColor = Color.Lerp(nightFog, dawnDuskFog, relativeTime / (quarterDay + halfquarterDay));
-        }
-    }
-
     /// Updates the World-time hour based on the current time of day.  
     private void UpdateWorldTime()
     {
@@ -404,7 +340,6 @@ public class TimeManager : MonoBehaviour
     }
     #endregion
 
-    
     public enum DayPhase
     {
         Night = 0,
