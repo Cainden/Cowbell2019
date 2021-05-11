@@ -184,7 +184,7 @@ public class TimeManager : MonoBehaviour
     {
         float timeRemaining = 0.0f;
 
-        if (dayPhase < currentPhase || dayPhase == DayPhase.Night)
+        if (dayPhase > currentPhase || dayPhase == DayPhase.Night)
         {
             switch (dayPhase)
             {
@@ -281,6 +281,7 @@ public class TimeManager : MonoBehaviour
     void Update()
     {
         DayPhase tempPhase = currentPhase;
+        float tempTime = currentCycleTime;
 
         // Rudementary phase-check algorithm:  
         if (currentCycleTime > nightTime && currentPhase == DayPhase.Dusk)
@@ -319,7 +320,7 @@ public class TimeManager : MonoBehaviour
         EventManager.CheckCurrentEvents(currentCycleTime);
 
         // If the phase changed, let's let all registered handlers know!!
-        if (tempPhase != currentPhase)
+        if (tempPhase != currentPhase || tempTime == 0.0f)
         {
             m_onTimeOfDayChange?.Invoke(currentPhase);
         }

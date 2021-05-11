@@ -12,7 +12,8 @@ public class DayCycleRenderHelper : MonoBehaviour
     [SerializeField]
     private bool m_updateFog = true;
 
-    private Light m_sun; 
+    private Light m_sun;
+    private Material m_background;
     private static Color m_fullLight;
     private static Color m_fullDark;
     private static Color m_dawnDuskFog;
@@ -32,6 +33,13 @@ public class DayCycleRenderHelper : MonoBehaviour
     {
         // Find Sun object in scene.
         m_sun = GameObject.Find("Sun Directional Light")?.GetComponent<Light>();
+
+        // Find Background Material
+        GameObject sky = GameObject.Find("sky-07");
+        if(sky != null)
+        {
+            m_background = sky.GetComponent<SpriteRenderer>()?.material;
+        }
 
         // Initialize lights
         m_fullLight = new Color(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
@@ -112,20 +120,33 @@ public class DayCycleRenderHelper : MonoBehaviour
     /// <param name="dayPhase">Time of day.</param>
     private void UpdateSkyboxBlendFactor(TimeManager.DayPhase dayPhase)
     {
+        Debug.Log("Update skybox blend. From state : " + dayPhase.ToString());
         switch (dayPhase)
         {
             case TimeManager.DayPhase.Dawn:
                 StartCoroutine(FadeSkyboxBlend(TimeManager.DayPhase.Day, 1.0f, 0.0f));
                 break;
             case TimeManager.DayPhase.Day:
-                RenderSettings.skybox.SetFloat("_Blend", 0.0f);
+                SetSkyBlend(0.0f);
                 break;
             case TimeManager.DayPhase.Dusk:
                 StartCoroutine(FadeSkyboxBlend(TimeManager.DayPhase.Night, 0.0f, 1.0f));
                 break;
             case TimeManager.DayPhase.Night:
-                RenderSettings.skybox.SetFloat("_Blend", 1.0f);
+                SetSkyBlend(1.0f);
                 break;
+        }
+    }
+
+    /// <summary>
+    /// Helper function to set the blend value of the Sky
+    /// </summary>
+    /// <param name="blend">0 - 1 value.</param>
+    private void SetSkyBlend(float blend)
+    {
+        if(m_background != null)
+        {
+            m_background.SetFloat("trans", blend);
         }
     }
 
@@ -206,7 +227,7 @@ public class DayCycleRenderHelper : MonoBehaviour
         {
             timeRemaining = TimeManager.Ref.TimeRemainingUntil(toPhase);
             float skyboxBlendFactor = (currentPhaseLength - timeRemaining) / currentPhaseLength;
-            RenderSettings.skybox.SetFloat("_Blend", skyboxBlendFactor);
+            SetSkyBlend(Mathf.Lerp(fromValue, toValue, skyboxBlendFactor));
             yield return null;
         }
     }
