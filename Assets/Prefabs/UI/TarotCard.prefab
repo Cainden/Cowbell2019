@@ -490,8 +490,6 @@ MonoBehaviour:
   CharacterBody: {fileID: 876749390550124258}
   BountyInfo: {fileID: 1063229436269116046}
   LocationInfo: {fileID: 3339634843043880420}
-  CardAnimator: {fileID: 0}
-  CardFlipped: 0
 --- !u!95 &2631449548862037327
 Animator:
   serializedVersion: 3
@@ -725,7 +723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2754887575491909731}
   m_Layer: 5
-  m_Name: CharacterArt
+  m_Name: Tarrot_HEADSHOT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
