@@ -16,7 +16,6 @@ public class BG_CYCLE : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		bgMAT.SetFloat("trans", TimeManager.RatioCycleTime);
-		Debug.Log(TimeManager.RatioCycleTime);
+		//bgMAT.SetFloat("trans", TimeManager.RatioCycleTime);
     }
 }
