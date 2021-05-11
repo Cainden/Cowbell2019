@@ -21204,7 +21204,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 893626643}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7b2953abc6542e4e9c13d8cb64da834, type: 3}
   m_Name: 
@@ -50593,6 +50593,11 @@ PrefabInstance:
       propertyPath: nextday
       value: 
       objectReference: {fileID: 533202894}
+    - target: {fileID: 1261920934932048545, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_TagString
+      value: ClockDisplay
+      objectReference: {fileID: 0}
     - target: {fileID: 1977234504634851755, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -50703,6 +50708,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3068896432682821531, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_TagString
+      value: UIChangeColorWithDayCycle
+      objectReference: {fileID: 0}
     - target: {fileID: 3068896432887652916, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -50742,6 +50752,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_margin.z
       value: 13.893068
+      objectReference: {fileID: 0}
+    - target: {fileID: 3068896432887652919, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_TagString
+      value: UIChangeColorWithDayCycle
       objectReference: {fileID: 0}
     - target: {fileID: 3068896433119964563, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
@@ -50787,6 +50802,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -25.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3127983215814508222, guid: 3fc230055b419d648a2dffec533bb376,
+        type: 3}
+      propertyPath: m_TagString
+      value: UIChangeColorWithDayCycle
       objectReference: {fileID: 0}
     - target: {fileID: 3291485143636738704, guid: 3fc230055b419d648a2dffec533bb376,
         type: 3}
