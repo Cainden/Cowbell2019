@@ -83,8 +83,6 @@ public class TimeManager : MonoBehaviour
 	//time of day tracker
 	public TimeOfDayTracker dayTrack;
 
-    private float m_hootelTimeScale = 1.0f;
-
     /// <summary>
     /// Real world time that in-game hours take in seconds
     /// </summary>
@@ -176,6 +174,12 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Return the time remaining between the current phase and the
+    /// DayPhase provided in minutes.
+    /// </summary>
+    /// <param name="dayPhase">DayPhase to get remaining time until.</param>
+    /// <returns>Remaining time in minutes.</returns>
     public float TimeRemainingUntil(DayPhase dayPhase)
     {
         float timeRemaining = 0.0f;
@@ -202,6 +206,10 @@ public class TimeManager : MonoBehaviour
         return timeRemaining;
     }
 
+    /// <summary>
+    /// Length of current DayPhase in minutes.
+    /// </summary>
+    /// <returns>Length of current DayPhase in minutes.</returns>
     public float LengthOfCurrentPhase()
     {
         float phaseLength = 0.0f;
@@ -223,22 +231,6 @@ public class TimeManager : MonoBehaviour
         }
 
         return phaseLength;
-    }
-
-    public float GetQuarterDayLength()
-    {
-        return quarterDay;
-    }
-
-    public float GetHootelTimeScale()
-    {
-        return m_hootelTimeScale;
-    }
-
-    public void SetHootelTimeScale(float timeScale)
-    {
-        // TODO : CLAMP THE TIMESCALE
-        m_hootelTimeScale = timeScale;
     }
 
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
@@ -293,19 +285,19 @@ public class TimeManager : MonoBehaviour
         // Rudementary phase-check algorithm:  
         if (currentCycleTime > nightTime && currentPhase == DayPhase.Dusk)
         {
-            SetNight();
+            currentPhase = DayPhase.Night;
         }
         else if (currentCycleTime > duskTime && currentPhase == DayPhase.Day)
         {
-            SetDusk();
+            currentPhase = DayPhase.Dusk;
         }
         else if (currentCycleTime > dayTime && currentPhase == DayPhase.Dawn)
         {
-            SetDay();
+            currentPhase = DayPhase.Day;
         }
         else if (currentCycleTime > dawnTime && currentCycleTime < dayTime && currentPhase == DayPhase.Night)
         {
-            SetDawn();
+            currentPhase = DayPhase.Dawn;
         }
 
         // Perform standard updates:  
@@ -316,7 +308,7 @@ public class TimeManager : MonoBehaviour
             currentCycleTime = currentCycleTime % dayCycleLength;
         else if (currentCycleTime == dayCycleLength)
             currentCycleTime = 0;
-        currentCycleTime += Time.deltaTime * m_hootelTimeScale;
+        currentCycleTime += Time.deltaTime;
         if (currentCycleTime > dayCycleLength)
             currentCycleTime = dayCycleLength;
 
@@ -335,35 +327,6 @@ public class TimeManager : MonoBehaviour
 
     #endregion
 
-    #region Day State Change Functions
-    /// Sets the currentPhase to Dawn, turning on the directional light, if any.  
-    public void SetDawn()
-    {
-        currentPhase = DayPhase.Dawn;
-    }
-
-    /// Sets the currentPhase to Day, ensuring full day color ambient light, and full  
-    /// directional light intensity, if any.  
-    public void SetDay()
-    {
-        currentPhase = DayPhase.Day;
-    }
-
-    /// Sets the currentPhase to Dusk.  
-    public void SetDusk()
-    {
-        currentPhase = DayPhase.Dusk;
-    }
-
-    /// Sets the currentPhase to Night, ensuring full night color ambient light, and  
-    /// turning off the directional light, if any.  
-    public void SetNight()
-    {
-        currentPhase = DayPhase.Night;
-    }
-
-    #endregion
-
     #region Update Helper Functions
     /// Updates the World-time hour based on the current time of day.  
     private void UpdateWorldTime()
@@ -377,7 +340,6 @@ public class TimeManager : MonoBehaviour
     }
     #endregion
 
-    
     public enum DayPhase
     {
         Night = 0,

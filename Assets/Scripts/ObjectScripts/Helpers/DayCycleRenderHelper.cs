@@ -1,12 +1,18 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DayCycleRenderHelper : MonoBehaviour
 {
-    private Light m_sun;
+    [SerializeField]
+    private bool m_updateLighting = true;
 
-    /// The scene ambient color used for full daylight.  
+    [SerializeField]
+    private bool m_blendSkybox = true;
+
+    [SerializeField]
+    private bool m_updateFog = true;
+
+    private Light m_sun; 
     private static Color m_fullLight;
     private static Color m_fullDark;
     private static Color m_dawnDuskFog;
@@ -19,10 +25,12 @@ public class DayCycleRenderHelper : MonoBehaviour
         Initialize();
     }
 
-    public void Initialize()
+    /// <summary>
+    /// Initialize this component.
+    /// </summary>
+    private void Initialize()
     {
-        // find objects in scene.
-        // sun
+        // Find Sun object in scene.
         m_sun = GameObject.Find("Sun Directional Light")?.GetComponent<Light>();
 
         // Initialize lights
@@ -36,16 +44,37 @@ public class DayCycleRenderHelper : MonoBehaviour
             m_lightIntensity = m_sun.intensity;
         }
 
+        // Register event handler for time of day changes
         TimeManager.Ref.RegisterOnTimeOfDayChange(OnTimeOfDayChange);
     }
 
+    /// <summary>
+    /// Event handler for adjusting rendering effects based on
+    /// time of day.
+    /// </summary>
+    /// <param name="dayPhase">Time of day.</param>
     public void OnTimeOfDayChange(TimeManager.DayPhase dayPhase)
     {
-        UpdateDayCycleLighting(dayPhase);
-        UpdateSkyboxBlendFactor(dayPhase);
-        UpdateFog(dayPhase);
+        if (m_updateLighting)
+        {
+            UpdateDayCycleLighting(dayPhase);
+        }
+
+        if (m_blendSkybox)
+        {
+            UpdateSkyboxBlendFactor(dayPhase);
+        }
+
+        if (m_updateFog)
+        {
+            UpdateFog(dayPhase);
+        }
     }
 
+    /// <summary>
+    /// Update the scene lighting based on time of day changes.
+    /// </summary>
+    /// <param name="dayPhase">Time of day.</param>
     private void UpdateDayCycleLighting(TimeManager.DayPhase dayPhase)
     {
         switch (dayPhase)
@@ -77,6 +106,10 @@ public class DayCycleRenderHelper : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Blend the skybox from day to night based on the time of day changes.
+    /// </summary>
+    /// <param name="dayPhase">Time of day.</param>
     private void UpdateSkyboxBlendFactor(TimeManager.DayPhase dayPhase)
     {
         switch (dayPhase)
@@ -96,6 +129,10 @@ public class DayCycleRenderHelper : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Update fog based on time of day changes.
+    /// </summary>
+    /// <param name="dayPhase">Time of day.</param>
     private void UpdateFog(TimeManager.DayPhase dayPhase)
     {
         switch (dayPhase)
@@ -115,6 +152,14 @@ public class DayCycleRenderHelper : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine to fade scene lighting between the current phase
+    /// and the TimeManager.DayPhase provided.
+    /// </summary>
+    /// <param name="toPhase">TimeManager.DayPhase being transitioned to.</param>
+    /// <param name="fromColor">Lighting color being faded from.</param>
+    /// <param name="toColor">Lighting color being faded to.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator FadeLighting(TimeManager.DayPhase toPhase,
                              Color fromColor, Color toColor)
     {
@@ -144,6 +189,14 @@ public class DayCycleRenderHelper : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine to blend the skybox between day and night based on the
+    /// current day phase and the TimeManager.DayPhase provided.
+    /// </summary>
+    /// <param name="toPhase">TimeManager.DayPhase being transitioned to.</param>
+    /// <param name="fromValue">Blend value being transitioned from.</param>
+    /// <param name="toValue">Blend value being transitioned to.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator FadeSkyboxBlend(TimeManager.DayPhase toPhase, float fromValue, float toValue)
     {
         float timeRemaining = 1.0f;
@@ -158,6 +211,14 @@ public class DayCycleRenderHelper : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine to fade the fog values between the current day phase
+    /// and the TimeManager.DayPhase provided.
+    /// </summary>
+    /// <param name="toPhase">TimeManager.DayPhase being transitioned to.</param>
+    /// <param name="fromColor">Lighting color being faded from.</param>
+    /// <param name="toColor">Lighting color being faded to.</param>
+    /// <returns>IEnumerator for coroutine.</returns>
     IEnumerator FadeFog(TimeManager.DayPhase toPhase, Color fromColor, Color toColor)
     {
         float timeRemaining = 1.0f;
