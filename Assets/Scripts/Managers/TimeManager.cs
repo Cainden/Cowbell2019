@@ -261,11 +261,27 @@ public class TimeManager : MonoBehaviour
         return phaseLength;
     }
 
+    /// <summary>
+    /// Get the current timeScale for a given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type defining the
+    /// expected timeScale return value.</param>
+    /// <param name="timeScale">Float reference to be filled out by
+    /// the function.</param>
+    /// <returns>True if the timeScalar exists. Otherwise, false.</returns>
     public bool GetTimeScale(TimeScalar timeScalar, out float timeScale)
     {
         return m_timeScalars.TryGetValue(timeScalar, out timeScale);
     }
 
+    /// <summary>
+    /// Gets deltaTime pre-scaled by the given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type defining the
+    /// expected scalar to use when scaling deltaTime.</param>
+    /// <param name="scaledDeltaTime">Float reference to be filled out by
+    /// the function.</param>
+    /// <returns>True if the TimeScalar exists. Otherwise, false.</returns>
     public bool GetScaledDeltaTime(TimeScalar timeScalar, out float scaledDeltaTime)
     {
         float timeScale = 0.0f;
@@ -283,6 +299,14 @@ public class TimeManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Sets the time scale of a given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type for which the new
+    /// timeScale will be applied.</param>
+    /// <param name="timeScale">Value of the desired timescale</param>
+    /// <remarks>This function will clamp the timeScale at 0.0f and higher.
+    /// No negative values will be applied.</remarks>
     public void SetTimeScale(TimeScalar timeScalar, float timeScale)
     {
         if(timeScale < 0.0f)
