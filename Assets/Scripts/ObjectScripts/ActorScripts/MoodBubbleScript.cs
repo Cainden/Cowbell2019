@@ -116,7 +116,11 @@ public class MoodBubbleScript : MonoBehaviour
         if (displayDuration != null && OverrideMood == Enums.ManMood.None)
             while (displayTime < displayDuration)
             {
-                displayTime += Time.deltaTime;
+                float deltaTime;
+                if (TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime))
+                {
+                    displayTime += deltaTime;
+                }
                 yield return null;
             }
         else
@@ -149,10 +153,14 @@ public class MoodBubbleScript : MonoBehaviour
         displayDuration = 1;
         while (displayTime < displayDuration)
         {
-            displayTime += Time.deltaTime;
-            panel.SetAlpha(Mathf.Lerp(pA, 0, displayTime));
-            bubble.SetAlpha(Mathf.Lerp(bA, 0, displayTime));
-            localCanvas.transform.Translate(Vector3.up * Time.deltaTime);
+            float deltaTime;
+            if (TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime))
+            {
+                displayTime += deltaTime;
+                panel.SetAlpha(Mathf.Lerp(pA, 0, displayTime));
+                bubble.SetAlpha(Mathf.Lerp(bA, 0, displayTime));
+                localCanvas.transform.Translate(Vector3.up * Time.deltaTime);
+            }
             yield return null;
         }
         localCanvas.transform.localPosition = canvasOrigin;

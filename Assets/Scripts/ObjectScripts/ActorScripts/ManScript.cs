@@ -529,19 +529,24 @@ public abstract class ManScript : MonoBehaviour
         //}
         //print(path);
 
-        float Travel = (Constants.ManRunSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
-        //print("Travel: " + Travel);
-        if (Travel >= Vector3.Distance(transform.position, _TargetPos)) // Target reached
+        float deltaTime;
+        if (TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime))
         {
-            transform.position = _TargetPos;
-            return true;
+            float Travel = (Constants.ManRunSpeed + (GetGeneralStatValue(GeneralStat.StatType.Speed) * 0.1f)) * deltaTime;
+            //print("Travel: " + Travel);
+            if (Travel >= Vector3.Distance(transform.position, _TargetPos)) // Target reached
+            {
+                transform.position = _TargetPos;
+                return true;
+            }
+            else // Regular movement
+            {
+                //                              direction
+                transform.position += (_TargetPos - transform.position).normalized * Travel;
+                return false;
+            }
         }
-        else // Regular movement
-        {
-            //                              direction
-            transform.position += (_TargetPos - transform.position).normalized * Travel;
-            return false;
-        }
+        return false;
     }
 
     #endregion
