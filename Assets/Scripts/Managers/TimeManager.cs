@@ -371,9 +371,14 @@ public class TimeManager : MonoBehaviour
             currentCycleTime = currentCycleTime % dayCycleLength;
         else if (currentCycleTime == dayCycleLength)
             currentCycleTime = 0;
-        currentCycleTime += Time.deltaTime;
-        if (currentCycleTime > dayCycleLength)
-            currentCycleTime = dayCycleLength;
+
+        float deltaTime;
+        if(GetScaledDeltaTime(TimeScalar.HOOTEL, out deltaTime))
+        {
+            currentCycleTime += deltaTime;
+            if (currentCycleTime > dayCycleLength)
+                currentCycleTime = dayCycleLength;
+        }
 
         //Using the above method instead of the below one for triggering events based on end of day. 
         //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
