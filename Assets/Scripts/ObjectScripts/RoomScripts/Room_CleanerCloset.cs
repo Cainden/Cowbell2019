@@ -35,11 +35,14 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
     private static void Cleaner(ManScript_Worker man)
     {
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         //Room is a bedroom
         if (man.ManData.AssignedRoom.RoomData.RoomType == Enums.RoomTypes.Bedroom)
         {
             (man.ManData.AssignedRoom as Room_Bedroom).CleanRoom(man.GetSpecialtyStatValue(MySpace.Stats.SpecialtyStat.StatType.Physicality));
-            man.currentTiredness -= Time.deltaTime;
+            man.currentTiredness -= deltaTime;
             if (man.currentTiredness < 0)
             {
                 man.currentTiredness = 0;
@@ -56,7 +59,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
         //Room is a cleaner closet
         else if (man.ManData.AssignedRoom.RoomData.RoomType == Enums.RoomTypes.CleanerCloset)
         {
-            man.currentTiredness += Time.deltaTime * restRatio;
+            man.currentTiredness += deltaTime * restRatio;
             if (man.currentTiredness > ManScript_Worker.tirednessMax)
             {
                 man.currentTiredness = ManScript_Worker.tirednessMax;
@@ -69,7 +72,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
                     man.delayTimer = 0;
                 }
                 
-                man.delayTimer += Time.deltaTime;
+                man.delayTimer += deltaTime;
             }
         }
     }

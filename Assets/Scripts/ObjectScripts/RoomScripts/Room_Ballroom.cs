@@ -103,7 +103,10 @@ public class Room_Ballroom : Room_WorkQuarters
 
     public override void GuestBehavior(ManScript_Guest guest)
     {
-        guest.delayTimer += Time.deltaTime;
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
+        guest.delayTimer += deltaTime;
         if (guest.delayTimer < 1)
             return;
         guest.delayTimer = 0;

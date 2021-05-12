@@ -35,9 +35,12 @@ public class RoomInfoWindowScript : MonoBehaviour
     private float tickCounter;
     private void Update()
     {
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (gameObject.activeInHierarchy)
         {
-            tickCounter += Time.deltaTime;
+            tickCounter += deltaTime;
             if (currRoom != null)
             {
                 if (tickCounter >= 2)

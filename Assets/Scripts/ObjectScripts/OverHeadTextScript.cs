@@ -24,8 +24,13 @@ public class OverHeadTextScript : MonoBehaviour
 
     private void Update()
     {
-        if (canMove) { transform.position = Vector3.MoveTowards(transform.position, transform.position + myMoveDir, moveAmt * (moveSpeed * Time.deltaTime)); }
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
 
+        if (canMove)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + myMoveDir, moveAmt * (moveSpeed * deltaTime));
+        }
     }
 
    // public void SetOverheadText(string textStr, Color textColor)

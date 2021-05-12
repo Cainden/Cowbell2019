@@ -19,6 +19,9 @@ public class RoomPopUpScript_Small : MonoBehaviour
     float time;
     private void Update()
     {
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (!gameObject.activeInHierarchy)
         {
             time = 0;
@@ -31,7 +34,7 @@ public class RoomPopUpScript_Small : MonoBehaviour
             return;
         }
 
-        time += Time.deltaTime;
+        time += deltaTime;
         if (time >= tickTimer)
         {
             time = 0;
