@@ -159,7 +159,7 @@ public class MoodBubbleScript : MonoBehaviour
                 displayTime += deltaTime;
                 panel.SetAlpha(Mathf.Lerp(pA, 0, displayTime));
                 bubble.SetAlpha(Mathf.Lerp(bA, 0, displayTime));
-                localCanvas.transform.Translate(Vector3.up * Time.deltaTime);
+                localCanvas.transform.Translate(Vector3.up * deltaTime);
             }
             yield return null;
         }
