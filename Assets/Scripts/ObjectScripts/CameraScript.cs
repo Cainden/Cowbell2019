@@ -147,21 +147,25 @@ public class CameraScript : MonoBehaviour
 
 	public void CheckKeyMovement()
 	{
-		if (Input.GetKey(KeyCode.D))
+		float deltaTime;
+		if (TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.CAMERA, out deltaTime))
 		{
-			transform.Translate(new Vector3(CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
-		}
-		if (Input.GetKey(KeyCode.A))
-		{
-			transform.Translate(new Vector3(-CameraKeyMovementSpeed * Time.deltaTime, 0, 0));
-		}
-		if (Input.GetKey(KeyCode.S))
-		{
-			transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * Time.deltaTime, 0));
-		}
-		if (Input.GetKey(KeyCode.W))
-		{
-			transform.Translate(new Vector3(0, CameraKeyMovementSpeed * Time.deltaTime, 0));
+			if (Input.GetKey(KeyCode.D))
+			{
+				transform.Translate(new Vector3(CameraKeyMovementSpeed * deltaTime, 0, 0));
+			}
+			if (Input.GetKey(KeyCode.A))
+			{
+				transform.Translate(new Vector3(-CameraKeyMovementSpeed * deltaTime, 0, 0));
+			}
+			if (Input.GetKey(KeyCode.S))
+			{
+				transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * deltaTime, 0));
+			}
+			if (Input.GetKey(KeyCode.W))
+			{
+				transform.Translate(new Vector3(0, CameraKeyMovementSpeed * deltaTime, 0));
+			}
 		}
 	}
 
@@ -189,24 +193,28 @@ public class CameraScript : MonoBehaviour
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManDragging) return;
 
-        float fZFactor = (1.0f - zoomFactor) * 10.0f + 7.5f; 
+        float fZFactor = (1.0f - zoomFactor) * 10.0f + 7.5f;
 
-        if (Input.mousePosition.x < 20)
-        {
-            transform.Translate(new Vector3(-CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
-        }
-        else if (Input.mousePosition.x > Screen.width - 20)
-        {
-            transform.Translate(new Vector3(CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0, 0));
-        }
+		float deltaTime;
+		if (TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.CAMERA, out deltaTime))
+		{
+			if (Input.mousePosition.x < 20)
+			{
+				transform.Translate(new Vector3(-CameraKeyMovementSpeed * deltaTime * fZFactor, 0, 0));
+			}
+			else if (Input.mousePosition.x > Screen.width - 20)
+			{
+				transform.Translate(new Vector3(CameraKeyMovementSpeed * deltaTime * fZFactor, 0, 0));
+			}
 
-        if (Input.mousePosition.y < 20)
-        {
-            transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
-        }
-        else if (Input.mousePosition.y > Screen.height - 20)
-        {
-            transform.Translate(new Vector3(0, CameraKeyMovementSpeed * Time.deltaTime * fZFactor, 0));
-        }
+			if (Input.mousePosition.y < 20)
+			{
+				transform.Translate(new Vector3(0, -CameraKeyMovementSpeed * deltaTime * fZFactor, 0));
+			}
+			else if (Input.mousePosition.y > Screen.height - 20)
+			{
+				transform.Translate(new Vector3(0, CameraKeyMovementSpeed * deltaTime * fZFactor, 0));
+			}
+		}
     }
 }
