@@ -49,12 +49,13 @@ public class GameManager : MonoBehaviour
         set
         {
             if (value < 0)
-                Time.timeScale = 0;
+                TimeManager.Ref.SetTimeScale(TimeManager.TimeScalar.HOOTEL, 0.0f);
             else if (value > 5)
-                Time.timeScale = 5;
+                TimeManager.Ref.SetTimeScale(TimeManager.TimeScalar.HOOTEL, 5.0f);
             else
-                Time.timeScale = value;
-            gameSpeed = Time.timeScale;
+                TimeManager.Ref.SetTimeScale(TimeManager.TimeScalar.HOOTEL, value);
+
+            TimeManager.Ref.GetTimeScale(TimeManager.TimeScalar.HOOTEL, out gameSpeed);
             OnGameSpeedChanged?.Invoke(gameSpeed);
         }
     }

@@ -25,7 +25,7 @@ public class DailySummaryScript : MonoBehaviour
     public void Enable(string hootelName, float guestHappiness)
     {
         gameObject.SetActive(true);
-        Time.timeScale = 0;
+        TimeManager.Ref.SetTimeScale(TimeManager.TimeScalar.HOOTEL, 0.0f);
         #region Revenue Calc Stuff
         List<RevenueInfo> info = GameManager.GetNetRevenueInfo();
         float fOut = 0, fIn = 0;
