@@ -120,7 +120,7 @@ public class DayCycleRenderHelper : MonoBehaviour
     /// <param name="dayPhase">Time of day.</param>
     private void UpdateSkyboxBlendFactor(TimeManager.DayPhase dayPhase)
     {
-        Debug.Log("Update skybox blend. From state : " + dayPhase.ToString());
+        //Debug.Log("Update skybox blend. From state : " + dayPhase.ToString());
         switch (dayPhase)
         {
             case TimeManager.DayPhase.Dawn:

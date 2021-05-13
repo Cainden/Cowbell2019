@@ -145,9 +145,27 @@ public class GameManager : MonoBehaviour
                 // TODO
                 break;
             case TimeManager.DayPhase.Night:
-                SwapToNightMode();
+                //SwapToNightMode();
                 break;
         }
+    }
+
+    /// <summary>
+    /// Event handler for OnTriggerMonsterMode event.
+    /// </summary>
+    public void OnTriggerMonsterMode()
+    {
+        StartCoroutine(MonsterMode());
+    }
+
+    IEnumerator MonsterMode()
+    {
+        // Enable Monster UI
+        SwapToNightMode();
+
+        // Show Tarot Cards
+
+        yield return null;
     }
 
     /// <summary>
@@ -164,8 +182,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SwapToNightMode()
     {
-        // TODO : Show Tarot cards
-
         // Update UI
         UIManager.Instance.SwitchUIMode(TimeManager.DayPhase.Night);
     }

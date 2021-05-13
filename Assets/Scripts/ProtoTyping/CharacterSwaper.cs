@@ -98,8 +98,8 @@ public class CharacterSwaper : MonoBehaviour
         {
             setChar[i].SetCategoryAndLabel(setChar[i].name, charLabel[(int)j]);
             setChar[i].ResolveSpriteToSpriteRenderer();
-			if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
-			Debug.Log(setChar[i].GetLabel().ToString());
+			//if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
+			//Debug.Log(setChar[i].GetLabel().ToString());
 		}
     }
 
@@ -109,8 +109,8 @@ public class CharacterSwaper : MonoBehaviour
 		{
 			setChar[i].SetCategoryAndLabel(setChar[i].name, charLabel[j]);
 			setChar[i].ResolveSpriteToSpriteRenderer();
-			if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
-			Debug.Log(setChar[i].GetLabel().ToString());
+			//if (GameManager.Debug)  Debug.Log(setChar[i].GetLabel().ToString());
+			//Debug.Log(setChar[i].GetLabel().ToString());
 		}
 
 	} 
