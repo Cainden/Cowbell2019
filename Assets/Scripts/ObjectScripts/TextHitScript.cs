@@ -21,7 +21,10 @@ public class TextHitScript : MonoBehaviour
 
     private void Update()
     {
-        fElapsedTime += Time.deltaTime;
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
+        fElapsedTime += deltaTime;
 
         if (fElapsedTime >= 2.0f)
         {

@@ -71,9 +71,12 @@ public class Room_Lobby : RoomScript
     {
         base.Update();
 
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (t > 0 && doorOpening == 0)
         {
-            t -= Time.deltaTime * doorSpeed * 2;
+            t -= deltaTime * doorSpeed * 2;
             if (t < 0) t = 0;
 
             LeftDoor.transform.rotation = Quaternion.Euler(Vector3.Lerp(new Vector3(L_XRot, L_YRot, L_BaseRot), new Vector3(L_XRot, L_YRot, (lastOpen == 1 ? -L_InnerRot : L_InnerRot)), t));
@@ -81,7 +84,7 @@ public class Room_Lobby : RoomScript
         }
         else if (doorOpening == 1 && t < 1)
         {
-            t += Time.deltaTime * doorSpeed * 2;
+            t += deltaTime * doorSpeed * 2;
             if (t > 1)
                 t = 1;
 
@@ -90,7 +93,7 @@ public class Room_Lobby : RoomScript
         }
         else if (doorOpening == 2 && t < 1)
         {
-            t += Time.deltaTime * doorSpeed * 2;
+            t += deltaTime * doorSpeed * 2;
             if (t > 1)
                 t = 1;
 

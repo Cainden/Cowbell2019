@@ -91,10 +91,14 @@ public class Room_Bedroom : RoomScript
     protected override void Update()
     {
         base.Update();
-        if (delay < 1)
-            delay += Time.deltaTime;
 
-        fElapsedTime += Time.deltaTime;
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
+        if (delay < 1)
+            delay += deltaTime;
+
+        fElapsedTime += deltaTime;
         if (RoomIsActive && fElapsedTime > cleanTickTime)
         {
             int numMen = CountMen();
@@ -123,8 +127,8 @@ public class Room_Bedroom : RoomScript
 
             if (bStank)
             {
-                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime * mult;
-                //print("dirty: " + RoomManager.Ref.CleanSpeedRatio * dirtyFactor * cleanTickTime * Time.deltaTime);
+                Cleanliness -= RoomManager.Ref.DirtinessSpeedRatio * dirtyFactor * cleanTickTime * deltaTime * mult;
+                //print("dirty: " + RoomManager.Ref.CleanSpeedRatio * dirtyFactor * cleanTickTime * deltaTime);
                 if (Cleanliness < 0)
                     Cleanliness = 0;
             }
@@ -135,11 +139,14 @@ public class Room_Bedroom : RoomScript
 
     public override void GuestBehavior(ManScript_Guest guest)
     {
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (Cleanliness < cleanlinessThreshhold * 0.5f)
-            guest.ChangeHappiness(-5 * Time.deltaTime);
+            guest.ChangeHappiness(-5 * deltaTime);
         if (guest.GetHappiness() < 50)
         {
-            guest.delayTimer += Time.deltaTime;
+            guest.delayTimer += deltaTime;
             if (guest.delayTimer >= 1)
             {
                 guest.delayTimer = 0;
@@ -249,7 +256,10 @@ public class Room_Bedroom : RoomScript
 
     public void CleanRoom(float cleanFactor)
     {
-        Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * Time.deltaTime * 0.01f;
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
+        Cleanliness += RoomManager.Ref.CleanSpeedRatio * cleanFactor * cleanTickTime * deltaTime * 0.01f;
         if (Cleanliness > 1)
             Cleanliness = 1;
     }
@@ -380,10 +390,13 @@ public class Room_Bedroom : RoomScript
     Guid manIn, waitingMan;
     public bool OverRideUpdateForDoor(ManScript man, Vector3 target)
     {
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (man.transform.position.z == target.z)
         {
             man.SetState(Enums.ManStates.Running, -1, target);
-            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * deltaTime;
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
                 man.transform.position = target;
@@ -423,7 +436,7 @@ public class Room_Bedroom : RoomScript
 
             target = new Vector3(DoorPos.transform.position.x, target.y, target.z);
             man.SetState(Enums.ManStates.Running, -1, target);
-            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
             {
@@ -458,7 +471,7 @@ public class Room_Bedroom : RoomScript
         {
             target = new Vector3(DoorPos.transform.position.x, man.transform.position.y, man.transform.position.z);
             man.SetState(Enums.ManStates.Running, -1, target);
-            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * Time.deltaTime;
+            float Travel = (Constants.ManRunSpeed + (man.GetGeneralStatValue(MySpace.Stats.GeneralStat.StatType.Speed) * 0.1f)) * deltaTime;
 
             if (Travel > Vector3.Distance(man.transform.position, target))
             {

@@ -260,8 +260,11 @@ public class Room_Elevator : RoomScript
     protected override void Update()
     {
         base.Update();
+        float deltaTime;
+        TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
         if (delay < 0.3f)
-            delay += Time.deltaTime;
+            delay += deltaTime;
         //GridManager.Ref.DebugIndexMovement(RoomData.CoveredIndizes[1], ", Y: " + RoomData.CoveredIndizes[0].Y);
     }
 
@@ -423,7 +426,10 @@ public class Room_Elevator : RoomScript
             float aStartT = GetBoxTIndex(start), aEndT = GetBoxTIndex(moveTo.boxPos);
             while (t < 1)
             {
-                t += Time.deltaTime / speed;
+                float deltaTime;
+                TimeManager.Ref.GetScaledDeltaTime(TimeManager.TimeScalar.HOOTEL, out deltaTime);
+
+                t += deltaTime / speed;
                 if (t > 1)
                     t = 1;
                 eBox.transform.position = Vector3.Lerp(start, moveTo.boxPos, t);

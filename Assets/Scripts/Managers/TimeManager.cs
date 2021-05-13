@@ -12,6 +12,26 @@ public delegate void OnTimeOfDayChange(TimeManager.DayPhase dayPhase);
 [DefaultExecutionOrder(-10)] // HACK : This can be resolved by having GameManager call Init on this object ref
 public class TimeManager : MonoBehaviour
 {
+    public enum TimeScalar
+    {
+        UNITY,
+        HOOTEL,
+        MONSTER,
+        CAMERA
+    }
+
+    public enum MoonCycle
+    {
+        WANING_GIBBOUS,
+        THIRD_QUARTER,
+        WANING_CRESCENT,
+        NEW_MOON,
+        WAXING_CRESCENT,
+        FIRST_QUARTER,
+        WAXING_GIBBOUS,
+        FULL_MOON
+    }
+
     #region Variables
     [SerializeField] Light sun = null;
 
@@ -97,6 +117,8 @@ public class TimeManager : MonoBehaviour
     public static float SecondsTime { get; private set; }
 
     private event OnTimeOfDayChange m_onTimeOfDayChange;
+
+    private Dictionary<TimeScalar, float> m_timeScalars;
 	
 	public static float RatioCycleTime
     {
@@ -141,6 +163,12 @@ public class TimeManager : MonoBehaviour
         SecondsTime = MinuteTime / 60;
 		//dayTrack.setDay(dayCounter.ToString());
 		currentCycleTime = dayStartHour * HourTime;
+
+        m_timeScalars = new Dictionary<TimeScalar, float>();
+        m_timeScalars.Add(TimeScalar.CAMERA, 1.0f);
+        m_timeScalars.Add(TimeScalar.HOOTEL, 1.0f);
+        m_timeScalars.Add(TimeScalar.MONSTER, 1.0f);
+        m_timeScalars.Add(TimeScalar.UNITY, 1.0f);
     }
 
 	// track the day
@@ -233,6 +261,64 @@ public class TimeManager : MonoBehaviour
         return phaseLength;
     }
 
+    /// <summary>
+    /// Get the current timeScale for a given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type defining the
+    /// expected timeScale return value.</param>
+    /// <param name="timeScale">Float reference to be filled out by
+    /// the function.</param>
+    /// <returns>True if the timeScalar exists. Otherwise, false.</returns>
+    public bool GetTimeScale(TimeScalar timeScalar, out float timeScale)
+    {
+        return m_timeScalars.TryGetValue(timeScalar, out timeScale);
+    }
+
+    /// <summary>
+    /// Gets deltaTime pre-scaled by the given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type defining the
+    /// expected scalar to use when scaling deltaTime.</param>
+    /// <param name="scaledDeltaTime">Float reference to be filled out by
+    /// the function.</param>
+    /// <returns>True if the TimeScalar exists. Otherwise, false.</returns>
+    public bool GetScaledDeltaTime(TimeScalar timeScalar, out float scaledDeltaTime)
+    {
+        float timeScale = 0.0f;
+
+        if(GetTimeScale(timeScalar, out timeScale))
+        {
+            scaledDeltaTime = Time.deltaTime * timeScale;
+            return true;
+        }
+        else
+        {
+            scaledDeltaTime = 0.0f;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Sets the time scale of a given TimeScalar.
+    /// </summary>
+    /// <param name="timeScalar">Enumerated type for which the new
+    /// timeScale will be applied.</param>
+    /// <param name="timeScale">Value of the desired timescale</param>
+    /// <remarks>This function will clamp the timeScale at 0.0f and higher.
+    /// No negative values will be applied.</remarks>
+    public void SetTimeScale(TimeScalar timeScalar, float timeScale)
+    {
+        if(timeScale < 0.0f)
+        {
+            timeScale = 0.0f;
+        }
+        if(m_timeScalars.ContainsKey(timeScalar))
+        {
+            m_timeScalars[timeScalar] = timeScale;
+        }
+    }
+
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
     void Reset()
     {
@@ -309,9 +395,14 @@ public class TimeManager : MonoBehaviour
             currentCycleTime = currentCycleTime % dayCycleLength;
         else if (currentCycleTime == dayCycleLength)
             currentCycleTime = 0;
-        currentCycleTime += Time.deltaTime;
-        if (currentCycleTime > dayCycleLength)
-            currentCycleTime = dayCycleLength;
+
+        float deltaTime;
+        if(GetScaledDeltaTime(TimeScalar.HOOTEL, out deltaTime))
+        {
+            currentCycleTime += deltaTime;
+            if (currentCycleTime > dayCycleLength)
+                currentCycleTime = dayCycleLength;
+        }
 
         //Using the above method instead of the below one for triggering events based on end of day. 
         //There is a high chance that the events could be skipped if it is set to happen EXACTLY at the end of the day.
@@ -326,9 +417,33 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    private void LateUpdate()
+    {
+        // If anyone changes Time.timeScale it wont take affect
+        // until the next frame. As long as we catch it here and
+        // reset it, the timeScale changes will never be used.
+        MonitorUnityTimeScaleChanges();
+    }
+
     #endregion
 
     #region Update Helper Functions
+    /// <summary>
+    /// Monitors for direct manipulations of Time.timeScale and changes it
+    /// back to the timescale controlled by TimeManager.
+    /// </summary>
+    private void MonitorUnityTimeScaleChanges()
+    {
+        float controlledTimeScalar = 0.0f;
+        if (m_timeScalars.TryGetValue(TimeScalar.UNITY, out controlledTimeScalar))
+        {
+            if (Time.timeScale != controlledTimeScalar)
+            {
+                Time.timeScale = controlledTimeScalar;
+            }
+        }
+    }
+
     /// Updates the World-time hour based on the current time of day.  
     private void UpdateWorldTime()
     {
