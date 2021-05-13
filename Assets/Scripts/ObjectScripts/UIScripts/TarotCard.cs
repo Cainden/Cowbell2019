@@ -11,6 +11,10 @@ public class TarotCard : MonoBehaviour
     private static readonly string CHAR_BODY_ART = "CharacterBodyArt";
     private static readonly string BOUNTY = "Tarrot_Hobbies";
 
+    private static readonly string CARD_REVEALED = "CardRevealed";
+    private static readonly string IDLE_ANIMATION = "Idle";
+    private static readonly string FLIP_CARD = "FlipCard";
+
     private GameObject m_nameInfo;
     private TextMeshPro m_nameText;
     private GameObject m_characterHead;
@@ -30,7 +34,6 @@ public class TarotCard : MonoBehaviour
         FindChildObjectByName(CHAR_NAME, transform, ref m_nameInfo);
         m_nameText = m_nameInfo.GetComponent<TextMeshPro>();
 
-
         //Character Art set up
         FindChildObjectByName(CHAR_HEAD_ART, transform, ref m_characterHead);
         m_headSprite = m_characterHead.GetComponent<SpriteRenderer>();
@@ -40,23 +43,65 @@ public class TarotCard : MonoBehaviour
         //Character Info set up
         FindChildObjectByName(BOUNTY, transform, ref m_bountyInfo);
         m_bountyText = m_bountyInfo.GetComponent<TextMeshPro>();
-        //LocationText = LocationInfo.GetComponent<TextMeshProUGUI>();
         m_cardAnimator = GetComponent<Animator>();
         m_flipping = false;
-
-        // TODO : REMOVE THIS!!
-        QuickTest();
     }
 
-    private void QuickTest()
+    /// <summary>
+    /// Fill out all Tarot Card info.
+    /// </summary>
+    /// <param name="FillNameText">Name of target.</param>
+    /// <param name="FillHeadSprite">Head sprite for target.</param>
+    /// <param name="FillBodySprite">Body sprite for target.</param>
+    /// <param name="FillBountyText">Bounty text for target.</param>
+    public void TarotCardInfo(string FillNameText, Sprite FillHeadSprite, Sprite FillBodySprite, string FillBountyText)
     {
-        SetName("Zavala");
-        SetBountyText("Defeating the Darkness!!");
+        m_nameText.text = FillNameText;
+        m_headSprite.sprite = FillHeadSprite;
+        m_bodySprite.sprite = FillBodySprite;
+        m_bountyText.text = FillBountyText;
     }
 
+    /// <summary>
+    /// Set target name on Tarot Card.
+    /// </summary>
+    /// <param name="name">Name of target.</param>
+    public void SetName(string name)
+    {
+        m_nameText.text = name;
+    }
+
+    /// <summary>
+    /// Set bounty text on Tarot Card.
+    /// </summary>
+    /// <param name="bountyText">Bounty text.</param>
+    public void SetBountyText(string bountyText)
+    {
+        m_bountyText.text = bountyText;
+    }
+
+    /// <summary>
+    /// Play flip animation for this card.
+    /// </summary>
+    public void Flip()
+    {
+        if (m_cardAnimator.GetCurrentAnimatorStateInfo(0).IsName(IDLE_ANIMATION))
+        {
+            m_flipping = true;
+            m_cardAnimator.SetBool(CARD_REVEALED, !m_cardAnimator.GetBool(CARD_REVEALED));
+            m_cardAnimator.SetTrigger(FLIP_CARD);
+        }
+    }
+
+    /// <summary>
+    /// Recursive function to find a child object by the name of the game object.
+    /// </summary>
+    /// <param name="name">Name of target object.</param>
+    /// <param name="transformObject">Parent object to check children of.</param>
+    /// <param name="targetObject">Reference to assign with target object.</param>
     private void FindChildObjectByName(string name, Transform transformObject, ref GameObject targetObject)
     {
-        if(transformObject.gameObject.name == name)
+        if (transformObject.gameObject.name == name)
         {
             targetObject = transformObject.gameObject;
         }
@@ -72,34 +117,6 @@ public class TarotCard : MonoBehaviour
                     break;
                 }
             }
-        }
-    }
-
-    public void TarotCardInfo(string FillNameText, Sprite FillHeadSprite, Sprite FillBodySprite, string FillBountyText)
-    {
-        m_nameText.text = FillNameText;
-        m_headSprite.sprite = FillHeadSprite;
-        m_bodySprite.sprite = FillBodySprite;
-        m_bountyText.text = FillBountyText;
-    }
-
-    public void SetName(string name)
-    {
-        m_nameText.text = name;
-    }
-
-    public void SetBountyText(string bountyText)
-    {
-        m_bountyText.text = bountyText;
-    }
-
-    public void Flip()
-    {
-        if (m_cardAnimator.GetCurrentAnimatorStateInfo(0).IsName("Idle"))
-        {
-            m_flipping = true;
-            m_cardAnimator.SetBool("CardRevealed", !m_cardAnimator.GetBool("CardRevealed"));
-            m_cardAnimator.SetTrigger("FlipCard");
         }
     }
 }
