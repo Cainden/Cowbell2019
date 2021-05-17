@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
         StartPath = (from PathPosition p in FindObjectsOfType<PathPosition>() orderby p.number ascending select p.transform.position).ToArray();
 
         TimeManager.Ref.RegisterOnTimeOfDayChange(OnTimeOfDayChange);
+        TimeManager.Ref.RegisterOnTriggerMonsterMode(OnTriggerMonsterMode);
     }
 
     public static int GetRandomizedGuestArival()
@@ -136,18 +137,47 @@ public class GameManager : MonoBehaviour
         switch(dayPhase)
         {
             case TimeManager.DayPhase.Dawn:
-                // TODO
+                SwapToDayMode();
                 break;
             case TimeManager.DayPhase.Day:
-                SwapToDayMode();
+                // TODO
                 break;
             case TimeManager.DayPhase.Dusk:
                 // TODO
                 break;
             case TimeManager.DayPhase.Night:
-                SwapToNightMode();
+                // TODO
                 break;
         }
+    }
+
+    /// <summary>
+    /// Event handler for OnTriggerMonsterMode event.
+    /// </summary>
+    public void OnTriggerMonsterMode()
+    {
+        StartCoroutine(MonsterMode());
+    }
+
+    /// <summary>
+    /// Coroutine to handle all Monster mode logic.
+    /// </summary>
+    /// <returns>IEnumerator</returns>
+    IEnumerator MonsterMode()
+    {
+        // Enable Monster UI
+        SwapToNightMode();
+
+        // TODO : This is just for debugging until the Tarot
+        // scene is ready for integration. REMOVE IT AFTERWARDS!!
+        yield return new WaitForSeconds(15);
+
+        // TODO : Show Tarot Cards
+
+        // TODO : The remainder of monster mode logic
+
+        TimeManager.Ref.MonsterModeEnded();
+        yield return null;
     }
 
     /// <summary>
@@ -164,8 +194,6 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void SwapToNightMode()
     {
-        // TODO : Show Tarot cards
-
         // Update UI
         UIManager.Instance.SwitchUIMode(TimeManager.DayPhase.Night);
     }
