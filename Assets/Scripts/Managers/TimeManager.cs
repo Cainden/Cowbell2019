@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using MySpace.Events;
 
 public delegate void OnTimeOfDayChange(TimeManager.DayPhase dayPhase);
+public delegate void OnTriggerMonsterMode();
 
 //Need Start on the Time Manager to happen before the GameManager
 [DefaultExecutionOrder(-10)] // HACK : This can be resolved by having GameManager call Init on this object ref
@@ -29,7 +30,7 @@ public class TimeManager : MonoBehaviour
         WAXING_CRESCENT,
         FIRST_QUARTER,
         WAXING_GIBBOUS,
-        FULL_MOON
+        FULL_MOON,
     }
 
     #region Variables
@@ -61,6 +62,9 @@ public class TimeManager : MonoBehaviour
 
 	//day counter
 	public int dayCounter;
+
+    private MoonCycle m_moonCycle;
+
     /// Dawn occurs at currentCycleTime = 0.0f, so this offsets the WorldHour time to make  
     /// dawn occur at a specified hour. A value of 3 results in a 5am dawn for a 24 hour world clock.  
     public float dawnTimeOffset;
@@ -117,6 +121,9 @@ public class TimeManager : MonoBehaviour
     public static float SecondsTime { get; private set; }
 
     private event OnTimeOfDayChange m_onTimeOfDayChange;
+    private event OnTriggerMonsterMode m_onTriggerMonsterMode;
+
+    private bool m_monsterModeActive;
 
     private Dictionary<TimeScalar, float> m_timeScalars;
 	
@@ -153,6 +160,10 @@ public class TimeManager : MonoBehaviour
         quarterDay = dayCycleLength * 0.25f;
         halfquarterDay = dayCycleLength * 0.125f;
 		dayCounter = 1;
+        // Starting on full moon will ensure the first player moon cycle
+        // is waning gibbous, since the moon cycle increments on the first
+        // night
+        m_moonCycle = MoonCycle.FULL_MOON;
         dawnTime = 0.0f;
         dayTime = dawnTime + halfquarterDay; //dayCycleLength * 0.125f
         duskTime = dayTime + quarterDay + halfquarterDay; //dayCycleLength * 0.5f
@@ -169,6 +180,8 @@ public class TimeManager : MonoBehaviour
         m_timeScalars.Add(TimeScalar.HOOTEL, 1.0f);
         m_timeScalars.Add(TimeScalar.MONSTER, 1.0f);
         m_timeScalars.Add(TimeScalar.UNITY, 1.0f);
+
+        m_monsterModeActive = false;
     }
 
 	// track the day
@@ -176,7 +189,16 @@ public class TimeManager : MonoBehaviour
 	{
 		dayCounter++;
 		dayTrack.setDay(dayCounter.ToString());
-	}
+
+        if (m_moonCycle == MoonCycle.FULL_MOON)
+        {
+            if(m_onTriggerMonsterMode != null)
+            {
+                m_monsterModeActive = true;
+                m_onTriggerMonsterMode();
+            }
+        }
+    }
 
     /// <summary>
     /// Register for time of day change events.
@@ -199,6 +221,30 @@ public class TimeManager : MonoBehaviour
         if (handler != null)
         {
             m_onTimeOfDayChange -= handler;
+        }
+    }
+
+    /// <summary>
+    /// Register for monster mode trigger event.
+    /// </summary>
+    /// <param name="handler">OnTriggerMosterMode handler</param>
+    public void RegisterOnTriggerMonsterMode(OnTriggerMonsterMode handler)
+    {
+        if (handler != null)
+        {
+            m_onTriggerMonsterMode += handler;
+        }
+    }
+
+    /// <summary>
+    /// Unregister for monster mode trigger event.
+    /// </summary>
+    /// <param name="handler">OnTriggerMosterMode handler</param>
+    public void UnregisterOnTriggerMonsterMode(OnTriggerMonsterMode handler)
+    {
+        if (handler != null)
+        {
+            m_onTriggerMonsterMode -= handler;
         }
     }
 
@@ -319,6 +365,11 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    public void MonsterModeEnded()
+    {
+        m_monsterModeActive = false;
+    }
+
     /// Sets the script control fields to reasonable default values for an acceptable day/night cycle effect.  
     void Reset()
     {
@@ -373,6 +424,7 @@ public class TimeManager : MonoBehaviour
         if (currentCycleTime > nightTime && currentPhase == DayPhase.Dusk)
         {
             currentPhase = DayPhase.Night;
+            IncrementMoonCycle();
         }
         else if (currentCycleTime > duskTime && currentPhase == DayPhase.Day)
         {
@@ -397,7 +449,7 @@ public class TimeManager : MonoBehaviour
             currentCycleTime = 0;
 
         float deltaTime;
-        if(GetScaledDeltaTime(TimeScalar.HOOTEL, out deltaTime))
+        if(GetScaledDeltaTime(TimeScalar.HOOTEL, out deltaTime) && m_monsterModeActive == false)
         {
             currentCycleTime += deltaTime;
             if (currentCycleTime > dayCycleLength)
@@ -428,6 +480,24 @@ public class TimeManager : MonoBehaviour
     #endregion
 
     #region Update Helper Functions
+    /// <summary>
+    /// Increment the current moon cycle.
+    /// </summary>
+    private void IncrementMoonCycle()
+    {
+        Array enumValues = Enum.GetValues(m_moonCycle.GetType());
+        int currentIndex = Array.IndexOf(enumValues, m_moonCycle);
+        if (currentIndex >= enumValues.Length - 1)
+        {
+            currentIndex = 0;
+        }
+        else
+        {
+            ++currentIndex;
+        }
+        m_moonCycle = (MoonCycle)enumValues.GetValue(currentIndex);
+    }
+
     /// <summary>
     /// Monitors for direct manipulations of Time.timeScale and changes it
     /// back to the timescale controlled by TimeManager.
