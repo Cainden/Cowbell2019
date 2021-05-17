@@ -332,6 +332,12 @@ public class TimeManager : MonoBehaviour
     {
         float timeScale = 0.0f;
 
+        if(timeScalar == TimeScalar.UNITY)
+        {
+            scaledDeltaTime = Time.deltaTime;
+            return true;
+        }
+
         if(GetTimeScale(timeScalar, out timeScale))
         {
             scaledDeltaTime = Time.deltaTime * timeScale;
