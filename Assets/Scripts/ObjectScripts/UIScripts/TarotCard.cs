@@ -10,10 +10,13 @@ public class TarotCard : MonoBehaviour
     private static readonly string CHAR_HEAD_ART = "CharacterHeadArt";
     private static readonly string CHAR_BODY_ART = "CharacterBodyArt";
     private static readonly string BOUNTY = "Tarrot_Hobbies";
+    private static readonly string SELECTED_IMAGE = "Tarrot_Select";
 
     private static readonly string CARD_REVEALED = "CardRevealed";
     private static readonly string IDLE_ANIMATION = "Idle";
     private static readonly string FLIP_CARD = "FlipCard";
+
+    private static Color SELECTED_COLOR = new Color(36.0f / 255.0f, 231.0f / 255.0f, 111.0f / 255.0f);
 
     private GameObject m_nameInfo;
     private TextMeshPro m_nameText;
@@ -21,12 +24,17 @@ public class TarotCard : MonoBehaviour
     private SpriteRenderer m_headSprite;
     private GameObject m_characterBody;
     private SpriteRenderer m_bodySprite;
+    private GameObject m_selected;
+    private UnityEngine.UI.Image m_selectedImage;
+    private Color m_unselectedColor;
 
     private GameObject m_bountyInfo;
     private TextMeshPro m_bountyText;
 
     private Animator m_cardAnimator;
     private bool m_flipping;
+
+    private bool m_currentlySelected;
 
     // Start is called before the first frame update
     void Start()
@@ -44,7 +52,17 @@ public class TarotCard : MonoBehaviour
         FindChildObjectByName(BOUNTY, transform, ref m_bountyInfo);
         m_bountyText = m_bountyInfo.GetComponent<TextMeshPro>();
         m_cardAnimator = GetComponent<Animator>();
+
+        //Selected button
+        FindChildObjectByName(SELECTED_IMAGE, transform, ref m_selected);
+        m_selectedImage = m_selected.GetComponent<UnityEngine.UI.Image>();
+        if (m_selectedImage != null)
+        {
+            m_unselectedColor = m_selectedImage.color;
+        }
+
         m_flipping = false;
+        m_currentlySelected = false;
     }
 
     /// <summary>
@@ -93,6 +111,18 @@ public class TarotCard : MonoBehaviour
         }
     }
 
+    public void ToggleSelection()
+    {
+        m_currentlySelected = !m_currentlySelected;
+
+        SetSelectedColor(m_currentlySelected);
+    }
+
+    public bool IsSelected()
+    {
+        return m_currentlySelected;
+    }
+
     /// <summary>
     /// Recursive function to find a child object by the name of the game object.
     /// </summary>
@@ -116,6 +146,26 @@ public class TarotCard : MonoBehaviour
                 {
                     break;
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Set the color of the selected image based on selection
+    /// state.
+    /// </summary>
+    /// <param name="isSelected">True if selected. Otherwise, false.</param>
+    private void SetSelectedColor(bool isSelected)
+    {
+        if (m_selectedImage != null)
+        {
+            if (isSelected)
+            {
+                m_selectedImage.color = SELECTED_COLOR;
+            }
+            else
+            {
+                m_selectedImage.color = m_unselectedColor;
             }
         }
     }
