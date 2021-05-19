@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+public delegate void OnAsyncSceneUpdate(float asyncProgress);
+public delegate void OnAsyncSceneComplete();
+public delegate bool OnRequestSceneActivation();
+
 public class SceneManagement : MonoBehaviour
 {
 	public static SceneManagement sceneManagement = null;
@@ -34,7 +38,7 @@ public class SceneManagement : MonoBehaviour
 	/// <summary>
 	/// Returns the current active scene.
 	/// </summary>
-	public Scene GetCurrScene() { return SceneManager.GetActiveScene(); }
+	public Scene GetActiveScene() { return SceneManager.GetActiveScene(); }
 
 	/// <summary>
 	/// Returns array of all currently loaded scenes.
@@ -56,33 +60,33 @@ public class SceneManagement : MonoBehaviour
 	/// <summary>
 	/// Loads scene using Scene Index.
 	/// </summary>
-	public void LoadScene(int _sceneIndex)
+	public void LoadScene(int sceneIndex)
 	{
-		SceneManager.LoadScene(_sceneIndex, LoadSceneMode.Single);
+		SceneManager.LoadScene(sceneIndex, LoadSceneMode.Single);
 	}
 
 	/// <summary>
 	/// Loads scene using Scene Name.
 	/// </summary>
-	public void LoadScene(string _sceneName)
+	public void LoadScene(string sceneName)
 	{
-		SceneManager.LoadScene(_sceneName, LoadSceneMode.Single);
+		SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
 	}
 
 	/// <summary>
 	/// Loads scene using Scene Index. Declare if you want to load additively or not.
 	/// </summary>
-	public void LoadScene(int _sceneIndex, LoadSceneMode _loadAdditive)
+	public void LoadScene(int sceneIndex, LoadSceneMode loadAdditive)
 	{
-		SceneManager.LoadScene(_sceneIndex, _loadAdditive);
+		SceneManager.LoadScene(sceneIndex, loadAdditive);
 	}
 
 	/// <summary>
 	/// Loads scene using Scene Name. Declare if you want to load additively or not.
 	/// </summary>
-	public void LoadScene(string _sceneName, LoadSceneMode _loadAdditive)
+	public void LoadScene(string sceneName, LoadSceneMode loadAdditive)
 	{
-		SceneManager.LoadScene(_sceneName, _loadAdditive);
+		SceneManager.LoadScene(sceneName, loadAdditive);
 	}
 
 	/// <summary>
@@ -91,15 +95,15 @@ public class SceneManagement : MonoBehaviour
 	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion. (only if async)</param>
 	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
-	public void LoadScene(int _sceneIndex, LoadSceneMode _loadAdditive, bool _loadAsync, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
+	public void LoadScene(int sceneIndex, LoadSceneMode loadAdditive, bool loadAsync, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
-		if (_loadAsync)
+		if (loadAsync)
 		{
-			StartCoroutine(LoadOrUnloadAsync(true, _sceneIndex, _onComplete, _waitToActivate, _loadAdditive));
+			StartCoroutine(LoadOrUnloadAsync(true, sceneIndex, onActivationRequest, onComplete, onProgressUpdate, waitToActivate, loadAdditive));
 		}
 		else
 		{
-			SceneManager.LoadScene(_sceneIndex, _loadAdditive);
+			SceneManager.LoadScene(sceneIndex, loadAdditive);
 		}
 	}
 
@@ -109,16 +113,16 @@ public class SceneManagement : MonoBehaviour
 	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion. (only if async)</param>
 	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
-	public void LoadScene(string _sceneName, LoadSceneMode _loadAdditive, bool _loadAsync, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
+	public void LoadScene(string sceneName, LoadSceneMode loadAdditive, bool loadAsync, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
-		if (_loadAsync)
+		if (loadAsync)
 		{
-			int sceneIndex = GetSceneIndexByName(_sceneName);
-			StartCoroutine(LoadOrUnloadAsync(true, sceneIndex, _onComplete, _waitToActivate, _loadAdditive));
+			int sceneIndex = GetSceneIndexByName(sceneName);
+			StartCoroutine(LoadOrUnloadAsync(true, sceneIndex, onActivationRequest, onComplete, onProgressUpdate, waitToActivate, loadAdditive));
 		}
 		else
 		{
-			SceneManager.LoadScene(_sceneName, _loadAdditive);
+			SceneManager.LoadScene(sceneName, loadAdditive);
 		}
 	}
 
@@ -132,9 +136,9 @@ public class SceneManagement : MonoBehaviour
 	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion.</param>
 	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
-	public void UnloadScene(int _sceneIndex, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
+	public void UnloadScene(int sceneIndex, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
-		StartCoroutine(LoadOrUnloadAsync(false, _sceneIndex, _onComplete, _waitToActivate));
+		StartCoroutine(LoadOrUnloadAsync(false, sceneIndex, onActivationRequest, onComplete, onProgressUpdate, waitToActivate));
 	}
 
 	/// <summary>
@@ -143,19 +147,20 @@ public class SceneManagement : MonoBehaviour
 	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion.</param>
 	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
-	public void UnloadScene(string _sceneName, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
+	public void UnloadScene(string sceneName, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
-		int sceneIndex = GetSceneIndexByName(_sceneName);
-		StartCoroutine(LoadOrUnloadAsync(false, sceneIndex, _onComplete, _waitToActivate));
+		int sceneIndex = GetSceneIndexByName(sceneName);
+		StartCoroutine(LoadOrUnloadAsync(false, sceneIndex, onActivationRequest, onComplete, onProgressUpdate, waitToActivate));
 	}
 
 	#endregion
 
 	#region Async Operations
-	private IEnumerator LoadOrUnloadAsync(bool shouldLoad, int sceneIndex, System.Action<AsyncOperation> _onComplete, bool _waitToActivate,
-		                                  LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+	private IEnumerator LoadOrUnloadAsync(bool shouldLoad, int sceneIndex, OnRequestSceneActivation onActivationRequest,
+		                                  OnAsyncSceneComplete onComplete, OnAsyncSceneUpdate onProgressUpdate,
+		                                  bool waitToActivate = false, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
 	{
-		if (_onComplete == null && _waitToActivate)
+		if (onActivationRequest == null && waitToActivate)
 		{
 			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
 			yield break; // If scene will never load, cancel operation.
@@ -168,29 +173,23 @@ public class SceneManagement : MonoBehaviour
 			yield break; // If method fails to call, cancel operation.
 		}
 
-		float asyncProgress; // Not being used yet. For sending into functions later if we need.
-
-		if (_waitToActivate)
+		if (waitToActivate)
 		{
 			async.allowSceneActivation = false;
 		}
 
-		while (async.progress < 0.9f)
+		while (async.progress <= 0.9f)
 		{
-			asyncProgress = async.progress;
-			yield return null;
-		}
-
-		if (async.progress == 0.9f)
-		{
-			asyncProgress = 1;
-			_onComplete?.Invoke(async);
+			onProgressUpdate?.Invoke(async.progress);
 		}
 
 		while (async.allowSceneActivation == false) // If the IEnumerator closes the async variable reference will be lost. If it's lost, null references will happen when you try to change "allowSceneActivation" when using the _waitToActivate functionality
 		{
+			async.allowSceneActivation = onActivationRequest();
 			yield return null;
 		}
+
+		onComplete?.Invoke();
 	}
 
 	private int GetSceneIndexByName(string name)
