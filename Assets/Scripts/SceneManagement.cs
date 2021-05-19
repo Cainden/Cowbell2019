@@ -12,14 +12,6 @@ public class SceneManagement : MonoBehaviour
 	/// </summary>
 	[HideInInspector] public int sceneCurrActive { get; private set; } = -1;
 
-	/// <summary>
-	/// List of the build indexes of previous active scenes.
-	/// </summary>
-	[HideInInspector] public List<int> scenePrevActive { get; private set; } = new List<int>();
-
-	[Tooltip("The max history size for the list of previous active scenes. Defaults to 30.")]
-	[SerializeField] private int scenePrevActiveLength = 10;
-
 	private void Awake()
 	{
 		#region Singleton Managment
@@ -36,31 +28,6 @@ public class SceneManagement : MonoBehaviour
 
 		DontDestroyOnLoad(this);
 		#endregion
-	}
-
-	private void OnEnable()
-	{
-		SceneManager.activeSceneChanged += UpdateSceneCurr;
-	}
-
-	private void OnDisable()
-	{
-		SceneManager.activeSceneChanged -= UpdateSceneCurr;
-	}
-
-	private void UpdateSceneCurr(Scene scene1, Scene scene2)
-	{
-		if (sceneCurrActive != -1)
-		{
-			scenePrevActive.Insert(0, sceneCurrActive);
-		}
-
-		if (scenePrevActive.Count > scenePrevActiveLength)
-		{
-			scenePrevActive.RemoveAt(scenePrevActiveLength);
-		}
-
-		sceneCurrActive = scene2.buildIndex;
 	}
 
 	/// <summary>
