@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -94,7 +95,7 @@ public class SceneManagement : MonoBehaviour
 	{
 		if (_loadAsync)
 		{
-			StartCoroutine(LoadAsync(_sceneIndex, _loadAdditive, _onComplete, _waitToActivate));
+			StartCoroutine(LoadOrUnloadAsync(true, _sceneIndex, _onComplete, _waitToActivate, _loadAdditive));
 		}
 		else
 		{
@@ -112,7 +113,8 @@ public class SceneManagement : MonoBehaviour
 	{
 		if (_loadAsync)
 		{
-			StartCoroutine(LoadAsync(_sceneName, _loadAdditive, _onComplete, _waitToActivate));
+			int sceneIndex = GetSceneIndexByName(_sceneName);
+			StartCoroutine(LoadOrUnloadAsync(true, sceneIndex, _onComplete, _waitToActivate, _loadAdditive));
 		}
 		else
 		{
@@ -132,7 +134,7 @@ public class SceneManagement : MonoBehaviour
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
 	public void UnloadScene(int _sceneIndex, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
 	{
-		StartCoroutine(UnloadAsync(_sceneIndex, _onComplete, _waitToActivate));
+		StartCoroutine(LoadOrUnloadAsync(false, _sceneIndex, _onComplete, _waitToActivate));
 	}
 
 	/// <summary>
@@ -143,60 +145,15 @@ public class SceneManagement : MonoBehaviour
 	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
 	public void UnloadScene(string _sceneName, System.Action<AsyncOperation> _onComplete = null, bool _waitToActivate = false)
 	{
-		StartCoroutine(UnloadAsync(_sceneName, _onComplete, _waitToActivate));
+		int sceneIndex = GetSceneIndexByName(_sceneName);
+		StartCoroutine(LoadOrUnloadAsync(false, sceneIndex, _onComplete, _waitToActivate));
 	}
 
 	#endregion
 
 	#region Async Operations
-
-	/// <summary>
-	/// Using Scene Index.
-	/// </summary>
-	private IEnumerator LoadAsync(int _sceneIndex, LoadSceneMode _loadAdditive, System.Action<AsyncOperation> _onComplete, bool _waitToActivate)
-	{
-		if(_onComplete == null && _waitToActivate)
-		{
-			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
-			yield break; // If scene will never load, cancel operation.
-		}
-
-		AsyncOperation async;
-		async = SceneManager.LoadSceneAsync(_sceneIndex, _loadAdditive);
-		if (async == null)
-		{
-			yield break; // If method fails to call, cancel operation.
-		} 
-
-		float asyncProgress; // Not being used yet. For sending into methods later if we need.
-
-		if (_waitToActivate)
-		{
-			async.allowSceneActivation = false;
-		}
-
-		while (async.progress < 0.9f)
-		{
-			asyncProgress = async.progress;
-			yield return null;
-		}
-
-		if (async.progress == 0.9f)
-		{
-			asyncProgress = 1;
-			_onComplete?.Invoke(async);
-		}
-
-		while (async.allowSceneActivation == false) // If the IEnumerator closes the async variable reference will be lost. If it's lost, null references will happen when you try to change "allowSceneActivation" when using the _waitToActivate functionality
-		{
-			yield return null;
-		}
-	}
-
-	/// <summary>
-	/// Using Scene Name.
-	/// </summary>
-	private IEnumerator LoadAsync(string _sceneName, LoadSceneMode _loadAdditive, System.Action<AsyncOperation> _onComplete, bool _waitToActivate)
+	private IEnumerator LoadOrUnloadAsync(bool shouldLoad, int sceneIndex, System.Action<AsyncOperation> _onComplete, bool _waitToActivate,
+		                                  LoadSceneMode loadSceneMode = LoadSceneMode.Single)
 	{
 		if (_onComplete == null && _waitToActivate)
 		{
@@ -204,51 +161,8 @@ public class SceneManagement : MonoBehaviour
 			yield break; // If scene will never load, cancel operation.
 		}
 
-		AsyncOperation async;
-		async = SceneManager.LoadSceneAsync(_sceneName, _loadAdditive);
-		if (async == null)
-		{
-			yield break; // If method fails to call, cancel operation.
-		} 
+		AsyncOperation async = PerformAsyncSceneLoadOrUnload(shouldLoad, sceneIndex, loadSceneMode);
 
-		float asyncProgress; // Not being used yet. For sending into methods later if we need.
-
-		if (_waitToActivate)
-		{
-			async.allowSceneActivation = false;
-		}
-
-		while (async.progress < 0.9f)
-		{
-			asyncProgress = async.progress;
-			yield return null;
-		}
-
-		if (async.progress == 0.9f)
-		{
-			asyncProgress = 1;
-			_onComplete?.Invoke(async);
-		}
-
-		while (async.allowSceneActivation == false) // If the IEnumerator closes the async variable reference will be lost. If it's lost, null references will happen when you try to change "allowSceneActivation" when using the _waitToActivate functionality
-		{
-			yield return null;
-		}
-	}
-
-	/// <summary>
-	/// Using Scene Index.
-	/// </summary>
-	private IEnumerator UnloadAsync(int _sceneIndex, System.Action<AsyncOperation> _onComplete, bool _waitToActivate)
-	{
-		if (_onComplete == null && _waitToActivate)
-		{
-			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
-			yield break; // If scene will never load, cancel operation.
-		}
-
-		AsyncOperation async;
-		async = SceneManager.UnloadSceneAsync(_sceneIndex);
 		if (async == null)
 		{
 			yield break; // If method fails to call, cancel operation.
@@ -279,48 +193,33 @@ public class SceneManagement : MonoBehaviour
 		}
 	}
 
-	/// <summary>
-	/// Using Scene Name.
-	/// </summary>
-	private IEnumerator UnloadAsync(string _sceneName, System.Action<AsyncOperation> _onComplete, bool _waitToActivate)
+	private int GetSceneIndexByName(string name)
 	{
-		if (_onComplete == null && _waitToActivate)
+		int sceneIndex = -1;
+		int numberOfScenes = SceneManager.sceneCount;
+
+		for (int iter = 0; iter < numberOfScenes; iter++)
 		{
-			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
-			yield break; // If scene will never load, cancel operation.
+			if (SceneManager.GetSceneAt(iter).name == name)
+            {
+				sceneIndex = iter;
+				break;
+            }
 		}
 
-		AsyncOperation async;
-		async = SceneManager.UnloadSceneAsync(_sceneName);
-		if (async == null)
-		{
-			yield break; // If method fails to call, cancel operation.
-		}
-
-		float asyncProgress; // Not being used yet. For sending into functions later if we need.
-
-		if (_waitToActivate)
-		{
-			async.allowSceneActivation = false;
-		}
-
-		while (async.progress < 0.9f)
-		{
-			asyncProgress = async.progress;
-			yield return null;
-		}
-
-		if (async.progress == 0.9f)
-		{
-			asyncProgress = 1;
-			_onComplete?.Invoke(async);
-		}
-
-		while (async.allowSceneActivation == false) // If the IEnumerator closes the async variable reference will be lost. If it's lost, null references will happen when you try to change "allowSceneActivation" when using the _waitToActivate functionality
-		{
-			yield return null;
-		}
+		return sceneIndex;
 	}
 
-	#endregion
+	private AsyncOperation PerformAsyncSceneLoadOrUnload(bool shouldLoad, int sceneIndex, LoadSceneMode loadSceneMode)
+    {
+		if(shouldLoad)
+        {
+			return SceneManager.LoadSceneAsync(sceneIndex, loadSceneMode);
+        }
+		else
+        {
+			return SceneManager.UnloadSceneAsync(sceneIndex);
+        }
+    }
+    #endregion
 }
