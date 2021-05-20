@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -160,6 +161,12 @@ public class SceneManagement : MonoBehaviour
 		                                  OnAsyncSceneComplete onComplete, OnAsyncSceneUpdate onProgressUpdate,
 		                                  bool waitToActivate = false, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
 	{
+		if (sceneIndex == -1)
+        {
+			Debug.Log("Invalid scene.");
+			yield break;
+        }
+
 		if (onActivationRequest == null && waitToActivate)
 		{
 			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
@@ -192,14 +199,22 @@ public class SceneManagement : MonoBehaviour
 		onComplete?.Invoke();
 	}
 
+	/// <summary>
+    /// Finds the scene index for a given scene. The function will find the
+    /// scene by name, or full path.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
 	private int GetSceneIndexByName(string name)
 	{
 		int sceneIndex = -1;
-		int numberOfScenes = SceneManager.sceneCount;
+		int numberOfScenes = SceneManager.sceneCountInBuildSettings;
 
 		for (int iter = 0; iter < numberOfScenes; iter++)
 		{
-			if (SceneManager.GetSceneAt(iter).name == name)
+			string scenePathNameByIndex = SceneUtility.GetScenePathByBuildIndex(iter);
+			string sceneNameByIndex = Path.GetFileNameWithoutExtension(scenePathNameByIndex);
+			if (sceneNameByIndex == name || scenePathNameByIndex == name)
             {
 				sceneIndex = iter;
 				break;
