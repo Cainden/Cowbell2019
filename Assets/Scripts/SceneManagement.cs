@@ -91,11 +91,20 @@ public class SceneManagement : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Loads scene using Scene Index. Declare if scene is to be loaded additively or not. Declare if the scene is to be loaded asynchronously or not.
+	/// Loads the scene using the scene index.
 	/// </summary>
-	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion. (only if async)</param>
-	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
-	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
+	/// <param name="sceneIndex">Index of the scene in build settings.</param>
+	/// <param name="loadAdditive">Mode to load the scene.</param>
+	/// <param name="loadAsync">True if the scene should be loaded asynchronously.</param>
+	/// <param name="onProgressUpdate">Callback that will provide the calling object
+	/// with updates on the progress percentage via a float value (0.0f - 1.0f).</param>
+	/// <param name="onComplete">Callback that will notify the calling object when
+	/// the process has completed.</param>
+	/// <param name="onActivationRequest">Callback that will allow the calling object
+	/// to pause completion of the process, until it returns true.</param>
+	/// <param name="waitToActivate">If true, allowSceneActivation will be set to
+	/// false on the AsyncOperation. This will pause the completion of the process
+	/// until this value is set to true again.</param>
 	public void LoadScene(int sceneIndex, LoadSceneMode loadAdditive, bool loadAsync, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
 		if (loadAsync)
@@ -109,11 +118,21 @@ public class SceneManagement : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Loads scene using Scene Name. Declare if scene is to be loaded additively or not. Declare if the scene is to be loaded asynchronously or not.
+	/// Loads scene using the scene name.
 	/// </summary>
-	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion. (only if async)</param>
-	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
-	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
+	/// <param name="sceneName">Name of the scene. Can be the scene name without extension,
+	/// or the relative path to the scene with extension.</param>
+	/// <param name="loadAdditive">Mode to load the scene.</param>
+	/// <param name="loadAsync">True if the scene should be loaded asynchronously.</param>
+	/// <param name="onProgressUpdate">Callback that will provide the calling object
+	/// with updates on the progress percentage via a float value (0.0f - 1.0f).</param>
+	/// <param name="onComplete">Callback that will notify the calling object when
+	/// the process has completed.</param>
+	/// <param name="onActivationRequest">Callback that will allow the calling object
+	/// to pause completion of the process, until it returns true.</param>
+	/// <param name="waitToActivate">If true, allowSceneActivation will be set to
+	/// false on the AsyncOperation. This will pause the completion of the process
+	/// until this value is set to true again.</param>
 	public void LoadScene(string sceneName, LoadSceneMode loadAdditive, bool loadAsync, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
 		if (loadAsync)
@@ -132,22 +151,39 @@ public class SceneManagement : MonoBehaviour
 	#region Unload Scene Methods
 
 	/// <summary>
-	/// Unloads scene asynchronously using Scene Index. You can only unload a scene if isn't the "active" scene. Scenes loaded additively can be unloaded.
+	/// Unloads scene asynchronously using the scene index.
 	/// </summary>
-	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion.</param>
-	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
-	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
+	/// <param name="sceneIndex">Index of the scene in build settings.</param>
+	/// <param name="onProgressUpdate">Callback that will provide the calling object
+	/// with updates on the progress percentage via a float value (0.0f - 1.0f).</param>
+	/// <param name="onComplete">Callback that will notify the calling object when
+	/// the process has completed.</param>
+	/// <param name="onActivationRequest">Callback that will allow the calling object
+	/// to pause completion of the process, until it returns true.</param>
+	/// <param name="waitToActivate">If true, allowSceneActivation will be set to
+	/// false on the AsyncOperation. This will pause the completion of the process
+	/// until this value is set to true again.</param>
+	/// <remarks>The currently active scene cannot be unloaded.</remarks>
 	public void UnloadScene(int sceneIndex, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
 		StartCoroutine(LoadOrUnloadAsync(false, sceneIndex, onActivationRequest, onComplete, onProgressUpdate, waitToActivate));
 	}
 
 	/// <summary>
-	/// Unloads scene asynchronously using Scene Name. You can only unload a scene if isn't the "active" scene. Scenes loaded additively can be unloaded.
+	/// Unloads scene asynchronously using the scene name.
 	/// </summary>
-	/// <param name="_onComplete">This function will be called when the loaded scene has reached 90% completion.</param>
-	/// <param name="_waitToActivate">If true, the scene will not be allowed to load in until you change the "allowSceneActivation" variable to true. This variable is accessible through the AsyncOperation reference returned in the _onComplete function you passed though.
-	/// <para>IMPORTANT: If you use this feature, you must set "allowSceneActivation" to true otherwise, the scene will never finish loading.</para></param>
+	/// <param name="sceneName">Name of the scene. Can be the scene name without extension,
+	/// or the relative path to the scene with extension.</param>
+	/// <param name="onProgressUpdate">Callback that will provide the calling object
+	/// with updates on the progress percentage via a float value (0.0f - 1.0f).</param>
+	/// <param name="onComplete">Callback that will notify the calling object when
+	/// the process has completed.</param>
+	/// <param name="onActivationRequest">Callback that will allow the calling object
+	/// to pause completion of the process, until it returns true.</param>
+	/// <param name="waitToActivate">If true, allowSceneActivation will be set to
+	/// false on the AsyncOperation. This will pause the completion of the process
+	/// until this value is set to true again.</param>
+    /// <remarks>The currently active scene cannot be unloaded.</remarks>
 	public void UnloadScene(string sceneName, OnAsyncSceneUpdate onProgressUpdate = null, OnAsyncSceneComplete onComplete = null, OnRequestSceneActivation onActivationRequest = null, bool waitToActivate = false)
 	{
 		int sceneIndex = GetSceneIndexByName(sceneName);
@@ -157,6 +193,25 @@ public class SceneManagement : MonoBehaviour
 	#endregion
 
 	#region Async Operations
+	/// <summary>
+	/// Coroutine that manages the async loading and unloading
+	/// of scenes.
+	/// </summary>
+	/// <param name="shouldLoad">True if the scene is to be loaded.
+	/// False if the scene is to be unloaded.</param>
+	/// <param name="sceneIndex">Build index of the scene to be loaded/unloaded.</param>
+	/// <param name="onActivationRequest">Callback that will allow the calling object
+    /// to pause completion of the process, until it returns true.</param>
+	/// <param name="onComplete">Callback that will notify the calling object when
+    /// the process has completed.</param>
+	/// <param name="onProgressUpdate">Callback that will provide the calling object
+    /// with updates on the progress percentage via a float value (0.0f - 1.0f).</param>
+	/// <param name="waitToActivate">If true, allowSceneActivation will be set to
+    /// false on the AsyncOperation. This will pause the completion of the process
+    /// until this value is set to true again.</param>
+	/// <param name="loadSceneMode">Mode to load the scene, if this is a load operation.
+	/// If the scene is being unloaded, this parameter is ignored.</param>
+	/// <returns></returns>
 	private IEnumerator LoadOrUnloadAsync(bool shouldLoad, int sceneIndex, OnRequestSceneActivation onActivationRequest,
 		                                  OnAsyncSceneComplete onComplete, OnAsyncSceneUpdate onProgressUpdate,
 		                                  bool waitToActivate = false, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
@@ -203,8 +258,9 @@ public class SceneManagement : MonoBehaviour
     /// Finds the scene index for a given scene. The function will find the
     /// scene by name, or full path.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">Name of the scene. Can be the scene name without extension,
+    /// or the relative path to the scene with extension.</param>
+    /// <returns>Index of the scene. -1 if the scene was not found.</returns>
 	private int GetSceneIndexByName(string name)
 	{
 		int sceneIndex = -1;
@@ -224,6 +280,15 @@ public class SceneManagement : MonoBehaviour
 		return sceneIndex;
 	}
 
+	/// <summary>
+    /// Initiates an async scene load/unload operation.
+    /// </summary>
+    /// <param name="shouldLoad">True if the scene is to be loaded.
+    /// False if the scene is to be unloaded.</param>
+    /// <param name="sceneIndex">Build index of the scene to be loaded/unloaded.</param>
+    /// <param name="loadSceneMode">Mode to load the scene, if this is a load operation.
+    /// If the scene is being unloaded, this parameter is ignored.</param>
+    /// <returns>AsyncOperation object to manage the load/unload process.</returns>
 	private AsyncOperation PerformAsyncSceneLoadOrUnload(bool shouldLoad, int sceneIndex, LoadSceneMode loadSceneMode)
     {
 		if(shouldLoad)
