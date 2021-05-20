@@ -223,14 +223,14 @@ public class SceneManagement : MonoBehaviour
 		if (onActivationRequest == null && waitToActivate)
 		{
 			Debug.LogError("WARNING, attempting to load a scene using waitToActivate, but there was no onComplete function given. The scene will never finish loading!");
-			yield break; // If scene will never load, cancel operation.
+			yield break;
 		}
 
 		AsyncOperation async = PerformAsyncSceneLoadOrUnload(shouldLoad, sceneIndex, loadSceneMode);
 
 		if (async == null)
 		{
-			yield break; // If method fails to call, cancel operation.
+			yield break;
 		}
 
 		if (waitToActivate)
@@ -238,16 +238,18 @@ public class SceneManagement : MonoBehaviour
 			async.allowSceneActivation = false;
 		}
 
-		while (async.progress <= 0.9f)
+		while (async.progress < 0.9f)
 		{
 			onProgressUpdate?.Invoke(async.progress);
 		}
 
-		while (async.allowSceneActivation == false) // If the IEnumerator closes the async variable reference will be lost. If it's lost, null references will happen when you try to change "allowSceneActivation" when using the _waitToActivate functionality
+		while (async.allowSceneActivation == false)
 		{
 			async.allowSceneActivation = onActivationRequest();
 			yield return null;
 		}
+
+		onProgressUpdate?.Invoke(1.0f);
 
 		onComplete?.Invoke();
 	}
