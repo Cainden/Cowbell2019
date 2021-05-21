@@ -10,6 +10,6 @@ public class LoadingSpinner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Rotate(Vector3.forward, m_rotationSpeed * Time.unscaledDeltaTime);
+        transform.Rotate(Vector3.back, m_rotationSpeed * Time.unscaledDeltaTime);
     }
 }
