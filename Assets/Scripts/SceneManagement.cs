@@ -292,6 +292,10 @@ public class SceneManagement : Singleton<SceneManagement>
         }
     }
 
+	/// <summary>
+    /// Set the loading screen to active.
+    /// </summary>
+    /// <param name="isActive">True to show loading screen. False to hide.</param>
 	private void SetLoadingScreenActiveState(bool isActive)
     {
 		if(m_loadingScreen == null)
@@ -300,7 +304,7 @@ public class SceneManagement : Singleton<SceneManagement>
 
 			if(m_loadingScreen == null)
             {
-				Debug.LogWarning("No Loading Screen found!!");
+				Debug.LogWarning("No Loading Screen found in the scene!!");
 				return;
             }
         }
