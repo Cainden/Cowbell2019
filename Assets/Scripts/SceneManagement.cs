@@ -14,10 +14,15 @@ public class SceneManagement : Singleton<SceneManagement>
 	/// </summary>
 	[HideInInspector] public int sceneCurrActive { get; private set; } = -1;
 
-	/// <summary>
-	/// Returns the current active scene.
-	/// </summary>
-	public Scene GetActiveScene() { return SceneManager.GetActiveScene(); }
+    private void Awake()
+    {
+		DontDestroyOnLoad(this);
+    }
+
+    /// <summary>
+    /// Returns the current active scene.
+    /// </summary>
+    public Scene GetActiveScene() { return SceneManager.GetActiveScene(); }
 
 	/// <summary>
 	/// Returns array of all currently loaded scenes.
