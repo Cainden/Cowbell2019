@@ -14,6 +14,8 @@ public class SceneManagement : Singleton<SceneManagement>
 	/// </summary>
 	[HideInInspector] public int sceneCurrActive { get; private set; } = -1;
 
+	private LoadingScreen m_loadingScreen;
+
     private void Awake()
     {
 		DontDestroyOnLoad(this);
@@ -211,6 +213,8 @@ public class SceneManagement : Singleton<SceneManagement>
 			yield break;
 		}
 
+		SetLoadingScreenActiveState(true);
+
 		AsyncOperation async = PerformAsyncSceneLoadOrUnload(shouldLoad, sceneIndex, loadSceneMode);
 
 		if (async == null)
@@ -237,6 +241,8 @@ public class SceneManagement : Singleton<SceneManagement>
 		onProgressUpdate?.Invoke(1.0f);
 
 		onComplete?.Invoke();
+
+		SetLoadingScreenActiveState(false);
 	}
 
 	/// <summary>
@@ -284,6 +290,26 @@ public class SceneManagement : Singleton<SceneManagement>
         {
 			return SceneManager.UnloadSceneAsync(sceneIndex);
         }
+    }
+
+	/// <summary>
+    /// Set the loading screen to active.
+    /// </summary>
+    /// <param name="isActive">True to show loading screen. False to hide.</param>
+	private void SetLoadingScreenActiveState(bool isActive)
+    {
+		if(m_loadingScreen == null)
+        {
+			m_loadingScreen = FindObjectOfType<LoadingScreen>();
+
+			if(m_loadingScreen == null)
+            {
+				Debug.LogWarning("No Loading Screen found in the scene!!");
+				return;
+            }
+        }
+
+		m_loadingScreen.ShowLoadingScreen(isActive);
     }
     #endregion
 }
