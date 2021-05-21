@@ -7,32 +7,12 @@ public delegate void OnAsyncSceneUpdate(float asyncProgress);
 public delegate void OnAsyncSceneComplete();
 public delegate bool OnRequestSceneActivation();
 
-public class SceneManagement : MonoBehaviour
+public class SceneManagement : Singleton<SceneManagement>
 {
-	public static SceneManagement sceneManagement = null;
-
 	/// <summary>
 	/// The currently active scene's build index.
 	/// </summary>
 	[HideInInspector] public int sceneCurrActive { get; private set; } = -1;
-
-	private void Awake()
-	{
-		#region Singleton Managment
-		if (!sceneManagement)
-		{
-			sceneManagement = this;
-		}
-
-		if (sceneManagement != this)
-		{
-			Destroy(this);
-			return;
-		}
-
-		DontDestroyOnLoad(this);
-		#endregion
-	}
 
 	/// <summary>
 	/// Returns the current active scene.

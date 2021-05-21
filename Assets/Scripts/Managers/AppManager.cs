@@ -42,10 +42,10 @@ public class AppManager : MonoBehaviour
         switch (state)
         {
             case Enums.AppState.MainMenu:
-                SceneManagement.sceneManagement.LoadScene(MainMenuScene);
+                SceneManagement.Instance.LoadScene(MainMenuScene);
                 return;
             case Enums.AppState.Game:
-                SceneManagement.sceneManagement.LoadScene(GameScene);
+                SceneManagement.Instance.LoadScene(GameScene);
                 return;
             default:
                 break;
