@@ -7,43 +7,43 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     private static T m_instance;
 
 
-	/// <summary>
+    /// <summary>
     /// Get an instance of the singleton object.
     /// </summary>
     public static T Instance
-	{
-		get
-		{
-			if (m_instance == null)
-			{
-				// Does one exist in the scene?
-				T[] allComponentInstances = FindObjectsOfType<T>();
-				if(allComponentInstances != null)
+    {
+        get
+        {
+            if (m_instance == null)
+            {
+                // Does one exist in the scene?
+                T[] allComponentInstances = FindObjectsOfType<T>();
+                if (allComponentInstances != null)
                 {
-					if(allComponentInstances.Length > 0)
+                    if (allComponentInstances.Length > 0)
                     {
-						m_instance = allComponentInstances[0];
+                        m_instance = allComponentInstances[0];
 
-						// If there are multiple instances in the scene it should be fixed
-						// so there is only one instance. Otherwise, some members that have
-						// been set in the editor window may be tossed out because the wrong
-						// instance has been set in this Property.
-						if(allComponentInstances.Length > 1)
+                        // If there are multiple instances in the scene it should be fixed
+                        // so there is only one instance. Otherwise, some members that have
+                        // been set in the editor window may be tossed out because the wrong
+                        // instance has been set in this Property.
+                        if (allComponentInstances.Length > 1)
                         {
-							Debug.LogWarning("More that one instance of " + typeof(T).Name + ". Please fix this!!");
+                            Debug.LogWarning("More that one instance of " + typeof(T).Name + ". Please fix this!!");
                         }
                     }
                 }
 
-				// Otherwise, lets create one
-				if (m_instance == null)
-				{
-					GameObject newObject = new GameObject(typeof(T).Name);
-					m_instance = newObject.AddComponent<T>();
-				}
-			}
+                // Otherwise, lets create one
+                if (m_instance == null)
+                {
+                    GameObject newObject = new GameObject(typeof(T).Name);
+                    m_instance = newObject.AddComponent<T>();
+                }
+            }
 
-			return m_instance;
-		}
-	}
+            return m_instance;
+        }
+    }
 }
