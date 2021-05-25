@@ -6,7 +6,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T m_instance;
 
-
     /// <summary>
     /// Get an instance of the singleton object.
     /// </summary>
@@ -39,11 +38,23 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 if (m_instance == null)
                 {
                     GameObject newObject = new GameObject(typeof(T).Name);
-                    m_instance = newObject.AddComponent<T>();
+                    newObject.AddComponent<T>();
                 }
             }
 
             return m_instance;
+        }
+    }
+
+    protected virtual void Awake()
+    {
+        if (m_instance == null)
+        {
+            m_instance = gameObject.GetComponent<T>();
+        }
+        else if (m_instance != gameObject.GetComponent<T>())
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 }

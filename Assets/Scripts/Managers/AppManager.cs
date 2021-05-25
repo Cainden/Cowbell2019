@@ -3,37 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using MySpace;
 
-public class AppManager : MonoBehaviour
+public class AppManager : Singleton<AppManager>
 {
     #region Inspector Variables
 
-    [SerializeField] string GameScene;
-    [SerializeField] string MainMenuScene;
+    private static readonly string GAME_SCENE = "MainHotelScene";
+    private static readonly string MAIN_MENU_SCENE = "MainMenu";
 
     #endregion
 
     #region Statics
     public static Enums.AppState CurState;
-
-    //Singleton management.
-    public static AppManager Ref { get; set; }
     #endregion
 
     #region Singleton Management
-    private void Awake()
+    protected override void Awake()
     {
-        if (!Ref)
-        {
-            Ref = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            if (Ref != this)
-            {
-                Destroy(gameObject);
-            }
-        }
+        base.Awake();
+        GameObject.DontDestroyOnLoad(this);
     }
     #endregion
 
@@ -42,12 +29,12 @@ public class AppManager : MonoBehaviour
         switch (state)
         {
             case Enums.AppState.MainMenu:
-                SceneManagement.Instance.LoadScene(MainMenuScene,
+                SceneManagement.Instance.LoadScene(MAIN_MENU_SCENE,
                                                    UnityEngine.SceneManagement.LoadSceneMode.Single,
                                                    true, null, null, null, false);
                 return;
             case Enums.AppState.Game:
-                SceneManagement.Instance.LoadScene(GameScene,
+                SceneManagement.Instance.LoadScene(GAME_SCENE,
                                                    UnityEngine.SceneManagement.LoadSceneMode.Single,
                                                    true,null,null,null,false);
                 return;

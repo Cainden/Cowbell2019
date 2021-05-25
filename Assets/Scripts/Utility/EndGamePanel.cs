@@ -50,6 +50,6 @@ public class EndGamePanel : MonoBehaviour
     #endregion
     private static void LoadMainScene()
     {
-        AppManager.Ref.ChangeApplicationState(Enums.AppState.MainMenu);
+        AppManager.Instance.ChangeApplicationState(Enums.AppState.MainMenu);
     }
 }

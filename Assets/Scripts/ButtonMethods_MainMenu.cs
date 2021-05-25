@@ -7,11 +7,11 @@ public class ButtonMethods_MainMenu : MonoBehaviour
 {
 	public void StartGame()
 	{
-		AppManager.Ref.ChangeApplicationState(Enums.AppState.Game);
+		AppManager.Instance.ChangeApplicationState(Enums.AppState.Game);
 	}
 
 	public void Quit()
 	{
-		AppManager.Ref.QuitApplication();
+		AppManager.Instance.QuitApplication();
 	}
 }
