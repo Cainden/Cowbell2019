@@ -16,8 +16,9 @@ public class SceneManagement : Singleton<SceneManagement>
 
 	private LoadingScreen m_loadingScreen;
 
-    private void Awake()
+    protected override void Awake()
     {
+		base.Awake();
 		DontDestroyOnLoad(this);
     }
 
