@@ -6,7 +6,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T m_instance;
 
-
     /// <summary>
     /// Get an instance of the singleton object.
     /// </summary>
@@ -44,6 +43,22 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             }
 
             return m_instance;
+        }
+    }
+
+    /// <summary>
+    /// This check is still defensive, in case multiple singleton
+    /// objects are added to the scene, or across multiple scenes.
+    /// </summary>
+    protected virtual void Awake()
+    {
+        if (m_instance == null)
+        {
+            m_instance = gameObject.GetComponent<T>();
+        }
+        else if (m_instance != gameObject.GetComponent<T>())
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 }
