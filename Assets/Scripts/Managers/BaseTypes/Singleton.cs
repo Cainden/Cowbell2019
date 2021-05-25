@@ -38,7 +38,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 if (m_instance == null)
                 {
                     GameObject newObject = new GameObject(typeof(T).Name);
-                    newObject.AddComponent<T>();
+                    m_instance = newObject.AddComponent<T>();
                 }
             }
 
@@ -46,6 +46,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This check is still defensive, in case multiple singleton
+    /// objects are added to the scene, or across multiple scenes.
+    /// </summary>
     protected virtual void Awake()
     {
         if (m_instance == null)
