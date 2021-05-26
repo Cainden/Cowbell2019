@@ -33,7 +33,7 @@ public class HireDlgScript : MonoBehaviour
     void Update()
     {
         // Convert to loop later?
-        ManManager manRef = ManManager.Ref;
+        ManManager manRef = ManManager.Instance;
         if (manRef.hireList.Count >= 1)
         {
             b0.gameObject.SetActive(true);

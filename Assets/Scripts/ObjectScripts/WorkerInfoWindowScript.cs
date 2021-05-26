@@ -46,12 +46,12 @@ public class WorkerInfoWindowScript : MonoBehaviour
 
     public void Activate(System.Guid man)
     {
-        worker = ManManager.Ref.GetManData(man).ManScript as ManScript_Worker;
+        worker = ManManager.Instance.GetManData(man).ManScript as ManScript_Worker;
         if (worker != null)
             SetupWorker();
         else
         {
-            guest = ManManager.Ref.GetManData(man).ManScript as ManScript_Guest;
+            guest = ManManager.Instance.GetManData(man).ManScript as ManScript_Guest;
             if (guest != null)
                 SetupGuest();
         }

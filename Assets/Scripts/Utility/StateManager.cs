@@ -72,7 +72,7 @@ public class StateManager : MonoBehaviour
         if (_SelectedMan == manId) return;
         ResetSelectedMan();
         _SelectedMan = manId;
-        ManManager.Ref.SetHighlightedMan(manId);
+        ManManager.Instance.SetHighlightedMan(manId);
     }
 
     public Guid GetSelectedMan()
@@ -84,7 +84,7 @@ public class StateManager : MonoBehaviour
     {
         if (_SelectedMan == Guid.Empty) return;
         GuiManager.Ref.Hide_ManInfoWindow();
-        ManManager.Ref.ResetHighlightedMan(_SelectedMan);
+        ManManager.Instance.ResetHighlightedMan(_SelectedMan);
         _SelectedMan = Guid.Empty;
     }
 
@@ -191,7 +191,7 @@ public class StateManager : MonoBehaviour
                 break;
             case Enums.GameStates.ChangeOwnedRoom:
                 GuiManager.Ref.Hide_ManInfoWindow();
-                //ManManager.Ref.RemoveManOwnershipFromRoom(GetSelectedMan());
+                //ManManager.Instance.RemoveManOwnershipFromRoom(GetSelectedMan());
                 ResetSelectedRoom();
                 break;
         }

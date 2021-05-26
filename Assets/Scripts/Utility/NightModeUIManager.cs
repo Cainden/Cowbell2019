@@ -33,7 +33,7 @@ public class NightModeUIManager : MonoBehaviour
             TarotCardCopy.transform.localScale = Vector3.one;
             AvailableTarotCards[i] = TarotCardCopy;
         }
-        //ManManager.Ref.GetAllActiveMenOfType<ManScript_Guest>();
+        //ManManager.Instance.GetAllActiveMenOfType<ManScript_Guest>();
     }
 
     #region ButtonFuntions

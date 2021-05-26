@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 using UnityEngine;
 using System.Linq;
 
-public class ManManager : MonoBehaviour
+public class ManManager : Singleton<ManManager>
 {
     #region Inspector Variables
 
@@ -17,8 +17,6 @@ public class ManManager : MonoBehaviour
     #endregion
 
     #region Variables
-    [HideInInspector]
-    public static ManManager Ref { get; private set; } // For external access of script
 
     private Dictionary<Guid, ManRef<ManScript>> _ManList = new Dictionary<Guid, ManRef<ManScript>>();
 
@@ -63,9 +61,9 @@ public class ManManager : MonoBehaviour
 
     
 
-    void Awake()
+    protected override void Awake()
     {
-        if (Ref == null) Ref = GetComponent<ManManager>();
+        base.Awake();
     }
 
     public bool IsManExisting(Guid manId)
@@ -651,8 +649,8 @@ public class ManManager : MonoBehaviour
             {
                 if (ar[i].Cleanliness <= 0.8f)
                     continue;
-                Ref.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
-                Ref.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
+                Instance.MoveManToNewRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
+                Instance.TransferOwnershipToRoom(man.ManData.ManId, ar[i].RoomData.RoomId);
                 return true;
             }
         }

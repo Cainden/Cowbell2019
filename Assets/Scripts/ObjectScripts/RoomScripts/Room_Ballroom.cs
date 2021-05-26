@@ -24,32 +24,32 @@ public class Room_Ballroom : Room_WorkQuarters
     {
         base.AssignManToRoomSlot(manId, slotIndex, assignedByPlayer);
 
-        Enums.ManTypes manType = ManManager.Ref.GetManData(manId).ManScript.ManType;
+        Enums.ManTypes manType = ManManager.Instance.GetManData(manId).ManScript.ManType;
 
         if (manType == Enums.ManTypes.Worker)
         {
-            //workerAssignments.Add((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker), GetGuestFromWorkerSlot(slotIndex));
+            //workerAssignments.Add((ManManager.Instance.GetManData(manId).ManScript as ManScript_Worker), GetGuestFromWorkerSlot(slotIndex));
             foreach(ManScript_Guest g in workerAssignments.Keys)
             {
                 if (workerAssignments[g] == null)
                 {
-                    workerAssignments[g] = ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker;
+                    workerAssignments[g] = ManManager.Instance.GetManData(manId).ManScript as ManScript_Worker;
                     break;
                 }
             }
         }
         else if (manType == Enums.ManTypes.Guest)
         {
-            workerAssignments.Add(ManManager.Ref.GetManData(manId).ManScript as ManScript_Guest, null);
+            workerAssignments.Add(ManManager.Instance.GetManData(manId).ManScript as ManScript_Guest, null);
             foreach (Guid g in RoomData.ManSlotsAssignments)
             {
                 if (g == Guid.Empty)
                     continue;
-                if (ManManager.Ref.GetManData(g).ManScript.ManType == Enums.ManTypes.Guest)
+                if (ManManager.Instance.GetManData(g).ManScript.ManType == Enums.ManTypes.Guest)
                     continue;
-                if (!workerAssignments.ContainsValue(ManManager.Ref.GetManData(g).ManScript as ManScript_Worker))
+                if (!workerAssignments.ContainsValue(ManManager.Instance.GetManData(g).ManScript as ManScript_Worker))
                 {
-                    workerAssignments[ManManager.Ref.GetManData(manId).ManScript as ManScript_Guest] = ManManager.Ref.GetManData(g).ManScript as ManScript_Worker;
+                    workerAssignments[ManManager.Instance.GetManData(manId).ManScript as ManScript_Guest] = ManManager.Instance.GetManData(g).ManScript as ManScript_Worker;
                     break;
                 }
             }
@@ -60,9 +60,9 @@ public class Room_Ballroom : Room_WorkQuarters
 
     public override bool RoomHasFreeManSlots(Guid manId)
     {
-        if (ManManager.Ref.GetManData(manId).ManScript.ManType == Enums.ManTypes.Guest)
+        if (ManManager.Instance.GetManData(manId).ManScript.ManType == Enums.ManTypes.Guest)
             return CheckFreeGuestSlot();
-        else if (ManManager.Ref.GetManData(manId).ManScript.ManType == Enums.ManTypes.Worker)
+        else if (ManManager.Instance.GetManData(manId).ManScript.ManType == Enums.ManTypes.Worker)
             return CheckFreeWorkerSlot();
         return base.RoomHasFreeManSlots(manId);
     }
@@ -142,9 +142,9 @@ public class Room_Ballroom : Room_WorkQuarters
         {
             if (CheckGuestWaiting(out Guid id))
             {
-                workerAssignments[ManManager.Ref.GetManData(id).ManScript as ManScript_Guest] = workerAssignments[guest];
+                workerAssignments[ManManager.Instance.GetManData(id).ManScript as ManScript_Guest] = workerAssignments[guest];
             }
-            ManManager.Ref.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
+            ManManager.Instance.MoveManToNewRoom(guest.ManData.ManId, guest.ManData.OwnedRoomRef.RoomId);
             workerAssignments.Remove(guest);
             guest.ResolveMood(Enums.ManMood.Sad1);
         }
@@ -153,15 +153,15 @@ public class Room_Ballroom : Room_WorkQuarters
     public override void RemoveManFromRoomSlot(Guid manId)
     {
         base.RemoveManFromRoomSlot(manId);
-        if (ManManager.Ref.GetManData(manId).ManScript.ManType == Enums.ManTypes.Guest)
+        if (ManManager.Instance.GetManData(manId).ManScript.ManType == Enums.ManTypes.Guest)
         {
-            workerAssignments.Remove(ManManager.Ref.GetManData(manId).ManScript as ManScript_Guest);
+            workerAssignments.Remove(ManManager.Instance.GetManData(manId).ManScript as ManScript_Guest);
         }
-        else if (ManManager.Ref.GetManData(manId).ManScript.ManType == Enums.ManTypes.Worker)
+        else if (ManManager.Instance.GetManData(manId).ManScript.ManType == Enums.ManTypes.Worker)
         {
             foreach (ManScript_Guest g in workerAssignments.Keys)
             {
-                if (workerAssignments[g] == ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker)
+                if (workerAssignments[g] == ManManager.Instance.GetManData(manId).ManScript as ManScript_Worker)
                 {
                     workerAssignments[g] = null;
                     break;
@@ -193,7 +193,7 @@ public class Room_Ballroom : Room_WorkQuarters
         }
         //else if (CheckGuestWaiting(out Guid id))
         //{
-        //    workerAssignments[ManManager.Ref.GetManData(id).ManScript as ManScript_Guest] = man;
+        //    workerAssignments[ManManager.Instance.GetManData(id).ManScript as ManScript_Guest] = man;
         //}
         else
         {
@@ -309,7 +309,7 @@ public class Room_Ballroom : Room_WorkQuarters
     //    {
     //        if (RoomData.CoveredIndizes[i] == index)
     //            if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
-    //                return ManManager.Ref.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Guest;
+    //                return ManManager.Instance.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Guest;
     //    }
     //    return null;
     //}
@@ -321,7 +321,7 @@ public class Room_Ballroom : Room_WorkQuarters
     //    {
     //        if (RoomData.CoveredIndizes[i] == index)
     //            if (RoomData.ManSlotsAssignments[i] != Guid.Empty)
-    //                return ManManager.Ref.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Worker;
+    //                return ManManager.Instance.GetManData(RoomData.ManSlotsAssignments[i]).ManScript as ManScript_Worker;
     //    }
     //    return null;
     //}

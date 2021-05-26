@@ -53,13 +53,13 @@ public class HiredWokerScrollList : MonoBehaviour
 
 	private void AddHiredWorkerButtons()
 	{
-		workerCount = ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>().Length;
+		workerCount = ManManager.Instance.GetAllActiveMenOfType<ManScript_Worker>().Length;
 		if (workerCount == 0)
 		{
 			noWorkers.SetActive(true);
 		}
 		//	Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-		foreach (MySpace.ManRef<ManScript_Worker> worker in ManManager.Ref.GetAllActiveMenOfType<ManScript_Worker>())
+		foreach (MySpace.ManRef<ManScript_Worker> worker in ManManager.Instance.GetAllActiveMenOfType<ManScript_Worker>())
         {
 			
 			

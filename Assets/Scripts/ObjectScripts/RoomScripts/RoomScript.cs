@@ -32,7 +32,7 @@ public class RoomScript : MonoBehaviour
         CheckReferences();
         SetRoomText();
         
-        manManRef = ManManager.Ref;
+        manManRef = ManManager.Instance;
         leftMost = RoomData.GetLeftMostIndex();
     }
 
@@ -141,7 +141,7 @@ public class RoomScript : MonoBehaviour
 
     public int GetFreeManSlotIndex(Guid ManId)
     {
-        return GetFreeManSlotIndex(ManManager.Ref.GetManData(ManId).ManScript);
+        return GetFreeManSlotIndex(ManManager.Instance.GetManData(ManId).ManScript);
     }
 
     public int GetReservedSlotIndex(Guid manId)
@@ -186,7 +186,7 @@ public class RoomScript : MonoBehaviour
     public virtual void AssignManToRoomSlot(Guid manId, int slotIndex, bool assignedByPlayer)
     {
         if (RoomData.ReservedSlots[slotIndex].object1 != Guid.Empty && RoomData.ReservedSlots[slotIndex].object1 != manId)
-            Debug.LogError("Room Slot Assignment Attempted in a reserved slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
+            Debug.LogError("Room Slot Assignment Attempted in a reserved slot!!!; ManType: " + ManManager.Instance.GetManData(manId).ManScript.ManData.ManType);
         RoomData.ManSlotsAssignments[slotIndex] = manId;
         RoomData.ReservedSlots[slotIndex] = new Container<Guid, bool>() { object1 = Guid.Empty, object2 = false };
 
@@ -196,9 +196,9 @@ public class RoomScript : MonoBehaviour
     public virtual void ReserveSlotForMan(Guid manId, int slotIndex, bool assignedByPlayer)
     {
         if (RoomData.ManSlotsAssignments[slotIndex] != Guid.Empty)
-            Debug.LogError("Attempted to reserve an already occupied slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
+            Debug.LogError("Attempted to reserve an already occupied slot!!!; ManType: " + ManManager.Instance.GetManData(manId).ManScript.ManData.ManType);
         if (RoomData.ReservedSlots[slotIndex].object1 != Guid.Empty && RoomData.ReservedSlots[slotIndex].object1 != manId)
-            Debug.LogError("Room Slot Reservation Attempted in an already reserved slot!!!; ManType: " + ManManager.Ref.GetManData(manId).ManScript.ManData.ManType);
+            Debug.LogError("Room Slot Reservation Attempted in an already reserved slot!!!; ManType: " + ManManager.Instance.GetManData(manId).ManScript.ManData.ManType);
         RoomData.ReservedSlots[slotIndex].object1 = manId;
         RoomData.ReservedSlots[slotIndex].object2 = assignedByPlayer;
 
