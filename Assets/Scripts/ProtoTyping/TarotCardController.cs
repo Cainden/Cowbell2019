@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using MySpace;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
@@ -121,7 +122,34 @@ public class TarotCardController : MonoBehaviour
     /// </summary>
     private void AssignTargets()
     {
-        // TODO : Get 3 random targets from the list of active guests.
+        ManManager manManager = ManManager.Ref;
+
+        if(manManager != null)
+        {
+            // Get 3 random guests
+            ManScript_Guest[] allGuests = manManager.GetAllActiveMenOfType<ManScript_Guest>();
+            int numberOfGuests = allGuests.Length;
+
+            if(numberOfGuests > m_tarotCards.Count)
+            {
+                // This is to make sure we have unique targets
+                List<int> targetIndices = new List<int>();
+                   
+                // Get 3 unique random numbers
+                for( int iter = 0; iter < m_tarotCards.Count; ++iter)
+                {
+                    int randomIndex = -1;
+
+                    do
+                    {
+                        randomIndex = Random.Range(0, numberOfGuests);
+                    } while (targetIndices.Contains(randomIndex));
+
+                    targetIndices.Add(randomIndex);
+                    m_tarotCards[iter].SetName(allGuests[randomIndex].ManScript.ManName);
+                }
+            }
+        }
     }
 
     /// <summary>

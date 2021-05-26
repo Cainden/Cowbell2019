@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     public static Vector3[] StartPath;
     #endregion
 
+    private bool m_tarotSceneActive = false;
+
     public static event System.Action<float> OnGameSpeedChanged;
 
     private static float gameSpeed;
@@ -147,6 +149,7 @@ public class GameManager : MonoBehaviour
                 break;
             case TimeManager.DayPhase.Night:
                 // TODO
+                OnTriggerMonsterMode(); // HACK : REMOVE THIS AFTER TESTING!!
                 break;
         }
     }
@@ -168,16 +171,33 @@ public class GameManager : MonoBehaviour
         // Enable Monster UI
         SwapToNightMode();
 
-        // TODO : This is just for debugging until the Tarot
-        // scene is ready for integration. REMOVE IT AFTERWARDS!!
-        yield return new WaitForSeconds(15);
+        // Show Tarot Cards
+        SceneManagement.Instance.LoadScene("CardTable", UnityEngine.SceneManagement.LoadSceneMode.Additive,
+                                           true, null, null, null, false);
+        m_tarotSceneActive = true;
 
-        // TODO : Show Tarot Cards
+        while (m_tarotSceneActive)
+        {
+            yield return null;
+        }
 
         // TODO : The remainder of monster mode logic
 
         TimeManager.Ref.MonsterModeEnded();
         yield return null;
+    }
+
+    /// <summary>
+    /// To be called after Tarot scene is ready to be unloaded
+    /// </summary>
+    public void TarotSceneFinished()
+    {
+        SceneManagement.Instance.UnloadScene("CardTable", null, TarotSceneUnloaded, null, false);
+    }
+
+    public void TarotSceneUnloaded()
+    {
+        m_tarotSceneActive = false;
     }
 
     /// <summary>

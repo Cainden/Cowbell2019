@@ -208,10 +208,20 @@ public class ManManager : MonoBehaviour
         
     }
 
-    public ManRef<T>[] GetAllActiveMenOfType<T>() where T : ManScript
+    public T[] GetAllActiveMenOfType<T>() where T : ManScript
     {
                                                     //This might just return true every time?
-        return (from ManRef<T> man in _ManList.Values where man.ManScript is T select man).ToArray();
+        return (from ManRef<T> man in _ManList.Values where man.ManScript is T select man.ManScript).ToArray();
+
+        //List<T> typeList = new List<T>();
+
+        //foreach (ManRef<ManScript> man in _ManList.Values)
+        //{
+        //    if(man.ManScript.GetType() == typeof(T))
+        //    {
+        //        typeList.Add((T)man.ManScript);
+        //    }
+        //}
 
 
         //int c = 0;

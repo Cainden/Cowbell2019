@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Prototyping/MainHotelScene.unity
     guid: faf3405636570c34abc9abd6b911bdfc
+  - enabled: 1
+    path: Assets/_Scenes/Prototyping/CardTable.unity
+    guid: 80dfa9e3268b7eb48865020fefe1afd1
   m_configObjects: {}
