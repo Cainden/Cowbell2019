@@ -67,7 +67,7 @@ public class GuiManager : MonoBehaviour
         SetCancelButton(false);
 
         SetCursorState(Enums.CursorStates.Normal);
-        UpdateManCount(ManManager.Ref.GetManCount());
+        UpdateManCount(ManManager.Instance.GetManCount());
     }
 
     void Update()

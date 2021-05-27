@@ -13,7 +13,7 @@ public class ClickManager : MonoBehaviour
 	[SerializeField] EventSystem MyEventSystem = null; // To be set in editor
 
     private bool  _MouseOnRoom = false;
-    private Guid  _MouseOnRoomGuid = Guid.Empty;
+    private RoomScript  m_mouseOnRoom = Guid.Empty;
     private float _MouseOnManDownTime = 0.0f;
     private bool  _WasGuiClick = false;
 
@@ -124,10 +124,10 @@ public class ClickManager : MonoBehaviour
 
         if (_MouseOnRoom && StateManager.Ref.GetGameState() == Enums.GameStates.ChangeOwnedRoom)
 		{
-			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(_MouseOnRoomGuid);
+			RoomRef roomToChangeTo = RoomManager.Ref.GetRoomData(m_mouseOnRoom.RoomData.RoomId);
 
 			//VERY temporary, needs to be changed to be less spaghetti once it is tested and works
-			if (roomToChangeTo.RoomScript as Room_Hallway != null && ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
+			if (roomToChangeTo.RoomScript as Room_Hallway != null && StateManager.Ref.GetSelectedMan().ManType == Enums.ManTypes.Guest)
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hitInfo, float.PositiveInfinity, _LayerMaskRoom))
 				{
@@ -138,7 +138,7 @@ public class ClickManager : MonoBehaviour
 
 			if (roomToChangeTo.RoomScript.RoomHasFreeOwnerSlots())
 			{
-				ManManager.Ref.TransferOwnershipToRoom(StateManager.Ref.GetSelectedMan(), _MouseOnRoomGuid);
+				ManManager.Instance.TransferOwnershipToRoom(StateManager.Ref.GetSelectedMan(), m_mouseOnRoom);
 				StateManager.Ref.SetGameState(Enums.GameStates.ManSelected);
 				return;
 			}
@@ -151,7 +151,7 @@ public class ClickManager : MonoBehaviour
 
 		if (_MouseOnRoom && (StateManager.Ref.IsRoomSelectionAllowed()))
 		{
-			StateManager.Ref.SetGameState(Enums.GameStates.RoomSelected, _MouseOnRoomGuid);
+			StateManager.Ref.SetGameState(Enums.GameStates.RoomSelected, m_mouseOnRoom.gameObject);
 			_MouseOnRoom = false;
 			return;
 		}
@@ -164,7 +164,7 @@ public class ClickManager : MonoBehaviour
 
 		if (StateManager.Ref.GetGameState() == Enums.GameStates.ManDragging)
 		{
-			ManManager.Ref.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom(), true);
+			ManManager.Instance.MoveManToNewRoom(StateManager.Ref.GetSelectedMan(), StateManager.Ref.GetHighlightedRoom(), true);
 			StateManager.Ref.SetGameState(Enums.GameStates.Normal);
 			return;
 		}
@@ -195,15 +195,17 @@ public class ClickManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskMan))
             {
-                if (!hitInfo.transform.GetComponent<ManScript>().isClickable)
+                ManScript hitManScript = hitInfo.transform.GetComponent<ManScript>();
+
+                if (hitManScript == null || !hitManScript.isClickable)
                     return false;
+
                 _MouseOnManDownTime = Time.time;
-                Guid ManId = hitInfo.transform.GetComponent<ManScript>().ManData.ManId;
                 
-                if (!guestsDraggable && ManManager.Ref.GetManData(ManId).ManScript.ManType == Enums.ManTypes.Guest)
-                    StateManager.Ref.SetGameState(Enums.GameStates.ManSelected, ManId);
+                if (!guestsDraggable && hitManScript.ManType == Enums.ManTypes.Guest)
+                    StateManager.Ref.SetGameState(Enums.GameStates.ManSelected, hitManScript.gameObject);
                 else
-                    StateManager.Ref.SetGameState(Enums.GameStates.ManPressed, ManId);
+                    StateManager.Ref.SetGameState(Enums.GameStates.ManPressed, hitManScript.gameObject);
                 return true;
             }
         }
@@ -222,13 +224,13 @@ public class ClickManager : MonoBehaviour
             {
                 // Prepare for room being selected onMouseUp
                 _MouseOnRoom = true;
-                _MouseOnRoomGuid = hitInfo.transform.GetComponent<RoomScript>().RoomData.RoomId;
+                m_mouseOnRoom = hitInfo.transform.GetComponent<RoomScript>();
                 return (true);
             }
         }
 
         _MouseOnRoom = false;
-        _MouseOnRoomGuid = Guid.Empty;
+        m_mouseOnRoom = null;
 
         return (false);
     }
@@ -302,26 +304,26 @@ public class ClickManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hitInfo, float.PositiveInfinity, _LayerMaskRoom))
             {
-                Guid RoomID = hitInfo.transform.GetComponent<RoomScript>().RoomData.RoomId;
-                if (ManManager.Ref.IsManTypeOf<ManScript_Guest>(StateManager.Ref.GetSelectedMan()))
+                RoomScript room = hitInfo.transform.GetComponent<RoomScript>();
+                if (StateManager.Ref.GetSelectedMan().ManType == Enums.ManTypes.Guest)
                 {
-                    if (RoomManager.IsRoomOfType<Room_Bedroom>(RoomID))
+                    if (RoomManager.IsRoomOfType<Room_Bedroom>(room.RoomData.RoomId))
                     {
                         Room_Bedroom bedroom = (hitInfo.transform.GetComponent<RoomScript>() as Room_Hallway).GetBedroomFromX(hitInfo.point.x - hitInfo.transform.position.x);
                         RoomManager.Ref.HighlightBedroom(bedroom.RoomData.RoomId, bedroom.transform.position);
                         return false;
                     }
                 }
-                else if (ManManager.Ref.IsManTypeOf<ManScript_Worker>(StateManager.Ref.GetSelectedMan()))
+                else if (StateManager.Ref.GetSelectedMan().ManType == Enums.ManTypes.Worker)
                 {
-                    if (RoomManager.IsRoomOfType<Room_WorkQuarters>(RoomID))
+                    if (RoomManager.IsRoomOfType<Room_WorkQuarters>(room.RoomData.RoomId))
                     {
-                        RoomManager.Ref.HighlightRoom(RoomID);
+                        RoomManager.Ref.HighlightRoom(room.RoomData.RoomId);
                         return false;
                     }
                 }
                 RoomManager.Ref.HighlightNoRoom();
-                StateManager.Ref.SetCurrentHoveredRoom(RoomID);
+                StateManager.Ref.SetCurrentHoveredRoom(room);
                 return false;
             }
         }
@@ -332,10 +334,10 @@ public class ClickManager : MonoBehaviour
     public void DeleteSelectedRoom()
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.RoomSelected) return;
-        Guid RoomID = StateManager.Ref.GetSelectedRoom();
-        if (RoomManager.Ref.CanRemoveRoom(RoomID))
+        RoomScript room = StateManager.Ref.GetSelectedRoom();
+        if (RoomManager.Ref.CanRemoveRoom(room.RoomData.RoomId))
         {
-            RoomManager.Ref.RemoveRoom(RoomID);
+            RoomManager.Ref.RemoveRoom(room.RoomData.RoomId);
         }
         else
         {
@@ -343,24 +345,19 @@ public class ClickManager : MonoBehaviour
         }
         StateManager.Ref.SetGameState(Enums.GameStates.Normal);
     }
-
+    
     public void DeleteSelectedMan()
     {
         if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
         DeleteMan(StateManager.Ref.GetSelectedMan());
     }
 
-    public void DeleteMan(Guid manId)
-    {
-        ManManager.Ref.MakeManLeave(manId);
-        ManManager.Ref.RemoveManFromRoom(manId);
-        ManManager.Ref.RemoveManFromList(manId);
-        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
-    }
-
     public void DeleteMan(ManScript man)
     {
-        DeleteMan(man.ManData.ManId);
+        ManManager.Instance.MakeManLeave(man);
+        ManManager.Instance.RemoveManFromRoom(man);
+        ManManager.Instance.RemoveManFromList(man);
+        StateManager.Ref.SetGameState(Enums.GameStates.Normal);
     }
     
     public void AddNewCleaner()
@@ -410,7 +407,7 @@ public class ClickManager : MonoBehaviour
 
         man.sprite = man.GetRandomizedSprite();
 
-        ManManager.Ref.hireList.Add(man);
+        ManManager.Instance.hireList.Add(man);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Cleaner application received!");
     }
@@ -430,7 +427,7 @@ public class ClickManager : MonoBehaviour
         Debug.Log("Before: " + sprite);
         guest.sprite = sprite;
         Debug.Log("After: " + guest.sprite);
-        ManManager.Ref.bookingList.Add(guest);
+        ManManager.Instance.bookingList.Add(guest);
 
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest waiting!");
     }
@@ -576,26 +573,26 @@ public class ClickManager : MonoBehaviour
 	}
 
 	/// <param name="_buttonNumber">If it's the first button on the UI from the top, = 0. If it's the second, this = 1. And so on.</param>
-	public void Button_Hire(int _buttonNumber)
-    {
-        //if (StateManager.Ref.IsManWaiting()) return;
-        WorkerConstructionData newHire = ManManager.Ref.hireList[_buttonNumber];
+	//public void Button_Hire(int _buttonNumber)
+ //   {
+ //       //if (StateManager.Ref.IsManWaiting()) return;
+ //       WorkerConstructionData newHire = ManManager.Instance.hireList[_buttonNumber];
 
-        ManManager.Ref.CreateWorker(newHire);
-        ManManager.Ref.hireList.RemoveAt(_buttonNumber);
+ //       ManManager.Instance.CreateWorker(newHire);
+ //       ManManager.Instance.hireList.RemoveAt(_buttonNumber);
 
-        StateManager.Ref.SetWaitingMan(newHire.manId);
-        GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
-    }
+ //       StateManager.Ref.SetWaitingMan(newHire.manId);
+ //       GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
+ //   }
 
     public void Button_Hire(WorkerConstructionData worker)
     {
         //if (StateManager.Ref.IsManWaiting()) return;
 
-        ManManager.Ref.CreateWorker(worker);
-        ManManager.Ref.hireList.Remove(worker);
+        ManManager.Instance.CreateWorker(worker);
+        ManManager.Instance.hireList.Remove(worker);
 
-        StateManager.Ref.SetWaitingMan(worker.manId);
+        StateManager.Ref.SetWaitingMan(worker);
         GuiManager.Ref.Initiate_UserInfoSmall("New Employee incoming!");
     }
 
@@ -603,10 +600,10 @@ public class ClickManager : MonoBehaviour
 	public void Button_Book(int _buttonNumber)
     {
         //if (StateManager.Ref.IsManWaiting()) return;
-        GuestConstructionData newGuest = ManManager.Ref.bookingList[_buttonNumber];
+        GuestConstructionData newGuest = ManManager.Instance.bookingList[_buttonNumber];
 
-        ManManager.Ref.CreateGuest(newGuest);
-        ManManager.Ref.bookingList.RemoveAt(_buttonNumber);
+        ManManager.Instance.CreateGuest(newGuest);
+        ManManager.Instance.bookingList.RemoveAt(_buttonNumber);
 
         //StateManager.Ref.SetWaitingMan(newGuest.manId); guests should never be "waiting" where it blocks incoming characters.
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
@@ -616,8 +613,8 @@ public class ClickManager : MonoBehaviour
     {
         //if (StateManager.Ref.IsManWaiting()) return;
 
-        ManManager.Ref.CreateGuest(guest);
-        ManManager.Ref.bookingList.Remove(guest);
+        ManManager.Instance.CreateGuest(guest);
+        ManManager.Instance.bookingList.Remove(guest);
 
         //StateManager.Ref.SetWaitingMan(guest.manId); guests should never be "waiting" where it blocks incoming characters.
         GuiManager.Ref.Initiate_UserInfoSmall("New Guest incoming!");
@@ -628,9 +625,9 @@ public class ClickManager : MonoBehaviour
 		if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
 		Guid ManId = StateManager.Ref.GetSelectedMan();
 
-		if (ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef != null)
+		if (ManManager.Instance.GetManData(ManId).ManScript.ManData.OwnedRoomRef != null)
 		{
-			Guid RoomId = ManManager.Ref.GetManData(ManId).ManScript.ManData.OwnedRoomRef.RoomId;
+			Guid RoomId = ManManager.Instance.GetManData(ManId).ManScript.ManData.OwnedRoomRef.RoomId;
 			RoomManager.Ref.SelectRoom(RoomId);
 		}
 
@@ -643,9 +640,9 @@ public class ClickManager : MonoBehaviour
 	{
 		if (StateManager.Ref.GetGameState() != Enums.GameStates.ManSelected) return;
 		//Guid ManId = StateManager.Ref.GetSelectedMan();
-		//ManManager.Ref.MakeManLeave(ManId);
-		//ManManager.Ref.RemoveManOwnershipFromRoom(ManId);
-		//ManManager.Ref.RemoveManFromList(ManId);
+		//ManManager.Instance.MakeManLeave(ManId);
+		//ManManager.Instance.RemoveManOwnershipFromRoom(ManId);
+		//ManManager.Instance.RemoveManFromList(ManId);
 		StateManager.Ref.SetGameState(Enums.GameStates.ChangeOwnedRoom);
 	}
 

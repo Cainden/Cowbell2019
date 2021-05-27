@@ -20,10 +20,10 @@ public abstract class Room_WorkQuarters : RoomScript
         base.AssignManToRoomSlot(manId, slotIndex, assignedByPlayer);
         if (!assignedByPlayer)
             return;
-        ManScript_Worker worker = ManManager.Ref.GetManData<ManScript_Worker>(manId).ManScript;
+        ManScript_Worker worker = ManManager.Instance.GetManData<ManScript_Worker>(manId).ManScript;
         if (worker != null)
         {
-            //ManManager.Ref.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Ref.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
+            //ManManager.Instance.GetManData(manId).ManScript.AddActionToEndOfMovement((ManManager.Instance.GetManData(manId).ManScript as ManScript_Worker).AssignRole);
             worker.AssignRole();
             worker.AddToDic(RoomRole, GetRoleFunction);
             worker.SetCharacterSprites(Outfit);

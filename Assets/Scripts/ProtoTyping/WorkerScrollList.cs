@@ -44,7 +44,7 @@ public class WorkerScrollList : MonoBehaviour
 	private void AddWorkerButtons()
 	{
 		//	Worker construction data can contain all information that will need to be displayed to the player about a worker they might want to hire
-		foreach (WorkerConstructionData man in ManManager.Ref.hireList)
+		foreach (WorkerConstructionData man in ManManager.Instance.hireList)
 		{
 			GameObject newButton = hireObjectPool.GetObject();
 

@@ -23,7 +23,7 @@ public class LoadSaveManager : MonoBehaviour
 
     public void SaveCurrentState()
     {
-        ManManager.Ref.SaveManList(_SaveFileNameManList);
+        ManManager.Instance.SaveManList(_SaveFileNameManList);
         RoomManager.Ref.SaveRoomList(_SaveFileNameRoomList);
 
         GuiManager.Ref.Initiate_UserInfoSmall("Data saved to file!");
@@ -44,7 +44,7 @@ public class LoadSaveManager : MonoBehaviour
 
         yield return null;
 
-        ManManager.Ref.LoadManList(_SaveFileNameManList);
+        ManManager.Instance.LoadManList(_SaveFileNameManList);
 
         yield return null;
 

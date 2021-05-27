@@ -33,14 +33,14 @@ public class BookGuestDlgScript : MonoBehaviour
     {
         //Button[] buttons = GetComponentsInChildren<Button>();
         //
-        // for (int i = 0; i < ManManager.Ref.bookingList.Count; ++i)
+        // for (int i = 0; i < ManManager.Instance.bookingList.Count; ++i)
         // {
         //     if (i >= 4)
         //         break;
         //
         //     buttons[i].gameObject.SetActive(true);
         // }
-        ManManager manRef = ManManager.Ref;
+        ManManager manRef = ManManager.Instance;
         if (manRef.bookingList.Count >= 1)
         {
             b0.gameObject.SetActive(true);

@@ -83,7 +83,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
     static void PathfindToClosestCloset(ManScript_Worker man)
     {
         //This is where we will change how we find the room that the cleaner needs to go to.
-        ManManager.Ref.MoveManToClosestRoomOfType<Room_CleanerCloset>(man);
+        ManManager.Instance.MoveManToClosestRoomOfType<Room_CleanerCloset>(man);
     }
 
     static void PathfindToDirtyRoom(ManScript_Worker man)
@@ -122,7 +122,7 @@ public class Room_CleanerCloset : Room_WorkQuarters
 
         skip:
         if (chosen != null)
-            ManManager.Ref.MoveManToNewRoom(man.ManData.ManId, chosen.RoomData.RoomId);
+            ManManager.Instance.MoveManToNewRoom(man.ManData.ManId, chosen.RoomData.RoomId);
         else if (man.ManData.AssignedRoom.RoomData.RoomType != Enums.RoomTypes.CleanerCloset)
             PathfindToClosestCloset(man);
     }

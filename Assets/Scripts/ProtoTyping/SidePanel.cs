@@ -182,7 +182,7 @@ public class SidePanel : MonoBehaviour
 
 
 
-		//Debug.Log(ManManager.Ref.GetAllActiveMenOfType<_ManList>());
+		//Debug.Log(ManManager.Instance.GetAllActiveMenOfType<_ManList>());
 	}
 
 	private void closeHiredPanel()

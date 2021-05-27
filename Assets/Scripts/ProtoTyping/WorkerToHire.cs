@@ -26,6 +26,5 @@ public class WorkerToHire : MonoBehaviour
     {
         ClickManager.Ref.Button_Hire(worker);
         SidePanel.SetPanel(false);
-
 	}
 }
