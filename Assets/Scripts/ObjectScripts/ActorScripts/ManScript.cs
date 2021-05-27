@@ -474,7 +474,7 @@ public abstract class ManScript : MonoBehaviour
             }
         }
 
-        ManManager.Instance.MoveManToNewRoom(ManData.ManId, RoomManager.lobbyId);
+        ManManager.Instance.MoveManToNewRoom(this, RoomManager.Ref.GetRoomData(RoomManager.lobbyId).RoomScript);
         SetState(Enums.ManStates.None, 0);
         isClickable = true;
         LobbyMoveFinished();

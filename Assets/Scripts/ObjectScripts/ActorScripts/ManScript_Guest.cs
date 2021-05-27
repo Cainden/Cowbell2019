@@ -150,7 +150,7 @@ public class ManScript_Guest : ManScript
         }
         if (moodScript.OverrideMood == Enums.ManMood.Bored)
             moodScript.ResolveMood(Enums.ManMood.Bored);
-        ManManager.Instance.MoveManToNewRoom(ManData.ManId, RoomManager.Ref.GetClosestRoom(rooms, ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]).RoomData.RoomId);
+        ManManager.Instance.MoveManToNewRoom(this, RoomManager.Ref.GetClosestRoom(rooms, ManData.AssignedRoom.RoomData.CoveredIndizes[ManData.AssignedRoomSlot]));
     }
 
     public override void AssignCharacterSpriteByCharacterType()
@@ -186,7 +186,7 @@ public class ManScript_Guest : ManScript
         transform.position = GridManager.Ref.GetWorldPositionFromGridIndex(ManData.OwnedRoomRef.RoomScript.RoomData.CoveredIndizes[ManData.OwnedRoomRef.RoomScript.GetFreeManSlotIndex(this)]);
 
         //Somehow need to make sure that the room that they are about to be assigned to has available slots
-        ManManager.Instance.MoveManToNewRoom(ManData.ManId, ManData.OwnedRoomRef.RoomId);
+        ManManager.Instance.MoveManToNewRoom(this, ManData.OwnedRoomRef.RoomScript);
         
         MovementPath.Clear();
         NextAction = null;

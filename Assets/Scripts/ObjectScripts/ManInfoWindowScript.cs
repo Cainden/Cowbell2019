@@ -14,7 +14,6 @@ public class ManInfoWindowScript : MonoBehaviour
 
     void Start ()
     {
-        
         Debug.Assert(ManNameText != null);
         OwnedRoomName.gameObject.SetActive(false);
         viewOwnedButton.gameObject.SetActive(false);
@@ -63,11 +62,6 @@ public class ManInfoWindowScript : MonoBehaviour
             default:
                 break;
         }
-
-
-
-        
-        
         
     }
 

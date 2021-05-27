@@ -44,16 +44,17 @@ public class WorkerInfoWindowScript : MonoBehaviour
         genstat2RearSlider.fillAmount = 0;
     }
 
-    public void Activate(System.Guid man)
+    public void Activate(ManScript man)
     {
-        worker = ManManager.Instance.GetManData(man).ManScript as ManScript_Worker;
-        if (worker != null)
-            SetupWorker();
-        else
+        if (man.ManData.ManType == Enums.ManTypes.Worker)
         {
-            guest = ManManager.Instance.GetManData(man).ManScript as ManScript_Guest;
-            if (guest != null)
-                SetupGuest();
+            worker = (ManScript_Worker)man;
+            SetupWorker();
+        }
+        else if (man.ManType == Enums.ManTypes.Guest)
+        {
+            guest = (ManScript_Guest)man;
+            SetupGuest();
         }
     }
 

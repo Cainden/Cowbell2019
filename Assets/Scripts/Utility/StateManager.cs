@@ -10,12 +10,10 @@ public class StateManager : MonoBehaviour
     public static StateManager Ref { get; private set; } // For external access of script
 
     private Enums.GameStates _GameState = Enums.GameStates.None;
-    private Guid _SelectedRoom = Guid.Empty;
-    private Guid _HighlightedRoom = Guid.Empty;
-    private Guid _SelectedMan = Guid.Empty;
-    private Guid _WaitingMan = Guid.Empty;
-
-
+    private RoomScript m_selectedRoom;
+    private RoomScript m_highlightedRoom;
+    private ManScript m_selectedMan;
+    private ManScript m_waitingMan;
 
     void Awake()
     {
@@ -34,73 +32,73 @@ public class StateManager : MonoBehaviour
     {
         ResetSelectedMan();
         ResetSelectedRoom();
-        SetWaitingMan(Guid.Empty);
-        SetCurrentHoveredRoom(Guid.Empty);
+        SetWaitingMan(null);
+        SetCurrentHoveredRoom(null);
     }
 
-    private void SetSelectedRoom(Guid RoomID)
+    private void SetSelectedRoom(RoomScript room)
     {
-        _SelectedRoom = RoomID;
-        RoomManager.Ref.SelectRoom(RoomID);
+        m_selectedRoom = room;
+        RoomManager.Ref.SelectRoom(room.RoomData.RoomId);
     }
 
-    public Guid GetSelectedRoom()
+    public RoomScript GetSelectedRoom()
     {
-        return (_SelectedRoom);
+        return (m_selectedRoom);
     }
 
-    public void SetCurrentHoveredRoom(Guid roomId)
+    public void SetCurrentHoveredRoom(RoomScript roomId)
     {
-        _HighlightedRoom = roomId;
+        m_highlightedRoom = roomId;
     }
 
-    public Guid GetHighlightedRoom()
+    public RoomScript GetHighlightedRoom()
     {
-        return (_HighlightedRoom);
+        return (m_highlightedRoom);
     }
 
     private void ResetSelectedRoom()
     {
-        //if (_SelectedRoom == Guid.Empty) return;
+        //if (m_selectedRoom == Guid.Empty) return;
         GuiManager.Ref.Hide_RoomInfoWindow();
-        _SelectedRoom = Guid.Empty;
+        m_selectedRoom = null;
         RoomManager.Ref.DeselectRooms();
     }
 
-    private void SetSelectedMan(Guid manId)
+    private void SetSelectedMan(ManScript man)
     {
-        if (_SelectedMan == manId) return;
+        if (m_selectedMan == man) return;
         ResetSelectedMan();
-        _SelectedMan = manId;
-        ManManager.Instance.SetHighlightedMan(manId);
+        m_selectedMan = man;
+        ManManager.Instance.SetHighlightedMan(man);
     }
 
-    public Guid GetSelectedMan()
+    public ManScript GetSelectedMan()
     {
-        return (_SelectedMan);
+        return (m_selectedMan);
     }
 
     private void ResetSelectedMan()
     {
-        if (_SelectedMan == Guid.Empty) return;
+        if (m_selectedMan == null) return;
         GuiManager.Ref.Hide_ManInfoWindow();
-        ManManager.Instance.ResetHighlightedMan(_SelectedMan);
-        _SelectedMan = Guid.Empty;
+        ManManager.Instance.ResetHighlightedMan(m_selectedMan);
+        m_selectedMan = null;
     }
 
-    public void SetWaitingMan(Guid manId)
+    public void SetWaitingMan(ManScript man)
     {
-        _WaitingMan = manId;
+        m_waitingMan = man;
     }
 
-    public Guid GetWaitingMan()
+    public ManScript GetWaitingMan()
     {
-        return (_WaitingMan);
+        return (m_waitingMan);
     }
 
     public bool IsManWaiting()
     {
-        return (_WaitingMan != Guid.Empty);
+        return (m_waitingMan != null);
     }
 
     public Enums.GameStates GetGameState()
@@ -108,13 +106,19 @@ public class StateManager : MonoBehaviour
         return (_GameState);
     }
 
-    public void SetGameState(Enums.GameStates newGameState, Guid selectedObjectId)
+    public void SetGameState(Enums.GameStates newGameState, GameObject selectedObject)
     {
         switch (newGameState)
         {
-            case Enums.GameStates.ManPressed: SetSelectedMan(selectedObjectId); break;
-            case Enums.GameStates.ManSelected: SetSelectedMan(selectedObjectId); break;
-            case Enums.GameStates.RoomSelected: SetSelectedRoom(selectedObjectId); break;
+            case Enums.GameStates.ManPressed:
+                SetSelectedMan(selectedObject.GetComponent<ManScript>());
+                break;
+            case Enums.GameStates.ManSelected:
+                SetSelectedMan(selectedObject.GetComponent<ManScript>());
+                break;
+            case Enums.GameStates.RoomSelected:
+                SetSelectedRoom(selectedObject.GetComponent<RoomScript>());
+                break;
         }
 
         SetGameState(newGameState);
@@ -141,7 +145,7 @@ public class StateManager : MonoBehaviour
                 {
                     newGameState = Enums.GameStates.ManSelected;
                     ResetSelectedRoom();
-                    GuiManager.Ref.Show_ManInfoWindow(_SelectedMan);
+                    GuiManager.Ref.Show_ManInfoWindow(m_selectedMan.ManData.ManId);
                     break;
                 }
 
@@ -172,18 +176,18 @@ public class StateManager : MonoBehaviour
                 break;
             case Enums.GameStates.RoomSelected:
                 ResetSelectedMan();
-                if (RoomManager.IsRoomOfType<Room_Hallway>(_SelectedRoom))
-                    (RoomManager.Ref.GetRoomData(_SelectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck().TogglePopUp();
-                //GuiManager.Ref.Show_RoomInfoWindow((RoomManager.Ref.GetRoomData(_SelectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck());
+                if (RoomManager.IsRoomOfType<Room_Hallway>(m_selectedRoom))
+                    (RoomManager.Ref.GetRoomData(m_selectedRoom.RoomData.RoomId).RoomScript as Room_Hallway).GetBedroomFromRayCheck().TogglePopUp();
+                //GuiManager.Ref.Show_RoomInfoWindow((RoomManager.Ref.GetRoomData(m_selectedRoom).RoomScript as Room_Hallway).GetBedroomFromRayCheck());
                 else
-                    GuiManager.Ref.Show_RoomInfoWindow(_SelectedRoom);
+                    GuiManager.Ref.Show_RoomInfoWindow(m_selectedRoom);
                 break;
             case Enums.GameStates.ManPressed:
                 ResetSelectedRoom();
                 break;
             case Enums.GameStates.ManSelected:
                 ResetSelectedRoom();
-                GuiManager.Ref.Show_ManInfoWindow(_SelectedMan);
+                GuiManager.Ref.Show_ManInfoWindow(m_selectedMan.ManData.ManId);
                 break;
             case Enums.GameStates.ManDragging:
                 ResetSelectedRoom();
